@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "species",
+  "version": "${version}",
+
+  "name": "Species",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Ninni",
+    "Noon"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/species/icon.png",
+
+  "environment": "*",
+  "entrypoints": { "main": [ "com.ninni.species.Species" ] },
+  "mixins": [ "species.mixins.json" ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+  "suggests": { "another-mod": "*" }
+}
