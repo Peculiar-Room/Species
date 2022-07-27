@@ -283,11 +283,17 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
             this.bodyFeathers.visible = false;
             this.leftWing.visible = true;
             this.rightWing.visible = true;
-
-            this.leftWing.roll = cos(animationProgress * speed * 0.3F) * degree * 4F * 0.25F;
-            this.leftWing.yaw = cos(animationProgress * speed * 0.3F + (float)Math.PI / 2) * degree * 0.5F * 0.25F - 0.15F;
-            this.rightWing.roll = cos(animationProgress * speed * 0.3F + (float)Math.PI) * degree * 4F * 0.25F;
-            this.rightWing.yaw = cos(animationProgress * speed * 0.3F + (float)Math.PI + (float)Math.PI / 2) * degree * 0.5F * 0.25F + 0.15F;
+            if (entity.isOnGround()) {
+                this.leftWing.roll = 0.8F;
+                this.leftWing.yaw = cos(limbAngle * speed * 0.45F) * 0.5F * limbDistance - 0.25F;
+                this.rightWing.roll = -0.8F;
+                this.rightWing.yaw = cos(limbAngle * speed * 0.45F + (float)Math.PI) * 0.5F * limbDistance + 0.25F;
+            } else {
+                this.leftWing.roll = cos(animationProgress * speed * 0.3F) * degree * 4F * 0.25F;
+                this.leftWing.yaw = cos(animationProgress * speed * 0.3F + (float) Math.PI / 2) * degree * 0.5F * 0.25F - 0.15F;
+                this.rightWing.roll = cos(animationProgress * speed * 0.3F + (float) Math.PI) * degree * 4F * 0.25F;
+                this.rightWing.yaw = cos(animationProgress * speed * 0.3F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F + 0.15F;
+            }
         } else {
             this.bodyFeathers.visible = true;
             this.leftWing.visible = false;

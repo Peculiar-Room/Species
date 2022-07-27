@@ -32,6 +32,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -47,6 +48,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
 
     public WraptorEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
+        this.stepHeight = 1;
     }
 
     public static DefaultAttributeContainer.Builder createWraptorAttributes() {
@@ -94,6 +96,18 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
                 this.setFeatherStage(stage + 1);
             }
         }
+    }
+
+    @Override
+    public void tickMovement() {
+        super.tickMovement();
+        Vec3d vec3d = this.getVelocity();
+        if (!this.onGround && vec3d.y < 0.0 && this.getFeatherStage() == 0) this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
+    }
+
+    @Override
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+        return false;
     }
 
     @Override
