@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.entity.entity.ai.goal.WraptorSwoopAtTargetGoal;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +16,6 @@ import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
@@ -76,7 +76,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
         this.targetSelector.add(0, new ActiveTargetGoal<>(this, WitherSkeletonEntity.class, false));
 
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new PounceAtTargetGoal(this, 0.5F));
+        this.goalSelector.add(1, new WraptorSwoopAtTargetGoal(this, 0.5F));
         this.goalSelector.add(2, new WraptorEntity.AttackGoal(1.35, false));
         this.goalSelector.add(3, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 1));
