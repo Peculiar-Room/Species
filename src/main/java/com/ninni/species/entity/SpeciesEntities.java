@@ -24,9 +24,9 @@ public class SpeciesEntities {
                                .defaultAttributes(WraptorEntity::createWraptorAttributes)
                                .spawnGroup(SpawnGroup.CREATURE)
                                .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, WraptorEntity::canSpawn)
-                               .dimensions(EntityDimensions.changing(1.0F, 1.2F))
+                               .dimensions(EntityDimensions.changing(1.2F, 2F))
                                .trackRangeBlocks(8),
-        new int[]{ 0x5c392d, 0xdacabc }
+        new int[]{ 0xAF3A5F, 0x55C1A9 }
     );
 
     @SuppressWarnings("unchecked")
