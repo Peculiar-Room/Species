@@ -1,0 +1,60 @@
+{
+  "entity.wraptor.aggro": {
+    "sounds": [ "species:entity/wraptor/aggro" ],
+    "subtitle": "subtitles.entity.species.wraptor.aggro"
+  },
+  "entity.wraptor.agitated": {
+  "sounds": [
+    "species:entity/wraptor/agitated1",
+    "species:entity/wraptor/agitated2",
+    "species:entity/wraptor/agitated3",
+    "species:entity/wraptor/agitated4",
+    "species:entity/wraptor/agitated5"
+  ],
+  "subtitle": "subtitles.entity.species.wraptor.agitated"
+  },
+  "entity.wraptor.attack": {
+    "sounds": [ "species:entity/wraptor/attack" ],
+    "subtitle": "subtitles.entity.species.wraptor.attack"
+  },
+  "entity.wraptor.death": {
+    "sounds": [
+      "species:entity/wraptor/death1",
+      "species:entity/wraptor/death2"
+    ],
+    "subtitle": "subtitles.entity.species.wraptor.death"
+  },
+  "entity.wraptor.hurt": {
+    "sounds": [
+      "species:entity/wraptor/hurt1",
+      "species:entity/wraptor/hurt2",
+      "species:entity/wraptor/hurt3",
+      "species:entity/wraptor/hurt4"
+    ],
+    "subtitle": "subtitles.entity.species.wraptor.hurt"
+  },
+  "entity.wraptor.idle": {
+    "sounds": [
+      "species:entity/wraptor/idle1",
+      "species:entity/wraptor/idle2",
+      "species:entity/wraptor/idle3",
+      "species:entity/wraptor/idle4",
+      "species:entity/wraptor/idle5",
+      "species:entity/wraptor/idle6"
+    ],
+    "subtitle": "subtitles.entity.species.wraptor.idle"
+  },
+  "entity.wraptor.shear": {
+    "sounds": [ "species:entity/wraptor/shear" ],
+    "subtitle": "subtitles.entity.species.wraptor.shear"
+  },
+  "entity.wraptor.step": {
+    "sounds": [
+      "species:entity/wraptor/step1",
+      "species:entity/wraptor/step2",
+      "species:entity/wraptor/step3",
+      "species:entity/wraptor/step4"
+    ],
+    "subtitle": "subtitles.entity.species.wraptor.step"
+  }
+}

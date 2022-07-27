@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.Blocks;
@@ -17,6 +18,7 @@ public class Species implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Reflection.initialize(
+			SpeciesSoundEvents.class,
 			SpeciesEntities.class
 		);
 	}

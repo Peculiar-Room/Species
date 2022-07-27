@@ -1,5 +1,7 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.sound.SpeciesSoundEvents;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -14,6 +16,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -25,7 +28,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -76,12 +79,17 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     }
 
     @Override
+    public boolean isShearable() {
+        return this.getFeatherStage() > 0;
+    }
+
+    @Override
     protected void mobTick() {
         super.mobTick();
         int stage = this.getFeatherStage();
         if (stage < 4) {
             long time = this.world.getTime();
-            if (this.random.nextInt((int)(time - this.timeSinceSheared)) > 20 * 90) {
+            if (this.random.nextInt((int)(time - this.timeSinceSheared)) > 20 * 150) {
                 this.timeSinceSheared = time;
                 this.setFeatherStage(stage + 1);
             }
@@ -107,8 +115,11 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     public void sheared(SoundCategory category) {
         int stage = this.getFeatherStage();
         if (stage == 4) this.timeSinceSheared = this.world.getTime();
-        this.world.playSoundFromEntity(null, this, SoundEvents.ENTITY_SHEEP_SHEAR, category, 1.0f, 1.0f);
-        this.setFeatherStage(stage - 1);
+        this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
+        if (stage == 1) {
+            this.setFeatherStage(0);
+            if (!this.isSilent()) this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+        } else this.setFeatherStage(stage - 1);
         for (int i = 0, l = 2 + this.random.nextInt(5); i < l; i++) {
             ItemEntity itemEntity = this.dropItem(Items.FEATHER, 1);
             if (itemEntity == null) continue;
@@ -137,6 +148,27 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
 
     @Nullable
     @Override
+    protected SoundEvent getAmbientSound() {
+        if (this.getFeatherStage() < 2) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
+        else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE;
+    }
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.ENTITY_WRAPTOR_HURT;
+    }
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.ENTITY_WRAPTOR_DEATH;
+    }
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_STEP, 0.15f, 1.0f);
+    }
+
+    @Nullable
+    @Override
     public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
         return null;
     }
@@ -144,10 +176,5 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType <WraptorEntity> entity, ServerWorldAccess world, SpawnReason reason, BlockPos pos, Random random){
         return world.getBlockState(pos.down()).isOf(Blocks.GRASS_BLOCK) && world.getBaseLightLevel(pos, 0) > 8;
-    }
-
-    @Override
-    public boolean isShearable() {
-        return this.getFeatherStage() > 0;
     }
 }

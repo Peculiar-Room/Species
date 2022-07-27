@@ -1,5 +1,14 @@
 {
   "itemGroup.species.item_group": "Species",
   "entity.species.wraptor": "Wraptor",
-  "item.species.wraptor_spawn_egg": "Wraptor Spawn Egg"
+  "item.species.wraptor_spawn_egg": "Wraptor Spawn Egg",
+
+  "subtitles.entity.species.wraptor.aggro": "Wraptor crows",
+  "subtitles.entity.species.wraptor.agitated": "Wraptor bawks",
+  "subtitles.entity.species.wraptor.attack": "Wraptor pecks",
+  "subtitles.entity.species.wraptor.death": "Wraptor dies",
+  "subtitles.entity.species.wraptor.hurt": "Wraptor hurts",
+  "subtitles.entity.species.wraptor.idle": "Wraptor clucks",
+  "subtitles.entity.species.wraptor.shear": "Shears cut",
+  "subtitles.entity.species.wraptor.step": "Wraptor steps"
 }

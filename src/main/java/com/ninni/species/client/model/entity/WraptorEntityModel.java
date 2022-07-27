@@ -252,7 +252,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
         float speed = 1.5f;
         float degree = 1.0f;
 
-        this.head.pitch = headPitch * ((float) Math.PI / 180f);
+        this.head.pitch = headPitch * ((float) Math.PI / 180f) - (headPitch * ((float) Math.PI / 180f)) / 2;
         this.head.yaw = headYaw * ((float) Math.PI / 180f) - (headYaw * ((float) Math.PI / 180f)) / 2;
         this.neck.pitch = (headPitch * ((float) Math.PI / 180f)) / 2;
         this.neck.yaw = (headYaw * ((float) Math.PI / 180f)) / 2;
@@ -260,7 +260,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
         this.rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
         this.leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limbDistance;
 
-        this.neck.pitch += cos(limbAngle * speed * 0.45F + (float)Math.PI / 2) * 0.8F * limbDistance;
+        this.neck.pitch += cos(limbAngle * speed * 0.45F + (float)Math.PI / 2) * 0.6F * limbDistance;
         this.head.pitch += cos(limbAngle * speed * 0.45F + (float)Math.PI + (float)Math.PI / 2) * 0.6F * limbDistance;
 
         this.body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 2F * limbDistance + 10.0F;
