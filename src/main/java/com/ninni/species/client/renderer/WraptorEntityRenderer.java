@@ -19,4 +19,9 @@ public class WraptorEntityRenderer<T extends LivingEntity> extends MobEntityRend
     public WraptorEntityRenderer(EntityRendererFactory.Context ctx) { super(ctx, new WraptorEntityModel<>(ctx.getPart(SpeciesEntityModelLayers.WRAPTOR)), 0.6F); }
 
     @Override public Identifier getTexture(WraptorEntity entity) { return TEXTURE; }
+
+    @Override
+    protected boolean isShaking(WraptorEntity entity) {
+        return super.isShaking(entity) || entity.getFeatherStage() == 1;
+    }
 }

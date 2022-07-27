@@ -7,11 +7,16 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Shearable;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
+import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -20,6 +25,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -66,11 +73,16 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
 
     @Override
     protected void initGoals() {
+        this.targetSelector.add(0, new ActiveTargetGoal<>(this, WitherSkeletonEntity.class, false));
+
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(2, new EscapeDangerGoal(this, 1.25));
+        this.goalSelector.add(1, new PounceAtTargetGoal(this, 0.5F));
+        this.goalSelector.add(2, new WraptorEntity.AttackGoal(1.35, false));
+        this.goalSelector.add(3, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 1));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(7, new RevengeGoal(this));
     }
 
     public int getFeatherStage() {
@@ -88,6 +100,8 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Override
     protected void mobTick() {
         super.mobTick();
+
+        this.removeStatusEffect(StatusEffects.WITHER);
         int stage = this.getFeatherStage();
         if (stage < 4) {
             long time = this.world.getTime();
@@ -118,6 +132,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
                 this.sheared(SoundCategory.PLAYERS);
                 this.emitGameEvent(GameEvent.SHEAR, player);
                 stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
+                if (this.getFeatherStage() == 0) this.setTarget(player);
                 return ActionResult.SUCCESS;
             }
             return ActionResult.CONSUME;
@@ -163,7 +178,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.getFeatherStage() < 2) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
+        if (this.getFeatherStage() <= 2) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
         else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE;
     }
     @Nullable
@@ -190,5 +205,21 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType <WraptorEntity> entity, ServerWorldAccess world, SpawnReason reason, BlockPos pos, Random random){
         return world.getBlockState(pos.down()).isOf(Blocks.GRASS_BLOCK) && world.getBaseLightLevel(pos, 0) > 8;
+    }
+
+    private class AttackGoal extends MeleeAttackGoal {
+        public AttackGoal(double speed, boolean pauseWhenIdle) {
+            super(WraptorEntity.this, speed, pauseWhenIdle);
+        }
+
+        @Override
+        protected void attack(LivingEntity target, double squaredDistance) {
+            double d = this.getSquaredMaxAttackDistance(target);
+            if (squaredDistance <= d && this.isCooledDown()) {
+                this.resetCooldown();
+                this.mob.tryAttack(target);
+                WraptorEntity.this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_ATTACK, 1.0F, 1.0F);
+            }
+        }
     }
 }
