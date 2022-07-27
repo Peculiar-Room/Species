@@ -62,7 +62,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(2, new EscapeDangerGoal(this, 1));
+        this.goalSelector.add(2, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 1));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));

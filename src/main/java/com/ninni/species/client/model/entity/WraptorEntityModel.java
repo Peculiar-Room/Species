@@ -107,7 +107,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
                             .uv(-12, 45)
                             .mirrored(false)
                             .cuboid(0.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
-            ModelTransform.of(4.0F, -3.0F, -3.5F, 0.0F, 0.0F, 0.0F)
+            ModelTransform.of(4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData rightWing = body.addChild(
@@ -116,7 +116,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
                             .uv(-12, 45)
                             .mirrored(true)
                             .cuboid(-19.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
-            ModelTransform.of(-4.0F, -3.0F, -3.5F, 0.0F, 0.0F, 0.0F)
+            ModelTransform.of(-4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData tailBase = body.addChild(
@@ -247,13 +247,28 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
 
     @Override
     public void setAngles(E entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        //limbDistance = clamp(limbDistance, -0.45F, 0.45F);
+        limbDistance = clamp(limbDistance, -0.45F, 0.45F);
         int stage = entity.getFeatherStage();
-        //float speed = 1.5f;
-        //float degree = 1.0f;
+        float speed = 1.5f;
+        float degree = 1.0f;
 
-        head.pitch = headPitch * ((float) Math.PI / 180f);
-        head.yaw = headYaw * ((float) Math.PI / 180f);
+        this.head.pitch = headPitch * ((float) Math.PI / 180f);
+        this.head.yaw = headYaw * ((float) Math.PI / 180f) - (headYaw * ((float) Math.PI / 180f)) / 2;
+        this.neck.pitch = (headPitch * ((float) Math.PI / 180f)) / 2;
+        this.neck.yaw = (headYaw * ((float) Math.PI / 180f)) / 2;
+
+        this.rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
+        this.leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limbDistance;
+
+        this.neck.pitch += cos(limbAngle * speed * 0.45F + (float)Math.PI / 2) * 0.8F * limbDistance;
+        this.head.pitch += cos(limbAngle * speed * 0.45F + (float)Math.PI + (float)Math.PI / 2) * 0.6F * limbDistance;
+
+        this.body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 2F * limbDistance + 10.0F;
+
+        this.tailBase.pitch = cos(limbAngle * speed * 1.2F) * 0.4F * limbDistance;
+        this.tail.pitch = cos(limbAngle * speed * 1.2F + (float)Math.PI) * 0.3F * limbDistance;
+        this.tailTip.pitch = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 0.4F * limbDistance;
+        this.tailFeathers.pitch = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 0.4F * limbDistance -0.7854F;
 
         if (stage < 4) {
             this.headFeathers.visible = false;
@@ -268,10 +283,19 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
             this.bodyFeathers.visible = false;
             this.leftWing.visible = true;
             this.rightWing.visible = true;
+
+            this.leftWing.roll = cos(animationProgress * speed * 0.3F) * degree * 4F * 0.25F;
+            this.leftWing.yaw = cos(animationProgress * speed * 0.3F + (float)Math.PI / 2) * degree * 0.5F * 0.25F - 0.15F;
+            this.rightWing.roll = cos(animationProgress * speed * 0.3F + (float)Math.PI) * degree * 4F * 0.25F;
+            this.rightWing.yaw = cos(animationProgress * speed * 0.3F + (float)Math.PI + (float)Math.PI / 2) * degree * 0.5F * 0.25F + 0.15F;
         } else {
             this.bodyFeathers.visible = true;
             this.leftWing.visible = false;
             this.rightWing.visible = false;
+            this.leftWing.roll = 0;
+            this.leftWing.yaw = 0;
+            this.rightWing.roll = 0;
+            this.rightWing.yaw = 0;
         }
 
     }
