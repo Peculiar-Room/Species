@@ -56,5 +56,9 @@
       "species:entity/wraptor/step4"
     ],
     "subtitle": "subtitles.entity.species.wraptor.step"
+  },
+  "entity.wraptor.feather_loss": {
+    "sounds": [ "species:entity/wraptor/feather_loss" ],
+    "subtitle": "subtitles.entity.species.wraptor.feather_loss"
   }
 }

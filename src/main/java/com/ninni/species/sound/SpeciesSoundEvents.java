@@ -8,14 +8,15 @@ import static com.ninni.species.Species.*;
 
 public interface SpeciesSoundEvents {
 
-    SoundEvent ENTITY_WRAPTOR_AGGRO    = wraptor("aggro");
-    SoundEvent ENTITY_WRAPTOR_AGITATED = wraptor("agitated");
-    SoundEvent ENTITY_WRAPTOR_ATTACK   = wraptor("attack");
-    SoundEvent ENTITY_WRAPTOR_DEATH    = wraptor("death");
-    SoundEvent ENTITY_WRAPTOR_HURT     = wraptor("hurt");
-    SoundEvent ENTITY_WRAPTOR_IDLE     = wraptor("idle");
-    SoundEvent ENTITY_WRAPTOR_SHEAR    = wraptor("shear");
-    SoundEvent ENTITY_WRAPTOR_STEP     = wraptor("step");
+    SoundEvent ENTITY_WRAPTOR_AGGRO        = wraptor("aggro");
+    SoundEvent ENTITY_WRAPTOR_AGITATED     = wraptor("agitated");
+    SoundEvent ENTITY_WRAPTOR_ATTACK       = wraptor("attack");
+    SoundEvent ENTITY_WRAPTOR_DEATH        = wraptor("death");
+    SoundEvent ENTITY_WRAPTOR_HURT         = wraptor("hurt");
+    SoundEvent ENTITY_WRAPTOR_IDLE         = wraptor("idle");
+    SoundEvent ENTITY_WRAPTOR_SHEAR        = wraptor("shear");
+    SoundEvent ENTITY_WRAPTOR_STEP         = wraptor("step");
+    SoundEvent ENTITY_WRAPTOR_FEATHER_LOSS = wraptor("feather_loss");
     private static SoundEvent wraptor(String type) {
         return createEntitySound("wraptor", type);
     }

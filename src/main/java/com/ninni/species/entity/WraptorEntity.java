@@ -102,14 +102,19 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
         super.mobTick();
         this.removeStatusEffect(StatusEffects.WITHER);
 
-        if (this.world.getDimension().piglinSafe() && !this.isAiDisabled()) {
-            int stage = this.getFeatherStage();
+        long time = this.world.getTime();
+        int stage = this.getFeatherStage();
+        if (this.world.getDimension().piglinSafe()) {
             if (stage < 4) {
-                long time = this.world.getTime();
                 if (this.random.nextInt((int) (time - this.timeSinceSheared)) > 20 * 150) {
                     this.timeSinceSheared = time;
                     this.setFeatherStage(stage + 1);
                 }
+            }
+        } else {
+            if (stage > 0 && random.nextInt(20 * 15) == 0) {
+                    this.setFeatherStage(stage - 1);
+                    this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_FEATHER_LOSS, 1.0f, 1.0f);
             }
         }
     }
@@ -150,9 +155,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
         int stage = this.getFeatherStage();
         if (stage == 4) this.timeSinceSheared = this.world.getTime();
         this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
-        if (stage == 1) {
-            this.setFeatherStage(0);
-        } else this.setFeatherStage(stage - 1);
+        this.setFeatherStage(stage - 1);
         for (int i = 0, l = 2 + this.random.nextInt(5); i < l; i++) {
             ItemEntity itemEntity = this.dropItem(Items.FEATHER, 1);
             if (itemEntity == null) continue;

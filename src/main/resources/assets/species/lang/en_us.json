@@ -10,5 +10,6 @@
   "subtitles.entity.species.wraptor.hurt": "Wraptor hurts",
   "subtitles.entity.species.wraptor.idle": "Wraptor clucks",
   "subtitles.entity.species.wraptor.shear": "Shears cut",
-  "subtitles.entity.species.wraptor.step": "Wraptor steps"
+  "subtitles.entity.species.wraptor.step": "Wraptor steps",
+  "subtitles.entity.species.wraptor.feather_loss": "Wraptor looses feathers"
 }
