@@ -100,14 +100,16 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Override
     protected void mobTick() {
         super.mobTick();
-
         this.removeStatusEffect(StatusEffects.WITHER);
-        int stage = this.getFeatherStage();
-        if (stage < 4) {
-            long time = this.world.getTime();
-            if (this.random.nextInt((int)(time - this.timeSinceSheared)) > 20 * 150) {
-                this.timeSinceSheared = time;
-                this.setFeatherStage(stage + 1);
+
+        if (this.world.getDimension().piglinSafe() && !this.isAiDisabled()) {
+            int stage = this.getFeatherStage();
+            if (stage < 4) {
+                long time = this.world.getTime();
+                if (this.random.nextInt((int) (time - this.timeSinceSheared)) > 20 * 150) {
+                    this.timeSinceSheared = time;
+                    this.setFeatherStage(stage + 1);
+                }
             }
         }
     }
@@ -132,7 +134,10 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
                 this.sheared(SoundCategory.PLAYERS);
                 this.emitGameEvent(GameEvent.SHEAR, player);
                 stack.damage(1, player, p -> p.sendToolBreakStatus(hand));
-                if (this.getFeatherStage() == 0) this.setTarget(player);
+                if (this.getFeatherStage() == 0 && !player.isCreative()) {
+                    if (!this.isSilent()) this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+                    this.setTarget(player);
+                }
                 return ActionResult.SUCCESS;
             }
             return ActionResult.CONSUME;
@@ -147,7 +152,6 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
         this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
         if (stage == 1) {
             this.setFeatherStage(0);
-            if (!this.isSilent()) this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundCategory.NEUTRAL, 1.0f, 1.0f);
         } else this.setFeatherStage(stage - 1);
         for (int i = 0, l = 2 + this.random.nextInt(5); i < l; i++) {
             ItemEntity itemEntity = this.dropItem(Items.FEATHER, 1);
@@ -178,7 +182,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.getFeatherStage() <= 2) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
+        if (this.getFeatherStage() <= 2 || !this.world.getDimension().piglinSafe()) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
         else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE;
     }
     @Nullable

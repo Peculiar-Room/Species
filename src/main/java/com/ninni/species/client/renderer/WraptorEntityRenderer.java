@@ -22,6 +22,8 @@ public class WraptorEntityRenderer<T extends LivingEntity> extends MobEntityRend
 
     @Override
     protected boolean isShaking(WraptorEntity entity) {
-        return super.isShaking(entity) || entity.getFeatherStage() == 1;
+        if (entity.getFeatherStage() == 1) return true;
+        if (!entity.getWorld().getDimension().piglinSafe()) return true;
+        return super.isShaking(entity);
     }
 }
