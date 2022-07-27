@@ -18,7 +18,10 @@
   "icon": "assets/species/icon.png",
 
   "environment": "*",
-  "entrypoints": { "main": [ "com.ninni.species.Species" ] },
+  "entrypoints": {
+    "main": [ "com.ninni.species.Species" ],
+    "client": [ "com.ninni.species.SpeciesClient" ]
+  },
   "mixins": [ "species.mixins.json" ],
 
   "depends": {
