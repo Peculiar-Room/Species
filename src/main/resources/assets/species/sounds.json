@@ -79,5 +79,13 @@
   "block.wraptor_egg.hatch": {
     "sounds": [ "species:block/wraptor_egg/hatch" ],
     "subtitle": "subtitles.block.species.wraptor_egg.hatch"
+  },
+  "item.cracked_wraptor_egg.slurp": {
+    "sounds": [
+      "species:item/cracked_wraptor_egg/slurp1",
+      "species:item/cracked_wraptor_egg/slurp2",
+      "species:item/cracked_wraptor_egg/slurp3"
+    ],
+    "subtitle": "subtitles.item.species.cracked_wraptor_egg.slurp"
   }
 }

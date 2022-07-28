@@ -28,6 +28,11 @@ public interface SpeciesSoundEvents {
         return createBlockSound("wraptor_egg", type);
     }
 
+    SoundEvent ITEM_CRACKED_WRAPTOR_EGG_SLURP = cracked_wraptor_egg("slurp");
+    private static SoundEvent cracked_wraptor_egg(String type) {
+        return createItemSound("cracked_wraptor_egg", type);
+    }
+
 
     private static SoundEvent register(String id) {
         Identifier identifier = new Identifier(MOD_ID, id);
@@ -38,5 +43,8 @@ public interface SpeciesSoundEvents {
     }
     private static SoundEvent createBlockSound(String block, String id) {
         return register("block." + block + "." + id);
+    }
+    private static SoundEvent createItemSound(String item, String id) {
+        return register("item." + item + "." + id);
     }
 }

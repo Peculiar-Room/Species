@@ -19,5 +19,6 @@
   "subtitles.entity.species.wraptor.step": "Wraptor steps",
   "subtitles.entity.species.wraptor.feather_loss": "Wraptor looses feathers",
   "subtitles.block.species.wraptor_egg.crack": "Wraptor egg cracks",
-  "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches"
+  "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches",
+  "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping"
 }
