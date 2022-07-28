@@ -21,6 +21,13 @@ public interface SpeciesSoundEvents {
         return createEntitySound("wraptor", type);
     }
 
+    SoundEvent BLOCK_WRAPTOR_EGG_BREAK = wraptor_egg("break");
+    SoundEvent BLOCK_WRAPTOR_EGG_CRACK = wraptor_egg("crack");
+    SoundEvent BLOCK_WRAPTOR_EGG_HATCH = wraptor_egg("hatch");
+    private static SoundEvent wraptor_egg(String type) {
+        return createBlockSound("wraptor_egg", type);
+    }
+
 
     private static SoundEvent register(String id) {
         Identifier identifier = new Identifier(MOD_ID, id);
@@ -28,5 +35,8 @@ public interface SpeciesSoundEvents {
     }
     private static SoundEvent createEntitySound(String entity, String id) {
         return register("entity." + entity + "." + id);
+    }
+    private static SoundEvent createBlockSound(String block, String id) {
+        return register("block." + block + "." + id);
     }
 }

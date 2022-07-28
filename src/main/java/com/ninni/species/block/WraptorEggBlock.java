@@ -2,6 +2,7 @@ package com.ninni.species.block;
 
 import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.entity.WraptorEntity;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,7 +14,6 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
@@ -45,14 +45,13 @@ public class WraptorEggBlock extends Block implements Waterloggable {
     }
 
     private void breakEgg(World world, BlockPos pos, BlockState state) {
-        //custom sounds
         int i = state.get(HATCH);
         if (i < 2) {
-            world.playSound(null, pos, SoundEvents.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7f, 0.9f + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_CRACK, SoundCategory.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.setBlockState(pos, this.getDefaultState().with(HATCH, i + 1), 2);
             world.syncWorldEvent(WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
         } else {
-            world.playSound(null, pos, SoundEvents.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7f, 0.9f + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_HATCH, SoundCategory.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.removeBlock(pos, false);
             world.syncWorldEvent(WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
             WraptorEntity wraptor = SpeciesEntities.WRAPTOR.create(world);

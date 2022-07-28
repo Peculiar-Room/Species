@@ -60,5 +60,24 @@
   "entity.wraptor.feather_loss": {
     "sounds": [ "species:entity/wraptor/feather_loss" ],
     "subtitle": "subtitles.entity.species.wraptor.feather_loss"
+  },
+  "block.wraptor_egg.break": {
+    "sounds": [
+      "species:block/wraptor_egg/break1",
+      "species:block/wraptor_egg/break2"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.wraptor_egg.crack": {
+    "sounds": [
+      "species:block/wraptor_egg/crack1",
+      "species:block/wraptor_egg/crack2",
+      "species:block/wraptor_egg/crack3"
+    ],
+    "subtitle": "subtitles.block.species.wraptor_egg.crack"
+  },
+  "block.wraptor_egg.hatch": {
+    "sounds": [ "species:block/wraptor_egg/hatch" ],
+    "subtitle": "subtitles.block.species.wraptor_egg.hatch"
   }
 }
