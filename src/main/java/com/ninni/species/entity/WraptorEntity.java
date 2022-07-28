@@ -97,7 +97,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
 
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new WraptorSwoopAtTargetGoal(this, 0.5F));
-        this.goalSelector.add(2, new WraptorEntity.AttackGoal(1.35, false));
+        this.goalSelector.add(2, new WraptorEntity.AttackGoal(1.2, false));
         this.goalSelector.add(1, new WraptorEntity.MateGoal(this, 1.0D));
         this.goalSelector.add(1, new WraptorEntity.LayGoal(this, 1.0D));
         this.goalSelector.add(4, new TemptGoal(this, 1.2, BREEDING_ITEM, false));
