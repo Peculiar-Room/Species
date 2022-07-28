@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.client.model.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
@@ -23,6 +24,7 @@ public class Species implements ModInitializer {
 			SpeciesBlocks.class,
 			SpeciesItems.class,
 			SpeciesSoundEvents.class,
+			SpeciesStatusEffects.class,
 			SpeciesEntities.class
 		);
 	}

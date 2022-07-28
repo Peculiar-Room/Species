@@ -7,6 +7,8 @@
   "item.species.cracked_wraptor_egg": "Cracked Wraptor Egg",
   "item.species.wraptor_spawn_egg": "Wraptor Spawn Egg",
 
+  "effect.species.wither_resistance": "Wither Resistance",
+
   "subtitles.entity.species.wraptor.aggro": "Wraptor crows",
   "subtitles.entity.species.wraptor.agitated": "Wraptor bawks",
   "subtitles.entity.species.wraptor.attack": "Wraptor pecks",
