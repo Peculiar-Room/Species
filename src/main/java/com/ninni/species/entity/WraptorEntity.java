@@ -101,8 +101,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
 
     @Override
     public boolean canHaveStatusEffect(StatusEffectInstance effect) {
-        if (effect.getEffectType() == StatusEffects.WITHER) return false;
-        return super.canHaveStatusEffect(effect);
+        return effect.getEffectType() != StatusEffects.WITHER && super.canHaveStatusEffect(effect);
     }
 
     @Override
