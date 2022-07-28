@@ -1,7 +1,9 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.species.block.SpeciesBlocks;
 import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -18,6 +20,8 @@ public class Species implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Reflection.initialize(
+			SpeciesBlocks.class,
+			SpeciesItems.class,
 			SpeciesSoundEvents.class,
 			SpeciesEntities.class
 		);

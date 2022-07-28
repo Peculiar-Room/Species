@@ -25,6 +25,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -33,6 +34,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -98,9 +100,14 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     }
 
     @Override
+    public boolean canHaveStatusEffect(StatusEffectInstance effect) {
+        if (effect.getEffectType() == StatusEffects.WITHER) return false;
+        return super.canHaveStatusEffect(effect);
+    }
+
+    @Override
     protected void mobTick() {
         super.mobTick();
-        this.removeStatusEffect(StatusEffects.WITHER);
 
         long time = this.world.getTime();
         int stage = this.getFeatherStage();
@@ -112,9 +119,9 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
                 }
             }
         } else {
-            if (stage > 0 && random.nextInt(20 * 15) == 0) {
-                    this.setFeatherStage(stage - 1);
-                    this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_FEATHER_LOSS, 1.0f, 1.0f);
+            if (this.isShearable() && random.nextInt(20 * 15) == 0) {
+                this.setFeatherStage(stage - 1);
+                this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_FEATHER_LOSS, 1.0f, 1.0f);
             }
         }
     }
@@ -122,8 +129,13 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Override
     public void tickMovement() {
         super.tickMovement();
+
+        if (!this.world.isClient && this.isAlive() && this.age % 80 == 0 && this.isBaby() && this.getHealth() < this.getMaxHealth()) this.heal(1f);
+
         Vec3d vec3d = this.getVelocity();
-        if (!this.onGround && vec3d.y < 0.0 && this.getFeatherStage() == 0) this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
+        if (!this.onGround && vec3d.y < 0.0) {
+            if (this.getFeatherStage() == 0 || this.isBaby()) this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
+        }
     }
 
     @Override
@@ -134,7 +146,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(Items.SHEARS)) {
+        if (stack.isOf(Items.SHEARS) && !this.isBaby()) {
             if (!this.world.isClient && this.isShearable()) {
                 this.sheared(SoundCategory.PLAYERS);
                 this.emitGameEvent(GameEvent.SHEAR, player);

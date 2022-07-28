@@ -1,6 +1,10 @@
 {
   "itemGroup.species.item_group": "Species",
+
   "entity.species.wraptor": "Wraptor",
+  "block.species.wraptor_egg": "Wraptor Egg",
+  "block.species.cracked_wraptor_egg": "Cracked Wraptor Egg",
+  "item.species.cracked_wraptor_egg": "Cracked Wraptor Egg",
   "item.species.wraptor_spawn_egg": "Wraptor Spawn Egg",
 
   "subtitles.entity.species.wraptor.aggro": "Wraptor crows",

@@ -248,6 +248,9 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
     @Override
     public void setAngles(E entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         limbDistance = clamp(limbDistance, -0.45F, 0.45F);
+
+
+
         int stage = entity.getFeatherStage();
         float speed = 1.5f;
         float degree = 1.0f;
@@ -279,7 +282,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
         }
         this.neckFeathers.visible = stage >= 3;
         this.neckBaseFeathers.visible = stage >= 2;
-        if (stage < 1) {
+        if (stage < 1 || entity.isBaby()) {
             this.bodyFeathers.visible = false;
             this.leftWing.visible = true;
             this.rightWing.visible = true;
@@ -304,5 +307,10 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
             this.rightWing.yaw = 0;
         }
 
+        if (this.child) {
+            this.neckBaseFeathers.visible = false;
+            this.neckFeathers.visible = false;
+            this.headFeathers.visible = false;
+        }
     }
 }

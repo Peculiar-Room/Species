@@ -1,0 +1,6 @@
+{
+	"parent": "species:block/wraptor_egg_template",
+	"textures": {
+		"egg": "species:block/wraptor_egg_0"
+	}
+}
