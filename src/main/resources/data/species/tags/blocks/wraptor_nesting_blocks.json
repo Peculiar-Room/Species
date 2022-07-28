@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:soul_fire_base_blocks",
+    "minecraft:magma_block",
+    "minecraft:warped_wart_block",
+    "minecraft:warped_nylium"
+  ]
+}

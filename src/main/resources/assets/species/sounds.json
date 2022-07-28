@@ -61,6 +61,12 @@
     "sounds": [ "species:entity/wraptor/feather_loss" ],
     "subtitle": "subtitles.entity.species.wraptor.feather_loss"
   },
+  "entity.wraptor.egg": {
+    "sounds": [
+      "mob/chicken/plop"
+    ],
+    "subtitle": "subtitles.entity.species.wraptor.egg"
+  },
   "block.wraptor_egg.break": {
     "sounds": [
       "species:block/wraptor_egg/break1",

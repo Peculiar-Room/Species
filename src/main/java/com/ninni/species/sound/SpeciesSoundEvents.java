@@ -17,6 +17,7 @@ public interface SpeciesSoundEvents {
     SoundEvent ENTITY_WRAPTOR_SHEAR        = wraptor("shear");
     SoundEvent ENTITY_WRAPTOR_STEP         = wraptor("step");
     SoundEvent ENTITY_WRAPTOR_FEATHER_LOSS = wraptor("feather_loss");
+    SoundEvent ENTITY_WRAPTOR_EGG          = wraptor("egg");
     private static SoundEvent wraptor(String type) {
         return createEntitySound("wraptor", type);
     }
