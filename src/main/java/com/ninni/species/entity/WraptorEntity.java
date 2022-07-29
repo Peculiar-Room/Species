@@ -38,6 +38,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -65,7 +66,7 @@ import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 
-public class WraptorEntity extends AnimalEntity implements Shearable {
+public class WraptorEntity extends AnimalEntity implements Monster, Shearable {
     public static final TrackedData<Integer> FEATHER_STAGE = DataTracker.registerData(WraptorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> IS_BORN_FROM_EGG = DataTracker.registerData(WraptorEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final Ingredient BREEDING_ITEM = Ingredient.fromTag(SpeciesTags.WRAPTOR_TEMPT_ITEMS);
@@ -77,6 +78,7 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     public WraptorEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
         this.stepHeight = 1;
+        this.experiencePoints = 3;
     }
 
     public static DefaultAttributeContainer.Builder createWraptorAttributes() {
@@ -174,6 +176,21 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
     }
 
     @Override
+    public boolean canImmediatelyDespawn(double distanceSquared) {
+        return !this.isPersistent();
+    }
+
+    @Override
+    public boolean shouldDropXp() {
+        return true;
+    }
+
+    @Override
+    public int getXpToDrop() {
+        return this.experiencePoints;
+    }
+
+    @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.SHEARS) && !this.isBaby()) {
@@ -185,11 +202,14 @@ public class WraptorEntity extends AnimalEntity implements Shearable {
                     if (!this.isSilent()) this.world.playSoundFromEntity(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundCategory.NEUTRAL, 1.0f, 1.0f);
                     this.setTarget(player);
                 }
+                this.setPersistent();
                 return ActionResult.SUCCESS;
             }
             return ActionResult.CONSUME;
         }
-        return super.interactMob(player, hand);
+        ActionResult result = super.interactMob(player, hand);
+        if (result.isAccepted()) this.setPersistent();
+        return result;
     }
 
     @Override

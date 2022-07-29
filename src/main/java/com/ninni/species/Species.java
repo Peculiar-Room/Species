@@ -18,9 +18,7 @@ public class Species implements ModInitializer {
 	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "item_group"), () -> new ItemStack(Blocks.SHROOMLIGHT));
 
 	//TODO
-	// -for some FUCKING REASON they dont spawn
 	// -advancements maybe
-	// -wraptor coop structure
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override

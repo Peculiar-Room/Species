@@ -58,6 +58,7 @@ public class WraptorEggBlock extends Block implements Waterloggable {
             assert wraptor != null;
             wraptor.setBreedingAge(-24000);
             wraptor.setBormFromEgg(true);
+            wraptor.setPersistent();
             wraptor.refreshPositionAndAngles(pos.getX() + 0.3, pos.getY(), pos.getZ() + 0.3, 0.0f, 0.0f);
             world.spawnEntity(wraptor);
         }

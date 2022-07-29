@@ -25,7 +25,7 @@ public class SpeciesEntities {
         FabricEntityTypeBuilder.createMob()
                                .entityFactory(WraptorEntity::new)
                                .defaultAttributes(WraptorEntity::createWraptorAttributes)
-                               .spawnGroup(SpawnGroup.CREATURE)
+                               .spawnGroup(SpawnGroup.MONSTER)
                                .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
                                .dimensions(EntityDimensions.changing(1.2F, 2F))
                                .trackRangeBlocks(8),
@@ -33,7 +33,7 @@ public class SpeciesEntities {
     );
 
     static {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.CREATURE, SpeciesEntities.WRAPTOR, 60, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 250, 4, 6);
     }
 
     @SuppressWarnings("unchecked")
