@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
 
 import static com.ninni.species.Species.*;
 
@@ -16,4 +17,7 @@ public interface SpeciesTags {
 
     //blockTags
     TagKey<Block> WRAPTOR_NESTING_BLOCKS = TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "wraptor_nesting_blocks"));
+
+    //biomeTags
+    TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "wraptor_coop_has_structure"));
 }
