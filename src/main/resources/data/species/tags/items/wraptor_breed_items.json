@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:shroomlight",
+    "minecraft:bone",
+    "minecraft:coal",
+    "minecraft:coal_block"
+  ]
+}
