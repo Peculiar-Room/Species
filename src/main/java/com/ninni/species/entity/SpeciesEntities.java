@@ -33,7 +33,7 @@ public class SpeciesEntities {
     );
 
     static {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.CREATURE, SpeciesEntities.WRAPTOR, 15, 1, 4);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.CREATURE, SpeciesEntities.WRAPTOR, 60, 1, 1);
     }
 
     @SuppressWarnings("unchecked")
