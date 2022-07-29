@@ -16,7 +16,7 @@ import net.minecraft.world.gen.structure.Structure;
 import java.util.Map;
 
 public class SpeciesStructures {
-    public static final RegistryEntry<Structure> WRAPTOR_COOP = register(SpecieseStructureKeys.WRAPTOR_COOP, new WraptorCoopStructure(createConfig(SpeciesTags.WRAPTOR_COOP_HAS_STRUCTURE, StructureTerrainAdaptation.BEARD_BOX)));
+    public static final RegistryEntry<Structure> WRAPTOR_COOP = register(SpeciesStructureKeys.WRAPTOR_COOP, new WraptorCoopStructure(createConfig(SpeciesTags.WRAPTOR_COOP_HAS_STRUCTURE, StructureTerrainAdaptation.BEARD_BOX)));
 
     private static RegistryEntry<Structure> register(RegistryKey<Structure> key, Structure structure) {
         return BuiltinRegistries.add(BuiltinRegistries.STRUCTURE, key, structure);
