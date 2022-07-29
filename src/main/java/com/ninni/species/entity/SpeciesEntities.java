@@ -1,5 +1,7 @@
 package com.ninni.species.entity;
 
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -12,6 +14,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.BiomeKeys;
 
 import static com.ninni.species.Species.*;
 
@@ -23,11 +26,15 @@ public class SpeciesEntities {
                                .entityFactory(WraptorEntity::new)
                                .defaultAttributes(WraptorEntity::createWraptorAttributes)
                                .spawnGroup(SpawnGroup.CREATURE)
-                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, WraptorEntity::canSpawn)
+                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
                                .dimensions(EntityDimensions.changing(1.2F, 2F))
                                .trackRangeBlocks(8),
         new int[]{ 0xAF3A5F, 0x55C1A9 }
     );
+
+    static {
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.CREATURE, SpeciesEntities.WRAPTOR, 15, 1, 4);
+    }
 
     @SuppressWarnings("unchecked")
     private static <T extends Entity> EntityType<T> register(String id, EntityType<T> entityType, int[] spawnEggColors) {
