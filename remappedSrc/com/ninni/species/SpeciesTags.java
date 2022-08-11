@@ -12,6 +12,7 @@ import static com.ninni.species.Species.*;
 @SuppressWarnings("unused")
 public interface SpeciesTags {
     //itemTags
+    TagKey<Item> WRAPTOR_TEMPT_ITEMS = TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "wraptor_tempt_items"));
     TagKey<Item> WRAPTOR_BREED_ITEMS = TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "wraptor_breed_items"));
 
     //blockTags

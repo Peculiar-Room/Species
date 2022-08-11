@@ -69,6 +69,7 @@ import org.jetbrains.annotations.Nullable;
 public class WraptorEntity extends AnimalEntity implements Monster, Shearable {
     public static final TrackedData<Integer> FEATHER_STAGE = DataTracker.registerData(WraptorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> IS_BORN_FROM_EGG = DataTracker.registerData(WraptorEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    public static final Ingredient TEMPT_ITEMS = Ingredient.fromTag(SpeciesTags.WRAPTOR_TEMPT_ITEMS);
     private static final TrackedData<Boolean> HAS_EGG = DataTracker.registerData(WraptorEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final String FEATHER_STAGE_KEY = "FeatherStage";
     public static final String TIME_SINCE_SHEARED_KEY = "TimeSinceSheared";
@@ -111,7 +112,7 @@ public class WraptorEntity extends AnimalEntity implements Monster, Shearable {
         this.goalSelector.add(2, new WraptorEntity.AttackGoal(1.2, false));
         this.goalSelector.add(1, new WraptorEntity.MateGoal(this, 1.0D));
         this.goalSelector.add(1, new WraptorEntity.LayGoal(this, 1.0D));
-        this.goalSelector.add(4, new TemptGoal(this, 1.2, Ingredient.fromTag(SpeciesTags.WRAPTOR_BREED_ITEMS), false));
+        this.goalSelector.add(4, new TemptGoal(this, 1.2, TEMPT_ITEMS, false));
         this.goalSelector.add(5, new FollowParentGoal(this, 1.1));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1));
         this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
