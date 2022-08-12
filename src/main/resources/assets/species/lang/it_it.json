@@ -1,0 +1,25 @@
+{
+  "itemGroup.species.item_group": "Species",
+
+  "entity.species.wraptor": "Wraptor",
+  "block.species.wraptor_egg": "Uovo di wraptor",
+  "block.species.cracked_wraptor_egg": "Uovo di wraptor crepato",
+  "item.species.cracked_wraptor_egg": "Uovo di wraptor crepato",
+  "item.species.wraptor_spawn_egg": "Uovo generatore di wraptor",
+
+  "effect.species.wither_resistance": "Resistenza al wither",
+
+  "subtitles.entity.species.wraptor.aggro": "Wraptor fa chicchirichì",
+  "subtitles.entity.species.wraptor.agitated": "Wraptor chioccia agitato",
+  "subtitles.entity.species.wraptor.attack": "Wraptor becca",
+  "subtitles.entity.species.wraptor.death": "Wraptor muore",
+  "subtitles.entity.species.wraptor.hurt": "Wraptor ferito",
+  "subtitles.entity.species.wraptor.idle": "Wraptor chioccia",
+  "subtitles.entity.species.wraptor.shear": "Cesoie utilizzate",
+  "subtitles.entity.species.wraptor.step": "Wraptor cammina",
+  "subtitles.entity.species.wraptor.feather_loss": "Wraptor perde le sue piume",
+  "subtitles.entity.species.wraptor.egg": "Wraptor depone un uomo",
+  "subtitles.block.species.wraptor_egg.crack": "Uovo di wraptor si crepa",
+  "subtitles.block.species.wraptor_egg.hatch": "Uovo di wraptor si schiude",
+  "subtitles.item.species.cracked_wraptor_egg.slurp": "Sorso di tuorlo"
+}

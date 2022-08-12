@@ -12,17 +12,13 @@ import com.ninni.species.world.gen.structure.SpeciesStructureTypes;
 import com.ninni.species.world.gen.structure.SpeciesStructures;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
-	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "item_group"), () -> new ItemStack(Blocks.SHROOMLIGHT));
-
-	//TODO
-	// -advancements maybe
+	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "item_group"), () -> new ItemStack(SpeciesItems.WRAPTOR_EGG));
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
