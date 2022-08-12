@@ -14,6 +14,7 @@ import net.minecraft.structure.StructurePiecesHolder;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -62,7 +63,9 @@ public class WraptorCoopGenerator {
 
         @Override
         public void generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
-            this.pos = this.pos.down();
+            if (world.getBlockState(this.pos.down()).isIn(BlockTags.NYLIUM) || (world.getBlockState(this.pos.down()).isOf(Blocks.NETHERRACK) && world.isAir(this.pos))) {
+                this.pos = this.pos.down();
+            }
             super.generate(world, structureAccessor, chunkGenerator, random, chunkBox, chunkPos, pivot);
         }
 
