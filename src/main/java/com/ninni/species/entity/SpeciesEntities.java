@@ -3,20 +3,13 @@ package com.ninni.species.entity;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.entity.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.BiomeKeys;
 
-import static com.ninni.species.Species.*;
+import static com.ninni.species.Species.MOD_ID;
 
 public class SpeciesEntities {
 
@@ -28,8 +21,7 @@ public class SpeciesEntities {
                     .spawnGroup(SpawnGroup.MONSTER)
                     .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
                     .dimensions(EntityDimensions.changing(1.2F, 2F))
-                    .trackRangeChunks(8),
-            new int[]{ 0xAF3A5F, 0x55C1A9 }
+                    .trackRangeChunks(8)
     );
 
     public static final EntityType<DeepfishEntity> DEEPFISH = register(
@@ -40,19 +32,14 @@ public class SpeciesEntities {
                     .spawnGroup(SpawnGroup.UNDERGROUND_WATER_CREATURE)
                     .spawnRestriction(SpawnRestriction.Location.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn)
                     .dimensions(EntityDimensions.changing(0.5F, 0.5F))
-                    .trackRangeChunks(10),
-            new int[]{ 0x5A5A5A, 0xED98BD }
+                    .trackRangeChunks(10)
     );
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T extends Entity> EntityType<T> register(String id, EntityType<T> entityType, int[] spawnEggColors) {
-        if (spawnEggColors != null) Registry.register(Registry.ITEM, new Identifier(MOD_ID, id + "_spawn_egg"), new SpawnEggItem((EntityType<? extends MobEntity>) entityType, spawnEggColors[0], spawnEggColors[1], new Item.Settings().maxCount(64).group(ITEM_GROUP)));
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(MOD_ID, id), entityType);
+    private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(MOD_ID, id), entityType.build());
     }
-
-    private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType, int[] spawnEggColors) { return register(id, entityType.build(), spawnEggColors); }
 }
