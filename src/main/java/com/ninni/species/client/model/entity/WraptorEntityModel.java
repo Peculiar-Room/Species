@@ -86,157 +86,157 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> 
         ModelPartData root = data.getRoot();
 
         ModelPartData body = root.addChild(
-            BODY,
-            ModelPartBuilder.create()
-                            .uv(0, 0)
-                            .cuboid(-4.0F, -4.0F, -6.0F, 8.0F, 8.0F, 12.0F),
-            ModelTransform.of(0.0F, 10.0F, 0.0F, 0.0F, 0.0F, 0.0F)
+                BODY,
+                ModelPartBuilder.create()
+                        .uv(0, 0)
+                        .cuboid(-4.0F, -4.0F, -6.0F, 8.0F, 8.0F, 12.0F),
+                ModelTransform.of(0.0F, 10.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData bodyFeathers = body.addChild(
-            BODY_FEATHERS,
-            ModelPartBuilder.create()
-                            .uv(52, 32)
-                            .cuboid(-4.0F, -5.0F, 0.5F, 8.0F, 9.0F, 12.0F, new Dilation(1.25F)),
-            ModelTransform.of(0.0F, 1.0F, -6.5F, 0.0F, 0.0F, 0.0F)
+                BODY_FEATHERS,
+                ModelPartBuilder.create()
+                        .uv(52, 32)
+                        .cuboid(-4.0F, -5.0F, 0.5F, 8.0F, 9.0F, 12.0F, new Dilation(1.25F)),
+                ModelTransform.of(0.0F, 1.0F, -6.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData leftWing = body.addChild(
-            LEFT_WING,
-            ModelPartBuilder.create()
-                            .uv(-12, 45)
-                            .mirrored(false)
-                            .cuboid(0.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
-            ModelTransform.of(4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
+                LEFT_WING,
+                ModelPartBuilder.create()
+                        .uv(-12, 45)
+                        .mirrored(false)
+                        .cuboid(0.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
+                ModelTransform.of(4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData rightWing = body.addChild(
-            RIGHT_WING,
-            ModelPartBuilder.create()
-                            .uv(-12, 45)
-                            .mirrored(true)
-                            .cuboid(-19.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
-            ModelTransform.of(-4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
+                RIGHT_WING,
+                ModelPartBuilder.create()
+                        .uv(-12, 45)
+                        .mirrored(true)
+                        .cuboid(-19.0F, 0.0F, -1.5F, 19.0F, 0.0F, 12.0F),
+                ModelTransform.of(-4.0F, -2.0F, -3.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData tailBase = body.addChild(
-            TAIL_BASE,
-            ModelPartBuilder.create()
-                            .uv(0, 20)
-                            .cuboid(-2.5F, -1.5F, 0.0F, 5.0F, 5.0F, 11.0F),
-            ModelTransform.of(0.0F, -2.5F, 6.0F, 0.0F, 0.0F, 0.0F)
+                TAIL_BASE,
+                ModelPartBuilder.create()
+                        .uv(0, 20)
+                        .cuboid(-2.5F, -1.5F, 0.0F, 5.0F, 5.0F, 11.0F),
+                ModelTransform.of(0.0F, -2.5F, 6.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData tail = tailBase.addChild(
-            TAIL,
-            ModelPartBuilder.create()
-                            .uv(32, 24)
-                            .cuboid(-2.0F, -8.0F, -2.0F, 4.0F, 8.0F, 4.0F),
-            ModelTransform.of(0.0F, -1.5F, 9.0F, 0.0F, 0.0F, 0.0F)
+                TAIL,
+                ModelPartBuilder.create()
+                        .uv(32, 24)
+                        .cuboid(-2.0F, -8.0F, -2.0F, 4.0F, 8.0F, 4.0F),
+                ModelTransform.of(0.0F, -1.5F, 9.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData tailTip = tail.addChild(
-            TAIL_TIP,
-            ModelPartBuilder.create()
-                            .uv(0, 36)
-                            .cuboid(-1.5F, -1.5F, -6.0F, 3.0F, 3.0F, 6.0F),
-            ModelTransform.of(0.0F, -6.5F, -2.0F, 0.0F, 0.0F, 0.0F)
+                TAIL_TIP,
+                ModelPartBuilder.create()
+                        .uv(0, 36)
+                        .cuboid(-1.5F, -1.5F, -6.0F, 3.0F, 3.0F, 6.0F),
+                ModelTransform.of(0.0F, -6.5F, -2.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData tailFeathers = tailTip.addChild(
-            TAIL_FEATHERS,
-            ModelPartBuilder.create()
-                            .uv(18, 36)
-                            .cuboid(-5.5F, -9.0F, 0.0F, 11.0F, 9.0F, 0.0F),
-            ModelTransform.of(0.0F, -1.5F, -6.0F, -0.7854F, 0.0F, 0.0F)
+                TAIL_FEATHERS,
+                ModelPartBuilder.create()
+                        .uv(18, 36)
+                        .cuboid(-5.5F, -9.0F, 0.0F, 11.0F, 9.0F, 0.0F),
+                ModelTransform.of(0.0F, -1.5F, -6.0F, -0.7854F, 0.0F, 0.0F)
         );
 
         ModelPartData neck = body.addChild(
-            NECK,
-            ModelPartBuilder.create()
-                            .uv(48, 24)
-                            .cuboid(-2.0F, -14.0F, -2.0F, 4.0F, 16.0F, 4.0F),
-            ModelTransform.of(0.0F, -1.0F, -6.0F, 0.0F, 0.0F, 0.0F)
+                NECK,
+                ModelPartBuilder.create()
+                        .uv(48, 24)
+                        .cuboid(-2.0F, -14.0F, -2.0F, 4.0F, 16.0F, 4.0F),
+                ModelTransform.of(0.0F, -1.0F, -6.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData neckFeathers = neck.addChild(
-            NECK_FEATHERS,
-            ModelPartBuilder.create()
-                            .uv(62, 9)
-                            .cuboid(-2.0F, 2.0F, -1.5F, 4.0F, 3.0F, 4.0F, new Dilation(0.5F)),
-            ModelTransform.of(0.0F, -14.0F, -0.5F, 0.0F, 0.0F, 0.0F)
+                NECK_FEATHERS,
+                ModelPartBuilder.create()
+                        .uv(62, 9)
+                        .cuboid(-2.0F, 2.0F, -1.5F, 4.0F, 3.0F, 4.0F, new Dilation(0.5F)),
+                ModelTransform.of(0.0F, -14.0F, -0.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData neckBaseFeathers = neck.addChild(
-            NECK_BASE_FEATHERS,
-            ModelPartBuilder.create()
-                            .uv(62, 0)
-                            .cuboid(-2.0F, 2.0F, -1.5F, 4.0F, 5.0F, 4.0F, new Dilation(0.5F)),
-            ModelTransform.of(0.0F, -9.0F, -0.5F, 0.0F, 0.0F, 0.0F)
+                NECK_BASE_FEATHERS,
+                ModelPartBuilder.create()
+                        .uv(62, 0)
+                        .cuboid(-2.0F, 2.0F, -1.5F, 4.0F, 5.0F, 4.0F, new Dilation(0.5F)),
+                ModelTransform.of(0.0F, -9.0F, -0.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData head = neck.addChild(
-            HEAD,
-            ModelPartBuilder.create()
-                            .uv(28, 0)
-                            .cuboid(-3.0F, -5.02F, -3.0F, 6.0F, 5.0F, 6.0F)
-                            .uv(30, 11)
-                            .cuboid(-3.5F, -3.0F, -8.0F, 7.0F, 3.0F, 10.0F),
-            ModelTransform.of(0.0F, -14.0F, -0.5F, 0.0F, 0.0F, 0.0F)
+                HEAD,
+                ModelPartBuilder.create()
+                        .uv(28, 0)
+                        .cuboid(-3.0F, -5.02F, -3.0F, 6.0F, 5.0F, 6.0F)
+                        .uv(30, 11)
+                        .cuboid(-3.5F, -3.0F, -8.0F, 7.0F, 3.0F, 10.0F),
+                ModelTransform.of(0.0F, -14.0F, -0.5F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData featherTuft = head.addChild(
-            FEATHER_TUFT,
-            ModelPartBuilder.create(),
-            ModelTransform.of(0.0F, -7.5F, 0.0F, 0.0F, 0.0F, 0.0F)
+                FEATHER_TUFT,
+                ModelPartBuilder.create(),
+                ModelTransform.of(0.0F, -7.5F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData rotatedTuft = featherTuft.addChild(
-            ROTATED_TUFT,
-            ModelPartBuilder.create()
-                            .uv(54, 16)
-                            .cuboid(-3.5F, -2.5F, 0.0F, 7.0F, 5.0F, 0.0F),
-            ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F)
+                ROTATED_TUFT,
+                ModelPartBuilder.create()
+                        .uv(54, 16)
+                        .cuboid(-3.5F, -2.5F, 0.0F, 7.0F, 5.0F, 0.0F),
+                ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F)
         );
 
         ModelPartData tuft = featherTuft.addChild(
-            TUFT,
-            ModelPartBuilder.create()
-                            .uv(54, 16)
-                            .cuboid(-3.5F, -2.5F, 0.0F, 7.0F, 5.0F, 0.0F),
-            ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F)
+                TUFT,
+                ModelPartBuilder.create()
+                        .uv(54, 16)
+                        .cuboid(-3.5F, -2.5F, 0.0F, 7.0F, 5.0F, 0.0F),
+                ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F)
         );
 
         ModelPartData headFeathers = head.addChild(
-            HEAD_FEATHERS,
-            ModelPartBuilder.create()
-                            .uv(72, 10)
-                            .cuboid(-3.0F, -5.0F, -3.0F, 6.0F, 7.0F, 6.0F, new Dilation(0.75F)),
-            ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F)
+                HEAD_FEATHERS,
+                ModelPartBuilder.create()
+                        .uv(72, 10)
+                        .cuboid(-3.0F, -5.0F, -3.0F, 6.0F, 7.0F, 6.0F, new Dilation(0.75F)),
+                ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData rightLeg = root.addChild(
-            RIGHT_LEG,
-            ModelPartBuilder.create()
-                            .uv(-6, 0)
-                            .mirrored(false)
-                            .cuboid(-3.0F, 12.98F, -5.0F, 6.0F, 0.0F, 6.0F)
-                            .uv(54, 0)
-                            .mirrored(true)
-                            .cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 14.0F, 2.0F),
-            ModelTransform.of(-4.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F)
+                RIGHT_LEG,
+                ModelPartBuilder.create()
+                        .uv(-6, 0)
+                        .mirrored(false)
+                        .cuboid(-3.0F, 12.98F, -5.0F, 6.0F, 0.0F, 6.0F)
+                        .uv(54, 0)
+                        .mirrored(true)
+                        .cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 14.0F, 2.0F),
+                ModelTransform.of(-4.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
         ModelPartData leftLeg = root.addChild(
-            LEFT_LEG,
-            ModelPartBuilder.create()
-                            .uv(-6, 0)
-                            .mirrored(false)
-                            .cuboid(-3.0F, 12.98F, -5.0F, 6.0F, 0.0F, 6.0F)
-                            .uv(54, 0)
-                            .mirrored(false)
-                            .cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 14.0F, 2.0F),
-            ModelTransform.of(4.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F)
+                LEFT_LEG,
+                ModelPartBuilder.create()
+                        .uv(-6, 0)
+                        .mirrored(false)
+                        .cuboid(-3.0F, 12.98F, -5.0F, 6.0F, 0.0F, 6.0F)
+                        .uv(54, 0)
+                        .mirrored(false)
+                        .cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 14.0F, 2.0F),
+                ModelTransform.of(4.0F, 11.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
         return TexturedModelData.of(data, 96, 64);

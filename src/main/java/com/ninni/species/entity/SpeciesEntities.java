@@ -21,15 +21,27 @@ import static com.ninni.species.Species.*;
 public class SpeciesEntities {
 
     public static final EntityType<WraptorEntity> WRAPTOR = register(
-        "wraptor",
-        FabricEntityTypeBuilder.createMob()
-                               .entityFactory(WraptorEntity::new)
-                               .defaultAttributes(WraptorEntity::createWraptorAttributes)
-                               .spawnGroup(SpawnGroup.MONSTER)
-                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
-                               .dimensions(EntityDimensions.changing(1.2F, 2F))
-                               .trackRangeBlocks(8),
-        new int[]{ 0xAF3A5F, 0x55C1A9 }
+            "wraptor",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(WraptorEntity::new)
+                    .defaultAttributes(WraptorEntity::createWraptorAttributes)
+                    .spawnGroup(SpawnGroup.MONSTER)
+                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
+                    .dimensions(EntityDimensions.changing(1.2F, 2F))
+                    .trackRangeChunks(8),
+            new int[]{ 0xAF3A5F, 0x55C1A9 }
+    );
+
+    public static final EntityType<DeepfishEntity> DEEPFISH = register(
+            "deepfish",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(DeepfishEntity::new)
+                    .defaultAttributes(DeepfishEntity::createDeepfishAttributes)
+                    .spawnGroup(SpawnGroup.UNDERGROUND_WATER_CREATURE)
+                    .spawnRestriction(SpawnRestriction.Location.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn)
+                    .dimensions(EntityDimensions.changing(0.5F, 0.5F))
+                    .trackRangeChunks(10),
+            new int[]{ 0x5A5A5A, 0xED98BD }
     );
 
     static {

@@ -21,5 +21,10 @@
   "subtitles.entity.species.wraptor.egg": "Wraptor lays an egg",
   "subtitles.block.species.wraptor_egg.crack": "Wraptor egg cracks",
   "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches",
-  "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping"
+  "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping",
+
+
+  "entity.species.deepfish": "Deepfish",
+  "item.species.deepfish_spawn_egg": "Deepfish Spawn Egg",
+  "item.species.deepfish_bucket": "Bucket of Deepfish"
 }

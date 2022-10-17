@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.renderer.DeepfishEntityRenderer;
 import com.ninni.species.client.renderer.WraptorEntityRenderer;
 import com.ninni.species.entity.SpeciesEntities;
 import net.fabricmc.api.ClientModInitializer;
@@ -14,5 +15,6 @@ public class SpeciesClient implements ClientModInitializer {
     public void onInitializeClient() {
         Reflection.initialize(SpeciesEntityModelLayers.class);
         EntityRendererRegistry.register(SpeciesEntities.WRAPTOR, WraptorEntityRenderer::new);
+        EntityRendererRegistry.register(SpeciesEntities.DEEPFISH, DeepfishEntityRenderer::new);
     }
 }

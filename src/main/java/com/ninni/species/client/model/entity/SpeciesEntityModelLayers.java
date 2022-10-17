@@ -1,5 +1,6 @@
 package com.ninni.species.client.model.entity;
 
+import com.ninni.species.client.model.DeepfishEntityModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -12,6 +13,7 @@ import static com.ninni.species.Species.*;
 public interface SpeciesEntityModelLayers {
 
     EntityModelLayer WRAPTOR = main("wraptor", WraptorEntityModel::getTexturedModelData);
+    EntityModelLayer DEEPFISH = main("deepfish", DeepfishEntityModel::getTexturedModelData);
 
     private static EntityModelLayer register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         EntityModelLayer layer = new EntityModelLayer(new Identifier(MOD_ID, id), name);
