@@ -26,7 +26,6 @@ public class DeepfishEntityRenderer extends MobEntityRenderer<DeepfishEntity, De
         this.addFeature(new DeepfishFeatureRenderer<>(this, TEXTURE_GLOW, (deepfish, tickDelta, animationProgress) -> (float)Math.max(0, Math.cos(animationProgress * 0.15F) * 3F * 0.25F), DeepfishEntityModel::getAllParts));
     }
 
-
     @Nullable
     @Override
     protected RenderLayer getRenderLayer(DeepfishEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
@@ -36,6 +35,8 @@ public class DeepfishEntityRenderer extends MobEntityRenderer<DeepfishEntity, De
     @Override
     protected void setupTransforms(DeepfishEntity fish, MatrixStack matrixStack, float f, float g, float h) {
         super.setupTransforms(fish, matrixStack, f, g, h);
+        matrixStack.scale(0.75F, 0.75F, 0.75F);
+
         if (!fish.isTouchingWater()) {
             matrixStack.translate(0.2, 0.2, 0);
             matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0f));

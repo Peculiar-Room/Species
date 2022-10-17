@@ -91,7 +91,7 @@ public class DeepfishEntityModel<T extends DeepfishEntity> extends SinglePartEnt
 
         this.body.yaw += cos(animationProgress * speed * 0.15F) * degree * 0.25F;
         this.body.pivotY = cos(animationProgress * speed * 0.15F + (float)Math.PI / 2) * degree * 1 + 20.0F;
-        this.tail.yaw = cos(limbAngle * speed * 1.2F + 0.5F) * degree * 3F * limbDistance;
+        this.tail.yaw = cos(limbAngle * speed * 2.1F + 0.5F) * degree * 3F * limbDistance;
         this.tail.pitch = cos(animationProgress * speed * 0.15F + (float)Math.PI / 2 + 0.5F) * degree * 1.5F * 0.25F;
     }
 }
