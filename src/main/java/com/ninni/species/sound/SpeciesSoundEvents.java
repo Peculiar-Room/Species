@@ -34,6 +34,13 @@ public interface SpeciesSoundEvents {
         return createItemSound("cracked_wraptor_egg", type);
     }
 
+    SoundEvent ENTITY_DEEPFISH_FLOP  = deepfish("flop");
+    SoundEvent ENTITY_DEEPFISH_DEATH = deepfish("death");
+    SoundEvent ENTITY_DEEPFISH_HURT  = deepfish("hurt");
+    SoundEvent ENTITY_DEEPFISH_IDLE  = deepfish("idle");
+    private static SoundEvent deepfish(String type) {
+        return createEntitySound("deepfish", type);
+    }
 
     private static SoundEvent register(String id) {
         Identifier identifier = new Identifier(MOD_ID, id);

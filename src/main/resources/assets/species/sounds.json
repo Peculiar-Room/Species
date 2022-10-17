@@ -93,5 +93,52 @@
       "species:item/cracked_wraptor_egg/slurp3"
     ],
     "subtitle": "subtitles.item.species.cracked_wraptor_egg.slurp"
+  },
+  "entity.deepfish.flop": {
+    "sounds": [
+      {
+        "name": "entity/fish/flop1",
+        "volume": 0.3
+      },
+      {
+        "name": "entity/fish/flop2",
+        "volume": 0.3
+      },
+      {
+        "name": "entity/fish/flop3",
+        "volume": 0.3
+      },
+      {
+        "name": "entity/fish/flop4",
+        "volume": 0.3
+      }
+    ],
+    "subtitle": "subtitles.entity.species.deepfish.flop"
+  },
+  "entity.deepfish.hurt": {
+    "sounds": [
+      "species:entity/deepfish/hurt1",
+      "species:entity/deepfish/hurt2"
+    ],
+    "subtitle": "subtitles.entity.species.deepfish.hurt"
+  },
+  "entity.deepfish.death": {
+    "sounds": [
+      "species:entity/deepfish/death1",
+      "species:entity/deepfish/death2"
+    ],
+    "subtitle": "subtitles.entity.species.deepfish.death"
+  },
+  "entity.deepfish.idle": {
+    "sounds": [
+      "species:entity/deepfish/idle1",
+      "species:entity/deepfish/idle2",
+      "species:entity/deepfish/idle3",
+      "species:entity/deepfish/idle4",
+      "species:entity/deepfish/idle5",
+      "species:entity/deepfish/idle6",
+      "species:entity/deepfish/idle7"
+    ],
+    "subtitle": "subtitles.entity.species.deepfish.idle"
   }
 }

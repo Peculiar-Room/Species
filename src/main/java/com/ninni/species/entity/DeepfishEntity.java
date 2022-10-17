@@ -1,17 +1,19 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.item.SpeciesItems;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.control.AquaticMoveControl;
 import net.minecraft.entity.ai.control.YawAdjustingLookControl;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.SchoolingFishEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class DeepfishEntity extends SchoolingFishEntity {
 
@@ -26,12 +28,36 @@ public class DeepfishEntity extends SchoolingFishEntity {
     }
 
     @Override
+    public int getMinAmbientSoundDelay() {
+        return 480;
+    }
+
+    @Override
     public int getMaxLookPitchChange() {
         return 1;
     }
+
     @Override
     protected SoundEvent getFlopSound() {
-        return SoundEvents.ENTITY_COD_FLOP;
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_FLOP;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_DEATH;
     }
 
     @Override

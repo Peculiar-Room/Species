@@ -26,5 +26,10 @@
 
   "entity.species.deepfish": "Deepfish",
   "item.species.deepfish_spawn_egg": "Deepfish Spawn Egg",
-  "item.species.deepfish_bucket": "Bucket of Deepfish"
+  "item.species.deepfish_bucket": "Bucket of Deepfish",
+
+  "subtitles.entity.species.deepfish.flop": "Deepfish flops",
+  "subtitles.entity.species.deepfish.death": "Deepfish dies",
+  "subtitles.entity.species.deepfish.hurt": "Deepfish hurts",
+  "subtitles.entity.species.deepfish.idle": "Deepfish howls"
 }
