@@ -1,6 +1,6 @@
 package com.ninni.species.client.renderer;
 
-import com.ninni.species.client.model.DeepfishEntityModel;
+import com.ninni.species.client.model.entity.DeepfishEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.DeepfishFeatureRenderer;
 import com.ninni.species.entity.DeepfishEntity;
@@ -23,7 +23,7 @@ public class DeepfishEntityRenderer extends MobEntityRenderer<DeepfishEntity, De
 
     public DeepfishEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new DeepfishEntityModel<>(context.getPart(SpeciesEntityModelLayers.DEEPFISH)), 0.3f);
-        this.addFeature(new DeepfishFeatureRenderer<>(this, TEXTURE_GLOW, (deepfish, tickDelta, animationProgress) -> (float)Math.max(0, Math.cos(animationProgress * 0.15F) * 0.25F), DeepfishEntityModel::getAllParts));
+        this.addFeature(new DeepfishFeatureRenderer<>(this, TEXTURE_GLOW, (deepfish, tickDelta, animationProgress) -> (float)Math.max(0, Math.cos(animationProgress * 0.15F) * 3F * 0.25F), DeepfishEntityModel::getAllParts));
     }
 
 

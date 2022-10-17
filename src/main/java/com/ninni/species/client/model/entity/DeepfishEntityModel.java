@@ -1,14 +1,14 @@
-package com.ninni.species.client.model;
+package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.ninni.species.entity.DeepfishEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
-import java.util.Collections;
 import java.util.List;
 
 import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
+import static net.minecraft.util.math.MathHelper.clamp;
 import static net.minecraft.util.math.MathHelper.cos;
 
 public class DeepfishEntityModel<T extends DeepfishEntity> extends SinglePartEntityModel<T> {
@@ -83,14 +83,15 @@ public class DeepfishEntityModel<T extends DeepfishEntity> extends SinglePartEnt
 
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        limbDistance = clamp(limbDistance, -0.25F, 0.25F);
         float speed = 1.5f;
         float degree = 1.0f;
         this.body.pitch = headPitch * ((float)Math.PI / 180);
         this.body.yaw = headYaw * ((float)Math.PI / 180);
 
         this.body.yaw += cos(animationProgress * speed * 0.15F) * degree * 0.25F;
-        this.body.pivotY = cos(animationProgress * speed * 0.15F + (float)Math.PI / 2) * degree * 0.25F + 20.0F;
-        this.tail.yaw = cos(limbAngle * speed * 0.6F + 0.5F) * degree * 3F * limbDistance;
-
+        this.body.pivotY = cos(animationProgress * speed * 0.15F + (float)Math.PI / 2) * degree * 1 + 20.0F;
+        this.tail.yaw = cos(limbAngle * speed * 1.2F + 0.5F) * degree * 3F * limbDistance;
+        this.tail.pitch = cos(animationProgress * speed * 0.15F + (float)Math.PI / 2 + 0.5F) * degree * 1.5F * 0.25F;
     }
 }

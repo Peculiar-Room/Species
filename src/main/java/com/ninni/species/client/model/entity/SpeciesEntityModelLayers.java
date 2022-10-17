@@ -1,6 +1,5 @@
 package com.ninni.species.client.model.entity;
 
-import com.ninni.species.client.model.DeepfishEntityModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
