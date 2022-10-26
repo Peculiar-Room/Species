@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -15,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.FluidTags;
@@ -27,6 +29,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public class RoombugEntity extends TameableEntity {
@@ -51,7 +54,7 @@ public class RoombugEntity extends TameableEntity {
         this.goalSelector.add(0, new SitGoal(this));
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new WanderAroundGoal(this, 1));
-        this.goalSelector.add(2, new RoombugFollowOwnerGoal(this, 1.25, 5.0f, 1.0f));
+        this.goalSelector.add(2, new RoombugFollowOwnerGoal(this, 1.5, 3.0f, 1.0f));
         this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
     }
 
@@ -105,6 +108,18 @@ public class RoombugEntity extends TameableEntity {
         super.tick();
         if (!this.world.isClient && this.isSubmergedIn(FluidTags.WATER)) {
             this.removeAllPassengers();
+        }
+        List<Entity> list = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
+        if (!list.isEmpty() && this.isSitting()) {
+            boolean bl = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
+            for (Entity entity : list) {
+                if (entity.hasPassenger(this)) continue;
+                if (bl && this.getPassengerList().size() < 1 && !entity.hasVehicle() && entity.getWidth() < this.getWidth() && entity instanceof LivingEntity && !(entity instanceof WaterCreatureEntity) && !(entity instanceof PlayerEntity)) {
+                    entity.startRiding(this);
+                    continue;
+                }
+                this.pushAwayFrom(entity);
+            }
         }
     }
 
