@@ -31,5 +31,8 @@
   "subtitles.entity.species.deepfish.flop": "Deepfish flops",
   "subtitles.entity.species.deepfish.death": "Deepfish dies",
   "subtitles.entity.species.deepfish.hurt": "Deepfish hurts",
-  "subtitles.entity.species.deepfish.idle": "Deepfish howls"
+  "subtitles.entity.species.deepfish.idle": "Deepfish howls",
+
+  "entity.species.roombug": "Roombug",
+  "item.species.roombug_spawn_egg": "Roombug Spawn Egg"
 }

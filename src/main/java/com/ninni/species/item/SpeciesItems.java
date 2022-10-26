@@ -1,7 +1,7 @@
 package com.ninni.species.item;
 
 import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.client.model.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.entity.SpeciesEntities;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -23,6 +23,8 @@ public class SpeciesItems {
 
     public static final Item DEEPFISH_SPAWN_EGG = register("deepfish_spawn_egg", new SpawnEggItem(SpeciesEntities.DEEPFISH, 0x5A5A5A, 0xED98BD, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
     public static final Item DEEPFISH_BUCKET = register("deepfish_bucket", new EntityBucketItem(SpeciesEntities.DEEPFISH, Fluids.WATER, SoundEvents.ITEM_BUCKET_EMPTY_FISH, new FabricItemSettings().maxCount(1).group(ITEM_GROUP)));
+
+    public static final Item ROOMBUG_SPAWN_EGG = register("roombug_spawn_egg", new SpawnEggItem(SpeciesEntities.ROOMBUG, 0x5A3C29, 0x994F47, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
 
     private static Item register(String id, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(MOD_ID, id), item);

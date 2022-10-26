@@ -1,4 +1,4 @@
-package com.ninni.species.client.model.entity.effect;
+package com.ninni.species.entity.effect;
 
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;

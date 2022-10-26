@@ -35,6 +35,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<RoombugEntity> ROOMBUG = register(
+            "roombug",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(RoombugEntity::new)
+                    .defaultAttributes(RoombugEntity::createRoombugAttributes)
+                    .spawnGroup(SpawnGroup.CREATURE)
+                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RoombugEntity::canSpawn)
+                    .dimensions(EntityDimensions.changing(1.375F, 0.3125F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), SpawnGroup.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

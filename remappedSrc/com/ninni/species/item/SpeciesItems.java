@@ -1,7 +1,7 @@
 package com.ninni.species.item;
 
 import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.client.model.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.BlockItem;

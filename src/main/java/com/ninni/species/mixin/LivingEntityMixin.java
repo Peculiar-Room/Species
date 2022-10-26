@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.client.model.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
