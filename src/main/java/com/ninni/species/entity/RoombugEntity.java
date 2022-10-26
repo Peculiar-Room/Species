@@ -53,9 +53,9 @@ public class RoombugEntity extends TameableEntity {
         this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(0, new SitGoal(this));
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WanderAroundGoal(this, 1));
+        this.goalSelector.add(1, new RoombugWanderAroundGoal(this, 1));
         this.goalSelector.add(2, new RoombugFollowOwnerGoal(this, 1.5, 3.0f, 1.0f));
-        this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+        this.goalSelector.add(3, new RoombugLookAtEntityGoal(this, PlayerEntity.class, 8.0f));
     }
 
     public static DefaultAttributeContainer.Builder createRoombugAttributes() {
@@ -101,6 +101,16 @@ public class RoombugEntity extends TameableEntity {
         }
 
         return super.interactMob(player, hand);
+    }
+
+    @Override
+    public boolean hurtByWater() {
+        return true;
+    }
+
+    @Override
+    public EntityGroup getGroup() {
+        return EntityGroup.ARTHROPOD;
     }
 
     @Override
@@ -182,5 +192,48 @@ public class RoombugEntity extends TameableEntity {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<RoombugEntity> roombugEntityEntityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         return false;
+    }
+
+    static class RoombugLookAtEntityGoal extends LookAtEntityGoal{
+        private final RoombugEntity bug;
+
+        public RoombugLookAtEntityGoal(RoombugEntity mob, Class<? extends LivingEntity> targetType, float range) {
+            super(mob, targetType, range);
+            this.bug = mob;
+        }
+
+        @Override
+        public boolean canStart() {
+            if (this.bug.isSitting()) return false;
+            return super.canStart();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (this.bug.isSitting()) return false;
+            return super.shouldContinue();
+        }
+    }
+
+    static class RoombugWanderAroundGoal extends WanderAroundGoal{
+        private final RoombugEntity bug;
+
+        public RoombugWanderAroundGoal(RoombugEntity mob, double speed) {
+            super(mob, speed);
+            this.bug = mob;
+        }
+
+
+        @Override
+        public boolean canStart() {
+            if (this.bug.isTamed()) return false;
+            return super.canStart();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            if (this.bug.isTamed()) return false;
+            return super.shouldContinue();
+        }
     }
 }
