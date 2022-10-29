@@ -56,7 +56,7 @@ public class RoombugEntity extends TameableEntity {
         this.goalSelector.add(0, new SitGoal(this));
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new WanderAroundGoal(this, 1));
-        this.goalSelector.add(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, true));
+        this.goalSelector.add(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, false));
         this.goalSelector.add(3, new RoombugLookAtEntityGoal(this, PlayerEntity.class, 8.0f));
     }
 
@@ -89,18 +89,19 @@ public class RoombugEntity extends TameableEntity {
         }
 
         if (this.isTamed()) {
-            if (player.shouldCancelInteraction()) {
-                if (!this.world.isClient && this.isOwner(player)) this.setSitting(!this.isSitting());
-            } else {
-                if (!this.isSubmergedIn(FluidTags.WATER) && this.getPrimaryPassenger() == null) {
-                    if (!this.world.isClient) {
-                        return player.startRiding(this) ? ActionResult.CONSUME : ActionResult.PASS;
-                    }
+            if (this.isTamed() && player.shouldCancelInteraction()) {
+                if (this.isOwner(player) && !this.world.isClient) {
+                    this.setSitting(!this.isSitting());
                 }
+                return ActionResult.success(this.world.isClient);
             }
-
-            return ActionResult.success(this.world.isClient);
+            if (!this.isSubmergedIn(FluidTags.WATER) && this.getPrimaryPassenger() == null) {
+                return player.startRiding(this) ? ActionResult.SUCCESS : ActionResult.PASS;
+            }
         }
+
+
+
 
         return super.interactMob(player, hand);
     }
@@ -201,9 +202,10 @@ public class RoombugEntity extends TameableEntity {
     @Override
     public void travel(Vec3d movementInput) {
         if (this.isSitting()) {
-            this.setMovementSpeed(0);
+            this.setVelocity(this.getVelocity().multiply(0.0, 1.0, 0.0));
+            movementInput = movementInput.multiply(0.0, 1.0, 0.0);
         }
-        else super.travel(movementInput);
+        super.travel(movementInput);
     }
 
     @SuppressWarnings("unused")
