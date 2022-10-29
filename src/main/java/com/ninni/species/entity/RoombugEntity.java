@@ -265,7 +265,7 @@ public class RoombugEntity extends TameableEntity {
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if ("Goofy Aah".equals(Formatting.strip(this.getName().getString()))) {
-            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1f, 1);
-        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 1f, 1.0f);
+            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 0.25f, 1);
+        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.25f, 1.0f);
     }
 }
