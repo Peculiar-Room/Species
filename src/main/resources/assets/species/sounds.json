@@ -140,5 +140,68 @@
       "species:entity/deepfish/idle7"
     ],
     "subtitle": "subtitles.entity.species.deepfish.idle"
+  },
+  "entity.roombug.goofy_aah_step": {
+    "sounds": [
+      "species:entity/roombug/goofy_aah_step1",
+      "species:entity/roombug/goofy_aah_step2",
+      "species:entity/roombug/goofy_aah_step3",
+      "species:entity/roombug/goofy_aah_step4",
+      "species:entity/roombug/goofy_aah_step5",
+      "species:entity/roombug/goofy_aah_step6"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.step"
+  },
+  "entity.roombug.step": {
+    "sounds": [
+      "species:entity/roombug/step1",
+      "species:entity/roombug/step2",
+      "species:entity/roombug/step3",
+      "species:entity/roombug/step4",
+      "species:entity/roombug/step5",
+      "species:entity/roombug/step6",
+      "species:entity/roombug/step7"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.step"
+  },
+  "entity.roombug.eat": {
+    "sounds": [
+      "species:entity/roombug/eat1",
+      "species:entity/roombug/eat2",
+      "species:entity/roombug/eat3"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.eat"
+  },
+  "entity.roombug.death": {
+    "sounds": [
+      "species:entity/roombug/death1",
+      "species:entity/roombug/death2"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.death"
+  },
+  "entity.roombug.hurt": {
+    "sounds": [
+      "species:entity/roombug/hurt1",
+      "species:entity/roombug/hurt2",
+      "species:entity/roombug/hurt3",
+      "species:entity/roombug/hurt4",
+      "species:entity/roombug/hurt5",
+      "species:entity/roombug/hurt6",
+      "species:entity/roombug/hurt7"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.hurt"
+  },
+  "entity.roombug.idle": {
+    "sounds": [
+      "species:entity/roombug/idle1",
+      "species:entity/roombug/idle2",
+      "species:entity/roombug/idle3",
+      "species:entity/roombug/idle4",
+      "species:entity/roombug/idle5",
+      "species:entity/roombug/idle6",
+      "species:entity/roombug/idle7",
+      "species:entity/roombug/idle8"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.idle"
   }
 }

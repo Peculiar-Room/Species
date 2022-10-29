@@ -6,53 +6,39 @@ import net.minecraft.util.registry.Registry;
 
 import static com.ninni.species.Species.*;
 
-public interface SpeciesSoundEvents {
+public class SpeciesSoundEvents {
 
-    SoundEvent ENTITY_WRAPTOR_AGGRO        = wraptor("aggro");
-    SoundEvent ENTITY_WRAPTOR_AGITATED     = wraptor("agitated");
-    SoundEvent ENTITY_WRAPTOR_ATTACK       = wraptor("attack");
-    SoundEvent ENTITY_WRAPTOR_DEATH        = wraptor("death");
-    SoundEvent ENTITY_WRAPTOR_HURT         = wraptor("hurt");
-    SoundEvent ENTITY_WRAPTOR_IDLE         = wraptor("idle");
-    SoundEvent ENTITY_WRAPTOR_SHEAR        = wraptor("shear");
-    SoundEvent ENTITY_WRAPTOR_STEP         = wraptor("step");
-    SoundEvent ENTITY_WRAPTOR_FEATHER_LOSS = wraptor("feather_loss");
-    SoundEvent ENTITY_WRAPTOR_EGG          = wraptor("egg");
-    private static SoundEvent wraptor(String type) {
-        return createEntitySound("wraptor", type);
-    }
+    public static final SoundEvent ENTITY_WRAPTOR_DEATH    = register("entity.wraptor.death");
+    public static final SoundEvent ENTITY_WRAPTOR_HURT     = register("entity.wraptor.hurt");
+    public static final SoundEvent ENTITY_WRAPTOR_IDLE     = register("entity.wraptor.idle");
+    public static final SoundEvent ENTITY_WRAPTOR_AGGRO    = register("entity.wraptor.aggro");
+    public static final SoundEvent ENTITY_WRAPTOR_AGITATED = register("entity.wraptor.agitated");
+    public static final SoundEvent ENTITY_WRAPTOR_ATTACK   = register("entity.wraptor.attack");
+    public static final SoundEvent ENTITY_WRAPTOR_SHEAR    = register("entity.wraptor.shear");
+    public static final SoundEvent ENTITY_WRAPTOR_STEP     = register("entity.wraptor.step");
+    public static final SoundEvent ENTITY_WRAPTOR_FEATHER_LOSS = register("entity.wraptor.feather_loss");
+    public static final SoundEvent ENTITY_WRAPTOR_EGG      = register("entity.wraptor.egg");
 
-    SoundEvent BLOCK_WRAPTOR_EGG_BREAK = wraptor_egg("break");
-    SoundEvent BLOCK_WRAPTOR_EGG_CRACK = wraptor_egg("crack");
-    SoundEvent BLOCK_WRAPTOR_EGG_HATCH = wraptor_egg("hatch");
-    private static SoundEvent wraptor_egg(String type) {
-        return createBlockSound("wraptor_egg", type);
-    }
+    public static final SoundEvent BLOCK_WRAPTOR_EGG_BREAK = register("block.wraptor_egg.break");
+    public static final SoundEvent BLOCK_WRAPTOR_EGG_CRACK = register("block.wraptor_egg.crack");
+    public static final SoundEvent BLOCK_WRAPTOR_EGG_HATCH = register("block.wraptor_egg.hatch");
 
-    SoundEvent ITEM_CRACKED_WRAPTOR_EGG_SLURP = cracked_wraptor_egg("slurp");
-    private static SoundEvent cracked_wraptor_egg(String type) {
-        return createItemSound("cracked_wraptor_egg", type);
-    }
+    public static final SoundEvent ITEM_CRACKED_WRAPTOR_EGG_SLURP = register("item.cracked_wraptor_egg.slurp");
 
-    SoundEvent ENTITY_DEEPFISH_FLOP  = deepfish("flop");
-    SoundEvent ENTITY_DEEPFISH_DEATH = deepfish("death");
-    SoundEvent ENTITY_DEEPFISH_HURT  = deepfish("hurt");
-    SoundEvent ENTITY_DEEPFISH_IDLE  = deepfish("idle");
-    private static SoundEvent deepfish(String type) {
-        return createEntitySound("deepfish", type);
-    }
+    public static final SoundEvent ENTITY_DEEPFISH_DEATH = register("entity.deepfish.death");
+    public static final SoundEvent ENTITY_DEEPFISH_HURT  = register("entity.deepfish.hurt");
+    public static final SoundEvent ENTITY_DEEPFISH_IDLE  = register("entity.deepfish.idle");
+    public static final SoundEvent ENTITY_DEEPFISH_FLOP  = register("entity.deepfish.flop");
 
-    private static SoundEvent register(String id) {
-        Identifier identifier = new Identifier(MOD_ID, id);
-        return Registry.register(Registry.SOUND_EVENT, identifier, new SoundEvent(identifier));
-    }
-    private static SoundEvent createEntitySound(String entity, String id) {
-        return register("entity." + entity + "." + id);
-    }
-    private static SoundEvent createBlockSound(String block, String id) {
-        return register("block." + block + "." + id);
-    }
-    private static SoundEvent createItemSound(String item, String id) {
-        return register("item." + item + "." + id);
+    public static final SoundEvent ENTITY_ROOMBUG_DEATH = register("entity.roombug.death");
+    public static final SoundEvent ENTITY_ROOMBUG_HURT  = register("entity.roombug.hurt");
+    public static final SoundEvent ENTITY_ROOMBUG_IDLE  = register("entity.roombug.idle");
+    public static final SoundEvent ENTITY_ROOMBUG_EAT   = register("entity.roombug.eat");
+    public static final SoundEvent ENTITY_ROOMBUG_STEP  = register("entity.roombug.step");
+    public static final SoundEvent ENTITY_ROOMBUG_GOOFY_AAH_STEP = register("entity.roombug.goofy_aah_step");
+
+    private static SoundEvent register(String name) {
+        Identifier id = new Identifier(MOD_ID, name);
+        return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
     }
 }

@@ -1,10 +1,13 @@
 package com.ninni.species.entity;
 
 import com.google.common.collect.Sets;
+import com.ninni.species.sound.SpeciesSoundEvents;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -18,9 +21,10 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -72,12 +76,11 @@ public class RoombugEntity extends TameableEntity {
 
             if (!player.getAbilities().creativeMode) itemStack.decrement(1);
             if (!this.isSilent()) {
-                //TODO custom sounds
-                this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_PARROT_EAT, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
 
             if (!this.world.isClient) {
-                if (this.random.nextInt(10) == 0) {
+                if (this.random.nextInt(2) == 0) {
                     this.setOwner(player);
                     this.world.sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
                 } else {
@@ -89,19 +92,26 @@ public class RoombugEntity extends TameableEntity {
         }
 
         if (this.isTamed()) {
-            if (this.isTamed() && player.shouldCancelInteraction()) {
-                if (this.isOwner(player) && !this.world.isClient) {
-                    this.setSitting(!this.isSitting());
+            if (player.shouldCancelInteraction()) {
+                if (this.isOwner(player) && itemStack.getItem() != Items.HONEY_BOTTLE) {
+                    if (!this.world.isClient) this.setSitting(!this.isSitting());
+                    return ActionResult.success(this.world.isClient);
+                } else if (itemStack.getItem() == Items.HONEY_BOTTLE && this.getHealth() < this.getMaxHealth()) {
+                    if (!this.world.isClient) {
+                        if (!player.getAbilities().creativeMode) itemStack.decrement(1);
+                        if (!player.getInventory().insertStack(Items.GLASS_BOTTLE.getDefaultStack())) {
+                            player.dropItem(Items.GLASS_BOTTLE.getDefaultStack(), false);
+                        }
+                        this.heal(6);
+                        this.world.sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                    }
+                    return ActionResult.success(this.world.isClient);
                 }
-                return ActionResult.success(this.world.isClient);
             }
             if (!this.isSubmergedIn(FluidTags.WATER) && this.getPrimaryPassenger() == null) {
                 return player.startRiding(this) ? ActionResult.SUCCESS : ActionResult.PASS;
             }
         }
-
-
-
 
         return super.interactMob(player, hand);
     }
@@ -232,5 +242,30 @@ public class RoombugEntity extends TameableEntity {
             if (this.bug.isSitting()) return false;
             return super.shouldContinue();
         }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.ENTITY_ROOMBUG_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.ENTITY_ROOMBUG_DEATH;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if ("Goofy Aah".equals(Formatting.strip(this.getName().getString()))) {
+            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1f, 1);
+        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 1f, 1.0f);
     }
 }
