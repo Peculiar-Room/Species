@@ -2,16 +2,20 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.Sets;
 import com.ninni.species.entity.entity.ai.goal.RoombugFollowOwnerGoal;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,12 +27,15 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -149,7 +156,7 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return this.getPrimaryPassenger() == null && !this.isSubmergedIn(FluidTags.WATER);
+        return !this.hasPassengers() && !this.isSubmergedIn(FluidTags.WATER);
     }
 
     @Override
@@ -165,7 +172,14 @@ public class RoombugEntity extends TameableEntity {
     @Override
     @Nullable
     public Entity getPrimaryPassenger() {
-        return this.getFirstPassenger();
+        Entity entity = this.getFirstPassenger();
+        return entity != null && this.canEntityControl(entity) ? entity : null;
+    }
+
+    private boolean canEntityControl(Entity entity) {
+        if (!(entity instanceof PlayerEntity playerEntity))
+            return false;
+        return true;
     }
 
     @Nullable
@@ -213,6 +227,13 @@ public class RoombugEntity extends TameableEntity {
             if (this.bug.isSitting()) return false;
             return super.shouldContinue();
         }
+    }
+
+    public void travel(Vec3d movementInput) {
+//        if (this.isSitting()) {
+//            MakeItDont Move;
+//        }
+//        else super.travel(movementInput);
     }
 
     static class RoombugWanderAroundGoal extends WanderAroundGoal{
