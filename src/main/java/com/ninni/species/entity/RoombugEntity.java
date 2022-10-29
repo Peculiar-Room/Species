@@ -1,21 +1,17 @@
 package com.ninni.species.entity;
 
 import com.google.common.collect.Sets;
-import com.ninni.species.entity.entity.ai.goal.RoombugFollowOwnerGoal;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,7 +23,6 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
@@ -35,7 +30,6 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +38,7 @@ public class RoombugEntity extends TameableEntity {
 
     protected RoombugEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
+        this.stepHeight = 1;
     }
 
     @Override
@@ -60,8 +55,8 @@ public class RoombugEntity extends TameableEntity {
         this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(0, new SitGoal(this));
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new RoombugWanderAroundGoal(this, 1));
-        this.goalSelector.add(2, new RoombugFollowOwnerGoal(this, 1.5, 3.0f, 1.0f));
+        this.goalSelector.add(1, new WanderAroundGoal(this, 1));
+        this.goalSelector.add(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, true));
         this.goalSelector.add(3, new RoombugLookAtEntityGoal(this, PlayerEntity.class, 8.0f));
     }
 
@@ -142,21 +137,18 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     public double getMountedHeightOffset() {
-        return this.getHeight() / 2;
-    }
-
-    @Override
-    public boolean collidesWith(Entity other) {
-        return RoombugEntity.canCollide(this, other);
-    }
-
-    public static boolean canCollide(Entity entity, Entity other) {
-        return (other.isCollidable() || other.isPushable()) && !entity.isConnectedThroughVehicle(other);
+        return this.isInSittingPose() ? 0.15625F : 0.2125F;
     }
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
         return !this.hasPassengers() && !this.isSubmergedIn(FluidTags.WATER);
+    }
+
+    @Override
+    @Nullable
+    public Entity getPrimaryPassenger() {
+        return null;
     }
 
     @Override
@@ -166,20 +158,23 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     public boolean isPushable() {
-        return true;
+        return false;
     }
 
     @Override
-    @Nullable
-    public Entity getPrimaryPassenger() {
-        Entity entity = this.getFirstPassenger();
-        return entity != null && this.canEntityControl(entity) ? entity : null;
+    public void pushAwayFrom(Entity entity) {
+        if (entity instanceof BoatEntity) {
+            if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
+                super.pushAwayFrom(entity);
+            }
+        } else if (entity.getBoundingBox().minY <= this.getBoundingBox().minY) {
+            super.pushAwayFrom(entity);
+        }
     }
 
-    private boolean canEntityControl(Entity entity) {
-        if (!(entity instanceof PlayerEntity playerEntity))
-            return false;
-        return true;
+    @Override
+    public boolean collidesWith(Entity other) {
+        return (other.isCollidable() || other.isPushable()) && !this.isConnectedThroughVehicle(other);
     }
 
     @Nullable
@@ -201,6 +196,14 @@ public class RoombugEntity extends TameableEntity {
     @Override
     public boolean isBaby() {
         return false;
+    }
+
+    @Override
+    public void travel(Vec3d movementInput) {
+        if (this.isSitting()) {
+            this.setMovementSpeed(0);
+        }
+        else super.travel(movementInput);
     }
 
     @SuppressWarnings("unused")
@@ -225,35 +228,6 @@ public class RoombugEntity extends TameableEntity {
         @Override
         public boolean shouldContinue() {
             if (this.bug.isSitting()) return false;
-            return super.shouldContinue();
-        }
-    }
-
-    public void travel(Vec3d movementInput) {
-//        if (this.isSitting()) {
-//            MakeItDont Move;
-//        }
-//        else super.travel(movementInput);
-    }
-
-    static class RoombugWanderAroundGoal extends WanderAroundGoal{
-        private final RoombugEntity bug;
-
-        public RoombugWanderAroundGoal(RoombugEntity mob, double speed) {
-            super(mob, speed);
-            this.bug = mob;
-        }
-
-
-        @Override
-        public boolean canStart() {
-            if (this.bug.isTamed()) return false;
-            return super.canStart();
-        }
-
-        @Override
-        public boolean shouldContinue() {
-            if (this.bug.isTamed()) return false;
             return super.shouldContinue();
         }
     }
