@@ -112,6 +112,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "species:cracked_wraptor_egg",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:netherite_scrap"
         },
         {
