@@ -249,7 +249,7 @@ public class RoombugEntity extends TameableEntity {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSitting() ? null : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
+        return this.isSitting() ? SpeciesSoundEvents.ENTITY_ROOMBUG_SNORING : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
     }
 
     @Nullable
@@ -268,6 +268,6 @@ public class RoombugEntity extends TameableEntity {
     protected void playStepSound(BlockPos pos, BlockState state) {
         if ("Goofy Ahh".equals(Formatting.strip(this.getName().getString()))) {
             this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1, 1);
-        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.25f, 1.0f);
+        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.5f, 1.0f);
     }
 }

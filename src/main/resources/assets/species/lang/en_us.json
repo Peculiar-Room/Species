@@ -35,9 +35,11 @@
 
   "entity.species.roombug": "Roombug",
   "item.species.roombug_spawn_egg": "Roombug Spawn Egg",
+
   "subtitles.entity.species.roombug.eat": "Roombug eats",
   "subtitles.entity.species.roombug.death": "Roombug dies",
   "subtitles.entity.species.roombug.hurt": "Roombug hurts",
   "subtitles.entity.species.roombug.idle": "Roombug clicks",
+  "subtitles.entity.species.roombug.snoring": "Roombug snores",
   "subtitles.entity.species.roombug.step": "Roombug strides"
 }

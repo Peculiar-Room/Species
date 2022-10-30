@@ -22,7 +22,7 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
     private void updatePassengerDismounting(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        if (this.getVehicle() instanceof RoombugEntity) {
+        if (this.getVehicle() instanceof RoombugEntity && player.shouldCancelInteraction()) {
             this.stopRiding();
             cir.setReturnValue(ActionResult.SUCCESS);
         }

@@ -21,5 +21,24 @@
   "subtitles.entity.species.wraptor.egg": "Wraptor depone un uomo",
   "subtitles.block.species.wraptor_egg.crack": "Uovo di wraptor si crepa",
   "subtitles.block.species.wraptor_egg.hatch": "Uovo di wraptor si schiude",
-  "subtitles.item.species.cracked_wraptor_egg.slurp": "Sorso di tuorlo"
+  "subtitles.item.species.cracked_wraptor_egg.slurp": "Sorso di tuorlo",
+
+  "entity.species.deepfish": "Deepfish",
+  "item.species.deepfish_spawn_egg": "Uovo generatore di deepfish",
+  "item.species.deepfish_bucket": "Secchio con deepfish",
+
+  "subtitles.entity.species.deepfish.flop": "Deepfish si dibatte",
+  "subtitles.entity.species.deepfish.death": "Deepfish muore",
+  "subtitles.entity.species.deepfish.hurt": "Deepfish ferito",
+  "subtitles.entity.species.deepfish.idle": "Deepfish ulula",
+
+  "entity.species.roombug": "Roombug",
+  "item.species.roombug_spawn_egg": "Uovo generatore di roombug",
+
+  "subtitles.entity.species.roombug.eat": "Roombug sgranocchia",
+  "subtitles.entity.species.roombug.death": "Roombug muore",
+  "subtitles.entity.species.roombug.hurt": "Roombug ferite",
+  "subtitles.entity.species.roombug.idle": "Roombug fa click",
+  "subtitles.entity.species.roombug.snoring": "Roombug russa",
+  "subtitles.entity.species.roombug.step": "Roombug zampetta"
 }

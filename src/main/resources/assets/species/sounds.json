@@ -203,5 +203,13 @@
       "species:entity/roombug/idle8"
     ],
     "subtitle": "subtitles.entity.species.roombug.idle"
+  },
+  "entity.roombug.snoring": {
+    "sounds": [
+      "species:entity/roombug/snoring1",
+      "species:entity/roombug/snoring2",
+      "species:entity/roombug/snoring3"
+    ],
+    "subtitle": "subtitles.entity.species.roombug.snoring"
   }
 }

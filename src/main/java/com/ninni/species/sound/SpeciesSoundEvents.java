@@ -33,6 +33,7 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ENTITY_ROOMBUG_DEATH = register("entity.roombug.death");
     public static final SoundEvent ENTITY_ROOMBUG_HURT  = register("entity.roombug.hurt");
     public static final SoundEvent ENTITY_ROOMBUG_IDLE  = register("entity.roombug.idle");
+    public static final SoundEvent ENTITY_ROOMBUG_SNORING  = register("entity.roombug.snoring");
     public static final SoundEvent ENTITY_ROOMBUG_EAT   = register("entity.roombug.eat");
     public static final SoundEvent ENTITY_ROOMBUG_STEP  = register("entity.roombug.step");
     public static final SoundEvent ENTITY_ROOMBUG_GOOFY_AAH_STEP = register("entity.roombug.goofy_aah_step");
