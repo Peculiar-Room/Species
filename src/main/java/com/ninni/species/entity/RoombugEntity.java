@@ -22,6 +22,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -104,6 +105,7 @@ public class RoombugEntity extends TameableEntity {
                         }
                         this.heal(6);
                         this.world.sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                        this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_HONEY_BOTTLE_DRINK, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
                     }
                     return ActionResult.success(this.world.isClient);
                 }
@@ -169,7 +171,7 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     public boolean isPushable() {
-        return false;
+        return true;
     }
 
     @Override
@@ -247,7 +249,7 @@ public class RoombugEntity extends TameableEntity {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
+        return this.isSitting() ? null : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
     }
 
     @Nullable
@@ -264,8 +266,8 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        if ("Goofy Aah".equals(Formatting.strip(this.getName().getString()))) {
-            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 0.25f, 1);
+        if ("Goofy Ahh".equals(Formatting.strip(this.getName().getString()))) {
+            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1, 1);
         } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.25f, 1.0f);
     }
 }
