@@ -20,7 +20,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         super(entityType, world);
     }
 
-    @Inject(method = "interactMob", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
     private void updatePassengerDismounting(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         if (this.getVehicle() instanceof RoombugEntity) {
             this.stopRiding();
