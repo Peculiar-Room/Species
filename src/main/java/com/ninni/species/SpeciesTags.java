@@ -19,4 +19,5 @@ public interface SpeciesTags {
 
     //biomeTags
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "wraptor_coop_has_structure"));
+    TagKey<Biome> ROOMBUG_SPAWNS = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "roombug_spawns"));
 }

@@ -24,6 +24,7 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -235,8 +236,8 @@ public class RoombugEntity extends TameableEntity {
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<RoombugEntity> roombugEntityEntityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
-        return false;
+    public static boolean canSpawn(EntityType<RoombugEntity> entitty, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        return world.getBlockState(pos.down()).isIn(BlockTags.ANIMALS_SPAWNABLE_ON) && AnimalEntity.isLightLevelValidForNaturalSpawn(world, pos);
     }
 
     static class RoombugLookAtEntityGoal extends LookAtEntityGoal{

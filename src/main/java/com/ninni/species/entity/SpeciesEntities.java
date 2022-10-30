@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.SpeciesTags;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -49,6 +50,7 @@ public class SpeciesEntities {
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), SpawnGroup.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), SpawnGroup.CREATURE, SpeciesEntities.ROOMBUG, 40, 1, 1);
     }
 
     private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {
