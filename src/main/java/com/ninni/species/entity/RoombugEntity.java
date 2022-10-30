@@ -1,6 +1,7 @@
 package com.ninni.species.entity;
 
 import com.google.common.collect.Sets;
+import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -40,6 +41,7 @@ import java.util.Set;
 
 public class RoombugEntity extends TameableEntity {
     private static final Set<Item> TAMING_INGREDIENTS = Sets.newHashSet(Items.HONEYCOMB);
+    int snoringTicks = 0;
 
     protected RoombugEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -126,6 +128,18 @@ public class RoombugEntity extends TameableEntity {
     @Override
     public EntityGroup getGroup() {
         return EntityGroup.ARTHROPOD;
+    }
+
+    @Override
+    public void tickMovement() {
+        if (this.isInSittingPose()) {
+            if (snoringTicks == 0) {
+                this.snoringTicks = 30;
+                this.world.addParticle(SpeciesParticles.SNORING, this.getX(), this.getY() + 0.375F, this.getZ(), 0f, 0f, 0f);
+            }
+            if (snoringTicks > 0) this.snoringTicks--;
+        }
+        super.tickMovement();
     }
 
     @Override
