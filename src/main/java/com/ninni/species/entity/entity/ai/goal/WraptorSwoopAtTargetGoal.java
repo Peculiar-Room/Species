@@ -16,7 +16,7 @@ public class WraptorSwoopAtTargetGoal extends Goal {
     public WraptorSwoopAtTargetGoal(WraptorEntity mob, float velocity) {
         this.mob = mob;
         this.velocity = velocity;
-        this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE));
+        this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE, Control.LOOK));
     }
 
     @Override
@@ -31,6 +31,11 @@ public class WraptorSwoopAtTargetGoal extends Goal {
         if (!this.mob.isOnGround()) return false;
 
         return this.mob.getRandom().nextInt(PounceAtTargetGoal.toGoalTicks(5)) == 0;
+    }
+
+    @Override
+    public void tick() {
+        this.mob.getLookControl().lookAt(this.target, 10.0f, this.mob.getMaxLookPitchChange());
     }
 
     @Override

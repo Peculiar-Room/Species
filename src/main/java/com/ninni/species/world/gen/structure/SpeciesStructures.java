@@ -1,6 +1,6 @@
 package com.ninni.species.world.gen.structure;
 
-import com.ninni.species.SpeciesTags;
+import com.ninni.species.tag.SpeciesTags;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.registry.BuiltinRegistries;

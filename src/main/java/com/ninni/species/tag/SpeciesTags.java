@@ -1,4 +1,4 @@
-package com.ninni.species;
+package com.ninni.species.tag;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

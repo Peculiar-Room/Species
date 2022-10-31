@@ -109,8 +109,8 @@ public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel
     }
 
     @Override
-    public void setAngles(BirtEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch) {
+    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.flyingAnimationState, BirtAnimations.FLY, ageInTicks);
+        this.updateAnimation(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
     }
 }

@@ -1,6 +1,6 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.SpeciesTags;
+import com.ninni.species.tag.SpeciesTags;
 import com.ninni.species.block.SpeciesBlocks;
 import com.ninni.species.entity.entity.ai.goal.WraptorSwoopAtTargetGoal;
 import com.ninni.species.sound.SpeciesSoundEvents;

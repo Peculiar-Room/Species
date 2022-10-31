@@ -87,18 +87,18 @@ public class BirtAnimations {
             )
             .build();
 
-    public static final Animation MESSAGE = Animation.Builder.create(1.5f)
-            .addBoneAnimation(ANTENNA, new Transformation(Transformation.Targets.ROTATE,
-                    new Keyframe(0f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(0.125f, AnimationHelper.method_41829(60f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(0.25f, AnimationHelper.method_41829(-60f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(0.375f, AnimationHelper.method_41829(45f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(0.5f, AnimationHelper.method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(0.75f, AnimationHelper.method_41829(22.5f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(1f, AnimationHelper.method_41829(-22.5f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(1.25f, AnimationHelper.method_41829(5f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(1.4166666666666667f, AnimationHelper.method_41829(-5f, 0f, 0f), Transformation.Interpolations.field_37884), 
-                    new Keyframe(1.5f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
-            )
-            .build();
+    //public static final Animation COMMUNICATING = Animation.Builder.create(1.5f)
+    //        .addBoneAnimation(ANTENNA, new Transformation(Transformation.Targets.ROTATE,
+    //                new Keyframe(0f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(0.125f, AnimationHelper.method_41829(60f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(0.25f, AnimationHelper.method_41829(-60f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(0.375f, AnimationHelper.method_41829(45f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(0.5f, AnimationHelper.method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(0.75f, AnimationHelper.method_41829(22.5f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(1f, AnimationHelper.method_41829(-22.5f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(1.25f, AnimationHelper.method_41829(5f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(1.4166666666666667f, AnimationHelper.method_41829(-5f, 0f, 0f), Transformation.Interpolations.field_37884),
+    //                new Keyframe(1.5f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
+    //        )
+    //        .build();
 }
