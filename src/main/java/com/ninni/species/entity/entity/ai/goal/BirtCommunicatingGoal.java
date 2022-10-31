@@ -32,7 +32,7 @@ public class BirtCommunicatingGoal extends Goal {
     @Override
     public boolean canStart() {
         if (!this.sender.canSendMessage()) return false;
-        this.reciever = this.findReciever();
+        this.reciever = this.sender.findReciever();
         return this.reciever != null;
     }
 
@@ -59,19 +59,6 @@ public class BirtCommunicatingGoal extends Goal {
         if (this.timer >= this.getTickCount(60)) {
             this.sendMessage();
         }
-    }
-
-    @Nullable
-    private BirtEntity findReciever() {
-        List<? extends BirtEntity> list = this.world.getTargets(this.entityClass, TargetPredicate.DEFAULT, this.sender, this.sender.getBoundingBox().expand(8.0));
-        double d = Double.MAX_VALUE;
-        BirtEntity birt = null;
-        for (BirtEntity birt2 : list) {
-            if (!(this.sender.squaredDistanceTo(birt2) < d)) continue;
-            birt = birt2;
-            d = this.sender.squaredDistanceTo(birt2);
-        }
-        return birt;
     }
 
     protected void sendMessage() {

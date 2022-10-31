@@ -1,10 +1,12 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.entity.entity.ai.goal.BirtCommunicatingGoal;
+import com.ninni.species.entity.entity.ai.goal.SendMessageTicksGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.AboveGroundTargeting;
 import net.minecraft.entity.ai.NoPenaltySolidTargeting;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
@@ -39,6 +41,7 @@ import net.minecraft.world.event.PositionSourceType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 
 public class BirtEntity extends PassiveEntity implements Flutterer {
@@ -55,6 +58,7 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(3, new TemptGoal(this, 1.25, Ingredient.fromTag(ItemTags.FLOWERS), false));
+        this.goalSelector.add(4, new SendMessageTicksGoal(this));
         this.goalSelector.add(5, new BirtCommunicatingGoal(this));
         this.goalSelector.add(8, new BirtWanderAroundGoal());
         this.goalSelector.add(9, new BirtLookAroundGoal());
@@ -79,12 +83,6 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
             }
         }
         super.onTrackedDataSet(data);
-    }
-
-    @Override
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        this.setMessageTicks(600);
-        return super.interactMob(player, hand);
     }
 
     @Override
@@ -115,6 +113,19 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
             this.setPose(EntityPose.STANDING);
         }
         if (messageTicks > 0) this.messageTicks--;
+    }
+
+    @Nullable
+    public BirtEntity findReciever() {
+        List<? extends BirtEntity> list = this.world.getTargets(BirtEntity.class, TargetPredicate.DEFAULT, this, this.getBoundingBox().expand(8.0));
+        double d = Double.MAX_VALUE;
+        BirtEntity birt = null;
+        for (BirtEntity birt2 : list) {
+            if (!(this.squaredDistanceTo(birt2) < d)) continue;
+            birt = birt2;
+            d = this.squaredDistanceTo(birt2);
+        }
+        return birt;
     }
 
     public boolean canSendMessage() {
