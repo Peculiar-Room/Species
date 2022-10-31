@@ -69,13 +69,14 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
         if (this.isInAir()) {
-            this.groundTicks = random.nextInt(100) + 20;
+            this.groundTicks = random.nextInt(300) + 20;
             this.setPose(EntityPose.FALL_FLYING);
         }
         else {
             this.groundTicks--;
             this.setPose(EntityPose.STANDING);
         }
+        System.out.println(groundTicks);
     }
 
     @Override
@@ -131,13 +132,13 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
 
         @Override
         public boolean canStart() {
-            if (BirtEntity.this.isOnGround() && BirtEntity.this.groundTicks < 0) return true;
-            return BirtEntity.this.navigation.isIdle() && BirtEntity.this.random.nextInt(10) == 0;
+            if (BirtEntity.this.groundTicks < 0) return true;
+            else if (BirtEntity.this.isInAir()) return BirtEntity.this.navigation.isIdle() && BirtEntity.this.random.nextInt(10) == 0;
+            return false;
         }
 
         @Override
         public boolean shouldContinue() {
-            if (BirtEntity.this.isOnGround() && BirtEntity.this.groundTicks < 0) return true;
             return BirtEntity.this.navigation.isFollowingPath();
         }
 
@@ -152,11 +153,11 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
         @Nullable
         private Vec3d getRandomLocation() {
             Vec3d vec3d2 = BirtEntity.this.getRotationVec(0.0f);
-            Vec3d vec3d3 = AboveGroundTargeting.find(BirtEntity.this, 16, 7, vec3d2.x, vec3d2.z, 1.5707964f, 3, 1);
+            Vec3d vec3d3 = AboveGroundTargeting.find(BirtEntity.this, 12, 7, vec3d2.x, vec3d2.z, 1.5707964f, 3, 1);
             if (vec3d3 != null) {
                 return vec3d3;
             }
-            return NoPenaltySolidTargeting.find(BirtEntity.this, 16, 4, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
+            return NoPenaltySolidTargeting.find(BirtEntity.this, 12, 4, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
         }
     }
 
