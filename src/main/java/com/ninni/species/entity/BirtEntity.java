@@ -131,12 +131,14 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
 
         @Override
         public boolean canStart() {
-            return BirtEntity.this.navigation.isIdle() && BirtEntity.this.random.nextInt(10) == 0 && BirtEntity.this.groundTicks < 0;
+            if (BirtEntity.this.isOnGround() && BirtEntity.this.groundTicks < 0) return true;
+            return BirtEntity.this.navigation.isIdle() && BirtEntity.this.random.nextInt(10) == 0;
         }
 
         @Override
         public boolean shouldContinue() {
-            return BirtEntity.this.navigation.isFollowingPath() && BirtEntity.this.groundTicks < 0;
+            if (BirtEntity.this.isOnGround() && BirtEntity.this.groundTicks < 0) return true;
+            return BirtEntity.this.navigation.isFollowingPath();
         }
 
         @Override
