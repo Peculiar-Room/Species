@@ -14,6 +14,7 @@ import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
 import static net.minecraft.util.math.MathHelper.clamp;
 
 @Environment(EnvType.CLIENT)
+@SuppressWarnings("FieldCanBeLocal, unused")
 public class RoombugEntityModel<E extends RoombugEntity> extends AnimalModel<E> {
     public static final String LEFT_ANTENNA = "left_antenna";
     public static final String RIGHT_ANTENNA = "right_antenna";

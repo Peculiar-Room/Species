@@ -41,5 +41,8 @@
   "subtitles.entity.species.roombug.hurt": "Roombug hurts",
   "subtitles.entity.species.roombug.idle": "Roombug clicks",
   "subtitles.entity.species.roombug.snoring": "Roombug snores",
-  "subtitles.entity.species.roombug.step": "Roombug strides"
+  "subtitles.entity.species.roombug.step": "Roombug strides",
+
+  "entity.species.birt": "Birt",
+  "item.species.birt_spawn_egg": "Birt Spawn Egg"
 }

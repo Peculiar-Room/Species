@@ -4,6 +4,7 @@ import com.google.common.reflect.Reflection;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.particles.SpeciesParticles;
+import com.ninni.species.client.renderer.BirtEntityRenderer;
 import com.ninni.species.client.renderer.DeepfishEntityRenderer;
 import com.ninni.species.client.renderer.RoombugEntityRenderer;
 import com.ninni.species.client.renderer.WraptorEntityRenderer;
@@ -21,6 +22,7 @@ public class SpeciesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SpeciesEntities.WRAPTOR, WraptorEntityRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.DEEPFISH, DeepfishEntityRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.ROOMBUG, RoombugEntityRenderer::new);
+        EntityRendererRegistry.register(SpeciesEntities.BIRT, BirtEntityRenderer::new);
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.SNORING, SnoringParticle.Factory::new);
     }

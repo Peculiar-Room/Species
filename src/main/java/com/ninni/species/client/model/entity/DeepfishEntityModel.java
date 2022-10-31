@@ -2,6 +2,8 @@ package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.ninni.species.entity.DeepfishEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 
@@ -11,6 +13,8 @@ import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
 import static net.minecraft.util.math.MathHelper.clamp;
 import static net.minecraft.util.math.MathHelper.cos;
 
+@Environment(EnvType.CLIENT)
+@SuppressWarnings("FieldCanBeLocal, unused")
 public class DeepfishEntityModel<T extends DeepfishEntity> extends SinglePartEntityModel<T> {
     private final ModelPart root;
     private final ModelPart body;
@@ -21,7 +25,7 @@ public class DeepfishEntityModel<T extends DeepfishEntity> extends SinglePartEnt
     public DeepfishEntityModel(ModelPart root) {
         this.root = root;
 
-        this.body = root.getChild("body");
+        this.body = root.getChild(BODY);
 
         this.leftEar = this.body.getChild(LEFT_EAR);
         this.rightEar  = this.body.getChild(RIGHT_EAR);

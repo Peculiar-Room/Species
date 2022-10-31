@@ -14,6 +14,7 @@ public interface SpeciesEntityModelLayers {
     EntityModelLayer WRAPTOR = main("wraptor", WraptorEntityModel::getTexturedModelData);
     EntityModelLayer DEEPFISH = main("deepfish", DeepfishEntityModel::getTexturedModelData);
     EntityModelLayer ROOMBUG = main("roombug", RoombugEntityModel::getTexturedModelData);
+    EntityModelLayer BIRT = main("birt", BirtEntityModel::getTexturedModelData);
 
     private static EntityModelLayer register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         EntityModelLayer layer = new EntityModelLayer(new Identifier(MOD_ID, id), name);

@@ -26,6 +26,8 @@ public class SpeciesItems {
 
     public static final Item ROOMBUG_SPAWN_EGG = register("roombug_spawn_egg", new SpawnEggItem(SpeciesEntities.ROOMBUG, 0x5A3C29, 0xB4584D, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
 
+    public static final Item BIRT_SPAWN_EGG = register("birt_spawn_egg", new SpawnEggItem(SpeciesEntities.BIRT, 0x53C7BE, 0xD95B4D, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
+
     private static Item register(String id, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(MOD_ID, id), item);
     }

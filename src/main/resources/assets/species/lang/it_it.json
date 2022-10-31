@@ -40,5 +40,8 @@
   "subtitles.entity.species.roombug.hurt": "Roombug ferite",
   "subtitles.entity.species.roombug.idle": "Roombug fa click",
   "subtitles.entity.species.roombug.snoring": "Roombug russa",
-  "subtitles.entity.species.roombug.step": "Roombug zampetta"
+  "subtitles.entity.species.roombug.step": "Roombug zampetta",
+
+  "entity.species.birt": "Birt",
+  "item.species.birt_spawn_egg": "Uovo generatore di birt"
 }

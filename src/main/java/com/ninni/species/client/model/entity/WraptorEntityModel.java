@@ -19,6 +19,7 @@ import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
 import static net.minecraft.util.math.MathHelper.*;
 
 @Environment(EnvType.CLIENT)
+@SuppressWarnings("FieldCanBeLocal, unused")
 public class WraptorEntityModel<E extends WraptorEntity> extends AnimalModel<E> {
     public static final String TAIL_BASE = "tail_base";
     public static final String TAIL_TIP = "tail_tip";
