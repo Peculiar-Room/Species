@@ -1,5 +1,6 @@
 package com.ninni.species.client.model.entity;
 
+import com.google.common.collect.ImmutableList;
 import com.ninni.species.client.animation.BirtAnimations;
 import com.ninni.species.entity.BirtEntity;
 import net.fabricmc.api.EnvType;
@@ -7,6 +8,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.List;
 
 import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
 
@@ -109,11 +112,15 @@ public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel
         return this.root;
     }
 
+    public List<ModelPart> getAllParts() {
+        return ImmutableList.of(this.body, this.antenna, this.leftWing, this.rightWing, this.tail);
+    }
+
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         if (entity.antennaTicks > 0) {
-            this.antenna.pitch += MathHelper.cos(animationProgress * 0.6F);
+            this.antenna.pitch += MathHelper.cos(animationProgress) * 0.25F;
         }
         this.updateAnimation(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
     }

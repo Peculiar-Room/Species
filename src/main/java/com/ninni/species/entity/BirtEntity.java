@@ -159,9 +159,6 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
         this.resetMessageTicks();
         other.resetMessageTicks();
 
-        this.world.sendEntityStatus(this, (byte) 10);
-        this.world.sendEntityStatus(other, (byte) 10);
-
         PositionSource positionSource = new PositionSource() {
             @Override
             public Optional<Vec3d> getPos(World world) {
@@ -174,6 +171,7 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
             }
         };
 
+        //TODO custom sound
         world.playSound(null, other.getBlockPos(), SoundEvents.BLOCK_SCULK_SENSOR_CLICKING, SoundCategory.NEUTRAL, 1, 1);
         world.spawnParticles(new VibrationParticleEffect(positionSource, 20), other.getX(), other.getY() + 0.75, other.getZ(), 0, 0, 0, 0, 0);
     }

@@ -1,14 +1,12 @@
 package com.ninni.species.entity.entity.ai.goal;
 
 import com.ninni.species.entity.BirtEntity;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.List;
 
 public class BirtCommunicatingGoal extends Goal {
     protected final BirtEntity sender;
@@ -40,6 +38,13 @@ public class BirtCommunicatingGoal extends Goal {
     public boolean shouldContinue() {
         assert this.reciever != null;
         return this.reciever.isAlive() && this.sender.canSendMessage() && this.timer < 60;
+    }
+
+    @Override
+    public void start() {
+        this.world.sendEntityStatus(this.sender, (byte) 10);
+        this.world.sendEntityStatus(this.reciever, (byte) 10);
+        super.start();
     }
 
     @Override
