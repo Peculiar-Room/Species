@@ -44,5 +44,9 @@
   "subtitles.entity.species.roombug.step": "Roombug strides",
 
   "entity.species.birt": "Birt",
-  "item.species.birt_spawn_egg": "Birt Spawn Egg"
+  "entity.species.birt_egg": "Birt Egg",
+  "item.species.birt_spawn_egg": "Birt Spawn Egg",
+  "item.species.birt_egg": "Birt Egg",
+
+  "effect.species.birtd": "Birt'd"
 }

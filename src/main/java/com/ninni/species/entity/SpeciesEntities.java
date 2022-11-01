@@ -58,6 +58,15 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<BirtEggEntity> BIRT_EGG = register(
+            "birt_egg",
+            FabricEntityTypeBuilder.create()
+                    .<BirtEggEntity>entityFactory(BirtEggEntity::new)
+                    .spawnGroup(SpawnGroup.MISC)
+                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
+                    .trackRangeChunks(4)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), SpawnGroup.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

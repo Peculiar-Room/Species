@@ -1,7 +1,7 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.entity.entity.ai.goal.BirtCommunicatingGoal;
-import com.ninni.species.entity.entity.ai.goal.SendMessageTicksGoal;
+import com.ninni.species.entity.ai.goal.BirtCommunicatingGoal;
+import com.ninni.species.entity.ai.goal.SendMessageTicksGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
@@ -23,6 +23,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.VibrationParticleEffect;
@@ -45,13 +46,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
-public class BirtEntity extends PassiveEntity implements Flutterer {
+public class BirtEntity extends AnimalEntity implements Flutterer {
     public final AnimationState flyingAnimationState = new AnimationState();
     public int antennaTicks;
     public int groundTicks;
     public int messageTicks = 0;
 
-    public BirtEntity(EntityType<? extends PassiveEntity> entityType, World world) {
+    public BirtEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
         this.moveControl = new FlightMoveControl(this, 20, false);
     }
@@ -180,12 +181,6 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
         return world.getBlockState(pos).isAir() ? 10.0F : 0.0F;
     }
-
-    @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
-        return false;
-    }
-
 
     @Override
     public boolean isInAir() {

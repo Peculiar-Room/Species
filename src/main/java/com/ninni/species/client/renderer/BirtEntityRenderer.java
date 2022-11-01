@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -21,6 +22,12 @@ public class BirtEntityRenderer extends MobEntityRenderer<BirtEntity, BirtEntity
     public BirtEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new BirtEntityModel<>(context.getPart(SpeciesEntityModelLayers.BIRT)), 0.3f);
         this.addFeature(new BirtFeatureRenderer<>(this, TEXTURE_COMMUNICATING, (birt, tickDelta, animationProgress) -> Math.max(0, MathHelper.cos(animationProgress * 0.5f) * 0.75F), BirtEntityModel::getAllParts));
+    }
+
+    @Override
+    protected void scale(BirtEntity entity, MatrixStack matrices, float amount) {
+        if (entity.isBaby()) matrices.scale(0.5F, 0.5F, 0.5F);
+        else super.scale(entity, matrices, amount);
     }
 
     @Override

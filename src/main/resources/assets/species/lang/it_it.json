@@ -43,5 +43,7 @@
   "subtitles.entity.species.roombug.step": "Roombug zampetta",
 
   "entity.species.birt": "Birt",
-  "item.species.birt_spawn_egg": "Uovo generatore di birt"
+  "entity.species.birt_egg": "Uovo di birt",
+  "item.species.birt_spawn_egg": "Uovo generatore di birt",
+  "item.species.birt_egg": "Uovo di birt"
 }

@@ -1,4 +1,4 @@
-package com.ninni.species.entity.entity.ai.goal;
+package com.ninni.species.entity.ai.goal;
 
 import com.ninni.species.entity.WraptorEntity;
 import net.minecraft.entity.LivingEntity;
