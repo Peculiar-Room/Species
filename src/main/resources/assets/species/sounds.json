@@ -211,5 +211,48 @@
       "species:entity/roombug/snoring3"
     ],
     "subtitle": "subtitles.entity.species.roombug.snoring"
+  },
+  "entity.birt.death": {
+    "sounds": [
+      "species:entity/birt/death1",
+      "species:entity/birt/death2"
+    ],
+    "subtitle": "subtitles.entity.species.birt.death"
+  },
+  "entity.birt.hurt": {
+    "sounds": [
+      "species:entity/birt/hurt1",
+      "species:entity/birt/hurt2",
+      "species:entity/birt/hurt3",
+      "species:entity/birt/hurt4"
+    ],
+    "subtitle": "subtitles.entity.species.birt.hurt"
+  },
+  "entity.birt.idle": {
+    "sounds": [
+      "species:entity/birt/idle1",
+      "species:entity/birt/idle2",
+      "species:entity/birt/idle3",
+      "species:entity/birt/idle4",
+      "species:entity/birt/idle5"
+    ],
+    "subtitle": "subtitles.entity.species.birt.idle"
+  },
+  "entity.birt.fly": {
+    "sounds": [
+      "species:entity/birt/fly1",
+      "species:entity/birt/fly2",
+      "species:entity/birt/fly3",
+      "species:entity/birt/fly4",
+      "species:entity/birt/fly5",
+      "species:entity/birt/fly6"
+    ],
+    "subtitle": "subtitles.entity.species.birt.fly"
+  },
+  "entity.birt.message": {
+    "sounds": [
+      "species:entity/birt/message"
+    ],
+    "subtitle": "subtitles.entity.species.birt.message"
   }
 }

@@ -2,6 +2,7 @@ package com.ninni.species.entity;
 
 import com.ninni.species.entity.ai.goal.BirtCommunicatingGoal;
 import com.ninni.species.entity.ai.goal.SendMessageTicksGoal;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
@@ -30,9 +31,10 @@ import net.minecraft.particle.VibrationParticleEffect;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -48,7 +50,13 @@ import java.util.Optional;
 
 public class BirtEntity extends AnimalEntity implements Flutterer {
     public final AnimationState flyingAnimationState = new AnimationState();
+    public float flapProgress;
+    public float maxWingDeviation;
+    public float prevMaxWingDeviation;
+    public float prevFlapProgress;
+    public float flap = 1;
     public int antennaTicks;
+    private float flapSpeed = 1.0f;
     public int groundTicks;
     public int messageTicks = 0;
 
@@ -119,6 +127,7 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
             this.setPose(EntityPose.STANDING);
         }
         if (messageTicks > 0) this.messageTicks--;
+        this.flapWings();
     }
 
     @Nullable
@@ -172,9 +181,36 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
             }
         };
 
-        //TODO custom sound
-        world.playSound(null, other.getBlockPos(), SoundEvents.BLOCK_SCULK_SENSOR_CLICKING, SoundCategory.NEUTRAL, 1, 1);
+        world.playSound(null, other.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE, SoundCategory.NEUTRAL, 1, (random.nextInt(10) / 10f) + 0.5f);
         world.spawnParticles(new VibrationParticleEffect(positionSource, 20), other.getX(), other.getY() + 0.75, other.getZ(), 0, 0, 0, 0, 0);
+    }
+
+    private void flapWings() {
+        this.prevFlapProgress = this.flapProgress;
+        this.prevMaxWingDeviation = this.maxWingDeviation;
+        this.maxWingDeviation += (float)(this.onGround || this.hasVehicle() ? -1 : 4) * 0.3f;
+        this.maxWingDeviation = MathHelper.clamp(this.maxWingDeviation, 0.0f, 1.0f);
+        if (!this.onGround && this.flapSpeed < 1.0f) {
+            this.flapSpeed = 1.0f;
+        }
+        this.flapSpeed *= 0.9f;
+        Vec3d vec3d = this.getVelocity();
+        if (!this.onGround && vec3d.y < 0.0) {
+            this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
+        }
+        this.flapProgress += this.flapSpeed * 2.0f;
+    }
+
+
+    @Override
+    protected boolean hasWings() {
+        return this.speed > this.flap;
+    }
+
+    @Override
+    protected void addFlapEffects() {
+        this.playSound(SpeciesSoundEvents.ENTITY_BIRT_FLY, 0.05f, 1.0f);
+        this.flap = this.speed + this.maxWingDeviation / 2.0f;
     }
 
     @Override
@@ -220,6 +256,21 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<? extends PassiveEntity> type, WorldAccess world, SpawnReason reason, BlockPos pos, Random random) {
         return false;
+    }
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.ENTITY_BIRT_IDLE;
+    }
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.ENTITY_BIRT_HURT;
+    }
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.ENTITY_BIRT_DEATH;
     }
 
     class BirtWanderAroundGoal extends Goal {

@@ -38,6 +38,12 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ENTITY_ROOMBUG_STEP  = register("entity.roombug.step");
     public static final SoundEvent ENTITY_ROOMBUG_GOOFY_AAH_STEP = register("entity.roombug.goofy_aah_step");
 
+    public static final SoundEvent ENTITY_BIRT_DEATH = register("entity.birt.death");
+    public static final SoundEvent ENTITY_BIRT_HURT  = register("entity.birt.hurt");
+    public static final SoundEvent ENTITY_BIRT_IDLE  = register("entity.birt.idle");
+    public static final SoundEvent ENTITY_BIRT_FLY  = register("entity.birt.fly");
+    public static final SoundEvent ENTITY_BIRT_MESSAGE  = register("entity.birt.message");
+
     private static SoundEvent register(String name) {
         Identifier id = new Identifier(MOD_ID, name);
         return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
