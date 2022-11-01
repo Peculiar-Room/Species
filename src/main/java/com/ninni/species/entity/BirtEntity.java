@@ -3,7 +3,11 @@ package com.ninni.species.entity;
 import com.ninni.species.entity.entity.ai.goal.BirtCommunicatingGoal;
 import com.ninni.species.entity.entity.ai.goal.SendMessageTicksGoal;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
+import net.minecraft.entity.AnimationState;
+import net.minecraft.entity.EntityPose;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.AboveGroundTargeting;
 import net.minecraft.entity.ai.NoPenaltySolidTargeting;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -20,7 +24,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.VibrationParticleEffect;
 import net.minecraft.recipe.Ingredient;
@@ -28,8 +31,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.ItemTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -46,6 +47,7 @@ import java.util.Optional;
 
 public class BirtEntity extends PassiveEntity implements Flutterer {
     public final AnimationState flyingAnimationState = new AnimationState();
+    public int antennaTicks;
     public int groundTicks;
     public int messageTicks = 0;
 
@@ -101,6 +103,9 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
     public void tickMovement() {
         super.tickMovement();
         Vec3d vec3d = this.getVelocity();
+        if (this.antennaTicks > 0) {
+            this.antennaTicks--;
+        }
         if (!this.onGround && vec3d.y < 0.0) {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
@@ -140,9 +145,22 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
         this.messageTicks = 0;
     }
 
+    @Override
+    public void handleStatus(byte status) {
+        if (status == 10) {
+            this.antennaTicks = 60;
+        }
+        else {
+            super.handleStatus(status);
+        }
+    }
+
     public void sendMessage(ServerWorld world, BirtEntity other) {
         this.resetMessageTicks();
         other.resetMessageTicks();
+
+        this.world.sendEntityStatus(this, (byte) 10);
+        this.world.sendEntityStatus(other, (byte) 10);
 
         PositionSource positionSource = new PositionSource() {
             @Override

@@ -8,7 +8,12 @@ import net.minecraft.client.render.entity.animation.Keyframe;
 import net.minecraft.client.render.entity.animation.Transformation;
 
 import static com.ninni.species.client.model.entity.BirtEntityModel.ANTENNA;
-import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.BODY;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_WING;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_WING;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.TAIL;
 
 @Environment(EnvType.CLIENT)
 public class BirtAnimations {
@@ -87,18 +92,4 @@ public class BirtAnimations {
             )
             .build();
 
-    //public static final Animation COMMUNICATING = Animation.Builder.create(1.5f)
-    //        .addBoneAnimation(ANTENNA, new Transformation(Transformation.Targets.ROTATE,
-    //                new Keyframe(0f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(0.125f, AnimationHelper.method_41829(60f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(0.25f, AnimationHelper.method_41829(-60f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(0.375f, AnimationHelper.method_41829(45f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(0.5f, AnimationHelper.method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(0.75f, AnimationHelper.method_41829(22.5f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(1f, AnimationHelper.method_41829(-22.5f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(1.25f, AnimationHelper.method_41829(5f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(1.4166666666666667f, AnimationHelper.method_41829(-5f, 0f, 0f), Transformation.Interpolations.field_37884),
-    //                new Keyframe(1.5f, AnimationHelper.method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
-    //        )
-    //        .build();
 }

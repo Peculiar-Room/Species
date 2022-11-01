@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.util.math.MathHelper;
 
 import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
 
@@ -111,6 +112,9 @@ public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
+        if (entity.antennaTicks > 0) {
+            this.antenna.pitch += MathHelper.cos(animationProgress * 0.6F);
+        }
         this.updateAnimation(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
     }
 }
