@@ -1,11 +1,11 @@
 package com.ninni.species.item;
 
 import com.ninni.species.entity.BirtEggEntity;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -20,7 +20,7 @@ public class BirtEggItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5f, 0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
+        world.playSound(null, user.getX(), user.getY(), user.getZ(), SpeciesSoundEvents.ITEM_BIRT_EGG_THROW, SoundCategory.PLAYERS, 0.5f, 0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClient) {
             BirtEggEntity entity = new BirtEggEntity(world, user);
             entity.setItem(itemStack);

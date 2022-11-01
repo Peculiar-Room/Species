@@ -233,8 +233,7 @@
       "species:entity/birt/idle1",
       "species:entity/birt/idle2",
       "species:entity/birt/idle3",
-      "species:entity/birt/idle4",
-      "species:entity/birt/idle5"
+      "species:entity/birt/idle4"
     ],
     "subtitle": "subtitles.entity.species.birt.idle"
   },
@@ -254,5 +253,28 @@
       "species:entity/birt/message"
     ],
     "subtitle": "subtitles.entity.species.birt.message"
+  },
+  "entity.birtd": {
+    "sounds": [
+      "species:entity/birtd"
+    ],
+    "subtitle": "subtitles.entity.birtd"
+  },
+  "item.birt_egg.throw": {
+    "sounds": [
+      "species:item/birt_egg/throw1",
+      "species:item/birt_egg/throw2",
+      "species:item/birt_egg/throw3",
+      "species:item/birt_egg/throw4",
+      "species:item/birt_egg/throw5"
+    ],
+    "subtitle": "subtitles.item.species.birt_egg.throw"
+  },
+  "item.birt_egg.hit": {
+    "sounds": [
+      "species:item/birt_egg/hit1",
+      "species:item/birt_egg/hit2"
+    ],
+    "subtitle": "subtitles.item.species.birt_egg.hit"
   }
 }

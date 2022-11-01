@@ -44,6 +44,11 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ENTITY_BIRT_FLY  = register("entity.birt.fly");
     public static final SoundEvent ENTITY_BIRT_MESSAGE  = register("entity.birt.message");
 
+    public static final SoundEvent ENTITY_BIRTD  = register("entity.birtd");
+
+    public static final SoundEvent ITEM_BIRT_EGG_THROW = register("item.birt_egg.throw");
+    public static final SoundEvent ITEM_BIRT_EGG_HIT = register("item.birt_egg.hit");
+
     private static SoundEvent register(String name) {
         Identifier id = new Identifier(MOD_ID, name);
         return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));

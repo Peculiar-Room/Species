@@ -181,7 +181,7 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
             }
         };
 
-        world.playSound(null, other.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE, SoundCategory.NEUTRAL, 1, (random.nextInt(10) / 10f) + 0.5f);
+        world.playSound(null, other.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE, SoundCategory.NEUTRAL, 1,  0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         world.spawnParticles(new VibrationParticleEffect(positionSource, 20), other.getX(), other.getY() + 0.75, other.getZ(), 0, 0, 0, 0, 0);
     }
 
