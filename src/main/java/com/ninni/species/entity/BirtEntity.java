@@ -126,6 +126,7 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
             this.groundTicks--;
             this.setPose(EntityPose.STANDING);
         }
+
         if (messageTicks > 0) this.messageTicks--;
         this.flapWings();
     }
@@ -209,7 +210,7 @@ public class BirtEntity extends AnimalEntity implements Flutterer {
 
     @Override
     protected void addFlapEffects() {
-        this.playSound(SpeciesSoundEvents.ENTITY_BIRT_FLY, 0.05f, 1.0f);
+        this.playSound(SpeciesSoundEvents.ENTITY_BIRT_FLY, 0.15f, 1.0f);
         this.flap = this.speed + this.maxWingDeviation / 2.0f;
     }
 

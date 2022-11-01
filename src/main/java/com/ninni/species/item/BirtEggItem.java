@@ -20,6 +20,7 @@ public class BirtEggItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
+        user.getItemCooldownManager().set(this, 20);
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SpeciesSoundEvents.ITEM_BIRT_EGG_THROW, SoundCategory.PLAYERS, 0.5f, 0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClient) {
             BirtEggEntity entity = new BirtEggEntity(world, user);
@@ -27,6 +28,7 @@ public class BirtEggItem extends Item {
             entity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1f, 1.0f);
             world.spawnEntity(entity);
         }
+
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         if (!user.getAbilities().creativeMode) {
             itemStack.decrement(1);

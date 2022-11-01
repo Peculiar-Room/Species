@@ -16,8 +16,8 @@ import static com.ninni.species.Species.MOD_ID;
 
 @Environment(value= EnvType.CLIENT)
 public class BirtEntityRenderer extends MobEntityRenderer<BirtEntity, BirtEntityModel<BirtEntity>> {
-    private static final Identifier TEXTURE = new Identifier(MOD_ID, "textures/entity/birt/birt.png");
-    private static final Identifier TEXTURE_COMMUNICATING = new Identifier(MOD_ID, "textures/entity/birt/birt_communicating.png");
+    public static final Identifier TEXTURE = new Identifier(MOD_ID, "textures/entity/birt/birt.png");
+    public static final Identifier TEXTURE_COMMUNICATING = new Identifier(MOD_ID, "textures/entity/birt/birt_communicating.png");
 
     public BirtEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new BirtEntityModel<>(context.getPart(SpeciesEntityModelLayers.BIRT)), 0.3f);

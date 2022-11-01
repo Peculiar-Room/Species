@@ -44,7 +44,10 @@ public class BirtEggEntity extends ThrownItemEntity {
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
-        if (entityHitResult.getEntity() instanceof LivingEntity entity) entity.addStatusEffect(new StatusEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
+        if (entityHitResult.getEntity() instanceof LivingEntity entity) {
+            if (!entity.hasStatusEffect(SpeciesStatusEffects.BIRTD)) world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRTD, SoundCategory.NEUTRAL, 1, 1);
+            entity.addStatusEffect(new StatusEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
+        }
         entityHitResult.getEntity().damage(DamageSource.thrownProjectile(this, this.getOwner()), 2.0f);
     }
 
@@ -66,8 +69,6 @@ public class BirtEggEntity extends ThrownItemEntity {
                     this.world.spawnEntity(chick);
                 }
             }
-        } else {
-            world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRTD, SoundCategory.NEUTRAL, 1, 1);
         }
         world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundCategory.NEUTRAL, 1, 1);
         this.world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);

@@ -8,4 +8,5 @@ import net.minecraft.util.registry.Registry;
 
 public class SpeciesParticles {
     public static final DefaultParticleType SNORING = Registry.register(Registry.PARTICLE_TYPE, new Identifier(Species.MOD_ID, "snoring"), FabricParticleTypes.simple());
+    public static final DefaultParticleType BIRTD = Registry.register(Registry.PARTICLE_TYPE, new Identifier(Species.MOD_ID, "birtd"), FabricParticleTypes.simple());
 }

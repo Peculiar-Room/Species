@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.particles.BirtdParticle;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.client.renderer.BirtEntityRenderer;
@@ -27,5 +28,6 @@ public class SpeciesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SpeciesEntities.BIRT_EGG, FlyingItemEntityRenderer::new);
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.SNORING, SnoringParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, BirtdParticle.Factory::new);
     }
 }
