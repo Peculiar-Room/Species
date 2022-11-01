@@ -182,6 +182,12 @@ public class BirtEntity extends PassiveEntity implements Flutterer {
     }
 
     @Override
+    public boolean canImmediatelyDespawn(double distanceSquared) {
+        return false;
+    }
+
+
+    @Override
     public boolean isInAir() {
         return !this.onGround;
     }
