@@ -35,8 +35,8 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "isImmobile", at = @At("HEAD"), cancellable = true)
-    public void applyBirtd(CallbackInfoReturnable<Boolean> cir) {
-        if (this.hasStatusEffect(SpeciesStatusEffects.BIRTD)) cir.setReturnValue(true);
+    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
+    public void applyBirtd(CallbackInfo ci) {
+        if (this.hasStatusEffect(SpeciesStatusEffects.BIRTD)) ci.cancel();
     }
 }

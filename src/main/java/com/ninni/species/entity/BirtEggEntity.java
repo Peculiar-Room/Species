@@ -70,6 +70,7 @@ public class BirtEggEntity extends ThrownItemEntity {
                 }
             }
         }
+
         world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundCategory.NEUTRAL, 1, 1);
         this.world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);
         this.discard();

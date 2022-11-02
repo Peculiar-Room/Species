@@ -47,6 +47,7 @@
   "entity.species.birt_egg": "Birt Egg",
   "item.species.birt_spawn_egg": "Birt Spawn Egg",
   "item.species.birt_egg": "Birt Egg",
+  "block.species.birt_dwelling": "Birt Dwelling",
 
   "effect.species.birtd": "Birt'd"
 }

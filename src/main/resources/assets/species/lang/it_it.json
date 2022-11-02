@@ -45,5 +45,8 @@
   "entity.species.birt": "Birt",
   "entity.species.birt_egg": "Uovo di birt",
   "item.species.birt_spawn_egg": "Uovo generatore di birt",
-  "item.species.birt_egg": "Uovo di birt"
+  "item.species.birt_egg": "Uovo di birt",
+  "block.species.birt_dwelling": "Nido di birt",
+
+  "effect.species.birtd": "Birtato"
 }

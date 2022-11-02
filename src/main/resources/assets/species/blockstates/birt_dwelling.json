@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,birts=0": {
+      "model": "species:block/birt_dwelling",
+      "y": 90
+    },
+    "facing=east,birts=1": {
+      "model": "species:block/birt_dwelling_1",
+      "y": 90
+    },
+    "facing=east,birts=2": {
+      "model": "species:block/birt_dwelling_2",
+      "y": 90
+    },
+    "facing=east,birts=3": {
+      "model": "species:block/birt_dwelling_3",
+      "y": 90
+    },
+    "facing=north,birts=0": {
+      "model": "species:block/birt_dwelling"
+    },
+    "facing=north,birts=1": {
+      "model": "species:block/birt_dwelling_1"
+    },
+    "facing=north,birts=2": {
+      "model": "species:block/birt_dwelling_2"
+    },
+    "facing=north,birts=3": {
+      "model": "species:block/birt_dwelling_3"
+    },
+    "facing=south,birts=0": {
+      "model": "species:block/birt_dwelling",
+      "y": 180
+    },
+    "facing=south,birts=1": {
+      "model": "species:block/birt_dwelling_1",
+      "y": 180
+    },
+    "facing=south,birts=2": {
+      "model": "species:block/birt_dwelling_2",
+      "y": 180
+    },
+    "facing=south,birts=3": {
+      "model": "species:block/birt_dwelling_3",
+      "y": 180
+    },
+    "facing=west,birts=0": {
+      "model": "species:block/birt_dwelling",
+      "y": 270
+    },
+    "facing=west,birts=1": {
+      "model": "species:block/birt_dwelling_1",
+      "y": 270
+    },
+    "facing=west,birts=2": {
+      "model": "species:block/birt_dwelling_2",
+      "y": 270
+    },
+    "facing=west,birts=3": {
+      "model": "species:block/birt_dwelling_3",
+      "y": 270
+    }
+  }
+}
