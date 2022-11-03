@@ -36,7 +36,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -148,16 +147,6 @@ public class BirtDwellingBlock extends BlockWithEntity {
             blockEntity1.angerBirts(null, state, com.ninni.species.block.entity.BirtDwellingBlockEntity.BirtState.EMERGENCY);
         }
         return super.getDroppedStacks(state, builder);
-    }
-
-    @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        BlockEntity blockEntity;
-        if ((blockEntity = world.getBlockEntity(pos)) instanceof BirtDwellingBlockEntity) {
-            BirtDwellingBlockEntity blockEntity1 = (BirtDwellingBlockEntity)blockEntity;
-            blockEntity1.angerBirts(null, state, BirtDwellingBlockEntity.BirtState.EMERGENCY);
-        }
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 }
 
