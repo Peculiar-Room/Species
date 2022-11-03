@@ -160,7 +160,7 @@ public class BirtEntity extends AnimalEntity implements Angerable, Flutterer {
         if (this.antennaTicks > 0) {
             this.antennaTicks--;
         }
-        if (!this.onGround && vec3d.y < 0.0) {
+        if (!this.onGround && vec3d.y < 0.0 && this.getTarget() == null) {
             this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
         }
         if (this.isInAir()) {
@@ -482,8 +482,8 @@ public class BirtEntity extends AnimalEntity implements Angerable, Flutterer {
                 vec3d2 = BirtEntity.this.getRotationVec(0.0F);
             }
 
-            Vec3d vec3d3 = AboveGroundTargeting.find(BirtEntity.this, 12, 7, vec3d2.x, vec3d2.z, 1.5707964F, 3, 1);
-            return vec3d3 != null ? vec3d3 : NoPenaltySolidTargeting.find(BirtEntity.this, 12, 4, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
+            Vec3d vec3d3 = AboveGroundTargeting.find(BirtEntity.this, 12, 5, vec3d2.x, vec3d2.z, 1.5707964F, 3, 1);
+            return vec3d3 != null ? vec3d3 : NoPenaltySolidTargeting.find(BirtEntity.this, 12, 2, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
         }
     }
 

@@ -4,6 +4,7 @@ import com.ninni.species.block.entity.BirtDwellingBlockEntity;
 import com.ninni.species.block.entity.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.item.SpeciesItems;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -22,9 +23,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -44,6 +50,22 @@ public class BirtDwellingBlock extends BlockWithEntity {
     public BirtDwellingBlock(AbstractBlock.Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(BIRTS, 0).with(EGGS, 0));
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (state.get(EGGS) > 0) {
+            world.setBlockState(pos, state.with(EGGS, state.get(EGGS) - 1));
+            Direction direction = state.get(BirtDwellingBlock.FACING);
+            double x = (double)pos.getX() + 0.5 + (double)direction.getOffsetX();
+            double y = (double)pos.getY() + 0.5 ;
+            double z = (double)pos.getZ() + 0.5 + (double)direction.getOffsetZ();
+            BlockPos itemPos = new BlockPos(x, y, z);
+            world.playSound(null, itemPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1 ,1);
+            dropStack(world, itemPos, SpeciesItems.BIRT_EGG.getDefaultStack());
+            return ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
