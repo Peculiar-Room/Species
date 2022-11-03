@@ -228,7 +228,7 @@ public class BirtEntity extends AnimalEntity implements Angerable, Flutterer {
     }
 
     public boolean canSendMessage() {
-        return this.messageTicks > 0;
+        return this.messageTicks > 0 && this.getTarget() == null;
     }
 
     public void setMessageTicks(int messageTicks) {

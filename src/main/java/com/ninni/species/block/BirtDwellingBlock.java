@@ -51,19 +51,18 @@ public class BirtDwellingBlock extends BlockWithEntity {
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(BIRTS, 0).with(EGGS, 0));
     }
 
-
-    //wip
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (state.get(EGGS) > 0) {
+        BlockEntity blockEntity;
+        if (state.get(EGGS) > 0 && player.getStackInHand(hand).isEmpty()) {
+            if (!world.isClient && (blockEntity = world.getBlockEntity(pos)) instanceof BirtDwellingBlockEntity) {
+                BirtDwellingBlockEntity blockEntity1 = (BirtDwellingBlockEntity)blockEntity;
+                blockEntity1.angerBirts(player, state, BirtDwellingBlockEntity.BirtState.EMERGENCY);
+            }
             world.setBlockState(pos, state.with(EGGS, state.get(EGGS) - 1));
-            Direction direction = state.get(BirtDwellingBlock.FACING);
-            double x = (double)pos.getX() + 0.5 + (double)direction.getOffsetX();
-            double y = (double)pos.getY() + 0.5 ;
-            double z = (double)pos.getZ() + 0.5 + (double)direction.getOffsetZ();
-            BlockPos itemPos = new BlockPos(x, y, z);
+            BlockPos itemPos = pos.offset(state.get(FACING));
             world.playSound(null, itemPos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1 ,1);
-            dropStack(world, itemPos, SpeciesItems.BIRT_EGG.getDefaultStack());
+            dropStack(world, itemPos, new ItemStack(SpeciesItems.BIRT_EGG));
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
