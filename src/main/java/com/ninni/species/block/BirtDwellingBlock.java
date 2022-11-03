@@ -52,6 +52,8 @@ public class BirtDwellingBlock extends BlockWithEntity {
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(BIRTS, 0).with(EGGS, 0));
     }
 
+
+    //wip
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (state.get(EGGS) > 0) {
