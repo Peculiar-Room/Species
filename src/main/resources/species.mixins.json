@@ -6,7 +6,8 @@
   "mixins": [
     "LivingEntityMixin",
     "MobEntityMixin",
-    "WitherSkeletonEntityMixin"
+    "WitherSkeletonEntityMixin",
+    "TreeDecoratorTypeAccessor"
   ],
   "client": [],
   "injectors": {
