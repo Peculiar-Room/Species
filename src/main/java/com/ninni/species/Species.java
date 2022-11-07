@@ -18,7 +18,6 @@ import com.ninni.species.world.gen.structure.SpeciesStructures;
 import com.ninni.species.world.poi.SpeciesPointsOfInterests;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.DispenserBlock;
@@ -26,7 +25,6 @@ import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.BiomeTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Position;
@@ -54,12 +52,11 @@ public class Species implements ModInitializer {
 			SpeciesStructures.class,
 			SpeciesStructureTypes.class,
 			SpeciesStructureSets.class,
-			SpeciesStructurePieceTypes.class,
-			SpeciesFeatures.class,
-			SpeciesTreeDecorators.class
+			SpeciesStructurePieceTypes.class
 		);
+		SpeciesTreeDecorators.init();
+		SpeciesFeatures.init();
 		SpeciesFeatures.BIRTED_BIRCH_TREES.getKey().ifPresent(this::addFeature);
-	
 
 		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new ProjectileDispenserBehavior(){
 			@Override
