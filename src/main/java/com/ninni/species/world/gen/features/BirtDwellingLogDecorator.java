@@ -33,7 +33,7 @@ public class BirtDwellingLogDecorator extends TreeDecorator {
         Random random = generator.getRandom();
         int count = generator.getLeavesPositions().size() > 6 ? 3 : 2;
         for (int i = 0; i < count; i++) {
-            this.placeBirtDwelling(generator, generator.getLogPositions(), MathHelper.nextInt(random, 3, 6), random);
+            this.placeBirtDwelling(generator, generator.getLogPositions(), MathHelper.nextInt(random, 3, generator.getLogPositions().size() - 1), random);
         }
     }
 
