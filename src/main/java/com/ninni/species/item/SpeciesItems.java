@@ -1,18 +1,26 @@
 package com.ninni.species.item;
 
+import static com.ninni.species.Species.ITEM_GROUP;
+import static com.ninni.species.Species.MOD_ID;
+
 import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.sound.SpeciesSoundEvents;
+
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.EntityBucketItem;
+import net.minecraft.item.FoodComponent;
+import net.minecraft.item.Item;
+import net.minecraft.item.MusicDiscItem;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
-
-import static com.ninni.species.Species.ITEM_GROUP;
-import static com.ninni.species.Species.MOD_ID;
 
 @SuppressWarnings("unused")
 public class SpeciesItems {
@@ -29,6 +37,7 @@ public class SpeciesItems {
     public static final Item BIRT_SPAWN_EGG = register("birt_spawn_egg", new SpawnEggItem(SpeciesEntities.BIRT, 0x53C7BE, 0xD95B4D, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
     public static final Item BIRT_EGG = register("birt_egg", new BirtEggItem(new Item.Settings().maxCount(16).group(ITEM_GROUP)));
     public static final Item BIRT_DWELLING = register("birt_dwelling", new BlockItem(SpeciesBlocks.BIRT_DWELLING, new FabricItemSettings().group(ITEM_GROUP)));
+    public static final Item MUSIC_DISC_DIAL = register("music_disc_dial", new MusicDiscItem(11, SpeciesSoundEvents.MUSIC_DISC_DIAL, new FabricItemSettings().rarity(Rarity.RARE).maxCount(1).group(ITEM_GROUP), 193));
 
     private static Item register(String id, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(MOD_ID, id), item);

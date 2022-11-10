@@ -49,5 +49,8 @@
   "item.species.birt_egg": "Birt Egg",
   "block.species.birt_dwelling": "Birt Dwelling",
 
+  "item.species.music_disc_dial": "Music Disc",
+  "item.species.music_disc_dial.desc": "bunten - dial",
+
   "effect.species.birtd": "Birt'd"
 }
