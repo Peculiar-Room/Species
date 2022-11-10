@@ -43,7 +43,7 @@ public class SpeciesEntities {
                     .defaultAttributes(RoombugEntity::createRoombugAttributes)
                     .spawnGroup(SpawnGroup.CREATURE)
                     .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, RoombugEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(1.375F, 0.3125F))
+                    .dimensions(EntityDimensions.changing(1.375F, 0.375F))
                     .trackRangeChunks(10)
     );
 

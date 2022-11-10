@@ -15,7 +15,7 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class RoombugEntityRenderer<T extends LivingEntity> extends MobEntityRenderer<RoombugEntity, RoombugEntityModel<RoombugEntity>> {
     public static final Identifier TEXTURE = new Identifier(MOD_ID, "textures/entity/roombug/roombug.png");
-    public static final Identifier SITTING_TEXTURE = new Identifier(MOD_ID, "textures/entity/roombug/roombug_sitting.png");
+    public static final Identifier SITTING_TEXTURE = new Identifier(MOD_ID, "textures/entity/roombug/roombug_sleeping.png");
 
     public RoombugEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new RoombugEntityModel<>(ctx.getPart(SpeciesEntityModelLayers.ROOMBUG)), 0.8F);

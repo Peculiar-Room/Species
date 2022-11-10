@@ -165,7 +165,7 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     public double getMountedHeightOffset() {
-        return this.isInSittingPose() ? 0.15625F : 0.2125F;
+        return this.isInSittingPose() ? 0.225F : 0.275F;
     }
 
     @Override
@@ -202,7 +202,7 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     public boolean collidesWith(Entity other) {
-        return (other.isCollidable() || other.isPushable()) && !this.isConnectedThroughVehicle(other);
+        return (other.isCollidable()) && !this.isConnectedThroughVehicle(other);
     }
 
     @Nullable
