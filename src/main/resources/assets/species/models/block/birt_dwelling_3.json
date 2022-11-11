@@ -1,16 +1,16 @@
 {
-	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/cube",
+	"ambientocclusion": false,
 	"textures": {
 		"6": "block/birch_log",
 		"7": "block/birch_log_top",
+		"particle": "block/birch_log",
 		"front_inside": "species:block/birt_nest_front_inside",
 		"side_inside": "species:block/birt_nest_side_inside",
 		"top_inside": "species:block/birt_nest_top_inside",
 		"bottom_inside": "species:block/birt_nest_bottom_inside",
 		"birt": "species:block/birt_nest_birt",
-		"front": "species:block/birt_nest_front",
-		"particle": "block/birch_log"
+		"front": "species:block/birt_nest_front"
 	},
 	"elements": [
 		{

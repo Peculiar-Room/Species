@@ -21,6 +21,7 @@ public interface SpeciesTags {
     //biomeTags
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "wraptor_coop_has_structure"));
     TagKey<Biome> ROOMBUG_SPAWNS = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "roombug_spawns"));
+    TagKey<Biome> BIRT_TREE_SPAWNS_IN = TagKey.of(Registry.BIOME_KEY, new Identifier(MOD_ID, "birt_tree_spawns_in"));
 
     //pointOfInterestTags
     TagKey<PointOfInterestType> BIRT_HOME = TagKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, new Identifier(MOD_ID, "birt_home"));

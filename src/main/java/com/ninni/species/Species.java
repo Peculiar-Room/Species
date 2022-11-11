@@ -11,6 +11,7 @@ import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.structure.SpeciesStructureSets;
+import com.ninni.species.tag.SpeciesTags;
 import com.ninni.species.world.gen.features.SpeciesFeatures;
 import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
 import com.ninni.species.world.gen.structure.SpeciesStructureTypes;
@@ -67,6 +68,6 @@ public class Species implements ModInitializer {
 	}
 
 	private void addFeature(RegistryKey<PlacedFeature> placedFeatureRegistryKey) {
-		BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
+		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
 	}
 }
