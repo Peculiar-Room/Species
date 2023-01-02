@@ -86,7 +86,7 @@ public class LimpetEntity extends AnimalEntity {
     @Override
     public void tickMovement() {
         super.tickMovement();
-        this.world.getEntitiesByClass(PlayerEntity.class, this.getBoundingBox().expand(2D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
+        this.world.getEntitiesByClass(PlayerEntity.class, this.getBoundingBox().expand(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
         if (this.getScaredTicks() > 0) {
             this.getNavigation().stop();
             this.setScaredTicks(this.getScaredTicks() - 1);
@@ -99,7 +99,7 @@ public class LimpetEntity extends AnimalEntity {
     }
 
     private boolean isValidEntity(PlayerEntity entity) {
-        return !entity.isSpectator() && entity.isAlive() && !entity.getAbilities().creativeMode && !entity.isSneaking();
+        return this.getLimpetType().getId() > 0 && !entity.isSpectator() && entity.isAlive() && !entity.getAbilities().creativeMode && !entity.isSneaking();
     }
 
     @Override
@@ -122,13 +122,13 @@ public class LimpetEntity extends AnimalEntity {
             }
 
             playSound(type.getMiningSound(), 1, 1);
-            this.setScaredTicks(0);
 
             if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, stack) != 0) {
                 this.setLimpetType(1);
                 return false;
             } else {
                 this.setLimpetType(0);
+                this.setScaredTicks(0);
             }
         } else if (source.getAttacker() instanceof LivingEntity && amount < 12 && !world.isClient() && type.getId() > 0) {
 
