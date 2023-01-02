@@ -52,5 +52,8 @@
   "item.species.music_disc_dial": "Music Disc",
   "item.species.music_disc_dial.desc": "bunten - dial",
 
-  "effect.species.birtd": "Birt'd"
+  "effect.species.birtd": "Birt'd",
+
+  "entity.species.limpet": "Limpet",
+  "item.species.limpet_spawn_egg": "Limpet Spawn Egg"
 }

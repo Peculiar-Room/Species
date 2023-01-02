@@ -1,3 +1,3 @@
 {
-  "parent": "minecraft:item/limpet_spawn_egg"
+  "parent": "minecraft:item/template_spawn_egg"
 }

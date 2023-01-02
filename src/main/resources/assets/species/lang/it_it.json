@@ -48,5 +48,8 @@
   "item.species.birt_egg": "Uovo di birt",
   "block.species.birt_dwelling": "Nido di birt",
 
-  "effect.species.birtd": "Birtato"
+  "effect.species.birtd": "Birtato",
+
+  "entity.species.limpet": "Limpet",
+  "item.species.limpet_spawn_egg": "Uovo generatore di limpet"
 }
