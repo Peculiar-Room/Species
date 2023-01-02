@@ -67,6 +67,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(4)
     );
 
+    public static final EntityType<LimpetEntity> LIMPET = register(
+            "limpet",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(LimpetEntity::new)
+                    .defaultAttributes(LimpetEntity::createLimpetAttributes)
+                    .spawnGroup(SpawnGroup.CREATURE)
+                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, LimpetEntity::canSpawn)
+                    .dimensions(EntityDimensions.changing(0.75F, 1.25F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), SpawnGroup.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

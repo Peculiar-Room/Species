@@ -39,6 +39,8 @@ public class SpeciesItems {
     public static final Item BIRT_DWELLING = register("birt_dwelling", new BlockItem(SpeciesBlocks.BIRT_DWELLING, new FabricItemSettings().group(ITEM_GROUP)));
     public static final Item MUSIC_DISC_DIAL = register("music_disc_dial", new MusicDiscItem(11, SpeciesSoundEvents.MUSIC_DISC_DIAL, new FabricItemSettings().rarity(Rarity.RARE).maxCount(1).group(ITEM_GROUP), 193));
 
+    public static final Item LIMPET_SPAWN_EGG = register("limpet_spawn_egg", new SpawnEggItem(SpeciesEntities.LIMPET, 0xA5C1D2, 0xFBF236, new Item.Settings().maxCount(64).group(ITEM_GROUP)));
+
     private static Item register(String id, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(MOD_ID, id), item);
     }
