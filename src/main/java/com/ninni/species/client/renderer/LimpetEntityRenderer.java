@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
 import static com.ninni.species.Species.MOD_ID;
@@ -21,6 +22,12 @@ public class LimpetEntityRenderer extends MobEntityRenderer<LimpetEntity, Limpet
 
     public LimpetEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new LimpetEntityModel<>(context.getPart(SpeciesEntityModelLayers.LIMPET)), 0.5f);
+    }
+
+    @Override
+    protected boolean isShaking(LimpetEntity entity) {
+        if (!entity.world.getEntitiesByClass(PlayerEntity.class, entity.getBoundingBox().expand(4D), entity::isValidEntityHoldingPickaxe).isEmpty()) return true;
+        return super.isShaking(entity);
     }
 
     @Override

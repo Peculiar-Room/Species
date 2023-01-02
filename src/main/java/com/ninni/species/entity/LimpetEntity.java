@@ -47,7 +47,7 @@ public class LimpetEntity extends AnimalEntity {
     }
 
     public static DefaultAttributeContainer.Builder createLimpetAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
     }
 
     @Override
@@ -98,8 +98,18 @@ public class LimpetEntity extends AnimalEntity {
         return !this.isScared();
     }
 
-    private boolean isValidEntity(PlayerEntity entity) {
-        return this.getLimpetType().getId() > 0 && !entity.isSpectator() && entity.isAlive() && !entity.getAbilities().creativeMode && !entity.isSneaking();
+    public boolean isValidEntity(PlayerEntity player) {
+        return this.getLimpetType().getId() > 0
+                && !player.isSpectator()
+                && player.isAlive()
+                && !player.getAbilities().creativeMode
+                && !player.isSneaking()
+                || (this.getLimpetType().getId() > 0
+                && player.getStackInHand(player.getActiveHand()).getItem() instanceof PickaxeItem);
+    }
+
+    public boolean isValidEntityHoldingPickaxe(PlayerEntity player) {
+        return this.getLimpetType().getId() > 0 && player.getStackInHand(player.getActiveHand()).getItem() instanceof PickaxeItem;
     }
 
     @Override
