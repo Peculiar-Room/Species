@@ -1,6 +1,8 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.entity.enums.LimpetType;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -15,6 +17,8 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -100,7 +104,34 @@ public class LimpetEntity extends AnimalEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (source.getAttacker() instanceof LivingEntity && amount < 12 && !world.isClient()) {
+        LimpetType type = this.getLimpetType();
+
+        if (source.getAttacker() instanceof PlayerEntity player
+                && player.getStackInHand(player.getActiveHand()).getItem() instanceof PickaxeItem pickaxe
+                && type.getId() > 0
+                && pickaxe.getMaterial().getMiningLevel() >= type.getPickaxeLevel()) {
+
+            ItemStack stack = player.getStackInHand(player.getActiveHand());
+
+            this.dropItem(type.getItem(), 1);
+            if (random.nextInt(2) == 1) this.dropItem(type.getItem(), 1);
+            switch (EnchantmentHelper.getLevel(Enchantments.FORTUNE, stack)) {
+                case 1 : if (random.nextInt(4) == 1) this.dropItem(type.getItem(), 1);
+                case 2 : if (random.nextInt(2) == 1) this.dropItem(type.getItem(), 1);
+                case 3 : this.dropItem(type.getItem(), 1);
+            }
+
+            playSound(type.getMiningSound(), 1, 1);
+            this.setScaredTicks(0);
+
+            if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+                this.setLimpetType(1);
+                return false;
+            } else {
+                this.setLimpetType(0);
+            }
+        } else if (source.getAttacker() instanceof LivingEntity && amount < 12 && !world.isClient() && type.getId() > 0) {
+
             playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1, 1);
             this.setScaredTicks(300);
             return false;

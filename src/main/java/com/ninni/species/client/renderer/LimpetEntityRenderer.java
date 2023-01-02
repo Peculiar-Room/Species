@@ -30,7 +30,7 @@ public class LimpetEntityRenderer extends MobEntityRenderer<LimpetEntity, Limpet
             case LAPIS -> TEXTURE_LAPIS;
             case EMERALD -> TEXTURE_EMERALD;
             case DIAMOND -> TEXTURE_DIAMOND;
-            case DEFAULT -> TEXTURE;
+            case SHELL, NO_SHELL -> TEXTURE;
         };
     }
 }

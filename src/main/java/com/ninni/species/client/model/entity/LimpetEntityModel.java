@@ -164,6 +164,8 @@ public class LimpetEntityModel<T extends LimpetEntity> extends SinglePartEntityM
             this.root.pivotY = 0.0F;
         }
 
+        shell.visible = entity.getLimpetType().getId() != 0;
+
         //walking
         body.pivotY = cos(limbAngle * speed * 0.6F + pi/2) * 1.4F * limbDistance + 11.0F;
         rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
