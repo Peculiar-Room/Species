@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.entity.enums.LimpetType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LimpetEntity extends AnimalEntity {
     private static final TrackedData<Integer> SCARED_TICKS = DataTracker.registerData(LimpetEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> TYPE = DataTracker.registerData(LimpetEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     protected LimpetEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
@@ -48,20 +50,25 @@ public class LimpetEntity extends AnimalEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(SCARED_TICKS, 0);
+        this.dataTracker.startTracking(TYPE, 0);
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("ScaredTicks", this.getScaredTicks());
+        nbt.putInt("LimpetType", this.getLimpetType().getId());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setScaredTicks(nbt.getInt("ScaredTicks"));
+        this.setLimpetType(nbt.getInt("LimpetType"));
     }
 
+    public LimpetType getLimpetType() { return LimpetType.TYPES[this.dataTracker.get(TYPE)]; }
+    public void setLimpetType(int id) { this.dataTracker.set(TYPE, id); }
     public int getScaredTicks() {
         return this.dataTracker.get(SCARED_TICKS);
     }

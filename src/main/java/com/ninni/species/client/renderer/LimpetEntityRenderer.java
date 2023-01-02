@@ -14,6 +14,10 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(value= EnvType.CLIENT)
 public class LimpetEntityRenderer extends MobEntityRenderer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
     public static final Identifier TEXTURE = new Identifier(MOD_ID, "textures/entity/limpet/limpet.png");
+    public static final Identifier TEXTURE_AMETHYST = new Identifier(MOD_ID, "textures/entity/limpet/limpet_amethyst.png");
+    public static final Identifier TEXTURE_LAPIS = new Identifier(MOD_ID, "textures/entity/limpet/limpet_lapis.png");
+    public static final Identifier TEXTURE_EMERALD = new Identifier(MOD_ID, "textures/entity/limpet/limpet_emerald.png");
+    public static final Identifier TEXTURE_DIAMOND = new Identifier(MOD_ID, "textures/entity/limpet/limpet_diamond.png");
 
     public LimpetEntityRenderer(EntityRendererFactory.Context context) {
         super(context, new LimpetEntityModel<>(context.getPart(SpeciesEntityModelLayers.LIMPET)), 0.5f);
@@ -21,6 +25,12 @@ public class LimpetEntityRenderer extends MobEntityRenderer<LimpetEntity, Limpet
 
     @Override
     public Identifier getTexture(LimpetEntity limpet) {
-        return TEXTURE;
+        return switch (limpet.getLimpetType()) {
+            case AMETHYST -> TEXTURE_AMETHYST;
+            case LAPIS -> TEXTURE_LAPIS;
+            case EMERALD -> TEXTURE_EMERALD;
+            case DIAMOND -> TEXTURE_DIAMOND;
+            case DEFAULT -> TEXTURE;
+        };
     }
 }
