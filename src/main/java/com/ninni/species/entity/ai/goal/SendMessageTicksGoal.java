@@ -1,7 +1,7 @@
 package com.ninni.species.entity.ai.goal;
 
 import com.ninni.species.entity.BirtEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class SendMessageTicksGoal extends Goal {
     private final BirtEntity birt;
@@ -11,7 +11,7 @@ public class SendMessageTicksGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         return this.birt.findReciever() != null && this.birt.getRandom().nextInt(200) == 0 && !this.birt.canSendMessage();
     }
 

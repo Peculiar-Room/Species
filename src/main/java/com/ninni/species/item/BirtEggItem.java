@@ -2,37 +2,38 @@ package com.ninni.species.item;
 
 import com.ninni.species.entity.BirtEggEntity;
 import com.ninni.species.sound.SpeciesSoundEvents;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class BirtEggItem extends Item {
 
-    public BirtEggItem(Item.Settings settings) {
+    public BirtEggItem(Item.Properties settings) {
         super(settings);
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        user.getItemCooldownManager().set(this, 20);
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SpeciesSoundEvents.ITEM_BIRT_EGG_THROW, SoundCategory.PLAYERS, 0.5f, 0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
-        if (!world.isClient) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
+        user.getCooldowns().addCooldown(this, 20);
+        world.playSound(null, user.getX(), user.getY(), user.getZ(), SpeciesSoundEvents.ITEM_BIRT_EGG_THROW, SoundSource.PLAYERS, 0.5f, 0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
+        if (!world.isClientSide) {
             BirtEggEntity entity = new BirtEggEntity(world, user);
             entity.setItem(itemStack);
-            entity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1f, 1.0f);
-            world.spawnEntity(entity);
+            entity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0f, 1f, 1.0f);
+            world.addFreshEntity(entity);
         }
 
-        user.incrementStat(Stats.USED.getOrCreateStat(this));
-        if (!user.getAbilities().creativeMode) {
-            itemStack.decrement(1);
+        user.awardStat(Stats.ITEM_USED.get(this));
+        if (!user.getAbilities().instabuild) {
+            itemStack.shrink(1);
         }
-        return TypedActionResult.success(itemStack, world.isClient());
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide);
     }
+
 }

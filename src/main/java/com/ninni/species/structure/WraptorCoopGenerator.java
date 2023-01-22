@@ -3,96 +3,97 @@ package com.ninni.species.structure;
 import com.ninni.species.Species;
 import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.loot.SpeciesLootTables;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.structure.SimpleStructurePiece;
-import net.minecraft.structure.StructureContext;
-import net.minecraft.structure.StructurePiecesHolder;
-import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.StructureTemplateManager;
-import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.StructureAccessor;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
+import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
 public class WraptorCoopGenerator {
     public static final int COOP_STRUCTURES = 7;
-    private static final Function<Integer, Identifier> TEMPLATES = Util.memoize(i -> new Identifier(Species.MOD_ID, "wraptor_coop/coop" + i));
+    private static final Function<Integer, ResourceLocation> TEMPLATES = Util.memoize(i -> new ResourceLocation(Species.MOD_ID, "wraptor_coop/coop" + i));
 
-    public static void addPieces(StructureTemplateManager manager, BlockPos pos, int height, BlockRotation rotation, StructurePiecesHolder holder, Random random) {
-        holder.addPiece(new WraptorCoopGenerator.Piece(manager, TEMPLATES.apply(MathHelper.nextBetween(random, 1, COOP_STRUCTURES)), pos, rotation));
+    public static void addPieces(StructureTemplateManager manager, BlockPos pos, int height, Rotation rotation, StructurePieceAccessor holder, RandomSource random) {
+        holder.addPiece(new WraptorCoopGenerator.Piece(manager, TEMPLATES.apply(Mth.randomBetweenInclusive(random, 1, COOP_STRUCTURES)), pos, rotation));
     }
 
-    public static class Piece extends SimpleStructurePiece {
+    public static class Piece extends TemplateStructurePiece {
         public static final String ROTATION_KEY = "Rotation";
 
-        public Piece(StructureTemplateManager manager, Identifier id, BlockPos pos, BlockRotation rotation) {
+        public Piece(StructureTemplateManager manager, ResourceLocation id, BlockPos pos, Rotation rotation) {
             super(SpeciesStructurePieceTypes.WRAPTOR_COOP, 0, manager, id, id.toString(), createPlacementData(rotation), pos);
         }
 
-        public Piece(StructureTemplateManager manager, NbtCompound nbt) {
-            super(SpeciesStructurePieceTypes.WRAPTOR_COOP, nbt, manager, id -> createPlacementData(BlockRotation.valueOf(nbt.getString(ROTATION_KEY))));
+        public Piece(StructureTemplateManager manager, CompoundTag nbt) {
+            super(SpeciesStructurePieceTypes.WRAPTOR_COOP, nbt, manager, id -> createPlacementData(Rotation.valueOf(nbt.getString(ROTATION_KEY))));
         }
 
-        private static StructurePlacementData createPlacementData(BlockRotation rotation) {
-            return new StructurePlacementData().setRotation(rotation).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
-        }
-
-        @Override
-        protected void writeNbt(StructureContext context, NbtCompound nbt) {
-            super.writeNbt(context, nbt);
-            nbt.putString(ROTATION_KEY, this.placementData.getRotation().name());
+        private static StructurePlaceSettings createPlacementData(Rotation rotation) {
+            return new StructurePlaceSettings().setRotation(rotation).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
         }
 
         @Override
-        public void generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
-            if (world.getBlockState(this.pos.down()).isIn(BlockTags.NYLIUM) || (world.getBlockState(this.pos.down()).isOf(Blocks.NETHERRACK) && world.isAir(this.pos))) {
-                this.pos = this.pos.down();
+        protected void addAdditionalSaveData(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag compoundTag) {
+            super.addAdditionalSaveData(structurePieceSerializationContext, compoundTag);
+            compoundTag.putString(ROTATION_KEY, this.placeSettings.getRotation().name());
+        }
+
+        @Override
+        public void postProcess(WorldGenLevel world, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource randomSource, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos blockPos) {
+            if (world.getBlockState(this.templatePosition.below()).is(BlockTags.NYLIUM) || (world.getBlockState(this.templatePosition.below()).is(Blocks.NETHERRACK) && world.isEmptyBlock(this.templatePosition))) {
+                this.templatePosition = this.templatePosition.below();
             }
-            super.generate(world, structureAccessor, chunkGenerator, random, chunkBox, chunkPos, pivot);
+            super.postProcess(world, structureManager, chunkGenerator, randomSource, boundingBox, chunkPos, blockPos);
         }
 
         @Override
-        protected void handleMetadata(String metadata, BlockPos pos, ServerWorldAccess world, Random random, BlockBox boundingBox) {
+        protected void handleDataMarker(String metadata, BlockPos pos, ServerLevelAccessor world, RandomSource random, BoundingBox boundingBox) {
             if (metadata.startsWith("Chest")) {
-                BlockRotation rotation = this.placementData.getRotation();
-                this.addChest(world, boundingBox, random, pos, SpeciesLootTables.WRAPTOR_COOP_CHEST, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, rotation.rotate(
-                    switch (metadata) {
-                        default -> Direction.NORTH;
-                        case "ChestEast" -> Direction.EAST;
-                        case "ChestSouth" -> Direction.SOUTH;
-                        case "ChestWest" -> Direction.WEST;
-                    }
+                Rotation rotation = this.placeSettings.getRotation();
+                this.createChest(world, boundingBox, random, pos, SpeciesLootTables.WRAPTOR_COOP_CHEST, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, rotation.rotate(
+                        switch (metadata) {
+                            default -> Direction.NORTH;
+                            case "ChestEast" -> Direction.EAST;
+                            case "ChestSouth" -> Direction.SOUTH;
+                            case "ChestWest" -> Direction.WEST;
+                        }
                 )));
             } else {
-                ArrayList<MobEntity> entities = new ArrayList<>();
+                ArrayList<Mob> entities = new ArrayList<>();
 
-                if ("Wraptor".equals(metadata)) entities.add(SpeciesEntities.WRAPTOR.create(world.toServerWorld()));
+                if ("Wraptor".equals(metadata)) entities.add(SpeciesEntities.WRAPTOR.create(world.getLevel()));
 
-                for (MobEntity entity : entities) {
-                    entity.setPersistent();
-                    entity.refreshPositionAndAngles(pos, 0.0f, 0.0f);
-                    entity.initialize(world, world.getLocalDifficulty(entity.getBlockPos()), SpawnReason.STRUCTURE, null, null);
-                    world.spawnEntityAndPassengers(entity);
+                for (Mob entity : entities) {
+                    entity.setPersistenceRequired();
+                    entity.moveTo(pos, 0.0f, 0.0f);
+                    entity.finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, null, null);
+                    world.addFreshEntityWithPassengers(entity);
                 }
             }
         }
+
     }
 }

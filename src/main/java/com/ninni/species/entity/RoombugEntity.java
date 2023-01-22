@@ -3,184 +3,193 @@ package com.ninni.species.entity;
 import com.google.common.collect.Sets;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.sound.SpeciesSoundEvents;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.WaterCreatureEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
 
-public class RoombugEntity extends TameableEntity {
+public class RoombugEntity extends TamableAnimal {
     private static final Set<Item> TAMING_INGREDIENTS = Sets.newHashSet(Items.HONEYCOMB);
     int snoringTicks = 0;
 
-    protected RoombugEntity(EntityType<? extends TameableEntity> entityType, World world) {
+    protected RoombugEntity(EntityType<? extends TamableAnimal> entityType, Level world) {
         super(entityType, world);
-        this.stepHeight = 1;
+        this.maxUpStep = 1;
     }
 
     @Override
-    @Nullable
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        if (entityData == null) {
-            entityData = new PassiveEntity.PassiveData(false);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+        if (spawnGroupData == null) {
+            spawnGroupData = new AgeableMob.AgeableMobGroupData(false);
         }
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
-        this.goalSelector.add(0, new SitGoal(this));
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WanderAroundGoal(this, 1));
-        this.goalSelector.add(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, false));
-        this.goalSelector.add(3, new RoombugLookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new PanicGoal(this, 1.25));
+        this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, false));
+        this.goalSelector.addGoal(3, new RoombugLookAtEntityGoal(this, Player.class, 8.0f));
     }
 
-    public static DefaultAttributeContainer.Builder createRoombugAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 15.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.225);
+    public static AttributeSupplier.Builder createRoombugAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 15.0).add(Attributes.MOVEMENT_SPEED, 0.225);
     }
 
     @Override
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
 
-        if (!this.isTamed() && TAMING_INGREDIENTS.contains(itemStack.getItem())) {
+        if (!this.isTame() && TAMING_INGREDIENTS.contains(itemStack.getItem())) {
 
-            if (!player.getAbilities().creativeMode) itemStack.decrement(1);
+            if (!player.getAbilities().instabuild) itemStack.shrink(1);
             if (!this.isSilent()) {
-                this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
 
-            if (!this.world.isClient) {
+            if (!this.level.isClientSide) {
                 if (this.random.nextInt(2) == 0) {
-                    this.setOwner(player);
-                    this.world.sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                    this.tame(player);
+                    this.level.broadcastEntityEvent(this, (byte) 7);
                 } else {
-                    this.world.sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+                    this.level.broadcastEntityEvent(this, (byte) 6);
                 }
             }
 
-            return ActionResult.success(this.world.isClient);
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
 
-        if (this.isTamed()) {
-            if (player.shouldCancelInteraction()) {
-                if (this.isOwner(player) && itemStack.getItem() != Items.HONEY_BOTTLE) {
-                    if (!this.world.isClient) this.setSitting(!this.isSitting());
-                    return ActionResult.success(this.world.isClient);
+        if (this.isTame()) {
+            if (player.isSecondaryUseActive()) {
+                if (this.isOwnedBy(player) && itemStack.getItem() != Items.HONEY_BOTTLE) {
+                    if (!this.level.isClientSide) this.setOrderedToSit(!this.isOrderedToSit());
+                    return InteractionResult.sidedSuccess(this.level.isClientSide);
                 } else if (itemStack.getItem() == Items.HONEY_BOTTLE && this.getHealth() < this.getMaxHealth()) {
-                    if (!this.world.isClient) {
-                        if (!player.getAbilities().creativeMode) itemStack.decrement(1);
-                        if (!player.getInventory().insertStack(Items.GLASS_BOTTLE.getDefaultStack())) {
-                            player.dropItem(Items.GLASS_BOTTLE.getDefaultStack(), false);
+                    if (!this.level.isClientSide) {
+                        if (!player.getAbilities().instabuild) itemStack.shrink(1);
+                        if (!player.getInventory().add(Items.GLASS_BOTTLE.getDefaultInstance())) {
+                            player.drop(Items.GLASS_BOTTLE.getDefaultInstance(), false);
                         }
                         this.heal(6);
-                        this.world.sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
-                        this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_HONEY_BOTTLE_DRINK, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                        this.level.broadcastEntityEvent(this, (byte) 7);
+                        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.HONEY_DRINK, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
                     }
-                    return ActionResult.success(this.world.isClient);
+                    return InteractionResult.sidedSuccess(this.level.isClientSide);
                 }
             }
-            if (!this.isSubmergedIn(FluidTags.WATER) && this.getPrimaryPassenger() == null) {
-                return player.startRiding(this) ? ActionResult.SUCCESS : ActionResult.PASS;
+            if (!this.isEyeInFluid(FluidTags.WATER) && this.getControllingPassenger() == null) {
+                return player.startRiding(this) ? InteractionResult.SUCCESS : InteractionResult.PASS;
             }
         }
 
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public boolean hurtByWater() {
+    public boolean isSensitiveToWater() {
         return true;
     }
 
     @Override
-    public EntityGroup getGroup() {
-        return EntityGroup.ARTHROPOD;
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 
     @Override
-    public void tickMovement() {
+    public void aiStep() {
         if (this.isInSittingPose()) {
             if (snoringTicks == 0) {
                 this.snoringTicks = 30;
-                this.world.addParticle(SpeciesParticles.SNORING, this.getX(), this.getY() + 0.375F, this.getZ(), 0f, 0f, 0f);
+                this.level.addParticle(SpeciesParticles.SNORING, this.getX(), this.getY() + 0.375F, this.getZ(), 0f, 0f, 0f);
             }
             if (snoringTicks > 0) this.snoringTicks--;
         }
-        super.tickMovement();
+        super.aiStep();
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.world.isClient && this.isSubmergedIn(FluidTags.WATER)) {
-            this.removeAllPassengers();
+        if (!this.level.isClientSide && this.isEyeInFluid(FluidTags.WATER)) {
+            this.ejectPassengers();
         }
-        List<Entity> list = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
-        if (!list.isEmpty() && this.isSitting()) {
-            boolean bl = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2f, -0.01f, 0.2f), EntitySelector.pushableBy(this));
+        if (!list.isEmpty() && this.isOrderedToSit()) {
+            boolean bl = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
             for (Entity entity : list) {
                 if (entity.hasPassenger(this)) continue;
-                if (bl && this.getPassengerList().size() < 1 && !entity.hasVehicle() && entity.getWidth() < this.getWidth() && entity instanceof LivingEntity && !(entity instanceof WaterCreatureEntity) && !(entity instanceof PlayerEntity)) {
+                if (bl && this.getPassengers().size() < 1 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player)) {
                     entity.startRiding(this);
                     continue;
                 }
-                this.pushAwayFrom(entity);
+                this.push(entity);
             }
         }
     }
 
     @Override
-    public double getMountedHeightOffset() {
+    public double getPassengersRidingOffset() {
         return this.isInSittingPose() ? 0.225F : 0.275F;
     }
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return !this.hasPassengers() && !this.isSubmergedIn(FluidTags.WATER);
+        return !this.isVehicle() && !this.isEyeInFluid(FluidTags.WATER);
     }
 
     @Override
     @Nullable
-    public Entity getPrimaryPassenger() {
+    public Entity getControllingPassenger() {
         return null;
     }
 
     @Override
-    public boolean isCollidable() {
+    public boolean canBeCollidedWith() {
         return true;
     }
 
@@ -190,34 +199,34 @@ public class RoombugEntity extends TameableEntity {
     }
 
     @Override
-    public void pushAwayFrom(Entity entity) {
-        if (entity instanceof BoatEntity) {
+    public void push(Entity entity) {
+        if (entity instanceof Boat) {
             if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
-                super.pushAwayFrom(entity);
+                super.push(entity);
             }
         } else if (entity.getBoundingBox().minY <= this.getBoundingBox().minY) {
-            super.pushAwayFrom(entity);
+            super.push(entity);
         }
     }
 
     @Override
-    public boolean collidesWith(Entity other) {
-        return (other.isCollidable()) && !this.isConnectedThroughVehicle(other);
+    public boolean canCollideWith(Entity entity) {
+        return entity.canBeCollidedWith() && !this.isPassengerOfSameVehicle(entity);
     }
 
     @Nullable
     @Override
-    public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
+    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         return null;
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack itemStack) {
         return false;
     }
 
     @Override
-    public boolean canBreedWith(AnimalEntity other) {
+    public boolean canMate(Animal other) {
         return false;
     }
 
@@ -227,20 +236,20 @@ public class RoombugEntity extends TameableEntity {
     }
 
     @Override
-    public void travel(Vec3d movementInput) {
-        if (this.isSitting()) {
-            this.setVelocity(this.getVelocity().multiply(0.0, 1.0, 0.0));
+    public void travel(Vec3 movementInput) {
+        if (this.isOrderedToSit()) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.0, 1.0, 0.0));
             movementInput = movementInput.multiply(0.0, 1.0, 0.0);
         }
         super.travel(movementInput);
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<RoombugEntity> entitty, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.down()).isIn(BlockTags.ANIMALS_SPAWNABLE_ON) && AnimalEntity.isLightLevelValidForNaturalSpawn(world, pos);
+    public static boolean canSpawn(EntityType<RoombugEntity> entitty, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
     }
 
-    static class RoombugLookAtEntityGoal extends LookAtEntityGoal{
+    static class RoombugLookAtEntityGoal extends LookAtPlayerGoal {
         private final RoombugEntity bug;
 
         public RoombugLookAtEntityGoal(RoombugEntity mob, Class<? extends LivingEntity> targetType, float range) {
@@ -249,22 +258,22 @@ public class RoombugEntity extends TameableEntity {
         }
 
         @Override
-        public boolean canStart() {
-            if (this.bug.isSitting()) return false;
-            return super.canStart();
+        public boolean canUse() {
+            if (this.bug.isOrderedToSit()) return false;
+            return super.canUse();
         }
 
         @Override
-        public boolean shouldContinue() {
-            if (this.bug.isSitting()) return false;
-            return super.shouldContinue();
+        public boolean canContinueToUse() {
+            if (this.bug.isOrderedToSit()) return false;
+            return super.canContinueToUse();
         }
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isSitting() ? SpeciesSoundEvents.ENTITY_ROOMBUG_SNORING : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
+        return this.isOrderedToSit() ? SpeciesSoundEvents.ENTITY_ROOMBUG_SNORING : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
     }
 
     @Nullable
@@ -281,8 +290,9 @@ public class RoombugEntity extends TameableEntity {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        if ("Goofy Ahh".equals(Formatting.strip(this.getName().getString()))) {
+        if ("Goofy Ahh".equals(ChatFormatting.stripFormatting(this.getName().getString()))) {
             this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1, 1);
         } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.5f, 1.0f);
     }
+
 }

@@ -3,76 +3,75 @@ package com.ninni.species.entity;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
-import net.minecraft.entity.EntityStatuses;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
-public class BirtEggEntity extends ThrownItemEntity {
+public class BirtEggEntity extends ThrowableItemProjectile {
 
-    public BirtEggEntity(EntityType<? extends BirtEggEntity> entityType, World world) {
+    public BirtEggEntity(EntityType<? extends BirtEggEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public BirtEggEntity(World world, LivingEntity owner) {
+    public BirtEggEntity(Level world, LivingEntity owner) {
         super(SpeciesEntities.BIRT_EGG, owner, world);
     }
 
-    public BirtEggEntity(World world, double x, double y, double z) {
+    public BirtEggEntity(Level world, double x, double y, double z) {
         super(SpeciesEntities.BIRT_EGG, x, y, z, world);
     }
 
 
     @Override
-    public void handleStatus(byte status) {
-        if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
+    public void handleEntityEvent(byte status) {
+        if (status == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, this.getStack()), this.getX(), this.getY(), this.getZ(), ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08);
+                this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItemRaw()), this.getX(), this.getY(), this.getZ(), ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08);
             }
         }
     }
 
     @Override
-    protected void onEntityHit(EntityHitResult entityHitResult) {
-        super.onEntityHit(entityHitResult);
+    protected void onHitEntity(EntityHitResult entityHitResult) {
+        super.onHitEntity(entityHitResult);
         if (entityHitResult.getEntity() instanceof LivingEntity entity) {
-            if (!entity.hasStatusEffect(SpeciesStatusEffects.BIRTD)) world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ENTITY_BIRTD, SoundCategory.NEUTRAL, 1, 1);
-            entity.addStatusEffect(new StatusEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
+            if (!entity.hasEffect(SpeciesStatusEffects.BIRTD)) this.level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD, SoundSource.NEUTRAL, 1, 1);
+            entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
         }
-        entityHitResult.getEntity().damage(DamageSource.thrownProjectile(this, this.getOwner()), 2.0f);
+        entityHitResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 2.0f);
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
+    protected void onHit(HitResult hitResult) {
+        super.onHit(hitResult);
         HitResult.Type type = hitResult.getType();
-        if (!this.world.isClient && type != HitResult.Type.ENTITY) {
+        if (!this.level.isClientSide && type != HitResult.Type.ENTITY) {
             if (this.random.nextInt(8) == 0) {
                 int i = 1;
                 if (this.random.nextInt(32) == 0) {
                     i = 4;
                 }
                 for (int j = 0; j < i; ++j) {
-                    BirtEntity chick = SpeciesEntities.BIRT.create(this.world);
+                    BirtEntity chick = SpeciesEntities.BIRT.create(this.level);
                     assert chick != null;
-                    chick.setBreedingAge(-24000);
-                    chick.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), this.getYaw(), 0.0f);
-                    this.world.spawnEntity(chick);
+                    chick.setAge(-24000);
+                    chick.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0f);
+                    this.level.addFreshEntity(chick);
                 }
             }
         }
 
-        world.playSound(null, this.getBlockPos(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundCategory.NEUTRAL, 1, 1);
-        this.world.sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);
+        level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundSource.NEUTRAL, 1, 1);
+        this.level.broadcastEntityEvent(this, (byte)3);
         this.discard();
     }
 

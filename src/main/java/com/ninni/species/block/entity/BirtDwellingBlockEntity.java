@@ -3,21 +3,20 @@ package com.ninni.species.block.entity;
 import com.google.common.collect.Lists;
 import com.ninni.species.block.BirtDwellingBlock;
 import com.ninni.species.entity.BirtEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -48,12 +47,12 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         return this.birts.size() == 3;
     }
 
-    public void angerBirts(@Nullable PlayerEntity player, BlockState state, BirtState birtState) {
+    public void angerBirts(@Nullable Player player, BlockState state, BirtState birtState) {
         List<Entity> list = this.tryReleaseBirt(state, birtState);
         if (player != null) {
             for (Entity entity : list) {
                 if (!(entity instanceof BirtEntity birt)) continue;
-                if (!(player.getPos().squaredDistanceTo(entity.getPos()) <= 16.0)) continue;
+                if (!(player.position().distanceToSqr(entity.position()) <= 16.0)) continue;
                 birt.setTarget(player);
                 birt.setCannotEnterDwellingTicks(400);
             }
@@ -63,11 +62,11 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     private List<Entity> tryReleaseBirt(BlockState state, BirtState birtState) {
         ArrayList<Entity> list = Lists.newArrayList();
         this.birts.removeIf(birt -> {
-            assert this.world != null;
-            return BirtDwellingBlockEntity.releaseBirt(this.world, this.pos, state, birt, list, birtState);
+            assert this.level != null;
+            return BirtDwellingBlockEntity.releaseBirt(this.level, this.worldPosition, state, birt, list, birtState);
         });
         if (!list.isEmpty()) {
-            super.markDirty();
+            super.setChanged();
         }
         return list;
     }
@@ -81,71 +80,71 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             return;
         }
         entity.stopRiding();
-        entity.removeAllPassengers();
-        NbtCompound nbtCompound = new NbtCompound();
-        entity.saveNbt(nbtCompound);
-        BlockPos blockPos = this.getPos();
+        entity.ejectPassengers();
+        CompoundTag nbtCompound = new CompoundTag();
+        entity.save(nbtCompound);
+        BlockPos blockPos = this.getBlockPos();
         this.addBirt(nbtCompound, ticksInDwelling);
-        if (this.world != null) {
-            this.world.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            this.world.emitGameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Emitter.of(entity, this.getCachedState()));
+        if (this.level != null) {
+            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
         }
         entity.discard();
-        super.markDirty();
+        super.setChanged();
     }
 
-    public void addBirt(NbtCompound nbtCompound, int ticksInDwelling) {
-        assert this.world != null;
+    public void addBirt(CompoundTag nbtCompound, int ticksInDwelling) {
+        assert this.level != null;
         this.birts.add(new Birt(nbtCompound, ticksInDwelling, 1200));
     }
 
-    private static boolean releaseBirt(World world, BlockPos pos, BlockState state, Birt birt, @Nullable List<Entity> entities, BirtState birtState) {
+    private static boolean releaseBirt(Level world, BlockPos pos, BlockState state, Birt birt, @Nullable List<Entity> entities, BirtState birtState) {
         if ((world.isNight() || world.isRaining()) && birtState != BirtState.EMERGENCY) {
             return false;
         }
-        NbtCompound nbtCompound = birt.entityData.copy();
+        CompoundTag nbtCompound = birt.entityData.copy();
         BirtDwellingBlockEntity.removeIrrelevantNbtKeys(nbtCompound);
-        nbtCompound.put("DwellingPos", NbtHelper.fromBlockPos(pos));
-        Direction direction = state.get(BirtDwellingBlock.FACING);
-        BlockPos blockPos = pos.offset(direction);
+        nbtCompound.put("DwellingPos", NbtUtils.writeBlockPos(pos));
+        Direction direction = state.getValue(BirtDwellingBlock.FACING);
+        BlockPos blockPos = pos.relative(direction);
         boolean bl = !world.getBlockState(blockPos).getCollisionShape(world, blockPos).isEmpty();
 
         if (bl && birtState != BirtState.EMERGENCY) return false;
-        Entity newBirt = EntityType.loadEntityWithPassengers(nbtCompound, world, entity -> entity);
+        Entity newBirt = EntityType.loadEntityRecursive(nbtCompound, world, entity -> entity);
         if (newBirt != null) {
             if (newBirt instanceof BirtEntity birtEntity) {
                 BirtDwellingBlockEntity.ageBirt(Birt.ticksInDwelling, birtEntity);
                 if (entities != null) entities.add(birtEntity);
-                float f = newBirt.getWidth();
+                float f = newBirt.getBbWidth();
                 double d = bl ? 0.0 : 0.55 + (double)(f / 2.0f);
-                double x = (double)pos.getX() + 0.5 + d * (double)direction.getOffsetX();
-                double y = (double)pos.getY() + 0.5 - (double)(newBirt.getHeight() / 2.0f);
-                double z = (double)pos.getZ() + 0.5 + d * (double)direction.getOffsetZ();
-                newBirt.refreshPositionAndAngles(x, y, z, newBirt.getYaw(), newBirt.getPitch());
+                double x = (double)pos.getX() + 0.5 + d * (double)direction.getStepX();
+                double y = (double)pos.getY() + 0.5 - (double)(newBirt.getBbHeight() / 2.0f);
+                double z = (double)pos.getZ() + 0.5 + d * (double)direction.getStepZ();
+                newBirt.moveTo(x, y, z, newBirt.getYRot(), newBirt.getXRot());
             } else {
                 return false;
             }
-            world.playSound(null, pos, SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(newBirt, world.getBlockState(pos)));
-            return world.spawnEntity(newBirt);
+            world.playSound(null, pos, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newBirt, world.getBlockState(pos)));
+            return world.addFreshEntity(newBirt);
         }
         return false;
     }
 
-    static void removeIrrelevantNbtKeys(NbtCompound compound) {
+    static void removeIrrelevantNbtKeys(CompoundTag compound) {
         for (String string : IRRELEVANT_BIRT_NBT_KEYS) compound.remove(string);
     }
 
     private static void ageBirt(int ticks, BirtEntity birt) {
-        int i = birt.getBreedingAge();
-        if (i < 0) birt.setBreedingAge(Math.min(0, i + ticks));
-        else if (i > 0) birt.setBreedingAge(Math.max(0, i - ticks));
+        int i = birt.getAge();
+        if (i < 0) birt.setAge(Math.min(0, i + ticks));
+        else if (i > 0) birt.setAge(Math.max(0, i - ticks));
     }
 
-    private static void tickBirts(World world, BlockPos pos, BlockState state, List<Birt> birts) {
+    private static void tickBirts(Level world, BlockPos pos, BlockState state, List<Birt> birts) {
         boolean bl = false;
         Iterator<Birt> iterator = birts.iterator();
-        world.setBlockState(pos, state.with(BIRTS, birts.size()));
+        world.setBlockAndUpdate(pos, state.setValue(BIRTS, birts.size()));
         while (iterator.hasNext()) {
             Birt birt = iterator.next();
             if (Birt.ticksInDwelling > birt.minOccupationTicks) {
@@ -156,43 +155,43 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             }
             ++Birt.ticksInDwelling;
         }
-        if (bl) BirtDwellingBlockEntity.markDirty(world, pos, state);
+        if (bl) BirtDwellingBlockEntity.setChanged(world, pos, state);
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, BirtDwellingBlockEntity blockEntity) {
+    public static void serverTick(Level world, BlockPos pos, BlockState state, BirtDwellingBlockEntity blockEntity) {
         BirtDwellingBlockEntity.tickBirts(world, pos, state, blockEntity.birts);
         if (!blockEntity.birts.isEmpty() && world.getRandom().nextDouble() < 0.005) {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            world.playSound(null, d, e, f, SoundEvents.BLOCK_BEEHIVE_WORK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, d, e, f, SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.birts.clear();
-        NbtList nbtList = nbt.getList(BIRTS_KEY, NbtElement.COMPOUND_TYPE);
+        ListTag nbtList = nbt.getList(BIRTS_KEY, 10);
         for (int i = 0; i < nbtList.size(); ++i) {
-            NbtCompound nbtCompound = nbtList.getCompound(i);
+            CompoundTag nbtCompound = nbtList.getCompound(i);
             Birt birt = new Birt(nbtCompound.getCompound(ENTITY_DATA_KEY), nbtCompound.getInt(TICKS_IN_DWELLING_KEY), nbtCompound.getInt(MIN_OCCUPATION_TICKS_KEY));
             this.birts.add(birt);
         }
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    protected void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
         nbt.put(BIRTS_KEY, this.getBirts());
     }
 
-    public NbtList getBirts() {
-        NbtList nbtList = new NbtList();
+    public ListTag getBirts() {
+        ListTag nbtList = new ListTag();
         for (Birt birt : this.birts) {
-            NbtCompound nbtCompound = birt.entityData.copy();
+            CompoundTag nbtCompound = birt.entityData.copy();
             nbtCompound.remove("UUID");
-            NbtCompound nbtCompound2 = new NbtCompound();
+            CompoundTag nbtCompound2 = new CompoundTag();
             nbtCompound2.put(ENTITY_DATA_KEY, nbtCompound);
             nbtCompound2.putInt(IRRELEVANT_BIRT_NBT_KEYS.toString(), Birt.ticksInDwelling);
             nbtCompound2.putInt(MIN_OCCUPATION_TICKS_KEY, birt.minOccupationTicks);
@@ -207,11 +206,11 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     }
 
     static class Birt {
-        final NbtCompound entityData;
+        final CompoundTag entityData;
         static int ticksInDwelling;
         final int minOccupationTicks;
 
-        Birt(NbtCompound entityData, int ticksInDwelling, int minOccupationTicks) {
+        Birt(CompoundTag entityData, int ticksInDwelling, int minOccupationTicks) {
             BirtDwellingBlockEntity.removeIrrelevantNbtKeys(entityData);
             this.entityData = entityData;
             Birt.ticksInDwelling = ticksInDwelling;

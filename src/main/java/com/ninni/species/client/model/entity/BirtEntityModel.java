@@ -5,17 +5,21 @@ import com.ninni.species.client.animation.BirtAnimations;
 import com.ninni.species.entity.BirtEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.*;
-import net.minecraft.client.render.entity.model.SinglePartEntityModel;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 
-import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
-
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel<T> {
+public class BirtEntityModel<T extends BirtEntity> extends HierarchicalModel<T> {
     public static final String ANTENNA = "antenna";
 
     private final ModelPart root;
@@ -31,85 +35,81 @@ public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel
     public BirtEntityModel(ModelPart root) {
         this.root = root;
 
-        this.body = root.getChild(BODY);
+        this.body = root.getChild(PartNames.BODY);
 
         this.antenna = this.body.getChild(ANTENNA);
-        this.tail = this.body.getChild(TAIL);
-        this.leftLeg = this.body.getChild(LEFT_LEG);
-        this.rightLeg = this.body.getChild(RIGHT_LEG);
-        this.leftWing = this.body.getChild(LEFT_WING);
-        this.rightWing = this.body.getChild(RIGHT_WING);
+        this.tail = this.body.getChild(PartNames.TAIL);
+        this.leftLeg = this.body.getChild(PartNames.LEFT_LEG);
+        this.rightLeg = this.body.getChild(PartNames.RIGHT_LEG);
+        this.leftWing = this.body.getChild(PartNames.LEFT_WING);
+        this.rightWing = this.body.getChild(PartNames.RIGHT_WING);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
+    public static LayerDefinition getLayerDefinition() {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
 
-        ModelPartData body = modelPartData.addChild(
-                BODY,
-                ModelPartBuilder.create()
-                        .uv(0, 0)
-                        .cuboid(-3.5F, -5.0F, -3.5F, 7.0F, 7.0F, 7.0F)
-                        .uv(18, 17)
-                        .cuboid(-2.5F, -1.0F, -5.5F, 5.0F, 2.0F, 2.0F),
-                ModelTransform.pivot(0.0F, 20.0F, 0.0F)
+        PartDefinition body = modelPartData.addOrReplaceChild(
+                PartNames.BODY,
+                CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .addBox(-3.5F, -5.0F, -3.5F, 7.0F, 7.0F, 7.0F)
+                        .texOffs(18, 17)
+                        .addBox(-2.5F, -1.0F, -5.5F, 5.0F, 2.0F, 2.0F),
+                PartPose.offset(0.0F, 20.0F, 0.0F)
         );
 
-        ModelPartData antenna = body.addChild(
+        PartDefinition antenna = body.addOrReplaceChild(
                 ANTENNA,
-                ModelPartBuilder.create()
-                        .uv(0, 1)
-                        .cuboid(-0.5F, -4.0F, -0.5F, 1.0F, 5.0F, 1.0F),
-                ModelTransform.pivot(0.0F, -5.0F, 0.0F)
+                CubeListBuilder.create()
+                        .texOffs(0, 1)
+                        .addBox(-0.5F, -4.0F, -0.5F, 1.0F, 5.0F, 1.0F),
+                PartPose.offset(0.0F, -5.0F, 0.0F)
         );
 
-        ModelPartData tail = body.addChild(
-                TAIL, 
-                ModelPartBuilder.create()
-                        .uv(0, 24)
-                        .cuboid(-1.5F, 0.0F, 0.0F, 3.0F, 1.0F, 3.0F),
-                ModelTransform.pivot(0.0F, 0.0F, 3.5F)
+        PartDefinition tail = body.addOrReplaceChild(
+                PartNames.TAIL,
+                CubeListBuilder.create()
+                        .texOffs(0, 24)
+                        .addBox(-1.5F, 0.0F, 0.0F, 3.0F, 1.0F, 3.0F),
+                PartPose.offset(0.0F, 0.0F, 3.5F)
         );
 
-        ModelPartData leftLeg = body.addChild(
-                LEFT_LEG,
-                ModelPartBuilder.create()
-                        .uv(8, 14)
-                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F),
-                ModelTransform.pivot(2.0F, 2.0F, 0.5F)
+        PartDefinition leftLeg = body.addOrReplaceChild(
+                PartNames.LEFT_LEG,
+                CubeListBuilder.create()
+                        .texOffs(8, 14)
+                        .addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F),
+                PartPose.offset(2.0F, 2.0F, 0.5F)
         );
 
-        ModelPartData rightLeg = body.addChild(
-                RIGHT_LEG,
-                ModelPartBuilder.create()
-                        .uv(8, 14)
-                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F),
-                ModelTransform.pivot(-2.0F, 2.0F, 0.5F)
+        PartDefinition rightLeg = body.addOrReplaceChild(
+                PartNames.RIGHT_LEG,
+                CubeListBuilder.create()
+                        .texOffs(8, 14)
+                        .addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 2.0F),
+                PartPose.offset(-2.0F, 2.0F, 0.5F)
         );
 
-        ModelPartData leftWing = body.addChild(
-                LEFT_WING,
-                ModelPartBuilder.create()
-                        .uv(0, 14)
-                        .cuboid(0.0F, -2.0F, -0.5F, 1.0F, 4.0F, 6.0F),
-                ModelTransform.pivot(3.5F, -1.0F, -1.0F)
+        PartDefinition leftWing = body.addOrReplaceChild(
+                PartNames.LEFT_WING,
+                CubeListBuilder.create()
+                        .texOffs(0, 14)
+                        .addBox(0.0F, -2.0F, -0.5F, 1.0F, 4.0F, 6.0F),
+                PartPose.offset(3.5F, -1.0F, -1.0F)
         );
 
-        ModelPartData rightWing = body.addChild(
-                RIGHT_WING,
-                ModelPartBuilder.create()
-                        .uv(0, 14)
-                        .mirrored()
-                        .cuboid(-1.0F, -2.0F, -0.5F, 1.0F, 4.0F, 6.0F)
-                        .mirrored(false),
-                ModelTransform.pivot(-3.5F, -1.0F, -1.0F)
+        PartDefinition rightWing = body.addOrReplaceChild(
+                PartNames.RIGHT_WING,
+                CubeListBuilder.create()
+                        .texOffs(0, 14)
+                        .mirror()
+                        .addBox(-1.0F, -2.0F, -0.5F, 1.0F, 4.0F, 6.0F)
+                        .mirror(false),
+                PartPose.offset(-3.5F, -1.0F, -1.0F)
         );
 
-        return TexturedModelData.of(modelData, 32, 32);
-    }
-    @Override
-    public ModelPart getPart() {
-        return this.root;
+        return LayerDefinition.create(modelData, 32, 32);
     }
 
     public List<ModelPart> getAllParts() {
@@ -117,11 +117,17 @@ public class BirtEntityModel<T extends BirtEntity> extends SinglePartEntityModel
     }
 
     @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
+    public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
         if (entity.antennaTicks > 0) {
-            this.antenna.pitch += MathHelper.cos(animationProgress) * 0.25F;
+            this.antenna.xRot += Mth.cos(animationProgress) * 0.25F;
         }
-        this.updateAnimation(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
+        this.animate(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
     }
+
+    @Override
+    public ModelPart root() {
+        return this.root;
+    }
+
 }

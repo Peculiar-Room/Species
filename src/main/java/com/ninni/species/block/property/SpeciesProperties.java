@@ -1,8 +1,8 @@
 package com.ninni.species.block.property;
 
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class SpeciesProperties {
-    public static final IntProperty BIRTS = IntProperty.of("birts", 0, 3);
-    public static final IntProperty EGGS = IntProperty.of("eggs", 0, 5);
+    public static final IntegerProperty BIRTS = IntegerProperty.create("birts", 0, 3);
+    public static final IntegerProperty EGGS = IntegerProperty.create("eggs", 0, 5);
 }

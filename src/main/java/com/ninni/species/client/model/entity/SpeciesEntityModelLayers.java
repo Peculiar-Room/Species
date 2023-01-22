@@ -3,27 +3,27 @@ package com.ninni.species.client.model.entity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.resources.ResourceLocation;
 
-import static com.ninni.species.Species.*;
+import static com.ninni.species.Species.MOD_ID;
 
 @Environment(EnvType.CLIENT)
 public interface SpeciesEntityModelLayers {
 
-    EntityModelLayer WRAPTOR = main("wraptor", WraptorEntityModel::getTexturedModelData);
-    EntityModelLayer DEEPFISH = main("deepfish", DeepfishEntityModel::getTexturedModelData);
-    EntityModelLayer ROOMBUG = main("roombug", RoombugEntityModel::getTexturedModelData);
-    EntityModelLayer BIRT = main("birt", BirtEntityModel::getTexturedModelData);
-    EntityModelLayer LIMPET = main("limpet", LimpetEntityModel::getTexturedModelData);
+    ModelLayerLocation WRAPTOR = main("wraptor", WraptorEntityModel::getLayerDefinition);
+    ModelLayerLocation DEEPFISH = main("deepfish", DeepfishEntityModel::getLayerDefinition);
+    ModelLayerLocation ROOMBUG = main("roombug", RoombugEntityModel::getLayerDefinition);
+    ModelLayerLocation BIRT = main("birt", BirtEntityModel::getLayerDefinition);
+    ModelLayerLocation LIMPET = main("limpet", LimpetEntityModel::getLayerDefinition);
 
-    private static EntityModelLayer register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
-        EntityModelLayer layer = new EntityModelLayer(new Identifier(MOD_ID, id), name);
+    private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
+        ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);
         EntityModelLayerRegistry.registerModelLayer(layer, provider);
         return layer;
     }
 
-    private static EntityModelLayer main(String id, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
+    private static ModelLayerLocation main(String id, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         return register(id, "main", provider);
     }
 }

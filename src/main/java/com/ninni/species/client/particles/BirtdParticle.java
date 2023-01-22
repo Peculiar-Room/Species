@@ -2,60 +2,63 @@ package com.ninni.species.client.particles;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.particle.*;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 
 @Environment(EnvType.CLIENT)
-public class BirtdParticle extends SpriteBillboardParticle {
-    private final SpriteProvider spriteProvider;
+public class BirtdParticle extends TextureSheetParticle {
+    private final SpriteSet spriteProvider;
 
 
-    BirtdParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider) {
+    BirtdParticle(ClientLevel world, double x, double y, double z, SpriteSet spriteProvider) {
         super(world, x, y, z);
         this.spriteProvider = spriteProvider;
-        this.maxAge = 50;
-        scale = 0.2f;
-        this.setSpriteForAge(spriteProvider);
+        this.lifetime = 50;
+        quadSize = 0.2f;
+        this.setSpriteFromAge(spriteProvider);
     }
 
     @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        if (age < maxAge) {
+        if (age < lifetime) {
             if (alpha > 0.1F) alpha -= 0.015F;
-            else this.markDead();
+            else this.remove();
         }
 
-        velocityX = MathHelper.cos(age * 0.115F) * 0.05F;
-        velocityZ = MathHelper.sin(age * 0.115F) * 0.05F;
-        this.setSpriteForAge(spriteProvider);
+        xd = Mth.cos(age * 0.115F) * 0.05F;
+        zd = Mth.sin(age * 0.115F) * 0.05F;
+        this.setSpriteFromAge(spriteProvider);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public int getBrightness(float tint) {
+    protected int getLightColor(float f) {
         BlockPos blockPos = new BlockPos(this.x, this.y, this.z);
-        if (this.world.isChunkLoaded(blockPos)) {
-            return WorldRenderer.getLightmapCoordinates(this.world, blockPos);
+        if (this.level.hasChunkAt(blockPos)) {
+            return LevelRenderer.getLightColor(this.level, blockPos);
         }
         return 0;
     }
 
     @Environment(value = EnvType.CLIENT)
-    public record Factory(SpriteProvider spriteProvider) implements ParticleFactory<DefaultParticleType> {
+    public record Factory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 
         @Override
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
             return new BirtdParticle(clientWorld, d, e, f, this.spriteProvider);
         }
     }

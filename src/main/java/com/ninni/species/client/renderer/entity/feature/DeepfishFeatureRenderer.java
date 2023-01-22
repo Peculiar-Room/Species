@@ -1,29 +1,29 @@
 package com.ninni.species.client.renderer.entity.feature;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.model.entity.DeepfishEntityModel;
 import com.ninni.species.entity.DeepfishEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 @Environment(value=EnvType.CLIENT)
-public class DeepfishFeatureRenderer<T extends DeepfishEntity, M extends DeepfishEntityModel<T>> extends FeatureRenderer<T, M> {
-    private final Identifier texture;
+public class DeepfishFeatureRenderer<T extends DeepfishEntity, M extends DeepfishEntityModel<T>> extends RenderLayer<T, M> {
+    private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final ModelPartVisibility<T, M> modelPartVisibility;
 
-    public DeepfishFeatureRenderer(FeatureRendererContext<T, M> context, Identifier texture, AnimationAngleAdjuster<T> animationAngleAdjuster, ModelPartVisibility<T, M> modelPartVisibility) {
+    public DeepfishFeatureRenderer(RenderLayerParent<T, M> context, ResourceLocation texture, AnimationAngleAdjuster<T> animationAngleAdjuster, ModelPartVisibility<T, M> modelPartVisibility) {
         super(context);
         this.texture = texture;
         this.animationAngleAdjuster = animationAngleAdjuster;
@@ -31,30 +31,30 @@ public class DeepfishFeatureRenderer<T extends DeepfishEntity, M extends Deepfis
     }
 
     @Override
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T fish, float f, float g, float h, float j, float k, float l) {
-        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderLayer.getEntityTranslucentEmissive(this.texture));
+    public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, T fish, float f, float g, float h, float j, float k, float l) {
+        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucentEmissive(this.texture));
 
         if (fish.isInvisible()) {
             return;
         }
         this.updateModelPartVisibility();
-        this.getContextModel().render(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlay(fish, 0.0f), 1.0f, 1.0f, 1.0f, this.animationAngleAdjuster.apply(fish, h, j));
+        this.getParentModel().renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(fish, 0.0f), 1.0f, 1.0f, 1.0f, this.animationAngleAdjuster.apply(fish, h, j));
         this.unhideAllModelParts();
     }
 
     private void updateModelPartVisibility() {
-        List<ModelPart> list = this.modelPartVisibility.getPartsToDraw(this.getContextModel());
-        this.getContextModel().getPart().traverse().forEach(part -> {
-            part.hidden = true;
+        List<ModelPart> list = this.modelPartVisibility.getPartsToDraw(this.getParentModel());
+        this.getParentModel().root().getAllParts().forEach(part -> {
+            part.skipDraw = true;
         });
         list.forEach(part -> {
-            part.hidden = false;
+            part.skipDraw = false;
         });
     }
 
     private void unhideAllModelParts() {
-        this.getContextModel().getPart().traverse().forEach(part -> {
-            part.hidden = false;
+        this.getParentModel().root().getAllParts().forEach(part -> {
+            part.skipDraw = false;
         });
     }
 

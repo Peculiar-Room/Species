@@ -1,10 +1,10 @@
 package com.ninni.species.entity.ai.goal;
 
 import com.ninni.species.entity.WraptorEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -16,38 +16,38 @@ public class WraptorSwoopAtTargetGoal extends Goal {
     public WraptorSwoopAtTargetGoal(WraptorEntity mob, float velocity) {
         this.mob = mob;
         this.velocity = velocity;
-        this.setControls(EnumSet.of(Goal.Control.JUMP, Goal.Control.MOVE, Control.LOOK));
+        this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE, Flag.LOOK));
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         this.target = this.mob.getTarget();
         if (this.target == null) return false;
-        double distance = this.mob.squaredDistanceTo(this.target);
+        double distance = this.mob.distanceToSqr(this.target);
 
         if (this.mob.getFeatherStage() > 0) return false;
 
         if (distance < 10.0 || distance > 40.0) return false;
         if (!this.mob.isOnGround()) return false;
 
-        return this.mob.getRandom().nextInt(PounceAtTargetGoal.toGoalTicks(5)) == 0;
+        return this.mob.getRandom().nextInt(LeapAtTargetGoal.reducedTickDelay(5)) == 0;
     }
 
     @Override
     public void tick() {
-        this.mob.getLookControl().lookAt(this.target, 10.0f, this.mob.getMaxLookPitchChange());
+        this.mob.getLookControl().setLookAt(this.target, 10.0f, this.mob.getMaxHeadXRot());
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         return !this.mob.isOnGround();
     }
 
     @Override
     public void start() {
-        Vec3d vec3d = new Vec3d(this.target.getX() - this.mob.getX(), 0.0, this.target.getZ() - this.mob.getZ());
-        if (vec3d.lengthSquared() > 1.0E-7) vec3d = vec3d.normalize().multiply(0.4).add(this.mob.getVelocity().multiply(0.2));
-        this.mob.setVelocity(vec3d.x * 1.5, this.velocity, vec3d.z * 1.5);
+        Vec3 vec3d = new Vec3(this.target.getX() - this.mob.getX(), 0.0, this.target.getZ() - this.mob.getZ());
+        if (vec3d.lengthSqr() > 1.0E-7) vec3d = vec3d.normalize().scale(0.4).add(this.mob.getDeltaMovement().scale(0.2));
+        this.mob.setDeltaMovement(vec3d.x * 1.5, this.velocity, vec3d.z * 1.5);
     }
 }
 

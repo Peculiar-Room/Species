@@ -21,22 +21,22 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.Position;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.Util;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
-	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MOD_ID, "item_group"), () -> new ItemStack(SpeciesItems.WRAPTOR_EGG));
+	public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(new ResourceLocation(MOD_ID, "item_group"), () -> new ItemStack(SpeciesItems.WRAPTOR_EGG));
 
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
@@ -57,17 +57,17 @@ public class Species implements ModInitializer {
 		);
 		SpeciesTreeDecorators.init();
 		SpeciesFeatures.init();
-		SpeciesFeatures.BIRTED_BIRCH_TREES.getKey().ifPresent(this::addFeature);
+		SpeciesFeatures.BIRTED_BIRCH_TREES.unwrapKey().ifPresent(this::addFeature);
 
-		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new ProjectileDispenserBehavior(){
+		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new AbstractProjectileDispenseBehavior() {
 			@Override
-			protected ProjectileEntity createProjectile(World world, Position position, ItemStack stack) {
-				return Util.make(new BirtEggEntity(world, position.getX(), position.getY(), position.getZ()), entity -> entity.setItem(stack));
+			protected Projectile getProjectile(Level world, Position position, ItemStack stack) {
+				return Util.make(new BirtEggEntity(world, position.x(), position.y(), position.z()), entity -> entity.setItem(stack));
 			}
 		});
 	}
 
-	private void addFeature(RegistryKey<PlacedFeature> placedFeatureRegistryKey) {
-		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
+	private void addFeature(ResourceKey<PlacedFeature> placedFeatureRegistryKey) {
+		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, placedFeatureRegistryKey);
 	}
 }

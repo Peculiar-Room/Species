@@ -4,11 +4,15 @@ import com.ninni.species.tag.SpeciesTags;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.*;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import static com.ninni.species.Species.MOD_ID;
 
@@ -19,9 +23,9 @@ public class SpeciesEntities {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(WraptorEntity::new)
                     .defaultAttributes(WraptorEntity::createWraptorAttributes)
-                    .spawnGroup(SpawnGroup.MONSTER)
-                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(1.2F, 2F))
+                    .spawnGroup(MobCategory.MONSTER)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
+                    .dimensions(EntityDimensions.scalable(1.2F, 2F))
                     .trackRangeChunks(8)
     );
 
@@ -30,9 +34,9 @@ public class SpeciesEntities {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(DeepfishEntity::new)
                     .defaultAttributes(DeepfishEntity::createDeepfishAttributes)
-                    .spawnGroup(SpawnGroup.UNDERGROUND_WATER_CREATURE)
-                    .spawnRestriction(SpawnRestriction.Location.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(0.5F, 0.5F))
+                    .spawnGroup(MobCategory.UNDERGROUND_WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.5F, 0.5F))
                     .trackRangeChunks(10)
     );
 
@@ -41,9 +45,9 @@ public class SpeciesEntities {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(RoombugEntity::new)
                     .defaultAttributes(RoombugEntity::createRoombugAttributes)
-                    .spawnGroup(SpawnGroup.CREATURE)
-                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, RoombugEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(1.375F, 0.375F))
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, RoombugEntity::canSpawn)
+                    .dimensions(EntityDimensions.scalable(1.375F, 0.375F))
                     .trackRangeChunks(10)
     );
 
@@ -52,9 +56,9 @@ public class SpeciesEntities {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(BirtEntity::new)
                     .defaultAttributes(BirtEntity::createBirtAttributes)
-                    .spawnGroup(SpawnGroup.CREATURE)
-                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, BirtEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(0.6F, 0.6F))
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, BirtEntity::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.6F, 0.6F))
                     .trackRangeChunks(10)
     );
 
@@ -62,7 +66,7 @@ public class SpeciesEntities {
             "birt_egg",
             FabricEntityTypeBuilder.create()
                     .<BirtEggEntity>entityFactory(BirtEggEntity::new)
-                    .spawnGroup(SpawnGroup.MISC)
+                    .spawnGroup(MobCategory.MISC)
                     .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
                     .trackRangeChunks(4)
     );
@@ -72,19 +76,19 @@ public class SpeciesEntities {
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(LimpetEntity::new)
                     .defaultAttributes(LimpetEntity::createLimpetAttributes)
-                    .spawnGroup(SpawnGroup.CREATURE)
-                    .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, LimpetEntity::canSpawn)
-                    .dimensions(EntityDimensions.changing(0.75F, 1.25F))
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, LimpetEntity::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.75F, 1.25F))
                     .trackRangeChunks(10)
     );
 
     static {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.WARPED_FOREST), SpawnGroup.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
-        BiomeModifications.addSpawn(BiomeSelectors.all(), SpawnGroup.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), SpawnGroup.CREATURE, SpeciesEntities.ROOMBUG, 40, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
+        BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), MobCategory.CREATURE, SpeciesEntities.ROOMBUG, 40, 1, 1);
     }
 
     private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(MOD_ID, id), entityType.build());
+        return Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(MOD_ID, id), entityType.build());
     }
 }

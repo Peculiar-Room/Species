@@ -1,10 +1,10 @@
 package com.ninni.species.sound;
 
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
-import static com.ninni.species.Species.*;
+import static com.ninni.species.Species.MOD_ID;
 
 public class SpeciesSoundEvents {
 
@@ -52,7 +52,7 @@ public class SpeciesSoundEvents {
     public static final SoundEvent MUSIC_DISC_DIAL = register("music.disc.dial");
 
     private static SoundEvent register(String name) {
-        Identifier id = new Identifier(MOD_ID, name);
+        ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
     }
 }
