@@ -1,5 +1,8 @@
 package com.ninni.species.entity;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.Dynamic;
+import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,19 +12,20 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,20 +38,41 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class LimpetEntity extends Animal {
+    protected static final ImmutableList<SensorType<? extends Sensor<? super LimpetEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
+    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET);
     private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
+    private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
 
     protected LimpetEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(5, new PanicGoal(this, 1.5));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+    protected Brain.Provider<LimpetEntity> brainProvider() {
+        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
+    }
+
+    @Override
+    public Brain<LimpetEntity> getBrain() {
+        return (Brain<LimpetEntity>) super.getBrain();
+    }
+
+    @Override
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return LimpetAi.makeBrain(this.brainProvider().makeBrain(dynamic));
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level.getProfiler().push("limpetBrain");
+        this.getBrain().tick((ServerLevel)this.level, this);
+        this.level.getProfiler().pop();
+        this.level.getProfiler().push("limpetActivityUpdate");
+        LimpetAi.updateActivity(this);
+        this.level.getProfiler().pop();
+        super.customServerAiStep();
     }
 
     public static AttributeSupplier.Builder createLimpetAttributes() {
@@ -59,6 +84,7 @@ public class LimpetEntity extends Animal {
         super.defineSynchedData();
         this.entityData.define(SCARED_TICKS, 0);
         this.entityData.define(TYPE, 0);
+        this.entityData.define(CRACKED_STAGE, 0);
     }
 
     @Override
@@ -66,6 +92,7 @@ public class LimpetEntity extends Animal {
         super.addAdditionalSaveData(nbt);
         nbt.putInt("ScaredTicks", this.getScaredTicks());
         nbt.putInt("LimpetType", this.getLimpetType().getId());
+        nbt.putInt("CrackedStage", this.getCrackedStage());
     }
 
     @Override
@@ -73,8 +100,15 @@ public class LimpetEntity extends Animal {
         super.readAdditionalSaveData(nbt);
         this.setScaredTicks(nbt.getInt("ScaredTicks"));
         this.setLimpetType(nbt.getInt("LimpetType"));
+        this.setCrackedStage(nbt.getInt("CrackedStage"));
     }
 
+    public int getCrackedStage() {
+        return this.entityData.get(CRACKED_STAGE);
+    }
+    public void setCrackedStage(int crackedStage) {
+        this.entityData.set(CRACKED_STAGE, crackedStage);
+    }
     public LimpetType getLimpetType() { return LimpetType.TYPES[this.entityData.get(TYPE)]; }
     public void setLimpetType(int id) { this.entityData.set(TYPE, id); }
     public int getScaredTicks() {
@@ -90,10 +124,15 @@ public class LimpetEntity extends Animal {
     @Override
     public void aiStep() {
         super.aiStep();
-        this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
-        if (this.getScaredTicks() > 0) {
-            this.getNavigation().stop();
-            this.setScaredTicks(this.getScaredTicks() - 1);
+        if (!this.level.isClientSide) {
+            if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
+                this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
+            }
+            if (this.getScaredTicks() > 0) {
+                int scaredTicks = this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET) ? 0 : this.getScaredTicks() - 1;
+                this.getNavigation().stop();
+                this.setScaredTicks(scaredTicks);
+            }
         }
     }
 
@@ -119,34 +158,38 @@ public class LimpetEntity extends Animal {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         LimpetType type = this.getLimpetType();
-
-        if (source.getEntity() instanceof Player player
-                && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem pickaxe
-                && type.getId() > 0
-                && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
-
+        if (source.getEntity() instanceof Player player && type.getId() > 0) {
             ItemStack stack = player.getItemInHand(player.getUsedItemHand());
-
-            this.spawnAtLocation(type.getItem(), 1);
-            if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-            switch (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)) {
-                case 1 : if (random.nextInt(4) == 1) this.spawnAtLocation(type.getItem(), 1);
-                case 2 : if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-                case 3 : this.spawnAtLocation(type.getItem(), 1);
-            }
-
-            playSound(type.getMiningSound(), 1, 1);
-
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
-                this.setLimpetType(1);
-                return false;
-            } else {
-                this.setLimpetType(0);
-                this.setScaredTicks(0);
+            if (stack.getItem() instanceof PickaxeItem pickaxe && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
+                if (this.getCrackedStage() < 2) {
+                    this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
+                    this.setCrackedStage(this.getCrackedStage() + 1);
+                    this.playSound(type.getMiningSound(), 1, 1);
+                    this.setScaredTicks(0);
+                    return false;
+                } else {
+                    this.spawnAtLocation(type.getItem(), 1);
+                    if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
+                    switch (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)) {
+                        case 1:
+                            if (random.nextInt(4) == 1) this.spawnAtLocation(type.getItem(), 1);
+                        case 2:
+                            if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
+                        case 3:
+                            this.spawnAtLocation(type.getItem(), 1);
+                    }
+                    this.playSound(type.getMiningSound(), 1, 1);
+                    if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+                        this.setLimpetType(1);
+                        return false;
+                    } else {
+                        this.setLimpetType(0);
+                        this.setScaredTicks(0);
+                    }
+                }
             }
         } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level.isClientSide && type.getId() > 0) {
-
-            playSound(SoundEvents.SHIELD_BLOCK, 1, 1);
+            this.playSound(SoundEvents.SHIELD_BLOCK, 1, 1);
             this.setScaredTicks(300);
             return false;
         }
@@ -155,7 +198,7 @@ public class LimpetEntity extends Animal {
 
     @Override
     public void travel(Vec3 vec3) {
-        if (this.isScared()) {
+        if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET) && this.isScared()) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0, 1, 0));
             vec3 = vec3.multiply(0, 1, 0);
         }
