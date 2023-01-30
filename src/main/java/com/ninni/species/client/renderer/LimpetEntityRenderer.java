@@ -2,6 +2,7 @@ package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.LimpetEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.LimpetEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,13 +16,14 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(value= EnvType.CLIENT)
 public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
-    public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_amethyst.png");
-    public static final ResourceLocation TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_lapis.png");
-    public static final ResourceLocation TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_emerald.png");
-    public static final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_diamond.png");
+    public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst.png");
+    public static final ResourceLocation TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/lapis.png");
+    public static final ResourceLocation TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald.png");
+    public static final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond.png");
 
     public LimpetEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET)), 0.5f);
+        this.addLayer(new LimpetBreakingLayer(this, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET))));
     }
 
     @Override

@@ -161,11 +161,12 @@ public class LimpetEntity extends Animal {
         if (source.getEntity() instanceof Player player && type.getId() > 0) {
             ItemStack stack = player.getItemInHand(player.getUsedItemHand());
             if (stack.getItem() instanceof PickaxeItem pickaxe && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
-                if (this.getCrackedStage() < 2) {
+                if (this.getCrackedStage() < 3) {
                     this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
                     this.setCrackedStage(this.getCrackedStage() + 1);
                     this.playSound(type.getMiningSound(), 1, 1);
                     this.setScaredTicks(0);
+                    player.getCooldowns().addCooldown(stack.getItem(), 80);
                     return false;
                 } else {
                     this.spawnAtLocation(type.getItem(), 1);
@@ -178,6 +179,7 @@ public class LimpetEntity extends Animal {
                         case 3:
                             this.spawnAtLocation(type.getItem(), 1);
                     }
+                    this.setCrackedStage(0);
                     this.playSound(type.getMiningSound(), 1, 1);
                     if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
                         this.setLimpetType(1);
