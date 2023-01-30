@@ -14,6 +14,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -137,6 +139,18 @@ public class LimpetEntity extends Animal {
     }
 
     @Override
+    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        LimpetType type = this.getLimpetType();
+        if (this.getCrackedStage() > 0 && type.getId() > 0 && player.getItemInHand(player.getUsedItemHand()).getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
+            this.setCrackedStage(this.getCrackedStage() - 1);
+            this.playSound(type.getPlacingSound(), 1, 1);
+            if (!player.getAbilities().instabuild) player.getItemInHand(player.getUsedItemHand()).shrink(1);
+            return InteractionResult.SUCCESS;
+        }
+        return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
     public boolean isPushable() {
         return !this.isScared();
     }
@@ -146,8 +160,7 @@ public class LimpetEntity extends Animal {
                 && !player.isSpectator()
                 && player.isAlive()
                 && !player.getAbilities().instabuild
-                && !player.isShiftKeyDown()
-                || (this.getLimpetType().getId() > 0
+                && !player.isShiftKeyDown() || (this.getLimpetType().getId() > 0
                 && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem);
     }
 
@@ -158,41 +171,44 @@ public class LimpetEntity extends Animal {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         LimpetType type = this.getLimpetType();
-        if (source.getEntity() instanceof Player player && type.getId() > 0) {
+        if (source.getEntity() instanceof Player player
+                && type.getId() > 0
+                && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem pickaxe
+                && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
+
             ItemStack stack = player.getItemInHand(player.getUsedItemHand());
-            if (stack.getItem() instanceof PickaxeItem pickaxe && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
-                if (this.getCrackedStage() < 3) {
-                    this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
-                    this.setCrackedStage(this.getCrackedStage() + 1);
-                    this.playSound(type.getMiningSound(), 1, 1);
-                    this.setScaredTicks(0);
-                    player.getCooldowns().addCooldown(stack.getItem(), 80);
+            if (this.getCrackedStage() < 3) {
+                this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
+                this.setCrackedStage(this.getCrackedStage() + 1);
+                this.playSound(type.getMiningSound(), 1, 1);
+                this.setScaredTicks(0);
+                player.getCooldowns().addCooldown(stack.getItem(), 80);
+                return false;
+            } else {
+                this.spawnAtLocation(type.getItem(), 1);
+                if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
+                switch (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)) {
+                    case 1:
+                        if (random.nextInt(4) == 1) this.spawnAtLocation(type.getItem(), 1);
+                    case 2:
+                        if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
+                    case 3:
+                        this.spawnAtLocation(type.getItem(), 1);
+                }
+                this.setCrackedStage(0);
+                this.playSound(type.getMiningSound(), 1, 1);
+                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+                    this.setLimpetType(1);
                     return false;
                 } else {
-                    this.spawnAtLocation(type.getItem(), 1);
-                    if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-                    switch (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)) {
-                        case 1:
-                            if (random.nextInt(4) == 1) this.spawnAtLocation(type.getItem(), 1);
-                        case 2:
-                            if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-                        case 3:
-                            this.spawnAtLocation(type.getItem(), 1);
-                    }
-                    this.setCrackedStage(0);
-                    this.playSound(type.getMiningSound(), 1, 1);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
-                        this.setLimpetType(1);
-                        return false;
-                    } else {
-                        this.setLimpetType(0);
-                        this.setScaredTicks(0);
-                    }
+                    this.setLimpetType(0);
+                    this.setScaredTicks(0);
                 }
             }
+
         } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level.isClientSide && type.getId() > 0) {
             this.playSound(SoundEvents.SHIELD_BLOCK, 1, 1);
-            this.setScaredTicks(300);
+            if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) this.setScaredTicks(300);
             return false;
         }
         return super.hurt(source, amount);

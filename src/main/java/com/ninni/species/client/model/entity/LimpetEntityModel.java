@@ -171,8 +171,8 @@ public class LimpetEntityModel<T extends LimpetEntity> extends HierarchicalModel
         shell.visible = entity.getLimpetType().getId() != 0;
 
         //walking
-        body.y = Mth.cos(limbAngle * speed * 0.6F + pi/2) * 1.4F * limbDistance + 11.0F;
-        rightLeg.xRot = Mth.cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
-        leftLeg.xRot = Mth.cos(limbAngle * speed * 0.6F + pi) * 1.4F * limbDistance;
+        body.y = Mth.cos(limbAngle * speed * 0.6F + pi/2) * degree * limbDistance + 11.0F;
+        rightLeg.xRot = Mth.cos(limbAngle * speed * 0.6F) * degree * 1.4F * limbDistance;
+        leftLeg.xRot = Mth.cos(limbAngle * speed * 0.6F + pi) * degree * 1.4F * limbDistance;
     }
 }
