@@ -174,7 +174,8 @@ public class LimpetEntity extends Animal {
         if (source.getEntity() instanceof Player player
                 && type.getId() > 0
                 && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem pickaxe
-                && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()) {
+                && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
+                && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
             ItemStack stack = player.getItemInHand(player.getUsedItemHand());
             if (this.getCrackedStage() < 3) {

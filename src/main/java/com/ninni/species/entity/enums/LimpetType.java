@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public enum LimpetType {
-    NO_SHELL(Items.AIR, 0, -1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
+    NO_SHELL(Items.BONE_MEAL, 0, -1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
     SHELL(Items.BONE_MEAL, 1, -1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
     AMETHYST(Items.AMETHYST_SHARD, 2, 0, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundEvents.AMETHYST_CLUSTER_PLACE),
     LAPIS(Items.LAPIS_LAZULI, 3, 1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
