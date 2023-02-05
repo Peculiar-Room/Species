@@ -6,6 +6,7 @@ import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.LimpetEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,11 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
     public static final ResourceLocation TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/lapis.png");
     public static final ResourceLocation TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald.png");
     public static final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond.png");
+    public static final ResourceLocation GARY_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_gary.png");
+    public static final ResourceLocation GARY_TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst_gary.png");
+    public static final ResourceLocation GARY_TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/lapis_gary.png");
+    public static final ResourceLocation GARY_TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald_gary.png");
+    public static final ResourceLocation GARY_TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond_gary.png");
 
     public LimpetEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET)), 0.5f);
@@ -34,7 +40,16 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
 
     @Override
     public ResourceLocation getTextureLocation(LimpetEntity limpet) {
-        return switch (limpet.getLimpetType()) {
+        if ("Gary".equals(ChatFormatting.stripFormatting(limpet.getName().getString()))) {
+            return switch (limpet.getLimpetType()) {
+                case AMETHYST -> GARY_TEXTURE_AMETHYST;
+                case LAPIS -> GARY_TEXTURE_LAPIS;
+                case EMERALD -> GARY_TEXTURE_EMERALD;
+                case DIAMOND -> GARY_TEXTURE_DIAMOND;
+                case SHELL, NO_SHELL -> GARY_TEXTURE;
+            };
+        } else
+            return switch (limpet.getLimpetType()) {
             case AMETHYST -> TEXTURE_AMETHYST;
             case LAPIS -> TEXTURE_LAPIS;
             case EMERALD -> TEXTURE_EMERALD;
