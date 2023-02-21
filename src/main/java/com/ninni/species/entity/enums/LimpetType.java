@@ -11,10 +11,11 @@ import java.util.Comparator;
 public enum LimpetType {
     NO_SHELL(Items.BONE_MEAL, 0, -1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
     SHELL(Items.BONE_MEAL, 1, -1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
-    AMETHYST(Items.AMETHYST_SHARD, 2, 0, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundEvents.AMETHYST_CLUSTER_PLACE),
-    LAPIS(Items.LAPIS_LAZULI, 3, 1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
-    EMERALD(Items.EMERALD, 4, 2, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
-    DIAMOND(Items.DIAMOND, 5, 2, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE);
+    COAL(Items.COAL, 2, 3, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
+    AMETHYST(Items.AMETHYST_SHARD, 3, 0, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundEvents.AMETHYST_CLUSTER_PLACE),
+    LAPIS(Items.LAPIS_LAZULI, 4, 1, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
+    EMERALD(Items.EMERALD, 5, 2, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE),
+    DIAMOND(Items.DIAMOND, 6, 2, SoundEvents.STONE_BREAK, SoundEvents.STONE_PLACE);
 
     public static final LimpetType[] TYPES = Arrays.stream(values()).sorted(Comparator.comparingInt(LimpetType::getId)).toArray(LimpetType[]::new);
     private final int id;

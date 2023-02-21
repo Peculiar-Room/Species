@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,21 +16,18 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
@@ -36,10 +35,12 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class LimpetEntity extends Animal {
+public class LimpetEntity extends Monster {
     protected static final ImmutableList<SensorType<? extends Sensor<? super LimpetEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET);
     private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
@@ -47,7 +48,7 @@ public class LimpetEntity extends Animal {
     private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
 
-    protected LimpetEntity(EntityType<? extends Animal> entityType, Level world) {
+    protected LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -64,6 +65,36 @@ public class LimpetEntity extends Animal {
     @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         return LimpetAi.makeBrain(this.brainProvider().makeBrain(dynamic));
+    }
+
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+
+        int i = this.chooseLimpetType(serverLevelAccessor);
+        if (spawnGroupData instanceof LimpetGroupData) i = ((LimpetGroupData)spawnGroupData).limpetType;
+        else spawnGroupData = new LimpetGroupData(i);
+        this.setLimpetType(i);
+
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
+    public int chooseLimpetType(LevelAccessor world) {
+        Holder<Biome> holder = world.getBiome(this.blockPosition());
+        int yLevel = this.blockPosition().getY();
+        if (yLevel > 20) {
+            if (holder.is(ConventionalBiomeTags.MOUNTAIN)) return LimpetType.EMERALD.getId();
+            else {
+                if (random.nextInt(5) == 0) return LimpetType.LAPIS.getId();
+                else return LimpetType.COAL.getId();
+            }
+        }
+        if (yLevel < 20 && yLevel > -20) return LimpetType.AMETHYST.getId();
+        if (yLevel < -20) {
+            if (random.nextInt(5) == 0) return LimpetType.DIAMOND.getId();
+            else return LimpetType.COAL.getId();
+        }
+        return LimpetType.SHELL.getId();
     }
 
     @Override
@@ -141,10 +172,11 @@ public class LimpetEntity extends Animal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         LimpetType type = this.getLimpetType();
-        if (this.getCrackedStage() > 0 && type.getId() > 0 && player.getItemInHand(player.getUsedItemHand()).getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
+        if (this.getCrackedStage() > 0 && type.getId() > 0 && player.getItemInHand(player.swingingArm).getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
             this.setCrackedStage(this.getCrackedStage() - 1);
             this.playSound(type.getPlacingSound(), 1, 1);
-            if (!player.getAbilities().instabuild) player.getItemInHand(player.getUsedItemHand()).shrink(1);
+            if (!player.getAbilities().instabuild) player.getItemInHand(player.swingingArm).shrink(1);
+            this.setPersistenceRequired();
             return InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, interactionHand);
@@ -161,11 +193,11 @@ public class LimpetEntity extends Animal {
                 && player.isAlive()
                 && !player.getAbilities().instabuild
                 && !player.isShiftKeyDown() || (this.getLimpetType().getId() > 0
-                && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem);
+                && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem);
     }
 
     public boolean isValidEntityHoldingPickaxe(Player player) {
-        return this.getLimpetType().getId() > 0 && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem;
+        return this.getLimpetType().getId() > 0 && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem;
     }
 
     @Override
@@ -173,11 +205,11 @@ public class LimpetEntity extends Animal {
         LimpetType type = this.getLimpetType();
         if (source.getEntity() instanceof Player player
                 && type.getId() > 0
-                && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof PickaxeItem pickaxe
+                && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem pickaxe
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
-            ItemStack stack = player.getItemInHand(player.getUsedItemHand());
+            ItemStack stack = player.getItemInHand(player.swingingArm);
             if (this.getCrackedStage() < 3) {
                 this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
@@ -224,14 +256,16 @@ public class LimpetEntity extends Animal {
         super.travel(vec3);
     }
 
-    @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
+    @SuppressWarnings("unused")
+    public static boolean canSpawn(EntityType<? extends Monster> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
+        return world.getLightEmission(pos) == 0;
     }
 
-    @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<? extends AgeableMob> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return false;
+    public static class LimpetGroupData implements SpawnGroupData {
+        public final int limpetType;
+
+        public LimpetGroupData(int i) {
+            this.limpetType = i;
+        }
     }
 }

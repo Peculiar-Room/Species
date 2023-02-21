@@ -17,11 +17,13 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(value= EnvType.CLIENT)
 public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
+    public static final ResourceLocation TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal.png");
     public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst.png");
     public static final ResourceLocation TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/lapis.png");
     public static final ResourceLocation TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald.png");
     public static final ResourceLocation TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond.png");
     public static final ResourceLocation GARY_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet_gary.png");
+    public static final ResourceLocation GARY_TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal_gary.png");
     public static final ResourceLocation GARY_TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst_gary.png");
     public static final ResourceLocation GARY_TEXTURE_LAPIS = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/lapis_gary.png");
     public static final ResourceLocation GARY_TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald_gary.png");
@@ -42,6 +44,7 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
     public ResourceLocation getTextureLocation(LimpetEntity limpet) {
         if ("Gary".equals(ChatFormatting.stripFormatting(limpet.getName().getString()))) {
             return switch (limpet.getLimpetType()) {
+                case COAL -> GARY_TEXTURE_COAL;
                 case AMETHYST -> GARY_TEXTURE_AMETHYST;
                 case LAPIS -> GARY_TEXTURE_LAPIS;
                 case EMERALD -> GARY_TEXTURE_EMERALD;
@@ -50,11 +53,12 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
             };
         } else
             return switch (limpet.getLimpetType()) {
-            case AMETHYST -> TEXTURE_AMETHYST;
-            case LAPIS -> TEXTURE_LAPIS;
-            case EMERALD -> TEXTURE_EMERALD;
-            case DIAMOND -> TEXTURE_DIAMOND;
-            case SHELL, NO_SHELL -> TEXTURE;
-        };
+                case COAL -> TEXTURE_COAL;
+                case AMETHYST -> TEXTURE_AMETHYST;
+                case LAPIS -> TEXTURE_LAPIS;
+                case EMERALD -> TEXTURE_EMERALD;
+                case DIAMOND -> TEXTURE_DIAMOND;
+                case SHELL, NO_SHELL -> TEXTURE;
+            };
     }
 }

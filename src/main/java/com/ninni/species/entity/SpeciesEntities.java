@@ -77,7 +77,7 @@ public class SpeciesEntities {
                     .entityFactory(LimpetEntity::new)
                     .defaultAttributes(LimpetEntity::createLimpetAttributes)
                     .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, LimpetEntity::canSpawn)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, LimpetEntity::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.75F, 1.25F))
                     .trackRangeChunks(10)
     );
@@ -86,6 +86,7 @@ public class SpeciesEntities {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), MobCategory.CREATURE, SpeciesEntities.ROOMBUG, 40, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.MONSTER, SpeciesEntities.LIMPET, 10, 1, 1);
     }
 
     private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {
