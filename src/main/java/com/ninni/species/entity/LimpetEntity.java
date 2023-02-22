@@ -20,7 +20,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -39,6 +43,9 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class LimpetEntity extends Monster {
     protected static final ImmutableList<SensorType<? extends Sensor<? super LimpetEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
@@ -172,10 +179,11 @@ public class LimpetEntity extends Monster {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         LimpetType type = this.getLimpetType();
-        if (this.getCrackedStage() > 0 && type.getId() > 0 && player.getItemInHand(player.swingingArm).getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
+        Optional<ItemStack> optional = this.getStackInHand(player);
+        if (this.getCrackedStage() > 0 && type.getId() > 0 && optional.isPresent() && optional.get().getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
             this.setCrackedStage(this.getCrackedStage() - 1);
             this.playSound(type.getPlacingSound(), 1, 1);
-            if (!player.getAbilities().instabuild) player.getItemInHand(player.swingingArm).shrink(1);
+            if (!player.getAbilities().instabuild) optional.get().shrink(1);
             this.setPersistenceRequired();
             return InteractionResult.SUCCESS;
         }
@@ -188,16 +196,22 @@ public class LimpetEntity extends Monster {
     }
 
     public boolean isValidEntity(Player player) {
+        Optional<ItemStack> stack = this.getStackInHand(player);
         return this.getLimpetType().getId() > 0
                 && !player.isSpectator()
                 && player.isAlive()
                 && !player.getAbilities().instabuild
                 && !player.isShiftKeyDown() || (this.getLimpetType().getId() > 0
-                && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem);
+                && stack.isPresent()
+                && stack.get().getItem() instanceof PickaxeItem);
     }
 
     public boolean isValidEntityHoldingPickaxe(Player player) {
-        return this.getLimpetType().getId() > 0 && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem;
+        return this.getLimpetType().getId() > 0 && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof PickaxeItem;
+    }
+
+    public Optional<ItemStack> getStackInHand(Player player) {
+        return Arrays.stream(InteractionHand.values()).filter(hand -> player.getItemInHand(hand).getItem() instanceof PickaxeItem).map(player::getItemInHand).findFirst();
     }
 
     @Override
@@ -205,11 +219,12 @@ public class LimpetEntity extends Monster {
         LimpetType type = this.getLimpetType();
         if (source.getEntity() instanceof Player player
                 && type.getId() > 0
-                && player.getItemInHand(player.swingingArm).getItem() instanceof PickaxeItem pickaxe
+                && this.getStackInHand(player).isPresent()
+                && this.getStackInHand(player).get().getItem() instanceof PickaxeItem pickaxe
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
-            ItemStack stack = player.getItemInHand(player.swingingArm);
+            ItemStack stack = this.getStackInHand(player).get();
             if (this.getCrackedStage() < 3) {
                 this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
