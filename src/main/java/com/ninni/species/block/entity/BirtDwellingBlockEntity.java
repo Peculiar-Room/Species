@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.ninni.species.block.BirtDwellingBlock.BIRTS;
+import static com.ninni.species.block.BirtDwellingBlock.EGGS;
 
 public class BirtDwellingBlockEntity extends BlockEntity {
     public static final String MIN_OCCUPATION_TICKS_KEY = "MinOccupationTicks";
@@ -33,6 +34,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     public static final String BIRTS_KEY = "Birts";
     private static final List<String> IRRELEVANT_BIRT_NBT_KEYS = Arrays.asList("Air", "Bees", "ArmorDropChances", "ArmorItems", "Brain", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "CannotEnterDwellingTicks", "CannotEnterHiveTicks", "TicksSincePollination", "CropsGrownSincePollination", "DwellingPos", "HivePos", "Passengers", "Leash", "UUID");
     private final List<Birt> birts = Lists.newArrayList();
+    private int day = -1;
 
     public BirtDwellingBlockEntity(BlockPos pos, BlockState state) {
         super(SpeciesBlockEntities.BIRT_DWELLING, pos, state);
@@ -56,6 +58,18 @@ public class BirtDwellingBlockEntity extends BlockEntity {
                 birt.setTarget(player);
                 birt.setCannotEnterDwellingTicks(400);
             }
+        }
+    }
+
+    public static void tickLayEgg(BirtDwellingBlockEntity birtDwellingBlockEntity, Level world, BlockPos blockPos, BlockState state) {
+        long day = world.getDayTime() / 24000L;
+        if (birtDwellingBlockEntity.day == -1 || day != birtDwellingBlockEntity.day && day == 0) {
+            birtDwellingBlockEntity.day = (int) day;
+        }
+        if (state.getValue(BIRTS) > 0 && birtDwellingBlockEntity.day < day) {
+            birtDwellingBlockEntity.day++;
+            world.setBlockAndUpdate(blockPos, state.setValue(EGGS, Math.min(5, state.getValue(EGGS) + state.getValue(BIRTS))));
+            world.playSound(null, blockPos, SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 
@@ -160,6 +174,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
 
     public static void serverTick(Level world, BlockPos pos, BlockState state, BirtDwellingBlockEntity blockEntity) {
         BirtDwellingBlockEntity.tickBirts(world, pos, state, blockEntity.birts);
+        BirtDwellingBlockEntity.tickLayEgg(blockEntity, world, pos, state);
         if (!blockEntity.birts.isEmpty() && world.getRandom().nextDouble() < 0.005) {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
@@ -178,12 +193,14 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             Birt birt = new Birt(nbtCompound.getCompound(ENTITY_DATA_KEY), nbtCompound.getInt(TICKS_IN_DWELLING_KEY), nbtCompound.getInt(MIN_OCCUPATION_TICKS_KEY));
             this.birts.add(birt);
         }
+        this.day = nbt.getInt("Day");
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.put(BIRTS_KEY, this.getBirts());
+        nbt.putInt("Day", this.day);
     }
 
     public ListTag getBirts() {
