@@ -22,6 +22,7 @@ public interface SpeciesTags {
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wraptor_coop_has_structure"));
     TagKey<Biome> ROOMBUG_SPAWNS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "roombug_spawns"));
     TagKey<Biome> BIRT_TREE_SPAWNS_IN = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "birt_tree_spawns_in"));
+    TagKey<Biome> LIMPET_SPAWNS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "limpet_spawns"));
 
     //pointOfInterestTags
     TagKey<PoiType> BIRT_HOME = TagKey.create(Registry.POINT_OF_INTEREST_TYPE_REGISTRY, new ResourceLocation(MOD_ID, "birt_home"));
