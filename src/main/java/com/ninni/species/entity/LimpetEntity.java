@@ -7,6 +7,7 @@ import com.ninni.species.entity.enums.LimpetType;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -57,6 +58,7 @@ public class LimpetEntity extends Monster {
 
     protected LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
+        this.maxUpStep = 1.0F;
     }
 
     @Override
@@ -179,11 +181,11 @@ public class LimpetEntity extends Monster {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         LimpetType type = this.getLimpetType();
-        Optional<ItemStack> optional = this.getStackInHand(player);
-        if (this.getCrackedStage() > 0 && type.getId() > 0 && optional.isPresent() && optional.get().getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
+        ItemStack stack = player.getItemInHand(interactionHand);
+        if (this.getCrackedStage() > 0 && type.getId() > 0 && stack.getItem() == type.getItem() && !this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
             this.setCrackedStage(this.getCrackedStage() - 1);
             this.playSound(type.getPlacingSound(), 1, 1);
-            if (!player.getAbilities().instabuild) optional.get().shrink(1);
+            if (!player.getAbilities().instabuild) stack.shrink(1);
             this.setPersistenceRequired();
             return InteractionResult.SUCCESS;
         }

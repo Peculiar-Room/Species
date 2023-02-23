@@ -56,7 +56,7 @@ public class LimpetAi {
                 Activity.AVOID,
                 10,
                 ImmutableList.of(
-                        SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 2.0F, 20, true),
+                        SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1.6F, 20, true),
                         new RunSometimes<LivingEntity>(new SetEntityLookTarget(8.0f), UniformInt.of(30, 60))
                 ),
                 MemoryModuleType.AVOID_TARGET
