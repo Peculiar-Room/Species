@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -99,7 +100,7 @@ public class LimpetEntity extends Monster {
             }
         }
         if (yLevel < 20 && yLevel > -20) return LimpetType.AMETHYST.getId();
-        if (yLevel < -20) {
+        if (yLevel <= -20) {
             if (random.nextInt(5) == 0) return LimpetType.DIAMOND.getId();
             else return LimpetType.COAL.getId();
         }
@@ -176,6 +177,7 @@ public class LimpetEntity extends Monster {
                 this.setScaredTicks(scaredTicks);
             }
         }
+
     }
 
     @Override
@@ -216,6 +218,7 @@ public class LimpetEntity extends Monster {
         return Arrays.stream(InteractionHand.values()).filter(hand -> player.getItemInHand(hand).getItem() instanceof PickaxeItem).map(player::getItemInHand).findFirst();
     }
 
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
         LimpetType type = this.getLimpetType();
@@ -225,6 +228,8 @@ public class LimpetEntity extends Monster {
                 && this.getStackInHand(player).get().getItem() instanceof PickaxeItem pickaxe
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
+
+            if (type.getId() > 1 && !this.level.isClientSide()) spawnBreakingParticles();
 
             ItemStack stack = this.getStackInHand(player).get();
             if (this.getCrackedStage() < 3) {
@@ -262,6 +267,11 @@ public class LimpetEntity extends Monster {
             return false;
         }
         return super.hurt(source, amount);
+    }
+
+    private void spawnBreakingParticles() {
+        Vec3 vec3 = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.5, Math.random() * 0.1 + 0.1, 0.0)).xRot(-this.getXRot() * 0.017453292F).yRot(-this.getYRot() * 0.5F);
+        ((ServerLevel)this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getLimpetType().getItem().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 60, vec3.x + random.nextInt(-10, 10) * 0.5, vec3.y + random.nextInt(0, 10) * 0.1, vec3.z - random.nextInt(-10, 10) * 0.5, 0);
     }
 
     @Override
