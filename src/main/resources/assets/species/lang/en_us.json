@@ -67,5 +67,11 @@
   "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
 
   "entity.species.limpet": "Limpet",
-  "item.species.limpet_spawn_egg": "Limpet Spawn Egg"
+  "item.species.limpet_spawn_egg": "Limpet Spawn Egg",
+
+  "subtitles.entity.species.limpet.death": "Limpet dies",
+  "subtitles.entity.species.limpet.hurt": "Limpet hurts",
+  "subtitles.entity.species.limpet.idle": "Limpet squeaks",
+  "subtitles.entity.species.limpet.step": "Limpet steps",
+  "subtitles.entity.species.limpet.deflect": "Limpet deflects"
 }

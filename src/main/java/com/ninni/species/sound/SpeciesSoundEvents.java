@@ -56,6 +56,12 @@ public class SpeciesSoundEvents {
 
     public static final SoundEvent MUSIC_DISC_DIAL = register("music.disc.dial");
 
+    public static final SoundEvent ENTITY_LIMPET_DEATH = register("entity.limpet.death");
+    public static final SoundEvent ENTITY_LIMPET_HURT = register("entity.limpet.hurt");
+    public static final SoundEvent ENTITY_LIMPET_IDLE = register("entity.limpet.idle");
+    public static final SoundEvent ENTITY_LIMPET_STEP = register("entity.limpet.step");
+    public static final SoundEvent ENTITY_LIMPET_DEFLECT = register("entity.limpet.deflect");
+
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));

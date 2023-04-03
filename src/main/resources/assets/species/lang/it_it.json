@@ -67,5 +67,11 @@
   "subtitles.item.species.birt_egg.hit": "Uovo di birt colpisce",
 
   "entity.species.limpet": "Limpet",
-  "item.species.limpet_spawn_egg": "Uovo generatore di limpet"
+  "item.species.limpet_spawn_egg": "Uovo generatore di limpet",
+
+  "subtitles.entity.species.limpet.death": "Limpet muore",
+  "subtitles.entity.species.limpet.hurt": "Limpet ferito",
+  "subtitles.entity.species.limpet.idle": "Limpet squittisce",
+  "subtitles.entity.species.limpet.step": "Limpet cammina",
+  "subtitles.entity.species.limpet.deflect": "Limpet para"
 }

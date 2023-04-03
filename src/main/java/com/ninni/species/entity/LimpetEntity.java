@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -14,7 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -262,7 +264,7 @@ public class LimpetEntity extends Monster {
             }
 
         } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level.isClientSide && type.getId() > 0) {
-            this.playSound(SoundEvents.SHIELD_BLOCK, 1, 1);
+            this.playSound(SpeciesSoundEvents.ENTITY_LIMPET_DEFLECT, 1, 1);
             if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) this.setScaredTicks(300);
             return false;
         }
@@ -281,6 +283,24 @@ public class LimpetEntity extends Monster {
             vec3 = vec3.multiply(0, 1, 0);
         }
         super.travel(vec3);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.ENTITY_LIMPET_IDLE;
+    }
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.ENTITY_LIMPET_DEATH;
+    }
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpeciesSoundEvents.ENTITY_LIMPET_HURT;
+    }
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpeciesSoundEvents.ENTITY_LIMPET_STEP, 0.15F, 1.0F);
     }
 
     @SuppressWarnings("unused")

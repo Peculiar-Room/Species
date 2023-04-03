@@ -322,5 +322,50 @@
 				"stream": true
 			}
 		]
+	},
+	"entity.limpet.death": {
+		"sounds": [
+			"species:entity/limpet/death1",
+			"species:entity/limpet/death2"
+		],
+		"subtitle": "subtitles.entity.species.limpet.death"
+	},
+	"entity.limpet.hurt": {
+		"sounds": [
+			"species:entity/limpet/hurt1",
+			"species:entity/limpet/hurt2",
+			"species:entity/limpet/hurt3",
+			"species:entity/limpet/hurt4"
+		],
+		"subtitle": "subtitles.entity.species.limpet.hurt"
+	},
+	"entity.limpet.idle": {
+		"sounds": [
+			"species:entity/limpet/idle1",
+			"species:entity/limpet/idle2",
+			"species:entity/limpet/idle3",
+			"species:entity/limpet/idle4",
+			"species:entity/limpet/idle5"
+		],
+		"subtitle": "subtitles.entity.species.limpet.idle"
+	},
+	"entity.limpet.step": {
+		"sounds": [
+			"species:entity/limpet/step1",
+			"species:entity/limpet/step2",
+			"species:entity/limpet/step3",
+			"species:entity/limpet/step4",
+			"species:entity/limpet/step5",
+			"species:entity/limpet/step6"
+		],
+		"subtitle": "subtitles.entity.species.limpet.step"
+	},
+	"entity.limpet.deflect": {
+		"sounds": [
+			"species:entity/limpet/deflect1",
+			"species:entity/limpet/deflect2",
+			"species:entity/limpet/deflect3"
+		],
+		"subtitle": "subtitles.entity.species.limpet.deflect"
 	}
 }
