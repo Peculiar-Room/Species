@@ -23,7 +23,6 @@
   "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches",
   "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping",
 
-
   "entity.species.deepfish": "Deepfish",
   "item.species.deepfish_spawn_egg": "Deepfish Spawn Egg",
   "item.species.deepfish_bucket": "Bucket of Deepfish",
@@ -53,6 +52,19 @@
   "item.species.music_disc_dial.desc": "bunten - dial",
 
   "effect.species.birtd": "Birt'd",
+
+  "subtitles.entity.species.birt.death": "Birt dies",
+  "subtitles.entity.species.birt.hurt": "Birt hurts",
+  "subtitles.entity.species.birt.idle": "Birt chirps",
+  "subtitles.entity.species.birt.fly": "Birt flies",
+  "subtitles.entity.species.birt.message": "Birt communicates",
+  "subtitles.entity.birtd": "Birts cause confusion",
+  "subtitles.block.species.birt_dwelling.collect": "Birt Egg collected",
+  "subtitles.block.species.birt_dwelling.enter": "Birt enters dwelling",
+  "subtitles.block.species.birt_dwelling.exit": "Birt exits dwelling",
+  "subtitles.block.species.birt_dwelling.work": "Birts are plotting",
+  "subtitles.item.species.birt_egg.throw": "Birt Egg thrown",
+  "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
 
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Limpet Spawn Egg"

@@ -5,10 +5,10 @@ import com.ninni.species.block.entity.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.entity.BirtEntity;
 import com.ninni.species.item.SpeciesItems;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -58,14 +58,13 @@ public class BirtDwellingBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
-        BlockEntity blockEntity;
         if (state.getValue(EGGS) > 0 && player.getItemInHand(hand).isEmpty()) {
-            if (!world.isClientSide() && (blockEntity = world.getBlockEntity(pos)) instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
+            if (!world.isClientSide() && world.getBlockEntity(pos) instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
                 birtDwellingBlockEntity.angerBirts(player, state, BirtDwellingBlockEntity.BirtState.EMERGENCY);
             }
             world.setBlockAndUpdate(pos, state.setValue(EGGS, state.getValue(EGGS) - 1));
             BlockPos itemPos = pos.relative(state.getValue(FACING));
-            world.playSound(null, itemPos, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1 ,1);
+            world.playSound(null, itemPos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_COLLECT, SoundSource.NEUTRAL, 1 ,1);
             popResource(world, itemPos, new ItemStack(SpeciesItems.BIRT_EGG));
             return InteractionResult.SUCCESS;
         }

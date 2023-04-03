@@ -3,12 +3,12 @@ package com.ninni.species.block.entity;
 import com.google.common.collect.Lists;
 import com.ninni.species.block.BirtDwellingBlock;
 import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -69,7 +69,6 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         if (state.getValue(BIRTS) > 0 && birtDwellingBlockEntity.day < day) {
             birtDwellingBlockEntity.day++;
             world.setBlockAndUpdate(blockPos, state.setValue(EGGS, Math.min(5, state.getValue(EGGS) + state.getValue(BIRTS))));
-            world.playSound(null, blockPos, SoundEvents.CHICKEN_EGG, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 
@@ -100,7 +99,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         BlockPos blockPos = this.getBlockPos();
         this.addBirt(nbtCompound, ticksInDwelling);
         if (this.level != null) {
-            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
         }
         entity.discard();
@@ -138,7 +137,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             } else {
                 return false;
             }
-            world.playSound(null, pos, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
             world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newBirt, world.getBlockState(pos)));
             return world.addFreshEntity(newBirt);
         }
@@ -179,7 +178,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            world.playSound(null, d, e, f, SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, d, e, f, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_WORK, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
     }
 

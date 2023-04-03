@@ -48,7 +48,23 @@
   "item.species.birt_egg": "Uovo di birt",
   "block.species.birt_dwelling": "Nido di birt",
 
+  "item.species.music_disc_dial": "Disco musicale",
+  "item.species.music_disc_dial.desc": "bunten - dial",
+
   "effect.species.birtd": "Birtato",
+
+  "subtitles.entity.species.birt.death": "Birt muore",
+  "subtitles.entity.species.birt.hurt": "Birt ferito",
+  "subtitles.entity.species.birt.idle": "Birt cinguetto",
+  "subtitles.entity.species.birt.fly": "Birt vola",
+  "subtitles.entity.species.birt.message": "Birt comunica",
+  "subtitles.entity.birtd": "Birt causano confusione",
+  "subtitles.block.species.birt_dwelling.collect": "Uovo di birt raccolto",
+  "subtitles.block.species.birt_dwelling.enter": "Birt entra in un nido",
+  "subtitles.block.species.birt_dwelling.exit": "Birt esce da un nido",
+  "subtitles.block.species.birt_dwelling.work": "Birt complottano",
+  "subtitles.item.species.birt_egg.throw": "Uovo di birt lanciato",
+  "subtitles.item.species.birt_egg.hit": "Uovo di birt colpisce",
 
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Uovo generatore di limpet"

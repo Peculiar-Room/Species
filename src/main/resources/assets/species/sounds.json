@@ -243,7 +243,8 @@
 			"species:entity/birt/idle1",
 			"species:entity/birt/idle2",
 			"species:entity/birt/idle3",
-			"species:entity/birt/idle4"
+			"species:entity/birt/idle4",
+			"species:entity/birt/idle5"
 		],
 		"subtitle": "subtitles.entity.species.birt.idle"
 	},
@@ -269,6 +270,33 @@
 			"species:entity/birtd"
 		],
 		"subtitle": "subtitles.entity.birtd"
+	},
+	"block.birt_dwelling.collect": {
+		"sounds": [
+			"species:block/birt_dwelling/collect"
+		],
+		"subtitle": "subtitles.block.species.birt_dwelling.collect"
+	},
+	"block.birt_dwelling.enter": {
+		"sounds": [
+			"species:block/birt_dwelling/enter"
+		],
+		"subtitle": "subtitles.block.species.birt_dwelling.enter"
+	},
+	"block.birt_dwelling.exit": {
+		"sounds": [
+			"species:block/birt_dwelling/exit"
+		],
+		"subtitle": "subtitles.block.species.birt_dwelling.exit"
+	},
+	"block.birt_dwelling.work": {
+		"sounds": [
+			"species:block/birt_dwelling/work1",
+			"species:block/birt_dwelling/work2",
+			"species:block/birt_dwelling/work3",
+			"species:block/birt_dwelling/work4"
+		],
+		"subtitle": "subtitles.block.species.birt_dwelling.work"
 	},
 	"item.birt_egg.throw": {
 		"sounds": [

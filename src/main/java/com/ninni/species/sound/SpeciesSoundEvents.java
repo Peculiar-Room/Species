@@ -44,6 +44,11 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ENTITY_BIRT_FLY = register("entity.birt.fly");
     public static final SoundEvent ENTITY_BIRT_MESSAGE = register("entity.birt.message");
 
+    public static final SoundEvent BLOCK_BIRT_DWELLING_COLLECT = register("block.birt_dwelling.collect");
+    public static final SoundEvent BLOCK_BIRT_DWELLING_ENTER = register("block.birt_dwelling.enter");
+    public static final SoundEvent BLOCK_BIRT_DWELLING_EXIT = register("block.birt_dwelling.exit");
+    public static final SoundEvent BLOCK_BIRT_DWELLING_WORK = register("block.birt_dwelling.work");
+
     public static final SoundEvent ENTITY_BIRTD = register("entity.birtd");
 
     public static final SoundEvent ITEM_BIRT_EGG_THROW = register("item.birt_egg.throw");
