@@ -162,17 +162,17 @@ public class RoombugEntityModel<E extends RoombugEntity> extends AgeableListMode
         rightAntenna.zRot = Mth.sin(animationProgress * speed * 0.2F + pi) * degree * 0.1F;
         rightAntenna.xRot = Mth.cos(animationProgress * speed * 0.1F + pi) * degree * 0.2F + pi/4;
 
-        leftForeLeg.zRot = Mth.cos(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance + 0.1309F;
-        leftForeLeg.yRot = Mth.sin(limbAngle * speed * 0.6F) * degree * -0.5F * limbDistance + 0.7854F;
+        leftForeLeg.zRot = Mth.cos(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance + 0.1745F;
+        leftForeLeg.yRot = Mth.sin(limbAngle * speed * 0.6F) * degree * -0.5F * limbDistance + 0.3927F;
         rightForeLeg.zRot = Mth.cos(limbAngle * speed * 0.6F + (float)Math.PI/2) * degree * 0.25F * limbDistance - 0.1745F;
         rightForeLeg.yRot = Mth.sin(limbAngle * speed * 0.6F + (float)Math.PI/2) * degree * -1F * limbDistance - 0.3927F;
 
-        leftMidLeg.zRot = Mth.sin(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance + 0.0873F;
-        leftMidLeg.yRot = Mth.cos(limbAngle * speed * 0.6F) * degree * 1F * limbDistance - 0.3927F;
+        leftMidLeg.zRot = Mth.sin(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance + 0.1745F;
+        leftMidLeg.yRot = Mth.cos(limbAngle * speed * 0.6F) * degree * 1F * limbDistance - 0.1745F;
         rightMidLeg.zRot = Mth.sin(limbAngle * speed * 0.6F + (float)Math.PI/2) * degree * 0.25F * limbDistance - 0.1745F;
         rightMidLeg.yRot = Mth.cos(limbAngle * speed * 0.6F + (float)Math.PI/2) * degree * 1F * limbDistance + 0.1745F;
 
-        leftBackLeg.zRot = Mth.cos(limbAngle * speed * 0.6F + (float)Math.PI) * degree * 0.25F * limbDistance + 0.1309F;
+        leftBackLeg.zRot = Mth.cos(limbAngle * speed * 0.6F + (float)Math.PI) * degree * 0.25F * limbDistance + 0.2618F;
         leftBackLeg.yRot = Mth.sin(limbAngle * speed * 0.6F + (float)Math.PI) * degree * -1F * limbDistance - 0.7854F;
         rightBackLeg.zRot = Mth.cos(limbAngle * speed * 0.6F + (float)Math.PI/1.5F) * degree * 0.25F * limbDistance - 0.2618F;
         rightBackLeg.yRot = Mth.sin(limbAngle * speed * 0.6F + (float)Math.PI/1.5F) * degree * -1F * limbDistance + 0.7854F;

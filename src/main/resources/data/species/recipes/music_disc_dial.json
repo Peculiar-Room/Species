@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#M#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:disc_fragment_5"
+    },
+    "M": {
+      "item": "species:birt_egg"
+    }
+  },
+  "result": {
+    "item": "species:music_disc_dial",
+    "count": 1
+  }
+}
