@@ -1,7 +1,8 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.ninni.species.mixin",
+  "minVersion": "0.8",
+  "refmap": "species.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "LivingEntityMixin",
