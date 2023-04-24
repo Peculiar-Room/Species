@@ -45,30 +45,30 @@ public class DeepfishEntity extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_FLOP;
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_FLOP.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_IDLE;
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_IDLE.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_HURT;
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_DEATH;
+        return SpeciesSoundEvents.ENTITY_DEEPFISH_DEATH.get();
     }
 
     @Override
     public ItemStack getBucketItemStack() {
-        return SpeciesItems.DEEPFISH_SPAWN_EGG.getDefaultInstance();
+        return SpeciesItems.DEEPFISH_SPAWN_EGG.get().getDefaultInstance();
     }
 
     @SuppressWarnings("unused")

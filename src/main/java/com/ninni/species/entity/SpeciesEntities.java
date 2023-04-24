@@ -1,95 +1,59 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.tag.SpeciesTags;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.core.Registry;
+import com.ninni.species.Species;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import static com.ninni.species.Species.MOD_ID;
-
+@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesEntities {
 
-    public static final EntityType<WraptorEntity> WRAPTOR = register(
-            "wraptor",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(WraptorEntity::new)
-                    .defaultAttributes(WraptorEntity::createWraptorAttributes)
-                    .spawnGroup(MobCategory.MONSTER)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn)
-                    .dimensions(EntityDimensions.scalable(1.2F, 2F))
-                    .trackRangeChunks(8)
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Species.MOD_ID);
+
+    public static final RegistryObject<EntityType<WraptorEntity>> WRAPTOR = ENTITY_TYPES.register(
+            "wraptor", () ->
+            EntityType.Builder.of(WraptorEntity::new, MobCategory.MONSTER)
+                    .sized(1.2F, 2F)
+                    .clientTrackingRange(8).build(new ResourceLocation(Species.MOD_ID, "wraptor").toString())
     );
 
-    public static final EntityType<DeepfishEntity> DEEPFISH = register(
-            "deepfish",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(DeepfishEntity::new)
-                    .defaultAttributes(DeepfishEntity::createDeepfishAttributes)
-                    .spawnGroup(MobCategory.UNDERGROUND_WATER_CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn)
-                    .dimensions(EntityDimensions.scalable(0.5F, 0.5F))
-                    .trackRangeChunks(10)
+    public static final RegistryObject<EntityType<DeepfishEntity>> DEEPFISH = ENTITY_TYPES.register(
+            "deepfish", () ->
+            EntityType.Builder.of(DeepfishEntity::new, MobCategory.UNDERGROUND_WATER_CREATURE)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(10).build(new ResourceLocation(Species.MOD_ID, "deepfish").toString())
     );
 
-    public static final EntityType<RoombugEntity> ROOMBUG = register(
-            "roombug",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(RoombugEntity::new)
-                    .defaultAttributes(RoombugEntity::createRoombugAttributes)
-                    .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, RoombugEntity::canSpawn)
-                    .dimensions(EntityDimensions.scalable(1.375F, 0.375F))
-                    .trackRangeChunks(10)
+    public static final RegistryObject<EntityType<RoombugEntity>> ROOMBUG = ENTITY_TYPES.register(
+            "roombug", () ->
+            EntityType.Builder.of(RoombugEntity::new, MobCategory.CREATURE)
+                    .sized(1.375F, 0.375F)
+                    .clientTrackingRange(10).build(new ResourceLocation(Species.MOD_ID, "roombug").toString())
     );
 
-    public static final EntityType<BirtEntity> BIRT = register(
-            "birt",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(BirtEntity::new)
-                    .defaultAttributes(BirtEntity::createBirtAttributes)
-                    .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, BirtEntity::canSpawn)
-                    .dimensions(EntityDimensions.scalable(0.6F, 0.6F))
-                    .trackRangeChunks(10)
+    public static final RegistryObject<EntityType<BirtEntity>> BIRT = ENTITY_TYPES.register(
+            "birt", () ->
+            EntityType.Builder.of(BirtEntity::new, MobCategory.CREATURE)
+                    .sized(0.6F, 0.6F)
+                    .clientTrackingRange(10).build(new ResourceLocation(Species.MOD_ID, "birt").toString())
     );
 
-    public static final EntityType<BirtEggEntity> BIRT_EGG = register(
-            "birt_egg",
-            FabricEntityTypeBuilder.create()
-                    .<BirtEggEntity>entityFactory(BirtEggEntity::new)
-                    .spawnGroup(MobCategory.MISC)
-                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
-                    .trackRangeChunks(4)
+    public static final RegistryObject<EntityType<BirtEggEntity>> BIRT_EGG = ENTITY_TYPES.register(
+            "birt_egg", () ->
+            EntityType.Builder.<BirtEggEntity>of(BirtEggEntity::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .clientTrackingRange(4).build(new ResourceLocation(Species.MOD_ID, "birt_egg").toString())
     );
 
-    public static final EntityType<LimpetEntity> LIMPET = register(
-            "limpet",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(LimpetEntity::new)
-                    .defaultAttributes(LimpetEntity::createLimpetAttributes)
-                    .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, LimpetEntity::canSpawn)
-                    .dimensions(EntityDimensions.scalable(0.75F, 1.25F))
-                    .trackRangeChunks(10)
+    public static final RegistryObject<EntityType<LimpetEntity>> LIMPET = ENTITY_TYPES.register(
+            "limpet", () ->
+            EntityType.Builder.of(LimpetEntity::new, MobCategory.CREATURE)
+                    .sized(0.75F, 1.25F)
+                    .clientTrackingRange(10).build(new ResourceLocation(Species.MOD_ID, "limpet").toString())
     );
 
-    static {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 120, 4, 6);
-        BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), MobCategory.CREATURE, SpeciesEntities.ROOMBUG, 40, 1, 1);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.LIMPET_SPAWNS), MobCategory.MONSTER, SpeciesEntities.LIMPET, 10, 1, 1);
-    }
-
-    private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {
-        return Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(MOD_ID, id), entityType.build());
-    }
 }

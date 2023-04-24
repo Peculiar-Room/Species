@@ -37,7 +37,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     private int day = -1;
 
     public BirtDwellingBlockEntity(BlockPos pos, BlockState state) {
-        super(SpeciesBlockEntities.BIRT_DWELLING, pos, state);
+        super(SpeciesBlockEntities.BIRT_DWELLING.get(), pos, state);
     }
 
     public boolean hasNoBirts() {
@@ -99,7 +99,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         BlockPos blockPos = this.getBlockPos();
         this.addBirt(nbtCompound, ticksInDwelling);
         if (this.level != null) {
-            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
         }
         entity.discard();
@@ -137,7 +137,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             } else {
                 return false;
             }
-            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newBirt, world.getBlockState(pos)));
             return world.addFreshEntity(newBirt);
         }
@@ -178,7 +178,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            world.playSound(null, d, e, f, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_WORK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, d, e, f, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_WORK.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
         }
     }
 

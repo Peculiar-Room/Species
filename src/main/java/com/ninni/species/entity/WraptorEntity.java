@@ -147,7 +147,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
         } else {
             if (this.readyForShearing() && random.nextInt(20 * 15) == 0) {
                 this.setFeatherStage(stage - 1);
-                this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_FEATHER_LOSS, 1.0f, 1.0f);
+                this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_FEATHER_LOSS.get(), 1.0f, 1.0f);
             }
         }
     }
@@ -193,7 +193,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
                 this.gameEvent(GameEvent.SHEAR, player);
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
                 if (this.getFeatherStage() == 0 && !player.isCreative() && !this.isBormFromEgg()) {
-                    if (!this.isSilent()) this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    if (!this.isSilent()) this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
                     this.setTarget(player);
                 }
                 this.setPersistenceRequired();
@@ -210,7 +210,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     public void shear(SoundSource category) {
         int stage = this.getFeatherStage();
         if (stage == 4) this.timeSinceSheared = this.level.getGameTime();
-        this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
+        this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR.get(), category, 1.0f, 1.0f);
         this.setFeatherStage(stage - 1);
         for (int i = 0, l = 2 + this.random.nextInt(5); i < l; i++) {
             ItemEntity itemEntity = this.spawnAtLocation(Items.FEATHER, 1);
@@ -245,22 +245,22 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.getFeatherStage() <= 2 || !this.level.dimensionType().piglinSafe()) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
-        else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE;
+        if (this.getFeatherStage() <= 2 || !this.level.dimensionType().piglinSafe()) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED.get();
+        else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE.get();
     }
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_WRAPTOR_HURT;
+        return SpeciesSoundEvents.ENTITY_WRAPTOR_HURT.get();
     }
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_WRAPTOR_DEATH;
+        return SpeciesSoundEvents.ENTITY_WRAPTOR_DEATH.get();
     }
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_STEP, 0.15f, 1.0f);
+        this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_STEP.get(), 0.15f, 1.0f);
     }
 
     public boolean isBormFromEgg() {
@@ -364,14 +364,14 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
         public void stop() {
             super.stop();
             Level world = this.wraptor.level;
-            world.playSound(null, this.wraptor.blockPosition(), SpeciesSoundEvents.ENTITY_WRAPTOR_EGG, SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
+            world.playSound(null, this.wraptor.blockPosition(), SpeciesSoundEvents.ENTITY_WRAPTOR_EGG.get(), SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
         }
 
         @Override
         public void tick() {
             super.tick();
             if (!this.wraptor.isInWater() && this.isReachedTarget() && this.wraptor.level.dimensionType().piglinSafe()) {
-                this.wraptor.level.setBlock(this.blockPos.above(), SpeciesBlocks.WRAPTOR_EGG.defaultBlockState(), 3);
+                this.wraptor.level.setBlock(this.blockPos.above(), SpeciesBlocks.WRAPTOR_EGG.get().defaultBlockState(), 3);
                 this.wraptor.setHasEgg(false);
                 this.wraptor.setInLoveTime(600);
             }
@@ -394,7 +394,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
             if (squaredDistance <= d && this.isTimeToAttack()) {
                 this.resetAttackCooldown();
                 this.mob.doHurtTarget(target);
-                WraptorEntity.this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_ATTACK, 1.0F, 1.0F);
+                WraptorEntity.this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_ATTACK.get(), 1.0F, 1.0F);
             }
         }
 

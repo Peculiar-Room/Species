@@ -4,17 +4,17 @@ import com.ninni.species.client.model.entity.LimpetEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.LimpetEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
     public static final ResourceLocation TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal.png");

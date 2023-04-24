@@ -26,10 +26,6 @@ public class SpeciesStructures {
         return new Structure.StructureSettings(getOrCreateBiomeTag(tag), spawns, featureStep, terrainAdaptation);
     }
 
-    private static Structure.StructureSettings createConfig(TagKey<Biome> tag, GenerationStep.Decoration step, TerrainAdjustment adaptation) {
-        return createConfig(tag, Map.of(), step, adaptation);
-    }
-
     private static Structure.StructureSettings createConfig(TagKey<Biome> tag, TerrainAdjustment terrainAdaptation) {
         return createConfig(tag, Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, terrainAdaptation);
     }

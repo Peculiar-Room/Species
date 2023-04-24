@@ -274,7 +274,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
             }
         };
 
-        world.playSound(null, other.blockPosition(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE, SoundSource.NEUTRAL, 1,  0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
+        world.playSound(null, other.blockPosition(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE.get(), SoundSource.NEUTRAL, 1,  0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         world.sendParticles(new VibrationParticleOption(positionSource, 20), other.getX(), other.getY() + 0.75, other.getZ(), 0, 0, 0, 0, 0);
     }
 
@@ -303,7 +303,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
     @Override
     protected void onFlap() {
-        this.playSound(SpeciesSoundEvents.ENTITY_BIRT_FLY, 0.15f, 1.0f);
+        this.playSound(SpeciesSoundEvents.ENTITY_BIRT_FLY.get(), 0.15f, 1.0f);
         this.flap = this.flyDist + this.maxWingDeviation / 2.0f;
     }
 
@@ -356,7 +356,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
             return false;
         } else {
             BlockEntity blockEntity = this.level.getBlockEntity(this.dwellingPos);
-            return blockEntity != null && blockEntity.getType() == SpeciesBlockEntities.BIRT_DWELLING;
+            return blockEntity != null && blockEntity.getType() == SpeciesBlockEntities.BIRT_DWELLING.get();
         }
     }
 
@@ -442,17 +442,17 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.ENTITY_BIRT_IDLE;
+        return SpeciesSoundEvents.ENTITY_BIRT_IDLE.get();
     }
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_BIRT_HURT;
+        return SpeciesSoundEvents.ENTITY_BIRT_HURT.get();
     }
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_BIRT_DEATH;
+        return SpeciesSoundEvents.ENTITY_BIRT_DEATH.get();
     }
 
     class BirtWanderAroundGoal extends Goal {
@@ -615,7 +615,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public boolean canBirtStart() {
-            return BirtEntity.this.dwellingPos != null && !BirtEntity.this.hasRestriction() && BirtEntity.this.canEnterDwelling() && !this.isCloseEnough(BirtEntity.this.dwellingPos) && BirtEntity.this.level.getBlockState(BirtEntity.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING);
+            return BirtEntity.this.dwellingPos != null && !BirtEntity.this.hasRestriction() && BirtEntity.this.canEnterDwelling() && !this.isCloseEnough(BirtEntity.this.dwellingPos) && BirtEntity.this.level.getBlockState(BirtEntity.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING.get());
         }
 
         @Override

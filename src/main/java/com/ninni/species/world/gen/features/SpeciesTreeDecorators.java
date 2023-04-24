@@ -1,13 +1,16 @@
 package com.ninni.species.world.gen.features;
 
 import com.ninni.species.Species;
-import com.ninni.species.mixin.TreeDecoratorTypeAccessor;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
+@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesTreeDecorators {
-    public static void init() { }
+    public static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATOR_TYPE = DeferredRegister.create(ForgeRegistries.TREE_DECORATOR_TYPES, Species.MOD_ID);
 
-    public static final TreeDecoratorType<BirtDwellingLogDecorator> BIRT_DWELLING = TreeDecoratorTypeAccessor.callRegister(new ResourceLocation(Species.MOD_ID, "birt_dwelling").toString(), BirtDwellingLogDecorator.CODEC);
+    public static final RegistryObject<TreeDecoratorType<BirtDwellingLogDecorator>> BIRT_DWELLING = TREE_DECORATOR_TYPE.register("birt_dwelling", () -> new TreeDecoratorType<>(BirtDwellingLogDecorator.CODEC));
 
 }

@@ -64,8 +64,8 @@ public class BirtDwellingBlock extends BaseEntityBlock {
             }
             world.setBlockAndUpdate(pos, state.setValue(EGGS, state.getValue(EGGS) - 1));
             BlockPos itemPos = pos.relative(state.getValue(FACING));
-            world.playSound(null, itemPos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_COLLECT, SoundSource.NEUTRAL, 1 ,1);
-            popResource(world, itemPos, new ItemStack(SpeciesItems.BIRT_EGG));
+            world.playSound(null, itemPos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_COLLECT.get(), SoundSource.NEUTRAL, 1 ,1);
+            popResource(world, itemPos, new ItemStack(SpeciesItems.BIRT_EGG.get()));
             return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, blockHitResult);
@@ -117,7 +117,7 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : BirtDwellingBlock.createTickerHelper(blockEntityType, SpeciesBlockEntities.BIRT_DWELLING, BirtDwellingBlockEntity::serverTick);
+        return level.isClientSide ? null : BirtDwellingBlock.createTickerHelper(blockEntityType, SpeciesBlockEntities.BIRT_DWELLING.get(), BirtDwellingBlockEntity::serverTick);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class BirtDwellingBlock extends BaseEntityBlock {
             if (bl) {
                 CompoundTag nbtCompound = new CompoundTag();
                 nbtCompound.put("Birts", blockEntity1.getBirts());
-                BlockItem.setBlockEntityData(itemStack, SpeciesBlockEntities.BIRT_DWELLING, nbtCompound);
+                BlockItem.setBlockEntityData(itemStack, SpeciesBlockEntities.BIRT_DWELLING.get(), nbtCompound);
                 nbtCompound = new CompoundTag();
                 itemStack.addTagElement("BlockStateTag", nbtCompound);
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);

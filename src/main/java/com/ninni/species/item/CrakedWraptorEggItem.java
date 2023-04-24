@@ -44,12 +44,12 @@ public class CrakedWraptorEggItem extends Item {
 
     @Override
     public SoundEvent getEatingSound() {
-        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP;
+        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP.get();
     }
 
     @Override
     public SoundEvent getDrinkingSound() {
-        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP;
+        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP.get();
     }
 
     @Override

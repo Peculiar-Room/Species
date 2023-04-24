@@ -22,21 +22,21 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "canBeAffected", at = @At("HEAD"), cancellable = true)
     public void applyWitherResistance(MobEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {
-        if (this.hasEffect(SpeciesStatusEffects.WITHER_RESISTANCE) && effect.getEffect() == MobEffects.WITHER) cir.setReturnValue(false);
+        if (this.hasEffect(SpeciesStatusEffects.WITHER_RESISTANCE.get()) && effect.getEffect() == MobEffects.WITHER) cir.setReturnValue(false);
     }
 
     @Inject(method = "tickEffects", at = @At("HEAD"))
     public void applyBirtdParticles(CallbackInfo ci) {
         LivingEntity that = (LivingEntity) (Object) this;
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD) && that.level instanceof ServerLevel world) {
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) && that.level instanceof ServerLevel world) {
             if (that.tickCount % 10 == 1) {
-                world.sendParticles(SpeciesParticles.BIRTD, that.getX(), that.getEyeY() + 0.5F, that.getZ() - 0.5, 1,0, 0, 0, 0);
+                world.sendParticles(SpeciesParticles.BIRTD.get(), that.getX(), that.getEyeY() + 0.5F, that.getZ() - 0.5, 1,0, 0, 0, 0);
             }
         }
     }
 
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)
     public void applyBirtd(CallbackInfo ci) {
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD)) ci.cancel();
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get())) ci.cancel();
     }
 }

@@ -1,5 +1,6 @@
 package com.ninni.species.world.gen.features;
 
+import com.google.common.collect.ImmutableList;
 import com.ninni.species.Species;
 import net.minecraft.core.Holder;
 import net.minecraft.data.BuiltinRegistries;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
-import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
 import java.util.List;
 

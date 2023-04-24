@@ -6,15 +6,15 @@ import com.ninni.species.client.model.entity.DeepfishEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.DeepfishFeatureRenderer;
 import com.ninni.species.entity.DeepfishEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DeepfishEntityRenderer extends MobRenderer<DeepfishEntity, DeepfishEntityModel<DeepfishEntity>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/deepfish/deepfish.png");
     private static final ResourceLocation TEXTURE_GLOW = new ResourceLocation(MOD_ID, "textures/entity/deepfish/deepfish_glow.png");

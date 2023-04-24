@@ -27,12 +27,12 @@ public class BirtDwellingLogDecorator extends TreeDecorator {
         Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
         BlockPos pos = list.get(index);
         if (!context.level().isStateAtPosition(pos.above(), this::isBirtDwelling) && !context.level().isStateAtPosition(pos, this::isBirtDwelling) && context.level().isStateAtPosition(pos.relative(direction), BlockBehaviour.BlockStateBase::isAir)) {
-            context.setBlock(pos, SpeciesBlocks.BIRT_DWELLING.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(context.random())));
-            context.level().getBlockEntity(pos, SpeciesBlockEntities.BIRT_DWELLING).ifPresent((blockEntity) -> {
+            context.setBlock(pos, SpeciesBlocks.BIRT_DWELLING.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(context.random())));
+            context.level().getBlockEntity(pos, SpeciesBlockEntities.BIRT_DWELLING.get()).ifPresent((blockEntity) -> {
                 int i = 2 + random.nextInt(2);
                 for (int j = 0; j < i; ++j) {
                     CompoundTag nbtCompound = new CompoundTag();
-                    nbtCompound.putString("id", Registry.ENTITY_TYPE.getKey(SpeciesEntities.BIRT).toString());
+                    nbtCompound.putString("id", Registry.ENTITY_TYPE.getKey(SpeciesEntities.BIRT.get()).toString());
                     blockEntity.addBirt(nbtCompound, random.nextInt(599));
                 }
 
@@ -44,12 +44,12 @@ public class BirtDwellingLogDecorator extends TreeDecorator {
     }
 
     private boolean isBirtDwelling(BlockState blockState) {
-        return blockState.is(SpeciesBlocks.BIRT_DWELLING);
+        return blockState.is(SpeciesBlocks.BIRT_DWELLING.get());
     }
 
     @Override
     protected TreeDecoratorType<?> type() {
-        return SpeciesTreeDecorators.BIRT_DWELLING;
+        return SpeciesTreeDecorators.BIRT_DWELLING.get();
     }
 
     @Override

@@ -23,13 +23,12 @@ public class BirtEggEntity extends ThrowableItemProjectile {
     }
 
     public BirtEggEntity(Level world, LivingEntity owner) {
-        super(SpeciesEntities.BIRT_EGG, owner, world);
+        super(SpeciesEntities.BIRT_EGG.get(), owner, world);
     }
 
     public BirtEggEntity(Level world, double x, double y, double z) {
-        super(SpeciesEntities.BIRT_EGG, x, y, z, world);
+        super(SpeciesEntities.BIRT_EGG.get(), x, y, z, world);
     }
-
 
     @Override
     public void handleEntityEvent(byte status) {
@@ -44,8 +43,8 @@ public class BirtEggEntity extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
         if (entityHitResult.getEntity() instanceof LivingEntity entity) {
-            if (!entity.hasEffect(SpeciesStatusEffects.BIRTD)) this.level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD, SoundSource.NEUTRAL, 1, 1);
-            entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
+            if (!entity.hasEffect(SpeciesStatusEffects.BIRTD.get())) this.level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD.get(), SoundSource.NEUTRAL, 1, 1);
+            entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.BIRTD.get(), 20 * 3, 0), this.getOwner());
         }
         entityHitResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 2.0f);
     }
@@ -61,7 +60,7 @@ public class BirtEggEntity extends ThrowableItemProjectile {
                     i = 4;
                 }
                 for (int j = 0; j < i; ++j) {
-                    BirtEntity chick = SpeciesEntities.BIRT.create(this.level);
+                    BirtEntity chick = SpeciesEntities.BIRT.get().create(this.level);
                     assert chick != null;
                     chick.setAge(-24000);
                     chick.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0f);
@@ -70,14 +69,14 @@ public class BirtEggEntity extends ThrowableItemProjectile {
             }
         }
 
-        level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundSource.NEUTRAL, 1, 1);
+        level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT.get(), SoundSource.NEUTRAL, 1, 1);
         this.level.broadcastEntityEvent(this, (byte)3);
         this.discard();
     }
 
     @Override
     protected Item getDefaultItem() {
-        return SpeciesItems.BIRT_EGG;
+        return SpeciesItems.BIRT_EGG.get();
     }
 }
 

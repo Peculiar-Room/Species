@@ -84,7 +84,7 @@ public class WraptorCoopGenerator {
             } else {
                 ArrayList<Mob> entities = new ArrayList<>();
 
-                if ("Wraptor".equals(metadata)) entities.add(SpeciesEntities.WRAPTOR.create(world.getLevel()));
+                if ("Wraptor".equals(metadata)) entities.add(SpeciesEntities.WRAPTOR.get().create(world.getLevel()));
 
                 for (Mob entity : entities) {
                     entity.setPersistenceRequired();

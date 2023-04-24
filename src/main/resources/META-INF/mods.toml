@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+license="All rights reserved"
+[[mods]]
+modId="species"
+version="1.19.2-1.0.0"
+displayName="Species"
+logoFile= "species.png"
+authors="Ninni, Noon"
+description='''
+This mod adds different types of mobs in a vanilla manner
+
+Contributors:
+- Bornulhu
+- bunten
+- FloofHip
+- Orcinus
+
+'''
+[[dependencies.species]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.species]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19,1.20)"
+    ordering="NONE"
+    side="BOTH"

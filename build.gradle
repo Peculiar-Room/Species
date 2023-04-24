@@ -1,76 +1,131 @@
-plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
-	id 'maven-publish'
+buildscript {
+	repositories {
+		maven { url = 'https://maven.minecraftforge.net' }
+		maven { url = "https://files.minecraftforge.net/maven" }
+		maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
+		maven { url = 'https://maven.parchmentmc.org' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${project.forgegradle_version}", changing: true
+		classpath 'org.parchmentmc:librarian:1.+'
+		classpath group: "org.spongepowered", name: "mixingradle", version: "0.7-SNAPSHOT"
+	}
 }
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: "org.spongepowered.mixin"
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+
+mixin {
+	add sourceSets.main, "species.refmap.json"
+}
+
+version = "${project.minecraft_version}-${project.mod_version}"
+group = 'com.ninni.species'
+archivesBaseName = 'Species'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+	mappings channel: "${project.mappings_channel}", version: "${project.mappings_version}"
+
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+	runs {
+		client {
+			workingDirectory project.file('run')
+
+			property 'forge.logging.markers', 'REGISTRIES'
+
+			property 'forge.logging.console.level', 'debug'
+			arg "-mixin.config=species.mixins.json"
+			mods {
+				species {
+					source sourceSets.main
+				}
+			}
+		}
+
+		server {
+			workingDirectory project.file('run')
+
+			property 'forge.logging.markers', 'REGISTRIES'
+
+			property 'forge.logging.console.level', 'debug'
+			arg "-mixin.config=species.mixins.json"
+
+			mods {
+				species {
+					source sourceSets.main
+				}
+			}
+		}
+
+		data {
+			workingDirectory project.file('run')
+
+			property 'forge.logging.markers', 'REGISTRIES'
+
+			property 'forge.logging.console.level', 'debug'
+			property "mixin.env.remapRefMap", "true"
+			property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
+			args '--mod', 'species', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+			mods {
+				species {
+					source sourceSets.main
+				}
+			}
+		}
+	}
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	maven {
+		url "https://www.cursemaven.com"
+	}
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// Uncomment the following line to enable the deprecated Fabric API modules.
-	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
-
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
-tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+	minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+	implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.128')
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+	manifest {
+		attributes([
+				"Specification-Title"     : "Species",
+				"Specification-Vendor"    : "Ninni, Orcinus",
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : "Species",
+				"Implementation-Version"  : "1.0.0",
+				"Implementation-Vendor"   : "Ninni, Orcinus",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				"MixinConfigs"            : "species.mixins.json"
+		])
 	}
+	finalizedBy 'reobfJar'
 }
 
-// configure the maven publication
+jar.finalizedBy('reobfJar')
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			from components.java
+			artifact jar
 		}
 	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+		maven {
+			url "https://maven.minecraftforge.net"
+		}
 	}
 }
