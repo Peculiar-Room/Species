@@ -3,20 +3,21 @@
 	"id": "species",
 	"version": "${version}",
 	"name": "Species",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod that adds fictional mobs to the game, with cool and unique functions",
 	"authors": [
 		"Ninni",
+		"FloofHips",
+		"GLaDOS edition",
+		"Bornulhu",
 		"Noon"
 	],
 	"contributors": [
-		"Bornulhu",
 		"bunten",
-		"FloofHips",
 		"Orcinus"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://curseforge.com/minecraft/mc-mods/species",
+		"sources": "https://github.com/N1nn1/species"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/species/icon.png",
