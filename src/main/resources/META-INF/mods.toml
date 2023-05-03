@@ -6,14 +6,12 @@ modId="species"
 version="1.19.2-1.0.0"
 displayName="Species"
 logoFile= "species.png"
-authors="Ninni, Noon"
+authors="Ninni,Noon, Bornulhu, FloofHip, GLaDOS edition"
 description='''
-This mod adds different types of mobs in a vanilla manner
+A mod that adds fictional mobs to the game, with cool and unique functions
 
 Contributors:
-- Bornulhu
 - bunten
-- FloofHip
 - Orcinus
 
 '''
