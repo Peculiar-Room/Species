@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[39,)"
-license="All rights reserved"
+license="ARR"
 [[mods]]
 modId="species"
 version="1.19.2-1.0.0"
