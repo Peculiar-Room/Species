@@ -2,6 +2,7 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.Sets;
 import com.ninni.species.client.particles.SpeciesParticles;
+import com.ninni.species.entity.ai.goal.RoombugFollowOwnerGoal;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -73,7 +73,7 @@ public class RoombugEntity extends TamableAnimal {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.25, 5.0f, 2.0f, false));
+        this.goalSelector.addGoal(2, new RoombugFollowOwnerGoal(this, 1.25, 5.0f, 2.0f, false));
         this.goalSelector.addGoal(3, new RoombugLookAtEntityGoal(this, Player.class, 8.0f));
     }
 
