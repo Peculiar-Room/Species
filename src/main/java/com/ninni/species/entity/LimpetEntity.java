@@ -5,6 +5,7 @@ import com.mojang.serialization.Dynamic;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
 import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.tag.SpeciesTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -16,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -305,7 +307,7 @@ public class LimpetEntity extends Monster {
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<? extends Monster> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return world.getLightEmission(pos) == 0;
+        return world.getLightEmission(pos) == 0 && world.getBlockState(pos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON);
     }
 
     public static class LimpetGroupData implements SpawnGroupData {
