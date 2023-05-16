@@ -4,9 +4,9 @@
   "spawners": [
     {
       "type": "species:roombug",
-      "weight": 120,
-      "minCount": 4,
-      "maxCount": 6
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 3
     }
   ]
 }

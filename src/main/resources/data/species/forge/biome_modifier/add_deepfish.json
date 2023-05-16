@@ -4,7 +4,7 @@
   "spawners": [
     {
       "type": "species:deepfish",
-      "weight": 120,
+      "weight": 80,
       "minCount": 4,
       "maxCount": 6
     }

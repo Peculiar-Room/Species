@@ -4,7 +4,7 @@
   "spawners": [
     {
       "type": "species:wraptor",
-      "weight": 120,
+      "weight": 100,
       "minCount": 4,
       "maxCount": 6
     }

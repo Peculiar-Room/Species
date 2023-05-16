@@ -2,9 +2,11 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
 import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.tag.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -14,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
@@ -256,6 +259,7 @@ public class LimpetEntity extends Monster {
                 this.playSound(type.getMiningSound(), 1, 1);
                 if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
                     this.setLimpetType(1);
+                    if (player instanceof ServerPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger((ServerPlayer) player);
                     return false;
                 } else {
                     this.setLimpetType(0);
@@ -305,7 +309,7 @@ public class LimpetEntity extends Monster {
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<? extends Monster> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return world.getLightEmission(pos) == 0;
+        return world.getLightEmission(pos) == 0 && world.getBlockState(pos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON);
     }
 
     public static class LimpetGroupData implements SpawnGroupData {

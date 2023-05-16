@@ -17,6 +17,7 @@ public interface SpeciesTags {
 
     //blockTags
     TagKey<Block> WRAPTOR_NESTING_BLOCKS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "wraptor_nesting_blocks"));
+    TagKey<Block> LIMPET_SPAWNABLE_ON = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "limpet_spawnable_on"));
 
     //biomeTags
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wraptor_coop_has_structure"));

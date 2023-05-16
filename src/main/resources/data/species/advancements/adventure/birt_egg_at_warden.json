@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:adventure/shoot_arrow",
+  "display": {
+    "icon": {
+      "item": "species:birt_egg"
+    },
+    "title": {
+      "translate": "advancements.species.birt_egg_at_warden.title"
+    },
+    "description": {
+      "translate": "advancements.species.birt_egg_at_warden.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "birt_egg_at_warden": {
+      "trigger": "species:birt_egg_at_warden"
+    }
+  },
+  "requirements": [
+    [
+      "birt_egg_at_warden"
+    ]
+  ]
+}

@@ -22,6 +22,10 @@
   "subtitles.block.species.wraptor_egg.crack": "Wraptor egg cracks",
   "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches",
   "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping",
+  "advancements.species.shear_wraptor_completely.title": "Clever Girl",
+  "advancements.species.shear_wraptor_completely.description": "Shear a Wraptor completely and face the consequences",
+  "advancements.species.hatch_wraptor.title": "Though Love",
+  "advancements.species.hatch_wraptor.description": "Hatch a Wraptor Egg using an Anvil",
 
   "entity.species.deepfish": "Deepfish",
   "item.species.deepfish_spawn_egg": "Deepfish Spawn Egg",
@@ -31,6 +35,9 @@
   "subtitles.entity.species.deepfish.death": "Deepfish dies",
   "subtitles.entity.species.deepfish.hurt": "Deepfish hurts",
   "subtitles.entity.species.deepfish.idle": "Deepfish howls",
+
+  "advancements.species.deepfish_in_a_bucket.title": "Song of the deep",
+  "advancements.species.deepfish_in_a_bucket.description": "Catch a Deepfish in a Bucket",
 
   "entity.species.roombug": "Roombug",
   "item.species.roombug_spawn_egg": "Roombug Spawn Egg",
@@ -66,6 +73,9 @@
   "subtitles.item.species.birt_egg.throw": "Birt Egg thrown",
   "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
 
+  "advancements.species.birt_egg_at_warden.title": "Birt is the Word",
+  "advancements.species.birt_egg_at_warden.description": "Throw a birt egg at a warden and live to tell the tale",
+
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Limpet Spawn Egg",
 
@@ -73,5 +83,8 @@
   "subtitles.entity.species.limpet.hurt": "Limpet hurts",
   "subtitles.entity.species.limpet.idle": "Limpet squeaks",
   "subtitles.entity.species.limpet.step": "Limpet steps",
-  "subtitles.entity.species.limpet.deflect": "Limpet deflects"
+  "subtitles.entity.species.limpet.deflect": "Limpet deflects",
+
+  "advancements.species.silk_touch_break_limpet.title": "The Conchquences of Hiding",
+  "advancements.species.silk_touch_break_limpet.description": "Break the Shell of a Limpet using Silk Touch"
 }

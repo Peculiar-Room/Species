@@ -1,0 +1,28 @@
+{
+  "parent": "species:nether/shear_wraptor_completely",
+  "display": {
+    "icon": {
+      "item": "species:cracked_wraptor_egg"
+    },
+    "title": {
+      "translate": "advancements.species.hatch_wraptor.title"
+    },
+    "description": {
+      "translate": "advancements.species.hatch_wraptor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hatch_wraptor": {
+      "trigger": "species:hatch_wraptor"
+    }
+  },
+  "requirements": [
+    [
+      "hatch_wraptor"
+    ]
+  ]
+}
