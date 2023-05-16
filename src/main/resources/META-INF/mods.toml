@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="ARR"
 [[mods]]
 modId="species"
-version="1.19.2-1.0.0"
+version="1.19.2-1.1"
 displayName="Species"
 logoFile= "species.png"
 authors="Ninni,Noon, Bornulhu, FloofHip, GLaDOS edition"
