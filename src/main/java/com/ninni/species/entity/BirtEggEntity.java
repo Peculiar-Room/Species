@@ -1,15 +1,18 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -47,6 +50,9 @@ public class BirtEggEntity extends ThrowableItemProjectile {
             if (!entity.hasEffect(SpeciesStatusEffects.BIRTD)) this.level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD, SoundSource.NEUTRAL, 1, 1);
             entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
         }
+
+        if (entityHitResult.getEntity() instanceof Warden && this.getOwner() instanceof ServerPlayer serverPlayer) SpeciesCriterion.BIRT_EGG_AT_WARDEN.trigger(serverPlayer);
+
         entityHitResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 2.0f);
     }
 
@@ -69,6 +75,7 @@ public class BirtEggEntity extends ThrowableItemProjectile {
                 }
             }
         }
+
 
         level.playSound(null, this.blockPosition(), SpeciesSoundEvents.ITEM_BIRT_EGG_HIT, SoundSource.NEUTRAL, 1, 1);
         this.level.broadcastEntityEvent(this, (byte)3);

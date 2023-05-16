@@ -2,6 +2,7 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
 import com.ninni.species.sound.SpeciesSoundEvents;
@@ -16,8 +17,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -258,6 +259,7 @@ public class LimpetEntity extends Monster {
                 this.playSound(type.getMiningSound(), 1, 1);
                 if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
                     this.setLimpetType(1);
+                    if (player instanceof ServerPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger((ServerPlayer) player);
                     return false;
                 } else {
                     this.setLimpetType(0);

@@ -1,6 +1,7 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.goal.WraptorSwoopAtTargetGoal;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import com.ninni.species.tag.SpeciesTags;
@@ -192,9 +193,14 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
                 this.shear(SoundSource.PLAYERS);
                 this.gameEvent(GameEvent.SHEAR, player);
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
-                if (this.getFeatherStage() == 0 && !player.isCreative() && !this.isBormFromEgg()) {
-                    if (!this.isSilent()) this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    this.setTarget(player);
+                if (this.getFeatherStage() == 0) {
+                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SHEAR_WRAPTOR_COMPLETELY.trigger(serverPlayer);
+
+                    if (!player.isCreative() && !this.isBormFromEgg()) {
+                        if (!this.isSilent())
+                            this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                        this.setTarget(player);
+                    }
                 }
                 this.setPersistenceRequired();
                 return InteractionResult.SUCCESS;

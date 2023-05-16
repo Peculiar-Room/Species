@@ -23,6 +23,11 @@
   "subtitles.block.species.wraptor_egg.hatch": "Uovo di wraptor si schiude",
   "subtitles.item.species.cracked_wraptor_egg.slurp": "Sorso di tuorlo",
 
+  "advancements.species.shear_wraptor_completely.title": "Sei furba eh?",
+  "advancements.species.shear_wraptor_completely.description": "Spiuma completamente un wraptor e affronta le conseguenze",
+  "advancements.species.hatch_wraptor.title": "Mazz e panell",
+  "advancements.species.hatch_wraptor.description": "Fai schiudere un uovo di wraptor utilizzando un incudine",
+
   "entity.species.deepfish": "Deepfish",
   "item.species.deepfish_spawn_egg": "Uovo generatore di deepfish",
   "item.species.deepfish_bucket": "Secchio con deepfish",
@@ -31,6 +36,9 @@
   "subtitles.entity.species.deepfish.death": "Deepfish muore",
   "subtitles.entity.species.deepfish.hurt": "Deepfish ferito",
   "subtitles.entity.species.deepfish.idle": "Deepfish ulula",
+
+  "advancements.species.deepfish_in_a_bucket.title": "Song of the deep",
+  "advancements.species.deepfish_in_a_bucket.description": "Cattura un deepfish con un secchio",
 
   "entity.species.roombug": "Roombug",
   "item.species.roombug_spawn_egg": "Uovo generatore di roombug",
@@ -66,6 +74,9 @@
   "subtitles.item.species.birt_egg.throw": "Uovo di birt lanciato",
   "subtitles.item.species.birt_egg.hit": "Uovo di birt colpisce",
 
+  "advancements.species.birt_egg_at_warden.title": "Birt is the word",
+  "advancements.species.birt_egg_at_warden.description": "Lancia un uovo di birt ad un warden",
+
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Uovo generatore di limpet",
 
@@ -73,5 +84,8 @@
   "subtitles.entity.species.limpet.hurt": "Limpet ferito",
   "subtitles.entity.species.limpet.idle": "Limpet squittisce",
   "subtitles.entity.species.limpet.step": "Limpet cammina",
-  "subtitles.entity.species.limpet.deflect": "Limpet para"
+  "subtitles.entity.species.limpet.deflect": "Limpet para",
+
+  "advancements.species.silk_touch_break_limpet.title": "Guscio di velluto",
+  "advancements.species.silk_touch_break_limpet.description": "Rompi il guscio di un limpet con tocco di velluto"
 }

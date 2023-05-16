@@ -1,10 +1,12 @@
 package com.ninni.species.block;
 
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.entity.WraptorEntity;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -42,7 +44,9 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        if(entity instanceof FallingBlockEntity fallingBlockEntity && fallingBlockEntity.getBlockState().getBlock() instanceof AnvilBlock && fallDistance > 4) this.breakEgg(world, pos, state);
+        if(entity instanceof FallingBlockEntity fallingBlockEntity && fallingBlockEntity.getBlockState().getBlock() instanceof AnvilBlock && fallDistance > 4) {
+            this.breakEgg(world, pos, state);
+        }
         super.fallOn(world, state, pos, entity, fallDistance);
     }
 
@@ -63,6 +67,7 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
             wraptor.setPersistenceRequired();
             wraptor.moveTo(pos.getX() + 0.3, pos.getY(), pos.getZ() + 0.3, 0.0f, 0.0f);
             world.addFreshEntity(wraptor);
+            if (wraptor.level.getNearestPlayer(wraptor, 16) instanceof ServerPlayer serverPlayer) SpeciesCriterion.HATCH_WRAPTOR.trigger(serverPlayer);
         }
     }
 

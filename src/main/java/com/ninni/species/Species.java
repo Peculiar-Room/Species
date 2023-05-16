@@ -4,6 +4,7 @@ import com.google.common.reflect.Reflection;
 import com.ninni.species.block.SpeciesBlocks;
 import com.ninni.species.block.entity.SpeciesBlockEntities;
 import com.ninni.species.client.particles.SpeciesParticles;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.BirtEggEntity;
 import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
@@ -41,6 +42,7 @@ public class Species implements ModInitializer {
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public void onInitialize() {
+		SpeciesCriterion.init();
 		Reflection.initialize(
 			SpeciesBlocks.class,
 			SpeciesBlockEntities.class,

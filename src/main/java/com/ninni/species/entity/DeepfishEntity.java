@@ -68,7 +68,7 @@ public class DeepfishEntity extends AbstractSchoolingFish {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return SpeciesItems.DEEPFISH_SPAWN_EGG.getDefaultInstance();
+        return SpeciesItems.DEEPFISH_BUCKET.getDefaultInstance();
     }
 
     @SuppressWarnings("unused")
