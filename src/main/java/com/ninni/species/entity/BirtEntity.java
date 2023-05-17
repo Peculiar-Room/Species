@@ -56,8 +56,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.PositionSource;
-import net.minecraft.world.level.gameevent.PositionSourceType;
+import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -67,7 +66,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -262,17 +260,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         this.resetMessageTicks();
         other.resetMessageTicks();
 
-        PositionSource positionSource = new PositionSource() {
-            @Override
-            public Optional<Vec3> getPosition(Level world) {
-                return Optional.of(new Vec3(BirtEntity.this.getX(), BirtEntity.this.getY() + 0.75, BirtEntity.this.getZ()));
-            }
-
-            @Override
-            public PositionSourceType<?> getType() {
-                return PositionSourceType.ENTITY;
-            }
-        };
+        EntityPositionSource positionSource = new EntityPositionSource(this, 0.75F);
 
         world.playSound(null, other.blockPosition(), SpeciesSoundEvents.ENTITY_BIRT_MESSAGE.get(), SoundSource.NEUTRAL, 1,  0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         world.sendParticles(new VibrationParticleOption(positionSource, 20), other.getX(), other.getY() + 0.75, other.getZ(), 0, 0, 0, 0, 0);
