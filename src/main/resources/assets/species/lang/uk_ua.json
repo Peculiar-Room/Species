@@ -1,0 +1,90 @@
+{
+  "itemGroup.species.item_group": "Species",
+  
+  "entity.species.wraptor": "Враптор",
+  "block.species.wraptor_egg": "Яйце враптора",
+  "block.species.cracked_wraptor_egg": "Тріснуте яйце враптора",
+  "item.species.cracked_wraptor_egg": "Тріснуте яйце враптора",
+  "item.species.wraptor_spawn_egg": "Яйце виклику враптора",
+  
+  "effect.species.wither_resistance": "Візеростійкість",
+  
+  "subtitles.entity.species.wraptor.aggro": "Враптор кричить",
+  "subtitles.entity.species.wraptor.agitated": "Враптор виє",
+  "subtitles.entity.species.wraptor.attack": "Враптор клює",
+  "subtitles.entity.species.wraptor.death": "Враптор гине",
+  "subtitles.entity.species.wraptor.hurt": "Враптора поранено",
+  "subtitles.entity.species.wraptor.idle": "Враптор квокче",
+  "subtitles.entity.species.wraptor.shear": "Ножиці натиснуті",
+  "subtitles.entity.species.wraptor.step": "Враптор крокує",
+  "subtitles.entity.species.wraptor.feather_loss": "Враптор втрачає перо",
+  "subtitles.entity.species.wraptor.egg": "Враптор відкладає яйце",
+  "subtitles.block.species.wraptor_egg.crack": "Яйце враптора тріскається",
+  "subtitles.block.species.wraptor_egg.hatch": "Враптор вилупився",
+  "subtitles.item.species.cracked_wraptor_egg.slurp": "Сьорбання",
+  "advancements.species.shear_wraptor_completely.title": "Розумна дівчинка",
+  "advancements.species.shear_wraptor_completely.description": "Повністю підстрижіть враптора і зіткніться з наслідками",
+  "advancements.species.hatch_wraptor.title": "Я люблячи",
+  "advancements.species.hatch_wraptor.description": "Вилупіть яйце враптора скинувши ковадло",
+  
+  "entity.species.deepfish": "Глибинна риба",
+  "item.species.deepfish_spawn_egg": "Яйце виклику глибинної риби",
+  "item.species.deepfish_bucket": "Відро з глибинною рибою",
+  
+  "subtitles.entity.species.deepfish.flop": "Глибинна риба плюхається",
+  "subtitles.entity.species.deepfish.death": "Глибинна риба гине",
+  "subtitles.entity.species.deepfish.hurt": "Глибинну рибу поранено",
+  "subtitles.entity.species.deepfish.idle": "Глибинна риба виє",
+  
+  "advancements.species.deepfish_in_a_bucket.title": "Пісня глибин",
+  "advancements.species.deepfish_in_a_bucket.description": "Піймайте глибинну рибу у відро",
+  
+  "entity.species.roombug": "Кімнатний жук",
+  "item.species.roombug_spawn_egg": "Яйце виклику кімнатного жука",
+  
+  "subtitles.entity.species.roombug.eat": "Кімнатний жук їсть",
+  "subtitles.entity.species.roombug.death": "Кімнатний жук гине",
+  "subtitles.entity.species.roombug.hurt": "Кімнатного жука поранено",
+  "subtitles.entity.species.roombug.idle": "Кімнатний жук клацає",
+  "subtitles.entity.species.roombug.snoring": "Кімнатний жук хропе",
+  "subtitles.entity.species.roombug.step": "Кімнатний жук блукає",
+  
+  "entity.species.birt": "Пчаша",
+  "entity.species.birt_egg": "Яйце пчаши",
+  "item.species.birt_spawn_egg": "Яйце виклику пчаши",
+  "item.species.birt_egg": "Яйце пчаши",
+  "block.species.birt_dwelling": "Кубло пчаши",
+  
+  "item.species.music_disc_dial": "Платівка",
+  "item.species.music_disc_dial.desc": "bunten - dial",
+  
+  "effect.species.birtd": "Пчашиність",
+  
+  "subtitles.entity.species.birt.death": "Пчаша гине",
+  "subtitles.entity.species.birt.hurt": "Пчашу поранено",
+  "subtitles.entity.species.birt.idle": "Пчаша цвірінькає",
+  "subtitles.entity.species.birt.fly": "Пчаша літає",
+  "subtitles.entity.species.birt.message": "Пчаша спілкується",
+  "subtitles.entity.birtd": "Пчаша оглушує",
+  "subtitles.block.species.birt_dwelling.collect": "Яйце пчаши зібрано",
+  "subtitles.block.species.birt_dwelling.enter": "Пчаша залазить в кубло",
+  "subtitles.block.species.birt_dwelling.exit": "Пчаша вилазить з кубла",
+  "subtitles.block.species.birt_dwelling.work": "Пчаши змовляються",
+  "subtitles.item.species.birt_egg.throw": "Яйце пчаши кинуто",
+  "subtitles.item.species.birt_egg.hit": "Яйце пчаши вдаряє щось",
+  
+  "advancements.species.birt_egg_at_warden.title": "Слово не горобець",
+  "advancements.species.birt_egg_at_warden.description": "Киньте яйце пчаши в боронителя та виживіть, щоб розповісти казку",
+  
+  "entity.species.limpet": "Лімпет",
+  "item.species.limpet_spawn_egg": "Яйце виклику лімпета",
+  
+  "subtitles.entity.species.limpet.death": "Лімпет гине",
+  "subtitles.entity.species.limpet.hurt": "Лімпета поранено",
+  "subtitles.entity.species.limpet.idle": "Лімпет пищить",
+  "subtitles.entity.species.limpet.step": "Лімпет крокує",
+  "subtitles.entity.species.limpet.deflect": "Лімпет ухиляється",
+  
+  "advancements.species.silk_touch_break_limpet.title": "Наслідки переховування",
+  "advancements.species.silk_touch_break_limpet.description": "Зламайте панцир лімпета використавши шовковий дотик"
+}
