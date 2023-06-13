@@ -75,8 +75,12 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
 
     public WraptorEntity(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.maxUpStep = 1;
         this.xpReward = 3;
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1;
     }
 
     public static AttributeSupplier.Builder createWraptorAttributes() {
@@ -136,9 +140,9 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        long time = this.level.getGameTime();
+        long time = this.level().getGameTime();
         int stage = this.getFeatherStage();
-        if (this.level.dimensionType().piglinSafe()) {
+        if (this.level().dimensionType().piglinSafe()) {
             if (stage < 4) {
                 if (this.random.nextInt((int) (time - this.timeSinceSheared)) > 20 * 150) {
                     this.timeSinceSheared = time;
@@ -157,10 +161,10 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     public void aiStep() {
         super.aiStep();
 
-        if (!this.level.isClientSide && this.isAlive() && this.age % 80 == 0 && this.isBaby() && this.getHealth() < this.getMaxHealth()) this.heal(1f);
+        if (!this.level().isClientSide && this.isAlive() && this.age % 80 == 0 && this.isBaby() && this.getHealth() < this.getMaxHealth()) this.heal(1f);
 
         Vec3 vec3d = this.getDeltaMovement();
-        if (!this.onGround && vec3d.y < 0.0) {
+        if (!this.onGround() && vec3d.y < 0.0) {
             if (this.getFeatherStage() == 0 || this.isBaby()) this.setDeltaMovement(vec3d.multiply(1.0, 0.6, 1.0));
         }
     }
@@ -189,7 +193,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.is(Items.SHEARS) && !this.isBaby()) {
-            if (!this.level.isClientSide() && this.readyForShearing()) {
+            if (!this.level().isClientSide() && this.readyForShearing()) {
                 this.shear(SoundSource.PLAYERS);
                 this.gameEvent(GameEvent.SHEAR, player);
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
@@ -198,7 +202,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
 
                     if (!player.isCreative() && !this.isBormFromEgg()) {
                         if (!this.isSilent())
-                            this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundSource.NEUTRAL, 1.0f, 1.0f);
+                            this.level().playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_AGGRO, SoundSource.NEUTRAL, 1.0f, 1.0f);
                         this.setTarget(player);
                     }
                 }
@@ -215,8 +219,8 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     @Override
     public void shear(SoundSource category) {
         int stage = this.getFeatherStage();
-        if (stage == 4) this.timeSinceSheared = this.level.getGameTime();
-        this.level.playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
+        if (stage == 4) this.timeSinceSheared = this.level().getGameTime();
+        this.level().playSound(null, this, SpeciesSoundEvents.ENTITY_WRAPTOR_SHEAR, category, 1.0f, 1.0f);
         this.setFeatherStage(stage - 1);
         for (int i = 0, l = 2 + this.random.nextInt(5); i < l; i++) {
             ItemEntity itemEntity = this.spawnAtLocation(Items.FEATHER, 1);
@@ -251,7 +255,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.getFeatherStage() <= 2 || !this.level.dimensionType().piglinSafe()) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
+        if (this.getFeatherStage() <= 2 || !this.level().dimensionType().piglinSafe()) return SpeciesSoundEvents.ENTITY_WRAPTOR_AGITATED;
         else return SpeciesSoundEvents.ENTITY_WRAPTOR_IDLE;
     }
     @Nullable
@@ -369,15 +373,15 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
         @Override
         public void stop() {
             super.stop();
-            Level world = this.wraptor.level;
+            Level world = this.wraptor.level();
             world.playSound(null, this.wraptor.blockPosition(), SpeciesSoundEvents.ENTITY_WRAPTOR_EGG, SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
         }
 
         @Override
         public void tick() {
             super.tick();
-            if (!this.wraptor.isInWater() && this.isReachedTarget() && this.wraptor.level.dimensionType().piglinSafe()) {
-                this.wraptor.level.setBlock(this.blockPos.above(), SpeciesBlocks.WRAPTOR_EGG.defaultBlockState(), 3);
+            if (!this.wraptor.isInWater() && this.isReachedTarget() && this.wraptor.level().dimensionType().piglinSafe()) {
+                this.wraptor.level().setBlock(this.blockPos.above(), SpeciesBlocks.WRAPTOR_EGG.defaultBlockState(), 3);
                 this.wraptor.setHasEgg(false);
                 this.wraptor.setInLoveTime(600);
             }

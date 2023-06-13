@@ -1,10 +1,7 @@
 package com.ninni.species.criterion;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -18,7 +15,7 @@ public class SpeciesCriteriaTriggers extends SimpleCriterionTrigger<SpeciesCrite
     }
 
     @Override
-    protected TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite composite, DeserializationContext deserializationContext) {
+    protected TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate composite, DeserializationContext deserializationContext) {
         return new SpeciesCriteriaTriggers.TriggerInstance(ID, composite);
     }
 
@@ -33,9 +30,8 @@ public class SpeciesCriteriaTriggers extends SimpleCriterionTrigger<SpeciesCrite
 
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-        public TriggerInstance(ResourceLocation id, EntityPredicate.Composite playerPredicate) {
-            super(id, playerPredicate);
+        public TriggerInstance(ResourceLocation resourceLocation, ContextAwarePredicate contextAwarePredicate) {
+            super(resourceLocation, contextAwarePredicate);
         }
-
     }
 }

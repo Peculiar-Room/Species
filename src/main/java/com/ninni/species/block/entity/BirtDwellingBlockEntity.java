@@ -72,11 +72,12 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         }
     }
 
+
     private List<Entity> tryReleaseBirt(BlockState state, BirtState birtState) {
         ArrayList<Entity> list = Lists.newArrayList();
         this.birts.removeIf(birt -> {
             assert this.level != null;
-            return BirtDwellingBlockEntity.releaseBirt(this.level, this.worldPosition, state, birt, list, birtState);
+            return releaseBirt(this.level, this.worldPosition, state, birt, list, birtState);
         });
         if (!list.isEmpty()) {
             super.setChanged();

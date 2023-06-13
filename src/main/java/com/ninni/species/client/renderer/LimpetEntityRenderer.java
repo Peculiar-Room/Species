@@ -36,7 +36,7 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
 
     @Override
     protected boolean isShaking(LimpetEntity entity) {
-        if (!entity.level.getEntitiesOfClass(Player.class, entity.getBoundingBox().inflate(4D), entity::isValidEntityHoldingPickaxe).isEmpty()) return true;
+        if (!entity.level().getEntitiesOfClass(Player.class, entity.getBoundingBox().inflate(4D), entity::isValidEntityHoldingPickaxe).isEmpty()) return true;
         return super.isShaking(entity);
     }
 

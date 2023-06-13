@@ -1,5 +1,5 @@
 {
-  "itemGroup.species.item_group": "Species",
+  "species.item_group": "Species",
 
   "entity.species.wraptor": "Wraptor",
   "block.species.wraptor_egg": "Wraptor Egg",
@@ -25,7 +25,7 @@
 
   "advancements.species.shear_wraptor_completely.title": "Clever Girl",
   "advancements.species.shear_wraptor_completely.description": "Shear a Wraptor completely and face the consequences",
-  "advancements.species.hatch_wraptor.title": "Though Love",
+  "advancements.species.hatch_wraptor.title": "Tough Love",
   "advancements.species.hatch_wraptor.description": "Hatch a Wraptor Egg using an Anvil",
 
   "entity.species.deepfish": "Deepfish",

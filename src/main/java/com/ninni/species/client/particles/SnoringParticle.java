@@ -47,7 +47,7 @@ public class SnoringParticle extends TextureSheetParticle {
 
     @Override
     protected int getLightColor(float f) {
-        BlockPos blockPos = new BlockPos(this.x, this.y, this.z);
+        BlockPos blockPos = new BlockPos((int)this.x, (int)this.y, (int)this.z);
         if (this.level.hasChunkAt(blockPos)) {
             return LevelRenderer.getLightColor(this.level, blockPos);
         }
