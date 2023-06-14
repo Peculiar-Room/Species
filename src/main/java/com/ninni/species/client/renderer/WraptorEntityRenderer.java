@@ -31,7 +31,7 @@ public class WraptorEntityRenderer<T extends LivingEntity> extends MobRenderer<W
     @Override
     protected boolean isShaking(WraptorEntity entity) {
         if (entity.getFeatherStage() == 1) return true;
-        if (!entity.getLevel().dimensionType().piglinSafe()) return true;
+        if (!entity.level().dimensionType().piglinSafe()) return true;
         return super.isShaking(entity);
     }
 }

@@ -168,7 +168,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         if (this.antennaTicks > 0) {
             this.antennaTicks--;
         }
-        if (!this.onGround && vec3d.y < 0.0 && this.getTarget() == null) {
+        if (!this.onGround() && vec3d.y < 0.0 && this.getTarget() == null) {
             this.setDeltaMovement(vec3d.multiply(1.0, 0.6, 1.0));
         }
         if (this.isFlying()) {
@@ -224,7 +224,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     
     @Nullable
     public BirtEntity findReciever() {
-        List<? extends BirtEntity> list = this.level.getNearbyEntities(BirtEntity.class, TargetingConditions.DEFAULT, this, this.getBoundingBox().inflate(8.0));
+        List<? extends BirtEntity> list = this.level().getNearbyEntities(BirtEntity.class, TargetingConditions.DEFAULT, this, this.getBoundingBox().inflate(8.0));
         double d = Double.MAX_VALUE;
         BirtEntity birt = null;
         for (BirtEntity birt2 : list) {
@@ -269,14 +269,14 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     private void flapWings() {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
-        this.maxWingDeviation += (float)(this.onGround || this.isPassenger() ? -1 : 4) * 0.3f;
+        this.maxWingDeviation += (float)(this.onGround() || this.isPassenger() ? -1 : 4) * 0.3f;
         this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0f, 1.0f);
-        if (!this.onGround && this.flapSpeed < 1.0f) {
+        if (!this.onGround() && this.flapSpeed < 1.0f) {
             this.flapSpeed = 1.0f;
         }
         this.flapSpeed *= 0.9f;
         Vec3 vec3d = this.getDeltaMovement();
-        if (!this.onGround && vec3d.y < 0.0) {
+        if (!this.onGround() && vec3d.y < 0.0) {
             this.setDeltaMovement(vec3d.multiply(1.0, 0.6, 1.0));
         }
         this.flapProgress += this.flapSpeed * 2.0f;
@@ -322,7 +322,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     }
     
     boolean canEnterDwelling() {
-        if (this.cannotEnterDwellingTicks <= 0 && this.getTarget() == null) return this.level.isRaining() || this.level.isNight();
+        if (this.cannotEnterDwellingTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight();
         else return false;
     }
 
@@ -331,7 +331,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     }
 
     private boolean doesDwellingHaveSpace(BlockPos pos) {
-        BlockEntity blockEntity = this.level.getBlockEntity(pos);
+        BlockEntity blockEntity = this.level().getBlockEntity(pos);
         if (blockEntity instanceof BirtDwellingBlockEntity) {
             return !((BirtDwellingBlockEntity)blockEntity).isFullOfBirts();
         } else {
@@ -343,7 +343,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         if (!this.hasDwelling()) {
             return false;
         } else {
-            BlockEntity blockEntity = this.level.getBlockEntity(this.dwellingPos);
+            BlockEntity blockEntity = this.level().getBlockEntity(this.dwellingPos);
             return blockEntity != null && blockEntity.getType() == SpeciesBlockEntities.BIRT_DWELLING.get();
         }
     }
@@ -387,7 +387,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
     @Override
     public boolean isFlying() {
-        return !this.onGround;
+        return !this.onGround();
     }
 
     @Nullable
@@ -414,7 +414,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         FlyingPathNavigation flyingPathNavigation = new FlyingPathNavigation(this, level){
             @Override
             public boolean isStableDestination(BlockPos blockPos) {
-                return !this.level.getBlockState(blockPos.below()).isAir();
+                return !level().getBlockState(blockPos.below()).isAir();
             }
         };
         flyingPathNavigation.setCanOpenDoors(false);
@@ -465,7 +465,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         public void start() {
             Vec3 vec3d = this.getRandomLocation();
             if (vec3d != null) {
-                BirtEntity.this.navigation.moveTo(BirtEntity.this.navigation.createPath(new BlockPos(vec3d), 1), 1.0);
+                BirtEntity.this.navigation.moveTo(BirtEntity.this.navigation.createPath(BlockPos.containing(vec3d), 1), 1.0);
             }
         }
         
@@ -493,12 +493,12 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public boolean canUse() {
-            return BirtEntity.this.isOnGround() && super.canUse();
+            return BirtEntity.this.onGround() && super.canUse();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return BirtEntity.this.isOnGround() && super.canContinueToUse();
+            return BirtEntity.this.onGround() && super.canContinueToUse();
         }
     }
     
@@ -512,7 +512,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
             if (BirtEntity.this.hasDwelling() && BirtEntity.this.canEnterDwelling()) {
                 assert BirtEntity.this.dwellingPos != null;
                 if (BirtEntity.this.dwellingPos.closerToCenterThan(BirtEntity.this.position(), 2.0)) {
-                    BlockEntity blockEntity = BirtEntity.this.level.getBlockEntity(BirtEntity.this.dwellingPos);
+                    BlockEntity blockEntity = BirtEntity.this.level().getBlockEntity(BirtEntity.this.dwellingPos);
                     if (blockEntity instanceof BirtDwellingBlockEntity blockEntity1) {
                         if (!blockEntity1.isFullOfBirts()) {
                             return true;
@@ -533,7 +533,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public void start() {
-            BlockEntity blockEntity = BirtEntity.this.level.getBlockEntity(BirtEntity.this.dwellingPos);
+            BlockEntity blockEntity = BirtEntity.this.level().getBlockEntity(BirtEntity.this.dwellingPos);
             if (blockEntity instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
                 birtDwellingBlockEntity.tryEnterDwelling(BirtEntity.this);
             }
@@ -580,7 +580,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         private List<BlockPos> getNearbyFreeDwellings() {
             BlockPos blockPos = BirtEntity.this.blockPosition();
-            PoiManager pointOfInterestStorage = ((ServerLevel)BirtEntity.this.level).getPoiManager();
+            PoiManager pointOfInterestStorage = ((ServerLevel)BirtEntity.this.level()).getPoiManager();
             Stream<PoiRecord> stream = pointOfInterestStorage.getInRange((poiType) -> poiType.is(SpeciesTags.BIRT_HOME), blockPos, 20, PoiManager.Occupancy.ANY);
             return stream.map(PoiRecord::getPos).filter(BirtEntity.this::doesDwellingHaveSpace).sorted(Comparator.comparingDouble((blockPos2) -> blockPos2.distSqr(blockPos))).collect(Collectors.toList());
         }
@@ -596,14 +596,14 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         MoveToDwellingGoal() {
             super();
-            this.ticks = BirtEntity.this.level.random.nextInt(10);
+            this.ticks = BirtEntity.this.level().random.nextInt(10);
             this.possibleDwellings = Lists.newArrayList();
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
         public boolean canBirtStart() {
-            return BirtEntity.this.dwellingPos != null && !BirtEntity.this.hasRestriction() && BirtEntity.this.canEnterDwelling() && !this.isCloseEnough(BirtEntity.this.dwellingPos) && BirtEntity.this.level.getBlockState(BirtEntity.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING.get());
+            return BirtEntity.this.dwellingPos != null && !BirtEntity.this.hasRestriction() && BirtEntity.this.canEnterDwelling() && !this.isCloseEnough(BirtEntity.this.dwellingPos) && BirtEntity.this.level().getBlockState(BirtEntity.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING.get());
         }
 
         @Override

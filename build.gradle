@@ -96,18 +96,17 @@ repositories {
 dependencies {
 	minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-	implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.19.2-2.0.1.128')
 }
 
 jar {
 	manifest {
 		attributes([
 				"Specification-Title"     : "Species",
-				"Specification-Vendor"    : "Ninni, Orcinus",
+				"Specification-Vendor"    : "Ninni",
 				"Specification-Version"   : "1",
 				"Implementation-Title"    : "Species",
-				"Implementation-Version"  : "1.0.0",
-				"Implementation-Vendor"   : "Ninni, Orcinus",
+				"Implementation-Version"  : "1.1.0",
+				"Implementation-Vendor"   : "Ninni",
 				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
 				"MixinConfigs"            : "species.mixins.json"
 		])

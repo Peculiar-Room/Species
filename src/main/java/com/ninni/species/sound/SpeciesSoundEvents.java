@@ -68,6 +68,6 @@ public class SpeciesSoundEvents {
 
     private static RegistryObject<SoundEvent> register(String name) {
         ResourceLocation id = new ResourceLocation(Species.MOD_ID, name);
-        return SOUND_EVENTS.register(name, () -> new SoundEvent(id));
+        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 }

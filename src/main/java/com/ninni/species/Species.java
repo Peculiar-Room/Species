@@ -9,11 +9,10 @@ import com.ninni.species.events.MiscEvents;
 import com.ninni.species.events.MobEvents;
 import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
-import com.ninni.species.world.gen.features.SpeciesFeatures;
+import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
+import com.ninni.species.world.gen.structure.SpeciesStructureTypes;
 import com.ninni.species.world.poi.SpeciesPointOfInterestTypes;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -23,12 +22,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Species.MOD_ID)
 public class Species {
 	public static final String MOD_ID = "species";
-	public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MOD_ID) {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(SpeciesItems.WRAPTOR_EGG.get());
-		}
-	};
 
 	public Species() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -41,6 +34,8 @@ public class Species {
 		SpeciesEntities.ENTITY_TYPES.register(modEventBus);
 		SpeciesItems.ITEMS.register(modEventBus);
 		SpeciesSoundEvents.SOUND_EVENTS.register(modEventBus);
+		SpeciesStructureTypes.STRUCTURES.register(modEventBus);
+		SpeciesStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
 		SpeciesParticles.PARTICLE_TYPES.register(modEventBus);
 		SpeciesPointOfInterestTypes.POI_TYPES.register(modEventBus);
 		SpeciesTreeDecorators.TREE_DECORATOR_TYPE.register(modEventBus);
@@ -51,7 +46,6 @@ public class Species {
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
-		event.enqueueWork(SpeciesFeatures::init);
 	}
 
 }

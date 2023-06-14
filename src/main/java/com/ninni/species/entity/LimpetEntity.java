@@ -114,12 +114,12 @@ public class LimpetEntity extends Monster {
 
     @Override
     protected void customServerAiStep() {
-        this.level.getProfiler().push("limpetBrain");
-        this.getBrain().tick((ServerLevel)this.level, this);
-        this.level.getProfiler().pop();
-        this.level.getProfiler().push("limpetActivityUpdate");
+        this.level().getProfiler().push("limpetBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        this.level().getProfiler().pop();
+        this.level().getProfiler().push("limpetActivityUpdate");
         LimpetAi.updateActivity(this);
-        this.level.getProfiler().pop();
+        this.level().getProfiler().pop();
         super.customServerAiStep();
     }
 
@@ -172,9 +172,9 @@ public class LimpetEntity extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
-                this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
+                this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
             }
             if (this.getScaredTicks() > 0) {
                 int scaredTicks = this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET) ? 0 : this.getScaredTicks() - 1;
@@ -234,11 +234,11 @@ public class LimpetEntity extends Monster {
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
-            if (type.getId() > 1 && !this.level.isClientSide()) spawnBreakingParticles();
+            if (type.getId() > 1 && !this.level().isClientSide()) spawnBreakingParticles();
 
             ItemStack stack = this.getStackInHand(player).get();
             if (this.getCrackedStage() < 3) {
-                this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level.random));
+                this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level().random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
                 this.playSound(type.getMiningSound(), 1, 1);
                 this.setScaredTicks(0);
@@ -267,7 +267,7 @@ public class LimpetEntity extends Monster {
                 }
             }
 
-        } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level.isClientSide && type.getId() > 0) {
+        } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level().isClientSide && type.getId() > 0) {
             this.playSound(SpeciesSoundEvents.ENTITY_LIMPET_DEFLECT.get(), 1, 1);
             if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) this.setScaredTicks(300);
             return false;
@@ -277,7 +277,7 @@ public class LimpetEntity extends Monster {
 
     private void spawnBreakingParticles() {
         Vec3 vec3 = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.5, Math.random() * 0.1 + 0.1, 0.0)).xRot(-this.getXRot() * 0.017453292F).yRot(-this.getYRot() * 0.5F);
-        ((ServerLevel)this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getLimpetType().getItem().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 60, vec3.x + random.nextInt(-10, 10) * 0.5, vec3.y + random.nextInt(0, 10) * 0.1, vec3.z - random.nextInt(-10, 10) * 0.5, 0);
+        ((ServerLevel)this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getLimpetType().getItem().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 60, vec3.x + random.nextInt(-10, 10) * 0.5, vec3.y + random.nextInt(0, 10) * 0.1, vec3.z - random.nextInt(-10, 10) * 0.5, 0);
     }
 
     @Override

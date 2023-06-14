@@ -6,7 +6,6 @@ import com.mojang.datafixers.util.Pair;
 import com.ninni.species.entity.LimpetEntity;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.AnimalPanic;
 import net.minecraft.world.entity.ai.behavior.DoNothing;
@@ -14,8 +13,7 @@ import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
 import net.minecraft.world.entity.ai.behavior.RandomStroll;
 import net.minecraft.world.entity.ai.behavior.RunOne;
-import net.minecraft.world.entity.ai.behavior.RunSometimes;
-import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget;
+import net.minecraft.world.entity.ai.behavior.SetEntityLookTargetSometimes;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -43,10 +41,10 @@ public class LimpetAi {
 
     private static void initIdleActivity(Brain<LimpetEntity> brain) {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
-                Pair.of(0, new RunSometimes<LivingEntity>(new SetEntityLookTarget(EntityType.PLAYER, 6.0f), UniformInt.of(30, 60))),
+                Pair.of(0, SetEntityLookTargetSometimes.create(EntityType.PLAYER, 6.0f, UniformInt.of(30, 60))),
                 Pair.of(1, new RunOne<>(ImmutableList.of(
-                        Pair.of(new RandomStroll(1.0f), 2),
-                        Pair.of(new SetWalkTargetFromLookTarget(1.0f, 3), 2),
+                        Pair.of(RandomStroll.stroll(1.0f), 2),
+                        Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 2),
                         Pair.of(new DoNothing(30, 60), 1))
                 ))));
     }
@@ -57,7 +55,7 @@ public class LimpetAi {
                 10,
                 ImmutableList.of(
                         SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1.6F, 20, true),
-                        new RunSometimes<LivingEntity>(new SetEntityLookTarget(8.0f), UniformInt.of(30, 60))
+                        SetEntityLookTargetSometimes.create(8.0f, UniformInt.of(30, 60))
                 ),
                 MemoryModuleType.AVOID_TARGET
         );

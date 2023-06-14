@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#species:limpet_spawns",
+  "spawners": {
+    "type": "species:limpet",
+    "maxCount": 1,
+    "minCount": 1,
+    "weight": 10
+  }
+}

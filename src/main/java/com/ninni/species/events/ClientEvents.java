@@ -30,8 +30,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerParticleTypes(RegisterParticleProvidersEvent event) {
-        event.register(SpeciesParticles.SNORING.get(), SnoringParticle.Factory::new);
-        event.register(SpeciesParticles.BIRTD.get(), BirtdParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.SNORING.get(), SnoringParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.BIRTD.get(), BirtdParticle.Factory::new);
     }
 
     @SubscribeEvent

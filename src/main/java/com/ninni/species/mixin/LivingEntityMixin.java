@@ -28,7 +28,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "tickEffects", at = @At("HEAD"))
     public void applyBirtdParticles(CallbackInfo ci) {
         LivingEntity that = (LivingEntity) (Object) this;
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) && that.level instanceof ServerLevel world) {
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) && that.level() instanceof ServerLevel world) {
             if (that.tickCount % 10 == 1) {
                 world.sendParticles(SpeciesParticles.BIRTD.get(), that.getX(), that.getEyeY() + 0.5F, that.getZ() - 0.5, 1,0, 0, 0, 0);
             }

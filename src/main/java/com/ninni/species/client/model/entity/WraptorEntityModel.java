@@ -286,7 +286,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AgeableListMode
             this.bodyFeathers.visible = false;
             this.leftWing.visible = true;
             this.rightWing.visible = true;
-            if (entity.isOnGround()) {
+            if (entity.onGround()) {
                 this.leftWing.zRot = 0.8F;
                 this.leftWing.yRot = Mth.cos(limbAngle * speed * 0.45F) * 0.5F * limbDistance - 0.25F;
                 this.rightWing.zRot = -0.8F;

@@ -44,11 +44,11 @@ public class WraptorCoopGenerator {
         public static final String ROTATION_KEY = "Rotation";
 
         public Piece(StructureTemplateManager manager, ResourceLocation id, BlockPos pos, Rotation rotation) {
-            super(SpeciesStructurePieceTypes.WRAPTOR_COOP, 0, manager, id, id.toString(), createPlacementData(rotation), pos);
+            super(SpeciesStructurePieceTypes.WRAPTOR_COOP.get(), 0, manager, id, id.toString(), createPlacementData(rotation), pos);
         }
 
         public Piece(StructureTemplateManager manager, CompoundTag nbt) {
-            super(SpeciesStructurePieceTypes.WRAPTOR_COOP, nbt, manager, id -> createPlacementData(Rotation.valueOf(nbt.getString(ROTATION_KEY))));
+            super(SpeciesStructurePieceTypes.WRAPTOR_COOP.get(), nbt, manager, id -> createPlacementData(Rotation.valueOf(nbt.getString(ROTATION_KEY))));
         }
 
         private static StructurePlaceSettings createPlacementData(Rotation rotation) {

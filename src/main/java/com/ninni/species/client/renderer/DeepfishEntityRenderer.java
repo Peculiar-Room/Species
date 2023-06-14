@@ -1,7 +1,7 @@
 package com.ninni.species.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.ninni.species.client.model.entity.DeepfishEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.DeepfishFeatureRenderer;
@@ -31,7 +31,7 @@ public class DeepfishEntityRenderer extends MobRenderer<DeepfishEntity, Deepfish
 
         if (!fish.isInWater()) {
             matrixStack.translate(0.2, 0.2, 0);
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90.0f));
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(90.0f));
         }
     }
 

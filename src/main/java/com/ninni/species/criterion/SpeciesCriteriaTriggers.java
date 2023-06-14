@@ -2,8 +2,8 @@ package com.ninni.species.criterion;
 
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,11 +18,6 @@ public class SpeciesCriteriaTriggers extends SimpleCriterionTrigger<SpeciesCrite
     }
 
     @Override
-    protected TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite composite, DeserializationContext deserializationContext) {
-        return new SpeciesCriteriaTriggers.TriggerInstance(ID, composite);
-    }
-
-    @Override
     public ResourceLocation getId() {
         return ID;
     }
@@ -31,10 +26,15 @@ public class SpeciesCriteriaTriggers extends SimpleCriterionTrigger<SpeciesCrite
         this.trigger(player, conditions -> true);
     }
 
+    @Override
+    protected TriggerInstance createInstance(JsonObject p_66248_, ContextAwarePredicate predicate, DeserializationContext p_66250_) {
+        return new SpeciesCriteriaTriggers.TriggerInstance(ID, predicate);
+    }
+
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-        public TriggerInstance(ResourceLocation id, EntityPredicate.Composite playerPredicate) {
-            super(id, playerPredicate);
+        public TriggerInstance(ResourceLocation id, ContextAwarePredicate predicate) {
+            super(id, predicate);
         }
 
     }

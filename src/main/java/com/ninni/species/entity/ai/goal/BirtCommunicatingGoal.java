@@ -22,7 +22,7 @@ public class BirtCommunicatingGoal extends Goal {
 
     public BirtCommunicatingGoal(BirtEntity birt, Class<? extends BirtEntity> entityClass) {
         this.sender = birt;
-        this.world = birt.level;
+        this.world = birt.level();
         this.entityClass = entityClass;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }

@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:warped_forest",
+  "spawners": {
+    "type": "species:wraptor",
+    "maxCount": 6,
+    "minCount": 4,
+    "weight": 100
+  }
+}

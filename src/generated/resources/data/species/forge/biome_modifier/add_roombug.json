@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#species:roombug_spawns",
+  "spawners": {
+    "type": "species:roombug",
+    "maxCount": 3,
+    "minCount": 1,
+    "weight": 10
+  }
+}

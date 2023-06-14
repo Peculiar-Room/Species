@@ -30,7 +30,6 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -90,37 +89,37 @@ public class RoombugEntity extends TamableAnimal {
 
             if (!player.getAbilities().instabuild) itemStack.shrink(1);
             if (!this.isSilent()) {
-                this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT.get(), this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT.get(), this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
 
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (this.random.nextInt(2) == 0) {
                     this.tame(player);
-                    this.level.broadcastEntityEvent(this, (byte) 7);
+                    this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
-                    this.level.broadcastEntityEvent(this, (byte) 6);
+                    this.level().broadcastEntityEvent(this, (byte) 6);
                 }
             }
 
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
         if (this.isTame()) {
             if (player.isSecondaryUseActive()) {
                 if (this.isOwnedBy(player) && itemStack.getItem() != Items.HONEY_BOTTLE) {
-                    if (!this.level.isClientSide) this.setOrderedToSit(!this.isOrderedToSit());
-                    return InteractionResult.sidedSuccess(this.level.isClientSide);
+                    if (!this.level().isClientSide) this.setOrderedToSit(!this.isOrderedToSit());
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
                 } else if (itemStack.getItem() == Items.HONEY_BOTTLE && this.getHealth() < this.getMaxHealth()) {
-                    if (!this.level.isClientSide) {
+                    if (!this.level().isClientSide) {
                         if (!player.getAbilities().instabuild) itemStack.shrink(1);
                         if (!player.getInventory().add(Items.GLASS_BOTTLE.getDefaultInstance())) {
                             player.drop(Items.GLASS_BOTTLE.getDefaultInstance(), false);
                         }
                         this.heal(6);
-                        this.level.broadcastEntityEvent(this, (byte) 7);
-                        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.HONEY_DRINK, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                        this.level().broadcastEntityEvent(this, (byte) 7);
+                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.HONEY_DRINK, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
                     }
-                    return InteractionResult.sidedSuccess(this.level.isClientSide);
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
                 }
             }
             if (!this.isEyeInFluid(FluidTags.WATER) && this.getControllingPassenger() == null) {
@@ -146,7 +145,7 @@ public class RoombugEntity extends TamableAnimal {
         if (this.isInSittingPose()) {
             if (snoringTicks == 0) {
                 this.snoringTicks = 30;
-                this.level.addParticle(SpeciesParticles.SNORING.get(), this.getX(), this.getY() + 0.375F, this.getZ(), 0f, 0f, 0f);
+                this.level().addParticle(SpeciesParticles.SNORING.get(), this.getX(), this.getY() + 0.375F, this.getZ(), 0f, 0f, 0f);
             }
             if (snoringTicks > 0) this.snoringTicks--;
         }
@@ -156,12 +155,12 @@ public class RoombugEntity extends TamableAnimal {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.isEyeInFluid(FluidTags.WATER)) {
+        if (!this.level().isClientSide && this.isEyeInFluid(FluidTags.WATER)) {
             this.ejectPassengers();
         }
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2f, -0.01f, 0.2f), EntitySelector.pushableBy(this));
+        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2f, -0.01f, 0.2f), EntitySelector.pushableBy(this));
         if (!list.isEmpty() && this.isOrderedToSit()) {
-            boolean bl = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
+            boolean bl = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
             for (Entity entity : list) {
                 if (entity.hasPassenger(this)) continue;
                 if (bl && this.getPassengers().size() < 1 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player) && !(entity instanceof RoombugEntity)) {
@@ -183,9 +182,9 @@ public class RoombugEntity extends TamableAnimal {
         return !this.isVehicle() && !this.isEyeInFluid(FluidTags.WATER);
     }
 
-    @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    @Override
+    public LivingEntity getControllingPassenger() {
         return null;
     }
 

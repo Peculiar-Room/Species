@@ -28,7 +28,7 @@ public class WraptorSwoopAtTargetGoal extends Goal {
         if (this.mob.getFeatherStage() > 0) return false;
 
         if (distance < 10.0 || distance > 40.0) return false;
-        if (!this.mob.isOnGround()) return false;
+        if (!this.mob.onGround()) return false;
 
         return this.mob.getRandom().nextInt(LeapAtTargetGoal.reducedTickDelay(5)) == 0;
     }
@@ -40,7 +40,7 @@ public class WraptorSwoopAtTargetGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.mob.isOnGround();
+        return !this.mob.onGround();
     }
 
     @Override

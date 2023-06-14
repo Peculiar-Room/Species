@@ -53,7 +53,7 @@ public class WraptorCoopStructure extends Structure {
 
     @Override
     public StructureType<?> type() {
-        return SpeciesStructureTypes.WRAPTOR_COOP;
+        return SpeciesStructureTypes.WRAPTOR_COOP.get();
     }
 
 }

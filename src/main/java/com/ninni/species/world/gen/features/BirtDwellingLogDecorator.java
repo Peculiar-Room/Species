@@ -7,6 +7,7 @@ import com.ninni.species.entity.SpeciesEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -32,7 +33,7 @@ public class BirtDwellingLogDecorator extends TreeDecorator {
                 int i = 2 + random.nextInt(2);
                 for (int j = 0; j < i; ++j) {
                     CompoundTag nbtCompound = new CompoundTag();
-                    nbtCompound.putString("id", Registry.ENTITY_TYPE.getKey(SpeciesEntities.BIRT.get()).toString());
+                    nbtCompound.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpeciesEntities.BIRT.get()).toString());
                     blockEntity.addBirt(nbtCompound, random.nextInt(599));
                 }
 

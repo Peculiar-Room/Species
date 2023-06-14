@@ -65,7 +65,7 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
             wraptor.setPersistenceRequired();
             wraptor.moveTo(pos.getX() + 0.3, pos.getY(), pos.getZ() + 0.3, 0.0f, 0.0f);
             world.addFreshEntity(wraptor);
-            if (wraptor.level.getNearestPlayer(wraptor, 16) instanceof ServerPlayer serverPlayer) SpeciesCriterion.HATCH_WRAPTOR.trigger(serverPlayer);
+            if (wraptor.level().getNearestPlayer(wraptor, 16) instanceof ServerPlayer serverPlayer) SpeciesCriterion.HATCH_WRAPTOR.trigger(serverPlayer);
         }
     }
 
