@@ -17,6 +17,30 @@ repositories {
 	// for more information about repositories.
 }
 
+loom {
+	runs {
+		datagenClient {
+			inherit client
+			name "Data Generation"
+			vmArg "-Dfabric-api.datagen"
+			vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
+			vmArg "-Dfabric-api.datagen.modid=species"
+
+			runDir "build/datagen"
+		}
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += [
+					'src/main/generated'
+			]
+		}
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

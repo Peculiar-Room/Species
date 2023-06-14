@@ -13,7 +13,7 @@ import com.ninni.species.sound.SpeciesSoundEvents;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.structure.SpeciesStructureSets;
 import com.ninni.species.tag.SpeciesTags;
-import com.ninni.species.world.gen.features.SpeciesFeatures;
+import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
 import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
 import com.ninni.species.world.gen.structure.SpeciesStructureTypes;
 import com.ninni.species.world.gen.structure.SpeciesStructures;
@@ -54,8 +54,8 @@ public class Species implements ModInitializer {
 			SpeciesStructurePieceTypes.class
 		);
 		SpeciesTreeDecorators.init();
-		SpeciesFeatures.init();
-		SpeciesFeatures.BIRTED_BIRCH_TREES.unwrapKey().ifPresent(this::addFeature);
+
+		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES);
 
 		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new AbstractProjectileDispenseBehavior() {
 			@Override

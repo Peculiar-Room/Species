@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": "species:birted_birch",
+    "features": [
+      {
+        "chance": 0.0,
+        "feature": "species:birted_birch"
+      }
+    ]
+  }
+}

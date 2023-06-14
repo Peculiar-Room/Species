@@ -1,0 +1,7 @@
+{
+  "type": "species:wraptor_coop",
+  "biomes": "#species:wraptor_coop_has_structure",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box"
+}

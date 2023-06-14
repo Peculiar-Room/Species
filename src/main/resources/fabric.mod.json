@@ -28,6 +28,9 @@
 		],
 		"client": [
 			"com.ninni.species.SpeciesClient"
+		],
+		"fabric-datagen": [
+			"com.ninni.species.data.SpeciesDataGenerator"
 		]
 	},
 	"mixins": [
