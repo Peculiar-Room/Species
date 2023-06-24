@@ -1,5 +1,5 @@
 {
-  "itemGroup.species.item_group": "Species",
+  "species.item_group": "Species",
   
   "entity.species.wraptor": "Враптор",
   "block.species.wraptor_egg": "Яйце враптора",
