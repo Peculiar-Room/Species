@@ -42,6 +42,7 @@ public class Species implements ModInitializer {
 		Reflection.initialize(
 			SpeciesBlocks.class,
 			SpeciesBlockEntities.class,
+			SpeciesCreativeModeTabs.class,
 			SpeciesPointsOfInterests.class,
 			SpeciesItems.class,
 			SpeciesSoundEvents.class,

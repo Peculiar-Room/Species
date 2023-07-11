@@ -1,5 +1,5 @@
 {
-  "species.item_group": "Species",
+  "itemGroup.species.species": "Species",
 
   "entity.species.wraptor": "Wraptor",
   "block.species.wraptor_egg": "Wraptor Egg",
