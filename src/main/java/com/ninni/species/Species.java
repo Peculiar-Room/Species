@@ -7,6 +7,7 @@ import com.ninni.species.entity.SpeciesEntities;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.events.MiscEvents;
 import com.ninni.species.events.MobEvents;
+import com.ninni.species.init.SpeciesCreativeModeTabs;
 import com.ninni.species.item.SpeciesItems;
 import com.ninni.species.sound.SpeciesSoundEvents;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
@@ -30,6 +31,7 @@ public class Species {
 
 		SpeciesBlocks.BLOCKS.register(modEventBus);
 		SpeciesBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+		SpeciesCreativeModeTabs.CREATIVE_MODE_TABAS.register(modEventBus);
 		SpeciesStatusEffects.MOB_EFFECTS.register(modEventBus);
 		SpeciesEntities.ENTITY_TYPES.register(modEventBus);
 		SpeciesItems.ITEMS.register(modEventBus);
