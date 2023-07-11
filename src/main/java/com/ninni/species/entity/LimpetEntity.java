@@ -64,7 +64,11 @@ public class LimpetEntity extends Monster {
 
     protected LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
-        this.maxUpStep = 1.0F;
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override

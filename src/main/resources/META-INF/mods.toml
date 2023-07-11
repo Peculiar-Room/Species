@@ -3,10 +3,10 @@ loaderVersion="[39,)"
 license="ARR"
 [[mods]]
 modId="species"
-version="1.20-1.2"
+version="1.20.1-1.3"
 displayName="Species"
 logoFile= "species.png"
-authors="Ninni,Noon, Bornulhu, FloofHip, GLaDOS edition"
+authors="Ninni, Noon, Bornulhu, FloofHip, GLaDOS edition"
 description='''
 A mod that adds fictional mobs to the game, with cool and unique functions
 

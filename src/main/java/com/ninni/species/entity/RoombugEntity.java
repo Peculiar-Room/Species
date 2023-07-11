@@ -56,7 +56,11 @@ public class RoombugEntity extends TamableAnimal {
 
     protected RoombugEntity(EntityType<? extends TamableAnimal> entityType, Level world) {
         super(entityType, world);
-        this.maxUpStep = 1;
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override
