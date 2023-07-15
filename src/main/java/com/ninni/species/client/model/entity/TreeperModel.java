@@ -3,10 +3,14 @@ package com.ninni.species.client.model.entity;
 import com.ninni.species.entity.Treeper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
@@ -65,8 +69,25 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
     }
 
     @Override
-    public void setupAnim(T entity, float f, float g, float h, float i, float j) {
+    public void setupAnim(T treeper, float f, float g, float h, float i, float j) {
+        Entity entity = Minecraft.getInstance().getCameraEntity();
+        Vec3 vec3 = (entity).getEyePosition(0.0F);
+        Vec3 vec32 = treeper.getEyePosition(0.0F);
+        float d = (float) (vec3.y - vec32.y);
+        if (d<= 4.5 && d>= -4.5) {
+            this.leftEye.y = -45.75F - d;
+            this.rightEye.y = -47.75F - d;
+        } else {
+            this.leftEye.y = -45.75F;
+            this.rightEye.y = -47.75F;
+        }
 
+        Vec3 vec33 = treeper.getViewVector(0.0F);
+        vec33 = new Vec3(vec33.x, 0.0, vec33.z);
+        Vec3 vec34 = (new Vec3(vec32.x - vec3.x, 0.0, vec32.z - vec3.z)).normalize().yRot(1.5707964F);
+        double e = vec33.dot(vec34);
+        this.leftEye.x = Mth.sqrt((float)Math.abs(e)) * 4.0F * (float)Math.signum(e) + 8.5F;
+        this.rightEye.x = Mth.sqrt((float)Math.abs(e)) * 4.0F * (float)Math.signum(e) - 8.5F;
     }
 
     public static LayerDefinition getLayerDefinition() {
