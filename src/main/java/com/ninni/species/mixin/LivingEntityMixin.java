@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.client.particles.SpeciesParticles;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;

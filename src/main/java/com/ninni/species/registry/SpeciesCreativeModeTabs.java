@@ -1,6 +1,6 @@
-package com.ninni.species;
+package com.ninni.species.registry;
 
-import com.ninni.species.item.SpeciesItems;
+import com.ninni.species.Species;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;

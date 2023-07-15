@@ -1,7 +1,7 @@
 package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.RoombugEntityModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.entity.RoombugEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

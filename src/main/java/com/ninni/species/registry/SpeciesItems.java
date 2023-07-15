@@ -1,9 +1,7 @@
-package com.ninni.species.item;
+package com.ninni.species.registry;
 
-import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.entity.SpeciesEntities;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.item.BirtEggItem;
+import com.ninni.species.item.CrakedWraptorEggItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

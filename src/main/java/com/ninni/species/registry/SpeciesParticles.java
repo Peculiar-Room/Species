@@ -1,4 +1,4 @@
-package com.ninni.species.client.particles;
+package com.ninni.species.registry;
 
 import com.ninni.species.Species;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;

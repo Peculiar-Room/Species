@@ -1,6 +1,6 @@
-package com.ninni.species.entity;
+package com.ninni.species.registry;
 
-import com.ninni.species.tag.SpeciesTags;
+import com.ninni.species.entity.*;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;

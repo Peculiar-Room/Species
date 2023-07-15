@@ -1,10 +1,10 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.goal.WraptorSwoopAtTargetGoal;
-import com.ninni.species.sound.SpeciesSoundEvents;
-import com.ninni.species.tag.SpeciesTags;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

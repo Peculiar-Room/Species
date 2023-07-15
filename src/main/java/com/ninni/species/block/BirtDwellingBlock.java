@@ -1,11 +1,11 @@
 package com.ninni.species.block;
 
 import com.ninni.species.block.entity.BirtDwellingBlockEntity;
-import com.ninni.species.block.entity.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.entity.BirtEntity;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

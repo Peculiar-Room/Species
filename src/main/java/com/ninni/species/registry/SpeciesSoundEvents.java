@@ -1,4 +1,4 @@
-package com.ninni.species.sound;
+package com.ninni.species.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

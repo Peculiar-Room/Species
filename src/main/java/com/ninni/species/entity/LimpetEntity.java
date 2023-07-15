@@ -5,8 +5,8 @@ import com.mojang.serialization.Dynamic;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
-import com.ninni.species.sound.SpeciesSoundEvents;
-import com.ninni.species.tag.SpeciesTags;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -62,7 +62,7 @@ public class LimpetEntity extends Monster {
     private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
 
-    protected LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
+    public LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 

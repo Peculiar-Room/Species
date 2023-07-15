@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
-import static com.ninni.species.item.SpeciesItems.*;
+import static com.ninni.species.registry.SpeciesItems.*;
 
 public class SpeciesCreativeModeTab {
 

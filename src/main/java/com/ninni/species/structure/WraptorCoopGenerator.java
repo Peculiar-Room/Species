@@ -1,7 +1,7 @@
 package com.ninni.species.structure;
 
 import com.ninni.species.Species;
-import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.loot.SpeciesLootTables;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.LimpetEntityModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.LimpetEntity;
 import net.fabricmc.api.EnvType;

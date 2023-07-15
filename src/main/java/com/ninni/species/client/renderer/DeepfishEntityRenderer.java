@@ -3,7 +3,7 @@ package com.ninni.species.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.ninni.species.client.model.entity.DeepfishEntityModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.DeepfishFeatureRenderer;
 import com.ninni.species.entity.DeepfishEntity;
 import net.fabricmc.api.EnvType;

@@ -1,7 +1,7 @@
 package com.ninni.species.world.poi;
 
 import com.google.common.collect.ImmutableSet;
-import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;

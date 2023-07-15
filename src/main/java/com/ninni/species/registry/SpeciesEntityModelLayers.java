@@ -1,5 +1,6 @@
-package com.ninni.species.client.model.entity;
+package com.ninni.species.registry;
 
+import com.ninni.species.client.model.entity.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;

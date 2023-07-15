@@ -1,5 +1,6 @@
-package com.ninni.species.entity.effect;
+package com.ninni.species.registry;
 
+import com.ninni.species.entity.effect.PublicStatusEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

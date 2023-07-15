@@ -1,7 +1,7 @@
 package com.ninni.species.item;
 
 import com.ninni.species.entity.BirtEggEntity;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;

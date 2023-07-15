@@ -1,6 +1,7 @@
-package com.ninni.species.block.entity;
+package com.ninni.species.registry;
 
-import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.block.entity.BirtDwellingBlockEntity;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

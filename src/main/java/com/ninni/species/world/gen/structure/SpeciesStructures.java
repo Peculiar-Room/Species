@@ -1,6 +1,6 @@
 package com.ninni.species.world.gen.structure;
 
-import com.ninni.species.tag.SpeciesTags;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;

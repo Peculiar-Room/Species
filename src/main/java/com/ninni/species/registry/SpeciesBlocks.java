@@ -1,6 +1,7 @@
-package com.ninni.species.block;
+package com.ninni.species.registry;
 
-import com.ninni.species.sound.SpeciesBlockSoundGroup;
+import com.ninni.species.block.BirtDwellingBlock;
+import com.ninni.species.block.WraptorEggBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

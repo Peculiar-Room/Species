@@ -1,18 +1,11 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
-import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.block.entity.SpeciesBlockEntities;
-import com.ninni.species.client.particles.SpeciesParticles;
+import com.ninni.species.registry.*;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.BirtEggEntity;
-import com.ninni.species.entity.SpeciesEntities;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.structure.SpeciesStructureSets;
-import com.ninni.species.tag.SpeciesTags;
 import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
 import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
 import com.ninni.species.world.gen.structure.SpeciesStructureTypes;

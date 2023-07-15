@@ -1,4 +1,4 @@
-package com.ninni.species.sound;
+package com.ninni.species.registry;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.SoundType;

@@ -1,15 +1,14 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesStatusEffects;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
