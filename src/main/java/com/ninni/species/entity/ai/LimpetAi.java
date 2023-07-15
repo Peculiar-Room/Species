@@ -3,7 +3,7 @@ package com.ninni.species.entity.ai;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.entity.Limpet;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
@@ -21,7 +21,7 @@ import net.minecraft.world.entity.schedule.Activity;
 
 public class LimpetAi {
 
-    public static Brain<LimpetEntity> makeBrain(Brain<LimpetEntity> brain) {
+    public static Brain<Limpet> makeBrain(Brain<Limpet> brain) {
         initCoreActivity(brain);
         initIdleActivity(brain);
         initRetreatActivity(brain);
@@ -31,7 +31,7 @@ public class LimpetAi {
         return brain;
     }
 
-    private static void initCoreActivity(Brain<LimpetEntity> brain) {
+    private static void initCoreActivity(Brain<Limpet> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
                 new AnimalPanic(1.4F),
                 new LookAtTargetSink(45, 90),
@@ -39,7 +39,7 @@ public class LimpetAi {
         ));
     }
 
-    private static void initIdleActivity(Brain<LimpetEntity> brain) {
+    private static void initIdleActivity(Brain<Limpet> brain) {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, SetEntityLookTargetSometimes.create(EntityType.PLAYER, 6.0f, UniformInt.of(30, 60))),
                 Pair.of(1, new RunOne<>(ImmutableList.of(
@@ -49,7 +49,7 @@ public class LimpetAi {
                 ))));
     }
 
-    private static void initRetreatActivity(Brain<LimpetEntity> brain) {
+    private static void initRetreatActivity(Brain<Limpet> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(
                 Activity.AVOID,
                 10,
@@ -61,7 +61,7 @@ public class LimpetAi {
         );
     }
 
-    public static void updateActivity(LimpetEntity limpet) {
+    public static void updateActivity(Limpet limpet) {
         limpet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.AVOID, Activity.IDLE));
     }
 

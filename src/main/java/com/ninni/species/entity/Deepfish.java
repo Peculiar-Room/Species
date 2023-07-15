@@ -21,9 +21,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public class DeepfishEntity extends AbstractSchoolingFish {
+public class Deepfish extends AbstractSchoolingFish {
 
-    public DeepfishEntity(EntityType<? extends AbstractSchoolingFish> entityType, Level world) {
+    public Deepfish(EntityType<? extends AbstractSchoolingFish> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
         this.lookControl = new SmoothSwimmingLookControl(this, 10);

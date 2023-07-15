@@ -1,9 +1,9 @@
 package com.ninni.species.block;
 
 import com.ninni.species.block.entity.BirtDwellingBlockEntity;
+import com.ninni.species.entity.Birt;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
-import com.ninni.species.entity.BirtEntity;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -82,10 +82,10 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     }
 
     private void angerNearbyBirts(Level world, BlockPos pos) {
-        List<BirtEntity> birtList = world.getEntitiesOfClass(BirtEntity.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
+        List<Birt> birtList = world.getEntitiesOfClass(Birt.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
         if (!birtList.isEmpty()) {
             List<Player> playerList = world.getEntitiesOfClass(Player.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
-            for (BirtEntity birt : birtList) {
+            for (Birt birt : birtList) {
                 if (birt.getTarget() != null) continue;
                 birt.setTarget(playerList.get(world.random.nextInt(playerList.size())));
             }

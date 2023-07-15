@@ -1,7 +1,7 @@
 package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.ninni.species.entity.DeepfishEntity;
+import com.ninni.species.entity.Deepfish;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
@@ -19,14 +19,14 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class DeepfishEntityModel<T extends DeepfishEntity> extends HierarchicalModel<T> {
+public class DeepfishModel<T extends Deepfish> extends HierarchicalModel<T> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart leftEar;
     private final ModelPart rightEar;
     private final ModelPart tail;
 
-    public DeepfishEntityModel(ModelPart root) {
+    public DeepfishModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);

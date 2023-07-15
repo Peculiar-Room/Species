@@ -2,8 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.DeepfishEntityModel;
-import com.ninni.species.entity.DeepfishEntity;
+import com.ninni.species.client.model.entity.DeepfishModel;
+import com.ninni.species.entity.Deepfish;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EntityModel;
@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 @Environment(value=EnvType.CLIENT)
-public class DeepfishFeatureRenderer<T extends DeepfishEntity, M extends DeepfishEntityModel<T>> extends RenderLayer<T, M> {
+public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final ModelPartVisibility<T, M> modelPartVisibility;
@@ -59,12 +59,12 @@ public class DeepfishFeatureRenderer<T extends DeepfishEntity, M extends Deepfis
     }
 
     @Environment(value= EnvType.CLIENT)
-    public interface AnimationAngleAdjuster<T extends DeepfishEntity> {
+    public interface AnimationAngleAdjuster<T extends Deepfish> {
         float apply(T var1, float var2, float var3);
     }
 
     @Environment(value=EnvType.CLIENT)
-    public interface ModelPartVisibility<T extends DeepfishEntity, M extends EntityModel<T>> {
+    public interface ModelPartVisibility<T extends Deepfish, M extends EntityModel<T>> {
         List<ModelPart> getPartsToDraw(M var1);
     }
 }

@@ -1,6 +1,6 @@
 package com.ninni.species.client.animation;
 
-import com.ninni.species.client.model.entity.BirtEntityModel;
+import com.ninni.species.client.model.entity.BirtModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.animation.AnimationChannel;
@@ -28,7 +28,7 @@ public class BirtAnimations {
                         new Keyframe(0.875f, KeyframeAnimations.degreeVec(5f, 0f, 0f), AnimationChannel.Interpolations.LINEAR),
                         new Keyframe(1f, KeyframeAnimations.degreeVec(0f, 0f, 0f), AnimationChannel.Interpolations.LINEAR))
                 )
-                .addAnimation(BirtEntityModel.ANTENNA, new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                .addAnimation(BirtModel.ANTENNA, new AnimationChannel(AnimationChannel.Targets.ROTATION,
                         new Keyframe(0f, KeyframeAnimations.degreeVec(-47.5f, 0f, 0f), AnimationChannel.Interpolations.LINEAR),
                         new Keyframe(0.125f, KeyframeAnimations.degreeVec(-35f, 0f, 0f), AnimationChannel.Interpolations.LINEAR),
                         new Keyframe(0.25f, KeyframeAnimations.degreeVec(-47.5f, 0f, 0f), AnimationChannel.Interpolations.LINEAR),

@@ -2,7 +2,7 @@ package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.ninni.species.client.animation.BirtAnimations;
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class BirtEntityModel<T extends BirtEntity> extends HierarchicalModel<T> {
+public class BirtModel<T extends Birt> extends HierarchicalModel<T> {
     public static final String ANTENNA = "antenna";
 
     private final ModelPart root;
@@ -32,7 +32,7 @@ public class BirtEntityModel<T extends BirtEntity> extends HierarchicalModel<T> 
     private final ModelPart leftWing;
     private final ModelPart rightWing;
 
-    public BirtEntityModel(ModelPart root) {
+    public BirtModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);

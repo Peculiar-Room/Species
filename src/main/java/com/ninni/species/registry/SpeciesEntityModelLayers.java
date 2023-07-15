@@ -12,11 +12,12 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(EnvType.CLIENT)
 public interface SpeciesEntityModelLayers {
 
-    ModelLayerLocation WRAPTOR = main("wraptor", WraptorEntityModel::getLayerDefinition);
-    ModelLayerLocation DEEPFISH = main("deepfish", DeepfishEntityModel::getLayerDefinition);
-    ModelLayerLocation ROOMBUG = main("roombug", RoombugEntityModel::getLayerDefinition);
-    ModelLayerLocation BIRT = main("birt", BirtEntityModel::getLayerDefinition);
-    ModelLayerLocation LIMPET = main("limpet", LimpetEntityModel::getLayerDefinition);
+    ModelLayerLocation WRAPTOR = main("wraptor", WraptorModel::getLayerDefinition);
+    ModelLayerLocation DEEPFISH = main("deepfish", DeepfishModel::getLayerDefinition);
+    ModelLayerLocation ROOMBUG = main("roombug", RoombugModel::getLayerDefinition);
+    ModelLayerLocation BIRT = main("birt", BirtModel::getLayerDefinition);
+    ModelLayerLocation LIMPET = main("limpet", LimpetModel::getLayerDefinition);
+    ModelLayerLocation TREEPER = main("treeper", TreeperModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

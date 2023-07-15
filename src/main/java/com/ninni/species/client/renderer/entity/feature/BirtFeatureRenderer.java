@@ -2,8 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.BirtEntityModel;
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.client.model.entity.BirtModel;
+import com.ninni.species.entity.Birt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EntityModel;
@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 @Environment(value=EnvType.CLIENT)
-public class BirtFeatureRenderer<T extends BirtEntity, M extends BirtEntityModel<T>> extends RenderLayer<T, M> {
+public class BirtFeatureRenderer<T extends Birt, M extends BirtModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final ModelPartVisibility<T, M> modelPartVisibility;
@@ -59,12 +59,12 @@ public class BirtFeatureRenderer<T extends BirtEntity, M extends BirtEntityModel
     }
 
     @Environment(value= EnvType.CLIENT)
-    public interface AnimationAngleAdjuster<T extends BirtEntity> {
+    public interface AnimationAngleAdjuster<T extends Birt> {
         float apply(T var1, float var2, float var3);
     }
 
     @Environment(value=EnvType.CLIENT)
-    public interface ModelPartVisibility<T extends BirtEntity, M extends EntityModel<T>> {
+    public interface ModelPartVisibility<T extends Birt, M extends EntityModel<T>> {
         List<ModelPart> getPartsToDraw(M var1);
     }
 }

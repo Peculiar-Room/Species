@@ -1,6 +1,6 @@
 package com.ninni.species.item;
 
-import com.ninni.species.entity.BirtEggEntity;
+import com.ninni.species.entity.BirtEgg;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -23,7 +23,7 @@ public class BirtEggItem extends Item {
         user.getCooldowns().addCooldown(this, 20);
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SpeciesSoundEvents.ITEM_BIRT_EGG_THROW, SoundSource.PLAYERS, 0.5f, 0.6f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClientSide) {
-            BirtEggEntity entity = new BirtEggEntity(world, user);
+            BirtEgg entity = new BirtEgg(world, user);
             entity.setItem(itemStack);
             entity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0f, 1f, 1.0f);
             world.addFreshEntity(entity);

@@ -1,6 +1,6 @@
 package com.ninni.species.client.model.entity;
 
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.entity.Limpet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class LimpetEntityModel<T extends LimpetEntity> extends HierarchicalModel<T> {
+public class LimpetModel<T extends Limpet> extends HierarchicalModel<T> {
     public static final String SHELL = "shell";
     public static final String SHELL_TOP = "shell_top";
     public static final String SHELL_BOTTOM = "shell_bottom";
@@ -36,7 +36,7 @@ public class LimpetEntityModel<T extends LimpetEntity> extends HierarchicalModel
     private final ModelPart leftLeg;
     private final ModelPart rightLeg;
 
-    public LimpetEntityModel(ModelPart root) {
+    public LimpetModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);

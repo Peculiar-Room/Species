@@ -54,26 +54,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class LimpetEntity extends Monster {
-    protected static final ImmutableList<SensorType<? extends Sensor<? super LimpetEntity>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
+public class Limpet extends Monster {
+    protected static final ImmutableList<SensorType<? extends Sensor<? super Limpet>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET);
-    private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(LimpetEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
 
-    public LimpetEntity(EntityType<? extends Monster> entityType, Level world) {
+    public Limpet(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected Brain.Provider<LimpetEntity> brainProvider() {
+    protected Brain.Provider<Limpet> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
     @Override
-    public Brain<LimpetEntity> getBrain() {
-        return (Brain<LimpetEntity>) super.getBrain();
+    public Brain<Limpet> getBrain() {
+        return (Brain<Limpet>) super.getBrain();
     }
 
     @Override

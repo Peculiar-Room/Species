@@ -19,17 +19,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class BirtEggEntity extends ThrowableItemProjectile {
+public class BirtEgg extends ThrowableItemProjectile {
 
-    public BirtEggEntity(EntityType<? extends BirtEggEntity> entityType, Level world) {
+    public BirtEgg(EntityType<? extends BirtEgg> entityType, Level world) {
         super(entityType, world);
     }
 
-    public BirtEggEntity(Level world, LivingEntity owner) {
+    public BirtEgg(Level world, LivingEntity owner) {
         super(SpeciesEntities.BIRT_EGG, owner, world);
     }
 
-    public BirtEggEntity(Level world, double x, double y, double z) {
+    public BirtEgg(Level world, double x, double y, double z) {
         super(SpeciesEntities.BIRT_EGG, x, y, z, world);
     }
 
@@ -67,7 +67,7 @@ public class BirtEggEntity extends ThrowableItemProjectile {
                     i = 4;
                 }
                 for (int j = 0; j < i; ++j) {
-                    BirtEntity chick = SpeciesEntities.BIRT.create(this.level());
+                    Birt chick = SpeciesEntities.BIRT.create(this.level());
                     assert chick != null;
                     chick.setAge(-24000);
                     chick.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0f);

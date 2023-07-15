@@ -1,7 +1,7 @@
 package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.ninni.species.entity.WraptorEntity;
+import com.ninni.species.entity.Wraptor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.AgeableListModel;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class WraptorEntityModel<E extends WraptorEntity> extends AgeableListModel<E> {
+public class WraptorModel<E extends Wraptor> extends AgeableListModel<E> {
     public static final String TAIL_BASE = "tail_base";
     public static final String TAIL_TIP = "tail_tip";
     public static final String BODY_FEATHERS = "body_feathers";
@@ -51,7 +51,7 @@ public class WraptorEntityModel<E extends WraptorEntity> extends AgeableListMode
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
 
-    public WraptorEntityModel(ModelPart root) {
+    public WraptorModel(ModelPart root) {
         this.root = root;
 
         this.body             = this.root.getChild(PartNames.BODY);

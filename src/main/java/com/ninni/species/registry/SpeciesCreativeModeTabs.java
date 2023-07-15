@@ -51,6 +51,7 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.DROWNED_SPAWN_EGG, SpeciesItems.DEEPFISH_SPAWN_EGG);
             entries.addAfter(Items.BEE_SPAWN_EGG, SpeciesItems.BIRT_SPAWN_EGG);
             entries.addAfter(Items.RABBIT_SPAWN_EGG, SpeciesItems.ROOMBUG_SPAWN_EGG);
+            entries.addAfter(Items.TRADER_LLAMA_SPAWN_EGG, SpeciesItems.TREEPER_SPAWN_EGG);
         });
     }
 

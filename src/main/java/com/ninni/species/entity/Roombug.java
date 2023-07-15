@@ -50,11 +50,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class RoombugEntity extends TamableAnimal {
+public class Roombug extends TamableAnimal {
     private static final Set<Item> TAMING_INGREDIENTS = Sets.newHashSet(Items.HONEYCOMB);
     int snoringTicks = 0;
 
-    public RoombugEntity(EntityType<? extends TamableAnimal> entityType, Level world) {
+    public Roombug(EntityType<? extends TamableAnimal> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -167,7 +167,7 @@ public class RoombugEntity extends TamableAnimal {
             boolean bl = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
             for (Entity entity : list) {
                 if (entity.hasPassenger(this)) continue;
-                if (bl && this.getPassengers().size() < 1 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player) && !(entity instanceof RoombugEntity)) {
+                if (bl && this.getPassengers().size() < 1 && !entity.isPassenger() && entity.getBbWidth() < this.getBbWidth() && entity instanceof LivingEntity && !(entity instanceof WaterAnimal) && !(entity instanceof Player) && !(entity instanceof Roombug)) {
                     entity.startRiding(this);
                     continue;
                 }
@@ -250,14 +250,14 @@ public class RoombugEntity extends TamableAnimal {
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<RoombugEntity> entitty, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+    public static boolean canSpawn(EntityType<Roombug> entitty, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
     }
 
     static class RoombugLookAtEntityGoal extends LookAtPlayerGoal {
-        private final RoombugEntity bug;
+        private final Roombug bug;
 
-        public RoombugLookAtEntityGoal(RoombugEntity mob, Class<? extends LivingEntity> targetType, float range) {
+        public RoombugLookAtEntityGoal(Roombug mob, Class<? extends LivingEntity> targetType, float range) {
             super(mob, targetType, range);
             this.bug = mob;
         }

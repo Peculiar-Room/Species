@@ -55,7 +55,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
+public class Birt extends Animal implements NeutralMob, FlyingAnimal {
     public final AnimationState flyingAnimationState = new AnimationState();
     public float flapProgress;
     public float maxWingDeviation;
@@ -66,8 +66,8 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     private float flapSpeed = 1.0f;
     public int groundTicks;
     public int messageTicks = 0;
-    private static final EntityDataAccessor<Byte> BIRT_FLAGS = SynchedEntityData.defineId(BirtEntity.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(BirtEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> BIRT_FLAGS = SynchedEntityData.defineId(Birt.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Birt.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
     @Nullable
     private UUID angryAt;
@@ -75,9 +75,9 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     int ticksLeftToFindDwelling;
     @Nullable
     BlockPos dwellingPos;
-    BirtEntity.MoveToDwellingGoal moveToDwellingGoal;
+    Birt.MoveToDwellingGoal moveToDwellingGoal;
 
-    public BirtEntity(EntityType<? extends Animal> entityType, Level world) {
+    public Birt(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new FlyingMoveControl(this, 20, false);
     }
@@ -208,11 +208,11 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
     }
     
     @Nullable
-    public BirtEntity findReciever() {
-        List<? extends BirtEntity> list = this.level().getNearbyEntities(BirtEntity.class, TargetingConditions.DEFAULT, this, this.getBoundingBox().inflate(8.0));
+    public Birt findReciever() {
+        List<? extends Birt> list = this.level().getNearbyEntities(Birt.class, TargetingConditions.DEFAULT, this, this.getBoundingBox().inflate(8.0));
         double d = Double.MAX_VALUE;
-        BirtEntity birt = null;
-        for (BirtEntity birt2 : list) {
+        Birt birt = null;
+        for (Birt birt2 : list) {
             if (!(this.distanceToSqr(birt2) < d)) continue;
             birt = birt2;
             d = this.distanceToSqr(birt2);
@@ -241,7 +241,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         }
     }
 
-    public void sendMessage(ServerLevel world, BirtEntity other) {
+    public void sendMessage(ServerLevel world, Birt other) {
         this.resetMessageTicks();
         other.resetMessageTicks();
 
@@ -436,74 +436,74 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public boolean canUse() {
-            if (BirtEntity.this.groundTicks < 0) return true;
-            else if (BirtEntity.this.isFlying()) return BirtEntity.this.navigation.isDone() && BirtEntity.this.random.nextInt(10) == 0;
+            if (Birt.this.groundTicks < 0) return true;
+            else if (Birt.this.isFlying()) return Birt.this.navigation.isDone() && Birt.this.random.nextInt(10) == 0;
             return false;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return BirtEntity.this.navigation.isInProgress();
+            return Birt.this.navigation.isInProgress();
         }
 
         @Override
         public void start() {
             Vec3 vec3d = this.getRandomLocation();
             if (vec3d != null) {
-                BirtEntity.this.navigation.moveTo(BirtEntity.this.navigation.createPath(new BlockPos((int)vec3d.x, (int)vec3d.y, (int)vec3d.z), 1), 1.0);
+                Birt.this.navigation.moveTo(Birt.this.navigation.createPath(new BlockPos((int)vec3d.x, (int)vec3d.y, (int)vec3d.z), 1), 1.0);
             }
         }
         
         @Nullable
         private Vec3 getRandomLocation() {
             Vec3 vec3d2;
-            assert BirtEntity.this.dwellingPos != null;
-            if (BirtEntity.this.isDwellingValid() && !BirtEntity.this.isWithinDistance(BirtEntity.this.dwellingPos, 22)) {
-                Vec3 vec3d = Vec3.atCenterOf(BirtEntity.this.dwellingPos);
-                vec3d2 = vec3d.subtract(BirtEntity.this.position()).normalize();
+            assert Birt.this.dwellingPos != null;
+            if (Birt.this.isDwellingValid() && !Birt.this.isWithinDistance(Birt.this.dwellingPos, 22)) {
+                Vec3 vec3d = Vec3.atCenterOf(Birt.this.dwellingPos);
+                vec3d2 = vec3d.subtract(Birt.this.position()).normalize();
             } else {
-                vec3d2 = BirtEntity.this.getViewVector(0.0F);
+                vec3d2 = Birt.this.getViewVector(0.0F);
             }
 
-            Vec3 vec3d3 = HoverRandomPos.getPos(BirtEntity.this, 12, 5, vec3d2.x, vec3d2.z, 1.5707964F, 3, 1);
-            return vec3d3 != null ? vec3d3 : AirAndWaterRandomPos.getPos(BirtEntity.this, 12, 2, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
+            Vec3 vec3d3 = HoverRandomPos.getPos(Birt.this, 12, 5, vec3d2.x, vec3d2.z, 1.5707964F, 3, 1);
+            return vec3d3 != null ? vec3d3 : AirAndWaterRandomPos.getPos(Birt.this, 12, 2, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
         }
     }
 
     class BirtLookAroundGoal extends RandomLookAroundGoal {
 
         BirtLookAroundGoal() {
-            super(BirtEntity.this);
+            super(Birt.this);
         }
 
         @Override
         public boolean canUse() {
-            return BirtEntity.this.onGround() && super.canUse();
+            return Birt.this.onGround() && super.canUse();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return BirtEntity.this.onGround() && super.canContinueToUse();
+            return Birt.this.onGround() && super.canContinueToUse();
         }
     }
     
-    class EnterDwellingGoal extends BirtEntity.NotAngryGoal {
+    class EnterDwellingGoal extends Birt.NotAngryGoal {
         EnterDwellingGoal() {
             super();
         }
 
         @Override
         public boolean canBirtStart() {
-            if (BirtEntity.this.hasDwelling() && BirtEntity.this.canEnterDwelling()) {
-                assert BirtEntity.this.dwellingPos != null;
-                if (BirtEntity.this.dwellingPos.closerToCenterThan(BirtEntity.this.position(), 2.0)) {
-                    BlockEntity blockEntity = BirtEntity.this.level().getBlockEntity(BirtEntity.this.dwellingPos);
+            if (Birt.this.hasDwelling() && Birt.this.canEnterDwelling()) {
+                assert Birt.this.dwellingPos != null;
+                if (Birt.this.dwellingPos.closerToCenterThan(Birt.this.position(), 2.0)) {
+                    BlockEntity blockEntity = Birt.this.level().getBlockEntity(Birt.this.dwellingPos);
                     if (blockEntity instanceof BirtDwellingBlockEntity blockEntity1) {
                         if (!blockEntity1.isFullOfBirts()) {
                             return true;
                         }
 
-                        BirtEntity.this.dwellingPos = null;
+                        Birt.this.dwellingPos = null;
                     }
                 }
             }
@@ -518,22 +518,22 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public void start() {
-            BlockEntity blockEntity = BirtEntity.this.level().getBlockEntity(BirtEntity.this.dwellingPos);
+            BlockEntity blockEntity = Birt.this.level().getBlockEntity(Birt.this.dwellingPos);
             if (blockEntity instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
-                birtDwellingBlockEntity.tryEnterDwelling(BirtEntity.this);
+                birtDwellingBlockEntity.tryEnterDwelling(Birt.this);
             }
 
         }
     }
 
-    private class FindDwellingGoal extends BirtEntity.NotAngryGoal {
+    private class FindDwellingGoal extends Birt.NotAngryGoal {
         FindDwellingGoal() {
             super();
         }
 
         @Override
         public boolean canBirtStart() {
-            return BirtEntity.this.ticksLeftToFindDwelling == 0 && !BirtEntity.this.hasDwelling() && BirtEntity.this.canEnterDwelling();
+            return Birt.this.ticksLeftToFindDwelling == 0 && !Birt.this.hasDwelling() && Birt.this.canEnterDwelling();
         }
 
         @Override
@@ -543,7 +543,7 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public void start() {
-            BirtEntity.this.ticksLeftToFindDwelling = 200;
+            Birt.this.ticksLeftToFindDwelling = 200;
             List<BlockPos> list = this.getNearbyFreeDwellings();
             if (!list.isEmpty()) {
                 Iterator<BlockPos> var2 = list.iterator();
@@ -551,28 +551,28 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
                 BlockPos blockPos;
                 do {
                     if (!var2.hasNext()) {
-                        BirtEntity.this.moveToDwellingGoal.clearPossibleDwellings();
-                        BirtEntity.this.dwellingPos = list.get(0);
+                        Birt.this.moveToDwellingGoal.clearPossibleDwellings();
+                        Birt.this.dwellingPos = list.get(0);
                         return;
                     }
 
                     blockPos = var2.next();
-                } while(BirtEntity.this.moveToDwellingGoal.isPossibleDwelling(blockPos));
+                } while(Birt.this.moveToDwellingGoal.isPossibleDwelling(blockPos));
 
-                BirtEntity.this.dwellingPos = blockPos;
+                Birt.this.dwellingPos = blockPos;
             }
         }
 
         private List<BlockPos> getNearbyFreeDwellings() {
-            BlockPos blockPos = BirtEntity.this.blockPosition();
-            PoiManager pointOfInterestStorage = ((ServerLevel)BirtEntity.this.level()).getPoiManager();
+            BlockPos blockPos = Birt.this.blockPosition();
+            PoiManager pointOfInterestStorage = ((ServerLevel) Birt.this.level()).getPoiManager();
             Stream<PoiRecord> stream = pointOfInterestStorage.getInRange((poiType) -> poiType.is(SpeciesTags.BIRT_HOME), blockPos, 20, PoiManager.Occupancy.ANY);
-            return stream.map(PoiRecord::getPos).filter(BirtEntity.this::doesDwellingHaveSpace).sorted(Comparator.comparingDouble((blockPos2) -> blockPos2.distSqr(blockPos))).collect(Collectors.toList());
+            return stream.map(PoiRecord::getPos).filter(Birt.this::doesDwellingHaveSpace).sorted(Comparator.comparingDouble((blockPos2) -> blockPos2.distSqr(blockPos))).collect(Collectors.toList());
         }
     }
 
     @VisibleForDebug
-    public class MoveToDwellingGoal extends BirtEntity.NotAngryGoal {
+    public class MoveToDwellingGoal extends Birt.NotAngryGoal {
         int ticks;
         final List<BlockPos> possibleDwellings;
         @Nullable
@@ -581,14 +581,14 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         MoveToDwellingGoal() {
             super();
-            this.ticks = BirtEntity.this.level().random.nextInt(10);
+            this.ticks = Birt.this.level().random.nextInt(10);
             this.possibleDwellings = Lists.newArrayList();
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
         public boolean canBirtStart() {
-            return BirtEntity.this.dwellingPos != null && !BirtEntity.this.hasRestriction() && BirtEntity.this.canEnterDwelling() && !this.isCloseEnough(BirtEntity.this.dwellingPos) && BirtEntity.this.level().getBlockState(BirtEntity.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING);
+            return Birt.this.dwellingPos != null && !Birt.this.hasRestriction() && Birt.this.canEnterDwelling() && !this.isCloseEnough(Birt.this.dwellingPos) && Birt.this.level().getBlockState(Birt.this.dwellingPos).is(SpeciesBlocks.BIRT_DWELLING);
         }
 
         @Override
@@ -607,35 +607,35 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         public void stop() {
             this.ticks = 0;
             this.ticksUntilLost = 0;
-            BirtEntity.this.navigation.stop();
-            BirtEntity.this.navigation.resetMaxVisitedNodesMultiplier();
+            Birt.this.navigation.stop();
+            Birt.this.navigation.resetMaxVisitedNodesMultiplier();
         }
 
         @Override
         public void tick() {
-            if (BirtEntity.this.dwellingPos != null) {
+            if (Birt.this.dwellingPos != null) {
                 ++this.ticks;
                 if (this.ticks > this.adjustedTickDelay(600)) {
                     this.makeChosenDwellingPossibleDwelling();
-                } else if (!BirtEntity.this.navigation.isInProgress()) {
-                    if (!BirtEntity.this.isWithinDistance(BirtEntity.this.dwellingPos, 16)) {
-                        if (BirtEntity.this.isTooFar(BirtEntity.this.dwellingPos)) {
+                } else if (!Birt.this.navigation.isInProgress()) {
+                    if (!Birt.this.isWithinDistance(Birt.this.dwellingPos, 16)) {
+                        if (Birt.this.isTooFar(Birt.this.dwellingPos)) {
                             this.setLost();
                         } else {
-                            BirtEntity.this.startMovingTo(BirtEntity.this.dwellingPos);
+                            Birt.this.startMovingTo(Birt.this.dwellingPos);
                         }
                     } else {
-                        boolean bl = this.startMovingToFar(BirtEntity.this.dwellingPos);
+                        boolean bl = this.startMovingToFar(Birt.this.dwellingPos);
                         if (!bl) {
                             this.makeChosenDwellingPossibleDwelling();
-                        } else if (this.path != null && Objects.requireNonNull(BirtEntity.this.navigation.getPath()).sameAs(this.path)) {
+                        } else if (this.path != null && Objects.requireNonNull(Birt.this.navigation.getPath()).sameAs(this.path)) {
                             ++this.ticksUntilLost;
                             if (this.ticksUntilLost > 60) {
                                 this.setLost();
                                 this.ticksUntilLost = 0;
                             }
                         } else {
-                            this.path = BirtEntity.this.navigation.getPath();
+                            this.path = Birt.this.navigation.getPath();
                         }
 
                     }
@@ -644,9 +644,9 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         }
 
         private boolean startMovingToFar(BlockPos pos) {
-            BirtEntity.this.navigation.setMaxVisitedNodesMultiplier(10.0F);
-            BirtEntity.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0);
-            return BirtEntity.this.navigation.getPath() != null && BirtEntity.this.navigation.getPath().canReach();
+            Birt.this.navigation.setMaxVisitedNodesMultiplier(10.0F);
+            Birt.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0);
+            return Birt.this.navigation.getPath() != null && Birt.this.navigation.getPath().canReach();
         }
 
         boolean isPossibleDwelling(BlockPos pos) {
@@ -667,23 +667,23 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
         }
 
         private void makeChosenDwellingPossibleDwelling() {
-            if (BirtEntity.this.dwellingPos != null) {
-                this.addPossibleDwelling(BirtEntity.this.dwellingPos);
+            if (Birt.this.dwellingPos != null) {
+                this.addPossibleDwelling(Birt.this.dwellingPos);
             }
 
             this.setLost();
         }
 
         private void setLost() {
-            BirtEntity.this.dwellingPos = null;
-            BirtEntity.this.ticksLeftToFindDwelling = 200;
+            Birt.this.dwellingPos = null;
+            Birt.this.ticksLeftToFindDwelling = 200;
         }
 
         private boolean isCloseEnough(BlockPos pos) {
-            if (BirtEntity.this.isWithinDistance(pos, 2)) {
+            if (Birt.this.isWithinDistance(pos, 2)) {
                 return true;
             } else {
-                Path path = BirtEntity.this.navigation.getPath();
+                Path path = Birt.this.navigation.getPath();
                 return path != null && path.getTarget().equals(pos) && path.canReach() && path.isDone();
             }
         }
@@ -699,12 +699,12 @@ public class BirtEntity extends Animal implements NeutralMob, FlyingAnimal {
 
         @Override
         public boolean canUse() {
-            return this.canBirtStart() && !BirtEntity.this.isAngry();
+            return this.canBirtStart() && !Birt.this.isAngry();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.canBirtContinue() && !BirtEntity.this.isAngry();
+            return this.canBirtContinue() && !Birt.this.isAngry();
         }
     }
     

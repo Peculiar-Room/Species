@@ -2,8 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.LimpetEntityModel;
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.client.model.entity.LimpetModel;
+import com.ninni.species.entity.Limpet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -13,19 +13,19 @@ import net.minecraft.resources.ResourceLocation;
 
 import static com.ninni.species.Species.MOD_ID;
 
-public class LimpetBreakingLayer extends RenderLayer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
-    private final LimpetEntityModel<LimpetEntity> model;
+public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetModel<Limpet>> {
+    private final LimpetModel<Limpet> model;
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/0.png");
     public static final ResourceLocation TEXTURE_1 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/1.png");
     public static final ResourceLocation TEXTURE_2 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/2.png");
 
-    public LimpetBreakingLayer(RenderLayerParent<LimpetEntity, LimpetEntityModel<LimpetEntity>> renderLayerParent, LimpetEntityModel<LimpetEntity> entityModel) {
+    public LimpetBreakingLayer(RenderLayerParent<Limpet, LimpetModel<Limpet>> renderLayerParent, LimpetModel<Limpet> entityModel) {
         super(renderLayerParent);
         this.model = entityModel;
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, LimpetEntity limpet, float f, float g, float h, float j, float k, float l) {
+    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Limpet limpet, float f, float g, float h, float j, float k, float l) {
         if (limpet.getCrackedStage() == 0) return;
         else {
             this.getParentModel().copyPropertiesTo(this.model);
@@ -37,7 +37,7 @@ public class LimpetBreakingLayer extends RenderLayer<LimpetEntity, LimpetEntityM
     }
 
 
-    public ResourceLocation getOverlayTextureLocation(LimpetEntity limpet) {
+    public ResourceLocation getOverlayTextureLocation(Limpet limpet) {
         return switch (limpet.getCrackedStage()) {
             case 2 -> TEXTURE_1;
             case 3 -> TEXTURE_2;

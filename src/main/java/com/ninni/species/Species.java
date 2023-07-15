@@ -3,7 +3,7 @@ package com.ninni.species;
 import com.google.common.reflect.Reflection;
 import com.ninni.species.registry.*;
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.entity.BirtEggEntity;
+import com.ninni.species.entity.BirtEgg;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.structure.SpeciesStructureSets;
 import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
@@ -28,7 +28,6 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
 
-	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public void onInitialize() {
 		SpeciesCriterion.init();
@@ -54,7 +53,7 @@ public class Species implements ModInitializer {
 		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new AbstractProjectileDispenseBehavior() {
 			@Override
 			protected Projectile getProjectile(Level world, Position position, ItemStack stack) {
-				return Util.make(new BirtEggEntity(world, position.x(), position.y(), position.z()), entity -> entity.setItem(stack));
+				return Util.make(new BirtEgg(world, position.x(), position.y(), position.z()), entity -> entity.setItem(stack));
 			}
 		});
 	}

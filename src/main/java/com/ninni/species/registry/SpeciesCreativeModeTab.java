@@ -1,4 +1,4 @@
-package com.ninni.species.item;
+package com.ninni.species.registry;
 
 import com.ninni.species.Species;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -28,6 +28,8 @@ public class SpeciesCreativeModeTab {
                 output.accept(MUSIC_DISC_DIAL);
 
                 output.accept(LIMPET_SPAWN_EGG);
+
+                output.accept(TREEPER_SPAWN_EGG);
             }).build()
     );
 

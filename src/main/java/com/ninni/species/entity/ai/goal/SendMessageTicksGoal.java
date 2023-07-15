@@ -1,12 +1,12 @@
 package com.ninni.species.entity.ai.goal;
 
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class SendMessageTicksGoal extends Goal {
-    private final BirtEntity birt;
+    private final Birt birt;
 
-    public SendMessageTicksGoal(BirtEntity birt) {
+    public SendMessageTicksGoal(Birt birt) {
         this.birt = birt;
     }
 

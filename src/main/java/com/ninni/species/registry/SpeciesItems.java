@@ -38,6 +38,8 @@ public class SpeciesItems {
 
     public static final Item LIMPET_SPAWN_EGG = register("limpet_spawn_egg", new SpawnEggItem(SpeciesEntities.LIMPET, 0xA5C1D2, 0xFBF236, new Item.Properties().stacksTo(64)));
 
+    public static final Item TREEPER_SPAWN_EGG = register("treeper_spawn_egg", new SpawnEggItem(SpeciesEntities.TREEPER, 0x402E1B, 0x32992D, new Item.Properties().stacksTo(64)));
+
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, id), item);
     }

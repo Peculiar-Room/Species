@@ -65,15 +65,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 
-public class WraptorEntity extends Animal implements Enemy, Shearable {
-    public static final EntityDataAccessor<Integer> FEATHER_STAGE = SynchedEntityData.defineId(WraptorEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> IS_BORN_FROM_EGG = SynchedEntityData.defineId(WraptorEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> HAS_EGG = SynchedEntityData.defineId(WraptorEntity.class, EntityDataSerializers.BOOLEAN);
+public class Wraptor extends Animal implements Enemy, Shearable {
+    public static final EntityDataAccessor<Integer> FEATHER_STAGE = SynchedEntityData.defineId(Wraptor.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_BORN_FROM_EGG = SynchedEntityData.defineId(Wraptor.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> HAS_EGG = SynchedEntityData.defineId(Wraptor.class, EntityDataSerializers.BOOLEAN);
     public static final String FEATHER_STAGE_KEY = "FeatherStage";
     public static final String TIME_SINCE_SHEARED_KEY = "TimeSinceSheared";
     private long timeSinceSheared;
 
-    public WraptorEntity(EntityType<? extends Animal> entityType, Level world) {
+    public Wraptor(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.xpReward = 3;
     }
@@ -109,9 +109,9 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, WitherSkeleton.class, false));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new WraptorSwoopAtTargetGoal(this, 0.5F));
-        this.goalSelector.addGoal(2, new WraptorEntity.AttackGoal(1.2, false));
-        this.goalSelector.addGoal(1, new WraptorEntity.MateGoal(this, 1.0D));
-        this.goalSelector.addGoal(1, new WraptorEntity.LayGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new Wraptor.AttackGoal(1.2, false));
+        this.goalSelector.addGoal(1, new Wraptor.MateGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new Wraptor.LayGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.WRAPTOR_BREED_ITEMS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1));
@@ -296,7 +296,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType <WraptorEntity> entity, ServerLevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random){
+    public static boolean canSpawn(EntityType <Wraptor> entity, ServerLevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random){
         return !world.getBlockState(pos.below()).is(Blocks.WARPED_WART_BLOCK);
     }
     @Override
@@ -310,9 +310,9 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     }
 
     static class MateGoal extends BreedGoal {
-        private final WraptorEntity wraptor;
+        private final Wraptor wraptor;
 
-        MateGoal(WraptorEntity wraptor, double speed) {
+        MateGoal(Wraptor wraptor, double speed) {
             super(wraptor, speed);
             this.wraptor = wraptor;
         }
@@ -353,9 +353,9 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
     }
 
     static class LayGoal extends MoveToBlockGoal {
-        private final WraptorEntity wraptor;
+        private final Wraptor wraptor;
 
-        LayGoal(WraptorEntity wraptor, double speed) {
+        LayGoal(Wraptor wraptor, double speed) {
             super(wraptor, speed, 16);
             this.wraptor = wraptor;
         }
@@ -395,7 +395,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
 
     private class AttackGoal extends MeleeAttackGoal {
         public AttackGoal(double speed, boolean pauseWhenIdle) {
-            super(WraptorEntity.this, speed, pauseWhenIdle);
+            super(Wraptor.this, speed, pauseWhenIdle);
         }
 
         @Override
@@ -404,7 +404,7 @@ public class WraptorEntity extends Animal implements Enemy, Shearable {
             if (squaredDistance <= d && this.isTimeToAttack()) {
                 this.resetAttackCooldown();
                 this.mob.doHurtTarget(target);
-                WraptorEntity.this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_ATTACK, 1.0F, 1.0F);
+                Wraptor.this.playSound(SpeciesSoundEvents.ENTITY_WRAPTOR_ATTACK, 1.0F, 1.0F);
             }
         }
 
