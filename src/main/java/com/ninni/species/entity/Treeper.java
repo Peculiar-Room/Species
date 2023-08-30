@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,7 +22,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -146,8 +146,8 @@ public class Treeper extends AgeableMob {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
             if (this.getSaplingCooldown() == 0) {
-                this.spawnAtLocation(Items.SPRUCE_SAPLING, this.random.nextInt(2) + 1);
-                this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 10, 60 * 20 * 15));
+                this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, this.random.nextInt(3) + 1);
+                this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
                 this.setPose(Pose.ROARING);
             }else this.setPose(Pose.SNIFFING);
 

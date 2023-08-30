@@ -26,12 +26,14 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.MUSIC_DISC_DIAL);
         output.accept(SpeciesItems.LIMPET_SPAWN_EGG);
         output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
+        output.accept(SpeciesItems.ANCIENT_PINECONE);
     }).build());
 
     static {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> {
             entries.addAfter(Items.HAY_BLOCK, SpeciesItems.BIRT_DWELLING);
-            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.WRAPTOR_EGG);
+            entries.addAfter(Items.TURTLE_EGG, SpeciesItems.WRAPTOR_EGG);
+            entries.addBefore(Items.WHEAT_SEEDS, SpeciesItems.ANCIENT_PINECONE);
         });
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, SpeciesItems.MUSIC_DISC_DIAL);

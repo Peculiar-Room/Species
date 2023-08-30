@@ -9,12 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.MobBucketItem;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.RecordItem;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.material.Fluids;
 
 import static com.ninni.species.Species.MOD_ID;
@@ -39,6 +34,7 @@ public class SpeciesItems {
     public static final Item LIMPET_SPAWN_EGG = register("limpet_spawn_egg", new SpawnEggItem(SpeciesEntities.LIMPET, 0xA5C1D2, 0xFBF236, new Item.Properties().stacksTo(64)));
 
     public static final Item TREEPER_SPAWN_EGG = register("treeper_spawn_egg", new SpawnEggItem(SpeciesEntities.TREEPER, 0x402E1B, 0x32992D, new Item.Properties().stacksTo(64)));
+    public static final Item ANCIENT_PINECONE = register("ancient_pinecone", new ItemNameBlockItem(SpeciesBlocks.TREEPER_SAPLING, new FabricItemSettings()));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, id), item);

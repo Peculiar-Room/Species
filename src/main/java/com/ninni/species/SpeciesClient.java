@@ -33,7 +33,8 @@ public class SpeciesClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, BirtdParticle.Factory::new);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
-                SpeciesBlocks.BIRT_DWELLING
+                SpeciesBlocks.BIRT_DWELLING,
+                SpeciesBlocks.TREEPER_SAPLING
         );
     }
 }
