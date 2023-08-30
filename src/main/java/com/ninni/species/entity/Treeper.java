@@ -14,6 +14,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -38,6 +39,20 @@ public class Treeper extends AgeableMob {
     public Treeper(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);
         this.setMaxUpStep(1);
+        this.lookControl = new Treeper.TreeperLookControl(this);
+    }
+
+    class TreeperLookControl extends LookControl {
+        TreeperLookControl(Mob mob) {
+            super(mob);
+        }
+
+        @Override
+        public void tick() {
+            if (Treeper.this.getPose() != Pose.DIGGING) {
+                super.tick();
+            }
+        }
     }
 
     @Nullable
@@ -48,7 +63,7 @@ public class Treeper extends AgeableMob {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(0, new TreeperLookGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1));
     }
@@ -72,7 +87,8 @@ public class Treeper extends AgeableMob {
         }
 //I AM USING POSES WHICH IS SHIT BECAUSE THEY ARE FOR ANIMATION AND CLIENT SIDE, WILL SWITCH SOON TO SYNCHED DATA
         if (this.getPose() == Pose.DIGGING) {
-            setPos(Math.floor(position().x) + 0.5F, this.getY(), Math.floor(position().z) + 0.5F);
+            this.yBodyRot = Math.round(this.yBodyRot / 90.0) * 90;
+            this.setPos(Math.floor(position().x) + 0.99F, this.getY(), Math.floor(position().z) + 0.99F);
         }
     }
 
@@ -179,6 +195,27 @@ public class Treeper extends AgeableMob {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Treeper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && world.getRawBrightness(pos, 0) > 8;
+    }
+
+    public static class TreeperLookGoal extends LookAtPlayerGoal {
+        protected final Mob mob;
+
+        public TreeperLookGoal(Mob mob, Class<? extends LivingEntity> class_, float f) {
+            super(mob, class_, f);
+            this.mob = mob;
+        }
+
+        @Override
+        public boolean canUse() {
+            if (this.mob.getPose() == Pose.DIGGING) return false;
+            return super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (this.mob.getPose() == Pose.DIGGING) return false;
+            return super.canContinueToUse();
+        }
     }
 
 }

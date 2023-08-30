@@ -18,7 +18,7 @@ public class TreeperRenderer<T extends LivingEntity> extends MobRenderer<Treeper
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/treeper/treeper.png");
 
     public TreeperRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new TreeperModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.TREEPER)), 3F);
+        super(ctx, new TreeperModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.TREEPER)), 0F);
         this.addLayer(new TreeperFeatureRenderer<>(this));
     }
 
