@@ -94,6 +94,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<TreeperSapling> TREEPER_SAPLING = register(
+            "treeper_sapling",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(TreeperSapling::new)
+                    .defaultAttributes(TreeperSapling::createTreeperAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, TreeperSapling::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.7F, 1.2F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

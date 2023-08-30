@@ -35,6 +35,7 @@ public class SpeciesItems {
 
     public static final Item TREEPER_SPAWN_EGG = register("treeper_spawn_egg", new SpawnEggItem(SpeciesEntities.TREEPER, 0x402E1B, 0x32992D, new Item.Properties().stacksTo(64)));
     public static final Item ANCIENT_PINECONE = register("ancient_pinecone", new ItemNameBlockItem(SpeciesBlocks.TREEPER_SAPLING, new FabricItemSettings()));
+    public static final Item TREEPER_SAPLING_SPAWN_EGG = register("treeper_sapling_spawn_egg", new SpawnEggItem(SpeciesEntities.TREEPER_SAPLING, 0x6f5535, 0x32992D, new Item.Properties().stacksTo(64)));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, id), item);

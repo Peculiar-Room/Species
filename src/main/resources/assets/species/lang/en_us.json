@@ -91,5 +91,6 @@
 
   "item.species.treeper_spawn_egg": "Treeper Spawn Egg",
   "item.species.ancient_pinecone": "Ancient Pinecone",
-  "block.species.treeper_sapling": "Treeper Sapling"
+  "block.species.treeper_sapling": "Treeper Sapling",
+  "item.species.treeper_sapling_spawn_egg": "Treeper Sapling Spawn Egg"
 }

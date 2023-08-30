@@ -1,5 +1,7 @@
 package com.ninni.species.block;
 
+import com.ninni.species.entity.TreeperSapling;
+import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -47,6 +49,16 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
             serverLevel.setBlock(blockPos, blockState2, 2);
             serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
         }
+        if (i == 2) {
+            serverLevel.removeBlock(blockPos, true);
+
+            TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
+            assert sapling != null;
+            sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
+
+            serverLevel.addFreshEntity(sapling);
+        }
+
     }
 
     @Override
@@ -66,7 +78,12 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
         }
         if (blockState.getValue(AGE) == 2) {
             serverLevel.removeBlock(blockPos, true);
-            //TODO make treeper sapling spawn
+
+            TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
+            assert sapling != null;
+            sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
+
+            serverLevel.addFreshEntity(sapling);
         }
     }
 
