@@ -73,7 +73,7 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
     @Override
     public void setupAnim(T treeper, float f, float g, float h, float i, float j) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
-        if (treeper.getPose() != Pose.ROARING && treeper.getPose() != Pose.SNIFFING && treeper.getPose() != Pose.DIGGING) {
+        if (treeper.getPose() != Pose.DIGGING) {
             Entity entity = Minecraft.getInstance().getCameraEntity();
             Vec3 vec3 = (entity).getEyePosition(0.0F);
             Vec3 vec32 = treeper.getEyePosition(0.0F);
@@ -85,18 +85,17 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
                 this.leftEye.y = -45.75F;
                 this.rightEye.y = -47.75F;
             }
-
             Vec3 vec33 = treeper.getViewVector(0.0F);
             vec33 = new Vec3(vec33.x, 0.0, vec33.z);
             Vec3 vec34 = (new Vec3(vec32.x - vec3.x, 0.0, vec32.z - vec3.z)).normalize().yRot(1.5707964F);
             double e = vec33.dot(vec34);
             this.leftEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) + 8.5F;
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
-        } else {
-            this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
-            this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
-            this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
         }
+        this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
+        this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
+
     }
 
     public static LayerDefinition getLayerDefinition() {

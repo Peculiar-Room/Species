@@ -32,24 +32,29 @@ import java.util.Optional;
 
 public class Treeper extends AgeableMob {
     private static final EntityDataAccessor<Integer> SAPLING_COOLDOWN = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> PLANTED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
     public final AnimationState shakingSuccessAnimationState = new AnimationState();
     public final AnimationState shakingFailAnimationState = new AnimationState();
     public final AnimationState plantingAnimationState = new AnimationState();
+    private int successTicks;
+    private int failTicks;
 
     public Treeper(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);
         this.setMaxUpStep(1);
-        this.lookControl = new Treeper.TreeperLookControl(this);
+        this.lookControl = new TreeperLookControl(this);
     }
 
-    class TreeperLookControl extends LookControl {
-        TreeperLookControl(Mob mob) {
+    static class TreeperLookControl extends LookControl {
+        protected final Treeper mob;
+        TreeperLookControl(Treeper mob) {
             super(mob);
+            this.mob = mob;
         }
 
         @Override
         public void tick() {
-            if (Treeper.this.getPose() != Pose.DIGGING) {
+            if (!this.mob.isPlanted()) {
                 super.tick();
             }
         }
@@ -80,13 +85,15 @@ public class Treeper extends AgeableMob {
         super.tick();
         if (this.getSaplingCooldown() > 0) this.setSaplingCooldown(this.getSaplingCooldown() - 1);
 
-        if (this.getPose() != Pose.ROARING && this.getPose() != Pose.SNIFFING) {
-            if (this.level().getDayTime() > 1000 && this.level().getDayTime() < 11000) {
-                this.setPose(Pose.DIGGING);
-            } else this.setPose(Pose.STANDING);
+        if (this.level().getDayTime() > 1000 && this.level().getDayTime() < 11000) {
+            this.setPose(Pose.DIGGING);
+            this.setPlanted(true);
+        } else {
+            this.setPose(Pose.STANDING);
+            this.setPlanted(false);
         }
-//I AM USING POSES WHICH IS SHIT BECAUSE THEY ARE FOR ANIMATION AND CLIENT SIDE, WILL SWITCH SOON TO SYNCHED DATA
-        if (this.getPose() == Pose.DIGGING) {
+
+        if (this.isPlanted()) {
             this.yBodyRot = Math.round(this.yBodyRot / 90.0) * 90;
             this.setPos(Math.floor(position().x) + 0.99F, this.getY(), Math.floor(position().z) + 0.99F);
         }
@@ -95,42 +102,47 @@ public class Treeper extends AgeableMob {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
         if (DATA_POSE.equals(entityDataAccessor)) {
-            Pose entityPose = this.getPose();
-            if (entityPose == Pose.ROARING) {
-                this.shakingFailAnimationState.start(this.age);
-            } else {
-                this.shakingFailAnimationState.stop();
-            }
-            if (entityPose == Pose.SNIFFING) {
-                this.shakingSuccessAnimationState.start(this.age);
-            } else {
-                this.shakingSuccessAnimationState.stop();
-            }
-            if (entityPose == Pose.DIGGING) {
-                this.plantingAnimationState.start(this.age);
-            } else {
-                this.plantingAnimationState.stop();
+            switch (this.getPose()) {
+                case ROARING -> this.shakingSuccessAnimationState.start(this.tickCount);
+                case SNIFFING -> this.shakingFailAnimationState.start(this.tickCount);
+                case DIGGING -> this.plantingAnimationState.start(this.tickCount);
             }
         }
         super.onSyncedDataUpdated(entityDataAccessor);
     }
 
     @Override
+    public void handleEntityEvent(byte b) {
+        if (b == 4) {
+            this.shakingFailAnimationState.start(this.tickCount);
+        } else if (b == 61) {
+            this.shakingSuccessAnimationState.start(this.tickCount);
+        } else if (b == 62) {
+            this.plantingAnimationState.start(this.tickCount);
+        } else {
+            super.handleEntityEvent(b);
+        }
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SAPLING_COOLDOWN, 0);
+        this.entityData.define(PLANTED, false);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putInt("saplingCooldown", this.getSaplingCooldown());
+        compoundTag.putBoolean("planted", this.isPlanted());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.setSaplingCooldown(compoundTag.getInt("saplingCooldown"));
+        this.setPlanted(compoundTag.getBoolean("planted"));
     }
 
     public Optional<ItemStack> getStackInHand(Player player) {
@@ -139,12 +151,13 @@ public class Treeper extends AgeableMob {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof Player player && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem) {
+        if (source.getEntity() instanceof Player player && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
             if (this.random.nextInt(10) == 0 && this.getSaplingCooldown() == 0) {
                 this.spawnAtLocation(Items.SPRUCE_SAPLING, this.random.nextInt(2) + 1);
                 this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 10, 60 * 20 * 15));
-                this.setPose(Pose.SNIFFING);
-            } else this.setPose(Pose.ROARING);
+                this.setPose(Pose.ROARING);
+            }else this.setPose(Pose.SNIFFING);
+
         }
 
         return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.isCreativePlayer()) && super.hurt(source, amount);
@@ -157,7 +170,7 @@ public class Treeper extends AgeableMob {
 
     @Override
     public void travel(Vec3 movementInput) {
-        if (this.getPose() == Pose.DIGGING) {
+        if (this.isPlanted()) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0.0, 1.0, 0.0));
             movementInput = movementInput.multiply(0.0, 1.0, 0.0);
         }
@@ -192,28 +205,36 @@ public class Treeper extends AgeableMob {
         this.entityData.set(SAPLING_COOLDOWN, saplingCooldown);
     }
 
+    public boolean isPlanted() {
+        return this.entityData.get(PLANTED);
+    }
+
+    public void setPlanted(boolean planted) {
+        this.entityData.set(PLANTED, planted);
+    }
+
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Treeper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && world.getRawBrightness(pos, 0) > 8;
     }
 
     public static class TreeperLookGoal extends LookAtPlayerGoal {
-        protected final Mob mob;
+        protected final Treeper mob;
 
-        public TreeperLookGoal(Mob mob, Class<? extends LivingEntity> class_, float f) {
+        public TreeperLookGoal(Treeper mob, Class<? extends LivingEntity> class_, float f) {
             super(mob, class_, f);
             this.mob = mob;
         }
 
         @Override
         public boolean canUse() {
-            if (this.mob.getPose() == Pose.DIGGING) return false;
+            if (this.mob.isPlanted()) return false;
             return super.canUse();
         }
 
         @Override
         public boolean canContinueToUse() {
-            if (this.mob.getPose() == Pose.DIGGING) return false;
+            if (this.mob.isPlanted()) return false;
             return super.canContinueToUse();
         }
     }
