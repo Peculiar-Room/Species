@@ -87,5 +87,7 @@
   "subtitles.entity.species.limpet.deflect": "Limpet deflects",
 
   "advancements.species.silk_touch_break_limpet.title": "The Conchequences of Hiding",
-  "advancements.species.silk_touch_break_limpet.description": "Break the Shell of a Limpet using Silk Touch"
+  "advancements.species.silk_touch_break_limpet.description": "Break the Shell of a Limpet using Silk Touch",
+
+  "item.species.treeper_spawn_egg": "Treeper Spawn Egg"
 }

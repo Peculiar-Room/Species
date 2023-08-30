@@ -25,6 +25,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.BIRT_DWELLING);
         output.accept(SpeciesItems.MUSIC_DISC_DIAL);
         output.accept(SpeciesItems.LIMPET_SPAWN_EGG);
+        output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
     }).build());
 
     static {
