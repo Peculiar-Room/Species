@@ -176,7 +176,7 @@ public class TreeperSapling extends TamableAnimal {
     }
 
     private boolean isValidTarget(LivingEntity mob) {
-        return mob.isAlive() && !mob.is(this);
+        return mob.isAlive() && !(mob instanceof TreeperSapling);
     }
 
     private void spawnLingeringCloud() {
