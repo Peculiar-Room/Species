@@ -1,13 +1,13 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -208,7 +208,7 @@ public class Treeper extends AgeableMob {
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Treeper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && world.getRawBrightness(pos, 0) > 8;
+        return world.getBlockState(pos.below()).is(SpeciesTags.TREEPER_SPAWNABLE_ON);
     }
 
     public static class TreeperLookGoal extends LookAtPlayerGoal {
