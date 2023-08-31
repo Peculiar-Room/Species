@@ -153,7 +153,7 @@ public class Treeper extends AgeableMob {
 
         }
 
-        return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.isCreativePlayer()) && super.hurt(source, amount);
+        return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) && super.hurt(source, amount);
     }
 
     @Override
