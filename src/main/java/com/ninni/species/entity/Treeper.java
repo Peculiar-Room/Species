@@ -144,7 +144,9 @@ public class Treeper extends AgeableMob {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
             if (this.getSaplingCooldown() == 0) {
-                this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, this.random.nextInt(3) + 1);
+                this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                 this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
                 this.setPose(Pose.ROARING);
             }else this.setPose(Pose.SNIFFING);
