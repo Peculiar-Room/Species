@@ -21,6 +21,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Objects;
+
 @SuppressWarnings("deprecation")
 public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
@@ -58,9 +60,8 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
         TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
         assert sapling != null;
         sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
-        if (serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false) != null) {
-            sapling.setOwnerUUID(serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false).getUUID());
-        }
+        sapling.setOwnerUUID(Objects.requireNonNull(serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false)).getUUID());
+        sapling.setTame(true);
 
         serverLevel.addFreshEntity(sapling);
     }

@@ -64,15 +64,15 @@ public class TreeperSapling extends TamableAnimal {
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
 
-        this.targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
     }
 
     public static AttributeSupplier.Builder createTreeperAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
+                .add(Attributes.MOVEMENT_SPEED, 0.35);
     }
 
     @Override
@@ -169,9 +169,14 @@ public class TreeperSapling extends TamableAnimal {
         if (!this.level().isClientSide) {
             this.dead = true;
             this.level().explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, Level.ExplosionInteraction.MOB);
+            this.level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(3), this::isValidTarget).forEach(livingEntity -> livingEntity.hurt(this.level().damageSources().mobAttack(this), 30));
             this.discard();
             this.spawnLingeringCloud();
         }
+    }
+
+    private boolean isValidTarget(LivingEntity mob) {
+        return mob.isAlive() && !mob.is(this);
     }
 
     private void spawnLingeringCloud() {

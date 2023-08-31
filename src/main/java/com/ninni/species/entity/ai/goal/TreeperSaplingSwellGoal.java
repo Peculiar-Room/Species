@@ -8,25 +8,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class TreeperSaplingSwellGoal extends Goal {
-    private final TreeperSapling creeper;
+    private final TreeperSapling treeperSapling;
     @Nullable
     private LivingEntity target;
 
-    public TreeperSaplingSwellGoal(TreeperSapling creeper) {
-        this.creeper = creeper;
+    public TreeperSaplingSwellGoal(TreeperSapling treeperSapling) {
+        this.treeperSapling = treeperSapling;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
     public boolean canUse() {
-        LivingEntity livingEntity = this.creeper.getTarget();
-        return this.creeper.getSwellDir() > 0 || livingEntity != null && this.creeper.distanceToSqr(livingEntity) < 9.0;
+        LivingEntity livingEntity = this.treeperSapling.getTarget();
+        return this.treeperSapling.getSwellDir() > 0 || livingEntity != null && this.treeperSapling.distanceToSqr(livingEntity) < 2.0;
     }
 
     @Override
     public void start() {
-        this.creeper.getNavigation().stop();
-        this.target = this.creeper.getTarget();
+        this.treeperSapling.getNavigation().stop();
+        this.target = this.treeperSapling.getTarget();
     }
 
     @Override
@@ -42,18 +42,18 @@ public class TreeperSaplingSwellGoal extends Goal {
     @Override
     public void tick() {
         if (this.target == null) {
-            this.creeper.setSwellDir(-1);
+            this.treeperSapling.setSwellDir(-1);
             return;
         }
-        if (this.creeper.distanceToSqr(this.target) > 49.0) {
-            this.creeper.setSwellDir(-1);
+        if (this.treeperSapling.distanceToSqr(this.target) > 49.0) {
+            this.treeperSapling.setSwellDir(-1);
             return;
         }
-        if (!this.creeper.getSensing().hasLineOfSight(this.target)) {
-            this.creeper.setSwellDir(-1);
+        if (!this.treeperSapling.getSensing().hasLineOfSight(this.target)) {
+            this.treeperSapling.setSwellDir(-1);
             return;
         }
-        this.creeper.setSwellDir(1);
+        this.treeperSapling.setSwellDir(1);
     }
 }
 
