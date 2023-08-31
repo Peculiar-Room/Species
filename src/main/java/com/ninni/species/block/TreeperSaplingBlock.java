@@ -49,16 +49,20 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
             serverLevel.setBlock(blockPos, blockState2, 2);
             serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
         }
-        if (i == 2) {
-            serverLevel.removeBlock(blockPos, true);
+        if (i == 2) this.spawnSapling(serverLevel, blockPos);
+    }
 
-            TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
-            assert sapling != null;
-            sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
+    public void spawnSapling(ServerLevel serverLevel, BlockPos blockPos) {
+        serverLevel.removeBlock(blockPos, true);
 
-            serverLevel.addFreshEntity(sapling);
+        TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
+        assert sapling != null;
+        sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
+        if (serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false) != null) {
+            sapling.setOwnerUUID(serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false).getUUID());
         }
 
+        serverLevel.addFreshEntity(sapling);
     }
 
     @Override
@@ -76,15 +80,7 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
         if (blockState.getValue(AGE) < 2) {
             serverLevel.setBlock(blockPos, blockState.setValue(AGE, blockState.getValue(AGE) + 1), 2);
         }
-        if (blockState.getValue(AGE) == 2) {
-            serverLevel.removeBlock(blockPos, true);
-
-            TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
-            assert sapling != null;
-            sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
-
-            serverLevel.addFreshEntity(sapling);
-        }
+        if (blockState.getValue(AGE) == 2) this.spawnSapling(serverLevel, blockPos);
     }
 
     @Override

@@ -89,8 +89,10 @@
   "advancements.species.silk_touch_break_limpet.title": "The Conchequences of Hiding",
   "advancements.species.silk_touch_break_limpet.description": "Break the Shell of a Limpet using Silk Touch",
 
+  "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Treeper Spawn Egg",
   "item.species.ancient_pinecone": "Ancient Pinecone",
   "block.species.treeper_sapling": "Treeper Sapling",
+  "entity.species.treeper_sapling": "Treeper Sapling",
   "item.species.treeper_sapling_spawn_egg": "Treeper Sapling Spawn Egg"
 }

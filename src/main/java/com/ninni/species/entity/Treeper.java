@@ -36,8 +36,6 @@ public class Treeper extends AgeableMob {
     public final AnimationState shakingSuccessAnimationState = new AnimationState();
     public final AnimationState shakingFailAnimationState = new AnimationState();
     public final AnimationState plantingAnimationState = new AnimationState();
-    private int successTicks;
-    private int failTicks;
 
     public Treeper(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);

@@ -89,8 +89,10 @@
   "advancements.species.silk_touch_break_limpet.title": "Guscio di velluto",
   "advancements.species.silk_touch_break_limpet.description": "Rompi il guscio di un limpet con tocco di velluto",
 
+  "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Uovo generatore di Treeper",
   "item.species.ancient_pinecone": "Pigna Antica",
   "block.species.treeper_sapling": "Arboscello di Treeper",
+  "entity.species.treeper_sapling": "Arboscello di Treeper",
   "item.species.treeper_sapling_spawn_egg": "Uovo generatore di Arboscello di Treeper"
 }
