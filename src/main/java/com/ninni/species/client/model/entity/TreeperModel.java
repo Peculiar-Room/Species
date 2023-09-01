@@ -2,6 +2,7 @@ package com.ninni.species.client.model.entity;
 
 import com.ninni.species.client.animation.TreeperAnimations;
 import com.ninni.species.entity.Treeper;
+import com.ninni.species.entity.pose.SpeciesPose;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -73,7 +74,7 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
     @Override
     public void setupAnim(T treeper, float f, float g, float h, float i, float j) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
-        if (treeper.getPose() != Pose.DIGGING) {
+        if (treeper.getPose() != SpeciesPose.PLANTING.get()) {
             Entity entity = Minecraft.getInstance().getCameraEntity();
             Vec3 vec3 = (entity).getEyePosition(0.0F);
             Vec3 vec32 = treeper.getEyePosition(0.0F);
@@ -92,7 +93,7 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
             this.leftEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) + 8.5F;
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
         }
-        if (treeper.getPose() != Pose.STANDING && treeper.getPose() != Pose.SNIFFING && treeper.getPose() != Pose.ROARING) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        if (treeper.getPose() != Pose.STANDING && treeper.getPose() != SpeciesPose.SHAKE_FAIL.get() && treeper.getPose() != SpeciesPose.SHAKE_SUCCESS.get()) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
         this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
         this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
 

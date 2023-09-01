@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
@@ -84,7 +85,7 @@ public class Treeper extends AgeableMob {
         if (this.getSaplingCooldown() > 0) this.setSaplingCooldown(this.getSaplingCooldown() - 1);
 
         if (this.level().getDayTime() > 1000 && this.level().getDayTime() < 13000) {
-            this.setPose(Pose.DIGGING);
+            this.setPose(SpeciesPose.PLANTING.get());
             this.setPlanted(true);
         } else {
             this.setPose(Pose.STANDING);
@@ -100,11 +101,9 @@ public class Treeper extends AgeableMob {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
         if (DATA_POSE.equals(entityDataAccessor)) {
-            switch (this.getPose()) {
-                case ROARING -> this.shakingSuccessAnimationState.start(this.tickCount);
-                case SNIFFING -> this.shakingFailAnimationState.start(this.tickCount);
-                case DIGGING -> this.plantingAnimationState.start(this.tickCount);
-            }
+            if (this.getPose() == SpeciesPose.PLANTING.get()) this.plantingAnimationState.start(this.tickCount);
+            if (this.getPose() == SpeciesPose.SHAKE_SUCCESS.get()) this.shakingSuccessAnimationState.start(this.tickCount);
+            if (this.getPose() == SpeciesPose.SHAKE_FAIL.get()) this.shakingFailAnimationState.start(this.tickCount);
         }
         super.onSyncedDataUpdated(entityDataAccessor);
     }
@@ -148,8 +147,8 @@ public class Treeper extends AgeableMob {
                 if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                 if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                 this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
-                this.setPose(Pose.ROARING);
-            }else this.setPose(Pose.SNIFFING);
+                this.setPose(SpeciesPose.SHAKE_SUCCESS.get());
+            }else this.setPose(SpeciesPose.SHAKE_FAIL.get());
 
         }
 
