@@ -105,6 +105,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Goober> GOOBER = register(
+            "goober",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Goober::new)
+                    .defaultAttributes(Goober::createGooberAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Goober::canSpawn)
+                    .dimensions(EntityDimensions.scalable(1.5F, 2.5F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

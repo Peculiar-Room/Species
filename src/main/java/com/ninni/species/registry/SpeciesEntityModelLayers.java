@@ -19,6 +19,7 @@ public interface SpeciesEntityModelLayers {
     ModelLayerLocation LIMPET = main("limpet", LimpetModel::getLayerDefinition);
     ModelLayerLocation TREEPER = main("treeper", TreeperModel::getLayerDefinition);
     ModelLayerLocation TREEPER_SAPLING = main("treeper_sapling", TreeperSaplingModel::getLayerDefinition);
+    ModelLayerLocation GOOBER = main("goober", GooberModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

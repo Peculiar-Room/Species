@@ -367,5 +367,82 @@
 			"species:entity/limpet/deflect3"
 		],
 		"subtitle": "subtitles.entity.species.limpet.deflect"
+	},
+	"entity.goober.death": {
+		"sounds": [
+			"species:entity/goober/death"
+		],
+		"subtitle": "subtitles.entity.species.goober.death"
+	},
+	"entity.goober.hurt": {
+		"sounds": [
+			"species:entity/goober/hurt1",
+			"species:entity/goober/hurt2",
+			"species:entity/goober/hurt3"
+		],
+		"subtitle": "subtitles.entity.species.goober.hurt"
+	},
+	"entity.goober.idle": {
+		"sounds": [
+			"species:entity/goober/idle1",
+			"species:entity/goober/idle2",
+			"species:entity/goober/idle3",
+			"species:entity/goober/idle4",
+			"species:entity/goober/idle5",
+			"species:entity/goober/idle6",
+			"species:entity/goober/sneeze1",
+			"species:entity/goober/sneeze2",
+			"species:entity/goober/sneeze3",
+			"species:entity/goober/sneeze4"
+		],
+		"subtitle": "subtitles.entity.species.goober.idle"
+	},
+	"entity.goober.idle_resting": {
+		"sounds": [
+			"species:entity/goober/idle_resting1",
+			"species:entity/goober/idle_resting2",
+			"species:entity/goober/idle_resting3",
+			"species:entity/goober/idle_resting4",
+			"species:entity/goober/idle_resting5",
+			"species:entity/goober/sneeze1",
+			"species:entity/goober/sneeze2",
+			"species:entity/goober/sneeze3",
+			"species:entity/goober/sneeze4"
+		],
+		"subtitle": "subtitles.entity.species.goober.idle_resting"
+	},
+	"entity.goober.lay_down": {
+		"sounds": [
+			"species:entity/goober/lay_down1",
+			"species:entity/goober/lay_down2"
+		],
+		"subtitle": "subtitles.entity.species.goober.lay_down"
+	},
+	"entity.goober.rear_up": {
+		"sounds": [
+			"species:entity/goober/rear_up"
+		],
+		"subtitle": "subtitles.entity.species.goober.rear_up"
+	},
+	"entity.goober.step": {
+		"sounds": [
+			"species:entity/goober/step1",
+			"species:entity/goober/step2",
+			"species:entity/goober/step3",
+			"species:entity/goober/step4",
+			"species:entity/goober/step5",
+			"species:entity/goober/step6"
+		],
+		"subtitle": "subtitles.entity.species.goober.step"
+	},
+	"entity.goober.yawn": {
+		"sounds": [
+			"species:entity/goober/yawn1",
+			"species:entity/goober/yawn2",
+			"species:entity/goober/yawn3",
+			"species:entity/goober/yawn4",
+			"species:entity/goober/yawn5"
+		],
+		"subtitle": "subtitles.entity.species.goober.yawn"
 	}
 }

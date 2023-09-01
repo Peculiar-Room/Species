@@ -92,7 +92,7 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
             this.leftEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) + 8.5F;
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
         }
-        if (treeper.getPose() != Pose.STANDING) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        if (treeper.getPose() != Pose.STANDING && treeper.getPose() != Pose.SNIFFING && treeper.getPose() != Pose.ROARING) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
         this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
         this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
 

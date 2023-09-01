@@ -28,6 +28,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
         output.accept(SpeciesItems.ANCIENT_PINECONE);
         output.accept(SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
+        output.accept(SpeciesItems.GOOBER_SPAWN_EGG);
     }).build());
 
     static {
@@ -56,6 +57,7 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.BEE_SPAWN_EGG, SpeciesItems.BIRT_SPAWN_EGG);
             entries.addAfter(Items.RABBIT_SPAWN_EGG, SpeciesItems.ROOMBUG_SPAWN_EGG);
             entries.addAfter(Items.TRADER_LLAMA_SPAWN_EGG, SpeciesItems.TREEPER_SPAWN_EGG, SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
+            entries.addAfter(Items.GOAT_SPAWN_EGG, SpeciesItems.GOOBER_SPAWN_EGG);
         });
     }
 

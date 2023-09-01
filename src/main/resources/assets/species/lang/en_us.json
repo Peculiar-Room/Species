@@ -94,5 +94,16 @@
   "item.species.ancient_pinecone": "Ancient Pinecone",
   "block.species.treeper_sapling": "Treeper Sapling",
   "entity.species.treeper_sapling": "Treeper Sapling",
-  "item.species.treeper_sapling_spawn_egg": "Treeper Sapling Spawn Egg"
+  "item.species.treeper_sapling_spawn_egg": "Treeper Sapling Spawn Egg",
+
+  "entity.species.goober": "Goober",
+  "item.species.goober_spawn_egg": "Goober Spawn Egg",
+  "subtitles.entity.species.goober.death": "Goober dies",
+  "subtitles.entity.species.goober.hurt": "Goober hurts",
+  "subtitles.entity.species.goober.idle": "Goober grunts",
+  "subtitles.entity.species.goober.idle_resting": "Goober groans tiredly",
+  "subtitles.entity.species.goober.lay_down": "Goober rests",
+  "subtitles.entity.species.goober.rear_up": "Goober rears up",
+  "subtitles.entity.species.goober.step": "Goober steps",
+  "subtitles.entity.species.goober.yawn": "Goober yawns"
 }
