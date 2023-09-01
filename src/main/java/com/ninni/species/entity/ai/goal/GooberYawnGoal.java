@@ -40,6 +40,7 @@ public class GooberYawnGoal extends Goal {
     @Override
     public void stop() {
         goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40 * 20));
+        time = 40;
         if (goober.isGooberLayingDown()) goober.setPose(SpeciesPose.LAYING_DOWN.get());
         else goober.setPose(Pose.STANDING);
     }

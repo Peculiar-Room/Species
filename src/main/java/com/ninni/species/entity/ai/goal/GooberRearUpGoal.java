@@ -41,5 +41,6 @@ public class GooberRearUpGoal extends Goal {
         goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40 * 20));
 
         goober.setPose(Pose.STANDING);
+        time = 80;
     }
 }
