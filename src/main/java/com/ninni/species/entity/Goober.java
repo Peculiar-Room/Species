@@ -46,6 +46,8 @@ public class Goober extends Animal {
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
     private int idleAnimationTimeout = 0;
 
+
+    //The only behavior that works repeatadly is the lay down one, the rest only work one time. also i want the laying down to be more rare but last a lot more
     public Goober(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new GooberMoveControl();
@@ -154,7 +156,7 @@ public class Goober extends Animal {
     }
 
     public boolean refuseToMove() {
-        return this.isGooberLayingDown() || this.isInPoseTransition();
+        return this.isGooberLayingDown() || this.isInPoseTransition() || this.getPose() == SpeciesPose.REARING_UP.get();
     }
 
     @Override
@@ -241,6 +243,7 @@ public class Goober extends Animal {
     public long getPoseTime() {
         return (this.level()).getGameTime() - Math.abs(this.entityData.get(LAST_POSE_CHANGE_TICK));
     }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -279,7 +282,7 @@ public class Goober extends Animal {
 
         @Override
         public void tick() {
-            if (!this.mob.isGooberLayingDown()) super.tick();
+            if (!mob.refuseToMove()) super.tick();
 
         }
     }
@@ -292,10 +295,12 @@ public class Goober extends Animal {
 
         @Override
         public void tick() {
-            if (this.operation == MoveControl.Operation.MOVE_TO && !Goober.this.isLeashed() && Goober.this.isGooberLayingDown() && !Goober.this.isInPoseTransition()) {
-                Goober.this.standUp();
+            if (!Goober.this.refuseToMove()) {
+                if (this.operation == MoveControl.Operation.MOVE_TO && !Goober.this.isLeashed() && Goober.this.isGooberLayingDown() && !Goober.this.isInPoseTransition()) {
+                    Goober.this.standUp();
+                }
+                super.tick();
             }
-            super.tick();
         }
     }
 
