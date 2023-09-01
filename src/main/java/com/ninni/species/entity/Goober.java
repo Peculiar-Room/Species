@@ -47,7 +47,9 @@ public class Goober extends Animal {
     private int idleAnimationTimeout = 0;
 
 
-    //The only behavior that works repeatadly is the lay down one, the rest only work one time. also i want the laying down to be more rare but last a lot more
+    //TODO
+    // they play yawn and rear up sounds when they change pose for some reason
+    // The only behavior that works repeatadly is the lay down one, the rest only work one time. also i want the laying down to be more rare but last a lot more
     public Goober(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new GooberMoveControl();
@@ -210,7 +212,7 @@ public class Goober extends Animal {
 
     public void layDown() {
         if (this.isGooberLayingDown()) return;
-        this.setActionCooldown(2 * 20 + this.random.nextInt(40));
+        this.setActionCooldown(2 * 20 + this.random.nextInt(40 * 20));
         this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_LAY_DOWN, 1.0f, 1.0f);
         this.setPose(SpeciesPose.LAYING_DOWN.get());
         this.resetLastPoseChangeTick(-(this.level()).getGameTime());
@@ -220,14 +222,14 @@ public class Goober extends Animal {
         if (!this.isGooberLayingDown()) {
             return;
         }
-        this.setActionCooldown(2 * 20 + this.random.nextInt(40));
+        this.setActionCooldown(2 * 20 + this.random.nextInt(40 * 20));
         this.setPose(Pose.STANDING);
         this.resetLastPoseChangeTick((this.level()).getGameTime());
     }
 
     public void standUpInstantly() {
         this.setPose(Pose.STANDING);
-        this.setActionCooldown(2 * 40 + this.random.nextInt(40));
+        this.setActionCooldown(2 * 40 + this.random.nextInt(40 * 20));
         this.resetLastPoseChangeTickToFullStand((this.level()).getGameTime());
     }
 

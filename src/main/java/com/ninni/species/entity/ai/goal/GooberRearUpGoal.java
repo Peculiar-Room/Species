@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 public class GooberRearUpGoal extends Goal {
     protected final Goober goober;
-    private int time = 8;
+    private int time = 80;
 
     public GooberRearUpGoal(Goober goober) {
         this.goober = goober;
@@ -38,7 +38,7 @@ public class GooberRearUpGoal extends Goal {
 
     @Override
     public void stop() {
-        goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40));
+        goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40 * 20));
 
         goober.setPose(Pose.STANDING);
     }

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 public class GooberYawnGoal extends Goal {
     protected final Goober goober;
-    private int time = 4;
+    private int time = 40;
 
     public GooberYawnGoal(Goober goober) {
         this.goober = goober;
@@ -39,7 +39,7 @@ public class GooberYawnGoal extends Goal {
 
     @Override
     public void stop() {
-        goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40));
+        goober.setActionCooldown(2 * 20 + goober.getRandom().nextInt(40 * 20));
         if (goober.isGooberLayingDown()) goober.setPose(SpeciesPose.LAYING_DOWN.get());
         else goober.setPose(Pose.STANDING);
     }
