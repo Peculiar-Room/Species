@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.PartNames;
 @Environment(EnvType.CLIENT)
 public class GooberAnimations {
         
-        public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(4f).looping()
+        public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(4.0f).looping()
                 .addAnimation(PartNames.BODY,
                         new AnimationChannel(AnimationChannel.Targets.POSITION,
                                 new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),

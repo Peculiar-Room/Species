@@ -17,6 +17,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
+import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -44,7 +45,8 @@ public class Goober extends Animal {
 
     public Goober(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new Goober.GooberMoveControl();
+        this.moveControl = new GooberMoveControl();
+        this.lookControl = new GooberLookControl(this);
         this.setMaxUpStep(1);
     }
 
@@ -56,10 +58,10 @@ public class Goober extends Animal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new GooberLayDownGoal(this));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(8, new GooberLayDownGoal(this));
 
     }
 
@@ -83,7 +85,7 @@ public class Goober extends Animal {
 
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
+            this.idleAnimationTimeout = 80;
             this.idleAnimationState.start(this.tickCount);
         } else {
             --this.idleAnimationTimeout;
@@ -91,11 +93,13 @@ public class Goober extends Animal {
         if (this.isGooberVisuallyLayingDown()) {
             this.standUpAnimationState.stop();
             this.yawnAnimationState.stop();
+            this.rearUpAnimationState.stop();
             if (this.isVisuallyLayingDown()) {
                 this.layDownAnimationState.startIfStopped(this.tickCount);
                 this.layDownIdleAnimationState.stop();
             } else {
                 this.layDownAnimationState.stop();
+                //TODO fix animation not looping correctly
                 this.layDownIdleAnimationState.startIfStopped(this.tickCount);
             }
         } else {
@@ -237,6 +241,20 @@ public class Goober extends Animal {
         return null;
     }
 
+    static class GooberLookControl extends LookControl {
+        protected final Goober mob;
+        GooberLookControl(Goober mob) {
+            super(mob);
+            this.mob = mob;
+        }
+
+        @Override
+        public void tick() {
+            if (!this.mob.isGooberLayingDown()) super.tick();
+
+        }
+    }
+
     class GooberMoveControl
             extends MoveControl {
         public GooberMoveControl() {
@@ -260,9 +278,7 @@ public class Goober extends Animal {
 
         @Override
         public void clientTick() {
-            if (!Goober.this.refuseToMove()) {
-                super.clientTick();
-            }
+            if (!Goober.this.refuseToMove()) super.clientTick();
         }
     }
 

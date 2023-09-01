@@ -20,7 +20,7 @@ public class GooberLayDownGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return !goober.isInWater() && !goober.isLeashed() && goober.onGround();
+        return !goober.isInWater() && goober.getPoseTime() >= (long)this.minimalPoseTicks && !goober.isLeashed() && goober.onGround();
     }
 
     @Override
