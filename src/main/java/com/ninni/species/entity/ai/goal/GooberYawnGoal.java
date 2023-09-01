@@ -16,12 +16,7 @@ public class GooberYawnGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !goober.isInWater() && goober.onGround() && time > 0 && goober.getActionCooldown() == 0;
-    }
-
-    @Override
-    public boolean canContinueToUse() {
-        return !goober.isInWater() && goober.onGround() && time > 0 && goober.getActionCooldown() == 0;
+        return goober.canYawn() && !goober.isInWater() && goober.onGround() && time > 0 && goober.getActionCooldown() == 0;
     }
 
     @Override

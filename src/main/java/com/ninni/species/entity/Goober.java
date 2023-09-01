@@ -80,6 +80,11 @@ public class Goober extends Animal {
                 .add(Attributes.MOVEMENT_SPEED, 0.15);
     }
 
+    public boolean canYawn() {
+        Pose pose = this.getPose();
+        return pose == Pose.STANDING || pose == SpeciesPose.LAYING_DOWN.get();
+    }
+
     @Override
     public void tick() {
         super.tick();
