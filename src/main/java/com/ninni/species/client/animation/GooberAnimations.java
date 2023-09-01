@@ -1941,35 +1941,19 @@ public class GooberAnimations {
                 .build();
         
         public static final AnimationDefinition LAY_DOWN_YAWN = AnimationDefinition.Builder.withLength(3.5f)
-                .addAnimation(PartNames.BODY,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, -11f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.TAIL,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(15f, 0f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
                 .addAnimation(PartNames.NECK,
                         new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(45f, 0f, 0f),
+                                new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM),
-                                new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(46f, 0f, 0f),
+                                new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(1f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM),
-                                new Keyframe(0.5834334f, KeyframeAnimations.degreeVec(45f, 0f, 0f),
+                                new Keyframe(0.5834334f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM),
-                                new Keyframe(1.2916767f, KeyframeAnimations.degreeVec(27.5f, 0f, 0f),
+                                new Keyframe(1.2916767f, KeyframeAnimations.degreeVec(-17.5f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM),
-                                new Keyframe(2.9583435f, KeyframeAnimations.degreeVec(27.5f, 0f, 0f),
+                                new Keyframe(2.9583435f, KeyframeAnimations.degreeVec(-17.5f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM),
-                                new Keyframe(3.375f, KeyframeAnimations.degreeVec(45f, 0f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.HEAD,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.HEAD,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(-45f, 0f, 0f),
+                                new Keyframe(3.375f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                         AnimationChannel.Interpolations.CATMULLROM)))
                 .addAnimation(PartNames.HEAD,
                         new AnimationChannel(AnimationChannel.Targets.SCALE,
@@ -1982,38 +1966,6 @@ public class GooberAnimations {
                                 new Keyframe(1.375f, KeyframeAnimations.scaleVec(1f, 1.1f, 1f),
                                         AnimationChannel.Interpolations.CATMULLROM),
                                 new Keyframe(3.375f, KeyframeAnimations.scaleVec(1f, 1f, 1f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.LEFT_ARM,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, -10f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.LEFT_ARM,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(-47.5f, 0f, -90f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.RIGHT_ARM,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, -10f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.RIGHT_ARM,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(-47.5f, 0f, 90f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.RIGHT_LEG,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, -10f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.RIGHT_LEG,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(45f, 0f, 90f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.LEFT_LEG,
-                        new AnimationChannel(AnimationChannel.Targets.POSITION,
-                                new Keyframe(0f, KeyframeAnimations.posVec(0f, -10f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
-                .addAnimation(PartNames.LEFT_LEG,
-                        new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                                new Keyframe(0f, KeyframeAnimations.degreeVec(45f, 0f, -90f),
                                         AnimationChannel.Interpolations.CATMULLROM)))
                 .addAnimation(PartNames.JAW,
                         new AnimationChannel(AnimationChannel.Targets.POSITION,

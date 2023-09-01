@@ -6,7 +6,10 @@ public enum SpeciesPose {
     PLANTING,
     SHAKE_SUCCESS,
     SHAKE_FAIL,
-    LAYING_DOWN;
+    YAWNING,
+    YAWNING_LAYING_DOWN,
+    LAYING_DOWN,
+    REARING_UP;
 
     public Pose get() {
         return Pose.valueOf(this.name());

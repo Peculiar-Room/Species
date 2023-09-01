@@ -2,6 +2,8 @@ package com.ninni.species.entity;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.ninni.species.entity.ai.goal.GooberLayDownGoal;
+import com.ninni.species.entity.ai.goal.GooberRearUpGoal;
+import com.ninni.species.entity.ai.goal.GooberYawnGoal;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -40,6 +42,7 @@ public class Goober extends Animal {
     public final AnimationState layDownYawnAnimationState = new AnimationState();
     public final AnimationState rearUpAnimationState = new AnimationState();
     public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.LONG);
+    public static final EntityDataAccessor<Integer> ACTION_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
     private int idleAnimationTimeout = 0;
 
@@ -60,9 +63,10 @@ public class Goober extends Animal {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(8, new GooberLayDownGoal(this));
-
+        this.goalSelector.addGoal(7, new GooberYawnGoal(this));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(9, new GooberLayDownGoal(this));
+        this.goalSelector.addGoal(10, new GooberRearUpGoal(this));
     }
 
     public static AttributeSupplier.Builder createGooberAttributes() {
@@ -75,6 +79,11 @@ public class Goober extends Animal {
     @Override
     public void tick() {
         super.tick();
+
+        if (this.getActionCooldown() > 0) {
+            this.setActionCooldown(this.getActionCooldown()-1);
+        }
+
         if ((this.level()).isClientSide()) {
             this.setupAnimationStates();
         }
@@ -111,7 +120,17 @@ public class Goober extends Animal {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return pose == SpeciesPose.LAYING_DOWN.get() ? SITTING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+        return (pose == SpeciesPose.LAYING_DOWN.get() || pose == SpeciesPose.YAWNING_LAYING_DOWN.get()) ? SITTING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
+        if (DATA_POSE.equals(entityDataAccessor)) {
+            if (this.getPose() == SpeciesPose.YAWNING.get()) this.yawnAnimationState.start(this.tickCount);
+            if (this.getPose() == SpeciesPose.YAWNING_LAYING_DOWN.get()) this.layDownYawnAnimationState.start(this.tickCount);
+            if (this.getPose() == SpeciesPose.REARING_UP.get()) this.rearUpAnimationState.start(this.tickCount);
+        }
+        super.onSyncedDataUpdated(entityDataAccessor);
     }
 
     @Override
@@ -139,25 +158,35 @@ public class Goober extends Animal {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
+        this.entityData.define(ACTION_COOLDOWN, 2 * 40 + this.random.nextInt(40));
+    }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putLong("LastPoseTick", this.entityData.get(LAST_POSE_CHANGE_TICK));
+        compoundTag.putInt("ActionCooldown", this.getActionCooldown());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
+
+        this.setActionCooldown(compoundTag.getInt("ActionCooldown"));
         long l = compoundTag.getLong("LastPoseTick");
-        if (l < 0L) {
-            this.setPose(SpeciesPose.LAYING_DOWN.get());
-        }
+        if (l < 0L) this.setPose(SpeciesPose.LAYING_DOWN.get());
         this.resetLastPoseChangeTick(l);
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
+    public int getActionCooldown() {
+        return this.entityData.get(ACTION_COOLDOWN);
+    }
+
+    public void setActionCooldown(int actionCooldown) {
+        this.entityData.set(ACTION_COOLDOWN, actionCooldown);
     }
 
     public boolean isGooberLayingDown() {
@@ -178,9 +207,8 @@ public class Goober extends Animal {
     }
 
     public void layDown() {
-        if (this.isGooberLayingDown()) {
-            return;
-        }
+        if (this.isGooberLayingDown()) return;
+        this.setActionCooldown(2 * 20 + this.random.nextInt(40));
         this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_LAY_DOWN, 1.0f, 1.0f);
         this.setPose(SpeciesPose.LAYING_DOWN.get());
         this.resetLastPoseChangeTick(-(this.level()).getGameTime());
@@ -190,13 +218,14 @@ public class Goober extends Animal {
         if (!this.isGooberLayingDown()) {
             return;
         }
-        //this.playSound(SoundEvents.CAMEL_STAND, 1.0f, 1.0f);
+        this.setActionCooldown(2 * 20 + this.random.nextInt(40));
         this.setPose(Pose.STANDING);
         this.resetLastPoseChangeTick((this.level()).getGameTime());
     }
 
     public void standUpInstantly() {
         this.setPose(Pose.STANDING);
+        this.setActionCooldown(2 * 40 + this.random.nextInt(40));
         this.resetLastPoseChangeTickToFullStand((this.level()).getGameTime());
     }
 

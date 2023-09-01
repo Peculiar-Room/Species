@@ -7,7 +7,6 @@ public class GooberLayDownGoal extends Goal {
     protected final Goober goober;
     private final int minimalPoseTicks;
 
-    //TODO figure out a much better system for this because currently its not working well
     public GooberLayDownGoal(Goober goober) {
         this.goober = goober;
         this.minimalPoseTicks = 20 * 20;
@@ -15,7 +14,7 @@ public class GooberLayDownGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !goober.isInWater() && goober.getPoseTime() >= (long)this.minimalPoseTicks && !goober.isLeashed() && goober.onGround();
+        return !goober.isInWater() && goober.getPoseTime() >= (long)this.minimalPoseTicks && !goober.isLeashed() && goober.onGround() && goober.getActionCooldown() == 0;
     }
 
     @Override
