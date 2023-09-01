@@ -112,7 +112,7 @@ public class SpeciesEntities {
                     .defaultAttributes(Goober::createGooberAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Goober::canSpawn)
-                    .dimensions(EntityDimensions.scalable(1.5F, 2.5F))
+                    .dimensions(EntityDimensions.scalable(1.5F, 2.2F))
                     .trackRangeChunks(10)
     );
 

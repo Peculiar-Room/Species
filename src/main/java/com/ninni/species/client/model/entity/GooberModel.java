@@ -46,16 +46,17 @@ public class GooberModel<E extends Goober> extends HierarchicalAgeableListModel<
     public void setupAnim(E entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
 
-        this.animateWalk(GooberAnimations.WALK, limbAngle, limbDistance, 3.5f, 6.0f);
+        this.animateWalk(GooberAnimations.WALK, limbAngle, limbDistance, 4f, 6.0f);
         this.animate(entity.idleAnimationState, GooberAnimations.IDLE, animationProgress);
         this.animate(entity.layDownIdleAnimationState, GooberAnimations.LAY_DOWN_IDLE, animationProgress);
         this.animate(entity.layDownAnimationState, GooberAnimations.LAY_DOWN, animationProgress);
+        this.animate(entity.standUpAnimationState, GooberAnimations.STAND_UP, animationProgress);
         this.animate(entity.yawnAnimationState, GooberAnimations.YAWN, animationProgress);
         this.animate(entity.layDownYawnAnimationState, GooberAnimations.LAY_DOWN_YAWN, animationProgress);
         this.animate(entity.rearUpAnimationState, GooberAnimations.REAR_UP, animationProgress);
-        this.head.xRot += headPitch * ((float) Math.PI / 180f) - (headPitch * ((float) Math.PI / 180f)) / 2;
+        this.head.xRot += entity.isGooberLayingDown() ? 0f : headPitch * ((float) Math.PI / 180f) - (headPitch * ((float) Math.PI / 180f)) / 2;
         this.head.yRot += headYaw * ((float) Math.PI / 180f) - (headYaw * ((float) Math.PI / 180f)) / 2;
-        this.neck.xRot += (headPitch * ((float) Math.PI / 180f)) / 2;
+        this.neck.xRot += entity.isGooberLayingDown() ? 0f : (headPitch * ((float) Math.PI / 180f)) / 2;
         this.neck.yRot += (headYaw * ((float) Math.PI / 180f)) / 2;
     }
     
