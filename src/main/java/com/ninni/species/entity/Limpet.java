@@ -272,7 +272,7 @@ public class Limpet extends Monster {
             }
 
         } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level().isClientSide && type.getId() > 0) {
-            this.playSound(SpeciesSoundEvents.ENTITY_LIMPET_DEFLECT, 1, 1);
+            this.playSound(SpeciesSoundEvents.LIMPET_DEFLECT, 1, 1);
             if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) this.setScaredTicks(300);
             return false;
         }
@@ -296,19 +296,19 @@ public class Limpet extends Monster {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.ENTITY_LIMPET_IDLE;
+        return SpeciesSoundEvents.LIMPET_IDLE;
     }
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_LIMPET_DEATH;
+        return SpeciesSoundEvents.LIMPET_DEATH;
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpeciesSoundEvents.ENTITY_LIMPET_HURT;
+        return SpeciesSoundEvents.LIMPET_HURT;
     }
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-        this.playSound(SpeciesSoundEvents.ENTITY_LIMPET_STEP, 0.15F, 1.0F);
+        this.playSound(SpeciesSoundEvents.LIMPET_STEP, 0.15F, 1.0F);
     }
 
     @SuppressWarnings("unused")

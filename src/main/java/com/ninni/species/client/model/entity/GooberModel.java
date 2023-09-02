@@ -1,11 +1,12 @@
 package com.ninni.species.client.model.entity;
 
-import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.animation.GooberAnimations;
-import com.ninni.species.client.model.HierarchicalAgeableListModel;
 import com.ninni.species.entity.Goober;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,7 +14,7 @@ import net.minecraft.client.model.geom.builders.*;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class GooberModel<E extends Goober> extends HierarchicalAgeableListModel<E> {
+public class GooberModel<E extends Goober> extends HierarchicalModel<E> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart neck;
@@ -141,16 +142,24 @@ public class GooberModel<E extends Goober> extends HierarchicalAgeableListModel<
         return LayerDefinition.create(meshdefinition, 144, 96);
     }
 
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
+        if (this.young) {
+            float babyScale = 0.5f;
+            float bodyYOffset = 24.0f;
+
+            poseStack.pushPose();
+            poseStack.scale(babyScale, babyScale, babyScale);
+            poseStack.translate(0.0f, bodyYOffset / 16.0f, 0.0f);
+            this.root().render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            poseStack.popPose();
+        } else {
+            this.root().render(poseStack, vertexConsumer, i, j, f, g, h, k);
+        }
+    }
+
     @Override public ModelPart root() {
         return this.root;
     }
 
-    @Override
-    protected Iterable<ModelPart> headParts() {
-        return ImmutableList.of(this.neck);
-    }
-    @Override
-    protected Iterable<ModelPart> bodyParts() {
-        return ImmutableList.of(this.body, this.leftArm, this.leftLeg, this.rightArm, this.rightLeg);
-    }
 }

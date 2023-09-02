@@ -25,6 +25,7 @@ public class GooberRearUpGoal extends GooberBehaviorGoal {
     public void start() {
         super.start();
         goober.setPose(SpeciesPose.REARING_UP.get());
+        goober.playSound(behavior.getSound(), 1.0f, 1.0f);
     }
 
     @Override

@@ -29,6 +29,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.ANCIENT_PINECONE);
         output.accept(SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
         output.accept(SpeciesItems.GOOBER_SPAWN_EGG);
+        output.accept(SpeciesItems.PETRIFIED_EGG);
     }).build());
 
     static {
@@ -36,6 +37,7 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.HAY_BLOCK, SpeciesItems.BIRT_DWELLING);
             entries.addAfter(Items.TURTLE_EGG, SpeciesItems.WRAPTOR_EGG);
             entries.addBefore(Items.WHEAT_SEEDS, SpeciesItems.ANCIENT_PINECONE);
+            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.PETRIFIED_EGG);
         });
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, SpeciesItems.MUSIC_DISC_DIAL);

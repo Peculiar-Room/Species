@@ -21,6 +21,7 @@ public class GooberYawnGoal extends GooberBehaviorGoal {
         super.start();
         if (goober.isGooberLayingDown()) goober.setPose(SpeciesPose.YAWNING_LAYING_DOWN.get());
         else goober.setPose(SpeciesPose.YAWNING.get());
+        goober.playSound(behavior.getSound(), 1.0f, goober.getVoicePitch());
     }
 
     @Override

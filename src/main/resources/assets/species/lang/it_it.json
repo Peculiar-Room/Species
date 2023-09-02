@@ -98,6 +98,8 @@
 
   "entity.species.goober": "Goober",
   "item.species.goober_spawn_egg": "Uovo generatore di Goober",
+  "block.species.petrified_egg": "Uovo pietrificato",
+  "item.species.petrified_egg": "Uovo pietrificato",
   "subtitles.entity.species.goober.death": "Goober muore",
   "subtitles.entity.species.goober.hurt": "Goober ferito",
   "subtitles.entity.species.goober.idle": "Goober brontola",
@@ -107,5 +109,7 @@
   "subtitles.entity.species.goober.rear_up": "Goober si alza",
   "subtitles.entity.species.goober.step": "Goober cammina",
   "subtitles.entity.species.goober.yawn": "Goober sbadiglia",
-  "subtitles.entity.species.goober.eat": "Goober mangia"
+  "subtitles.entity.species.goober.eat": "Goober mangia",
+  "subtitles.block.species.petrified_egg.crack": "Uovo pietrificato si crepa",
+  "subtitles.block.species.petrified_egg.hatch": "Uovo pietrificato si schiude"
 }

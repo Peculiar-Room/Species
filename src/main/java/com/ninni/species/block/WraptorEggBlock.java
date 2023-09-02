@@ -53,11 +53,11 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
     private void breakEgg(Level world, BlockPos pos, BlockState state) {
         int i = state.getValue(HATCH);
         if (i < 2) {
-            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_CRACK, SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.WRAPTOR_EGG_CRACK, SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.setBlock(pos, this.defaultBlockState().setValue(HATCH, i + 1), 2);
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         } else {
-            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_HATCH, SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.WRAPTOR_EGG_HATCH, SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.removeBlock(pos, false);
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
             Wraptor wraptor = SpeciesEntities.WRAPTOR.create(world);

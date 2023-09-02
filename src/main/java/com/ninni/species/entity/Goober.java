@@ -6,6 +6,7 @@ import com.ninni.species.entity.ai.goal.GooberRearUpGoal;
 import com.ninni.species.entity.ai.goal.GooberYawnGoal;
 import com.ninni.species.entity.enums.GooberBehavior;
 import com.ninni.species.entity.pose.SpeciesPose;
+import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,10 +23,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -65,6 +63,7 @@ public class Goober extends Animal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new GooberYawnGoal(this));
@@ -134,6 +133,11 @@ public class Goober extends Animal {
             if (this.getPose() == SpeciesPose.REARING_UP.get()) this.rearUpAnimationState.start(this.tickCount);
         }
         super.onSyncedDataUpdated(entityDataAccessor);
+    }
+
+    @Override
+    public boolean fireImmune() {
+        return this.isBaby();
     }
 
     @Override
@@ -235,7 +239,7 @@ public class Goober extends Animal {
 
     public void layDown() {
         if (this.isGooberLayingDown()) return;
-        this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_LAY_DOWN, 1.0f, 1.0f);
+        this.playSound(SpeciesSoundEvents.GOOBER_LAY_DOWN, 1.0f, 1.0f);
         this.setPose(SpeciesPose.LAYING_DOWN.get());
         this.resetLastPoseChangeTick(-(this.level()).getGameTime());
     }
@@ -269,30 +273,30 @@ public class Goober extends Animal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isGooberLayingDown() ? SpeciesSoundEvents.ENTITY_GOOBER_IDLE_RESTING : SpeciesSoundEvents.ENTITY_GOOBER_IDLE;
+        return this.isGooberLayingDown() ? SpeciesSoundEvents.GOOBER_IDLE_RESTING : SpeciesSoundEvents.GOOBER_IDLE;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_GOOBER_HURT;
+        return SpeciesSoundEvents.GOOBER_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_GOOBER_DEATH;
+        return SpeciesSoundEvents.GOOBER_DEATH;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_STEP, 0.35f, 1.0f);
+        this.playSound(SpeciesSoundEvents.GOOBER_STEP, 0.35f, 1.0f);
     }
 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
+        return SpeciesEntities.GOOBER.create(serverLevel);
     }
 
     static class GooberLookControl extends LookControl {

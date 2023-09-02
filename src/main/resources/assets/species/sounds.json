@@ -449,5 +449,13 @@
 	"entity.goober.eat": {
 		"sounds": [],
 		"subtitle": "subtitles.entity.species.goober.eat"
+	},
+	"block.petrified_egg.crack": {
+		"sounds": [],
+		"subtitle": "subtitles.block.species.petrified_egg.crack"
+	},
+	"block.petrified_egg.hatch": {
+		"sounds": [],
+		"subtitle": "subtitles.block.species.petrified_egg.hatch"
 	}
 }

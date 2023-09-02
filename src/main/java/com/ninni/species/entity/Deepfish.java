@@ -45,25 +45,25 @@ public class Deepfish extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_FLOP;
+        return SpeciesSoundEvents.DEEPFISH_FLOP;
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_IDLE;
+        return SpeciesSoundEvents.DEEPFISH_IDLE;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_HURT;
+        return SpeciesSoundEvents.DEEPFISH_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_DEEPFISH_DEATH;
+        return SpeciesSoundEvents.DEEPFISH_DEATH;
     }
 
     @Override

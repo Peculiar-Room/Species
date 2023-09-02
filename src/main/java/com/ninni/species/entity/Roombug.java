@@ -93,7 +93,7 @@ public class Roombug extends TamableAnimal {
 
             if (!player.getAbilities().instabuild) itemStack.shrink(1);
             if (!this.isSilent()) {
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ENTITY_ROOMBUG_EAT, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.ROOMBUG_EAT, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
 
             if (!this.level().isClientSide) {
@@ -278,26 +278,26 @@ public class Roombug extends TamableAnimal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isOrderedToSit() ? SpeciesSoundEvents.ENTITY_ROOMBUG_SNORING : SpeciesSoundEvents.ENTITY_ROOMBUG_IDLE;
+        return this.isOrderedToSit() ? SpeciesSoundEvents.ROOMBUG_SNORING : SpeciesSoundEvents.ROOMBUG_IDLE;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpeciesSoundEvents.ENTITY_ROOMBUG_HURT;
+        return SpeciesSoundEvents.ROOMBUG_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpeciesSoundEvents.ENTITY_ROOMBUG_DEATH;
+        return SpeciesSoundEvents.ROOMBUG_DEATH;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if ("Goofy Ahh".equals(ChatFormatting.stripFormatting(this.getName().getString()))) {
-            this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_GOOFY_AAH_STEP, 1, 1);
-        } else this.playSound(SpeciesSoundEvents.ENTITY_ROOMBUG_STEP, 0.5f, 1.0f);
+            this.playSound(SpeciesSoundEvents.ROOMBUG_GOOFY_AAH_STEP, 1, 1);
+        } else this.playSound(SpeciesSoundEvents.ROOMBUG_STEP, 0.5f, 1.0f);
     }
 
 }

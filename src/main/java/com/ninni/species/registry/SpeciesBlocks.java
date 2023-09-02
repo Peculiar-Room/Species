@@ -19,6 +19,8 @@ public class SpeciesBlocks {
 
     public static final Block TREEPER_SAPLING = register("treeper_sapling", new TreeperSaplingBlock(FabricBlockSettings.copyOf(Blocks.SPRUCE_SAPLING)));
 
+    public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
+
     private static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(MOD_ID, id), block);
     }

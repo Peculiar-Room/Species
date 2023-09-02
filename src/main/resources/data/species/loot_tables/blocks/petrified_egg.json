@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "species:ancient_pinecone"
+          "name": "species:petrified_egg"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "species:blocks/treeper_sapling"
+  "random_sequence": "species:blocks/petrified_egg"
 }

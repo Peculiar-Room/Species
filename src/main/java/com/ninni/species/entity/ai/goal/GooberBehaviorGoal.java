@@ -32,7 +32,6 @@ public class GooberBehaviorGoal extends Goal {
         super.start();
         timer = behavior.getLength();
         goober.setBehavior(behavior.getName());
-        goober.playSound(behavior.getSound(), 1.0f, goober.getVoicePitch());
     }
 
     @Override
