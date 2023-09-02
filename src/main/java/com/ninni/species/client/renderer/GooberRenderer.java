@@ -2,7 +2,7 @@ package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.GooberModel;
 import com.ninni.species.entity.Goober;
-import com.ninni.species.entity.pose.SpeciesPose;
+import com.ninni.species.entity.enums.GooberBehavior;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,6 +24,7 @@ public class GooberRenderer<T extends LivingEntity> extends MobRenderer<Goober, 
 
     @Override
     public ResourceLocation getTextureLocation(Goober entity) {
-        return (entity.getPose() == SpeciesPose.YAWNING.get() || entity.getPose() == SpeciesPose.YAWNING_LAYING_DOWN.get()) ? TEXTURE_TIRED : TEXTURE;
+        //return entity.getBehavior() == GooberBehavior.YAWN.getName() ? TEXTURE_TIRED : TEXTURE;
+        return entity.getBehavior() != GooberBehavior.IDLE.getName() ? TEXTURE_TIRED : TEXTURE;
     }
 }

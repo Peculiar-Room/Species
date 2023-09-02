@@ -1,6 +1,7 @@
 package com.ninni.species.entity.ai.goal;
 
 import com.ninni.species.entity.Goober;
+import com.ninni.species.entity.enums.GooberBehavior;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class GooberLayDownGoal extends Goal {
@@ -18,7 +19,7 @@ public class GooberLayDownGoal extends Goal {
                 && goober.getPoseTime() >= (long)this.minimalPoseTicks
                 && !goober.isLeashed()
                 && goober.onGround()
-                && goober.getActionCooldown() == 0;
+                && goober.getBehavior() == GooberBehavior.IDLE.getName();
     }
 
     @Override
