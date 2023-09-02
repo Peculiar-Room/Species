@@ -5,9 +5,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 
 public enum GooberBehavior {
-    IDLE("idle", SoundEvents.EMPTY, 0),
-    YAWN("yawn", SpeciesSoundEvents.ENTITY_GOOBER_YAWN, 30),
-    REAR_UP("rear_up", SpeciesSoundEvents.ENTITY_GOOBER_REAR_UP, 300);
+    IDLE("Idling", SoundEvents.EMPTY, 0),
+    YAWN("Yawning", SpeciesSoundEvents.ENTITY_GOOBER_YAWN, 30),
+    REAR_UP("RearingUp", SpeciesSoundEvents.ENTITY_GOOBER_REAR_UP, 75);
     private final String name;
     private final SoundEvent sound;
     private final int length;

@@ -44,12 +44,12 @@ public class Goober extends Animal {
     public final AnimationState rearUpAnimationState = new AnimationState();
     public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<String> BEHAVIOR = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> YAWN_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> REAR_UP_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
     private int idleAnimationTimeout = 0;
 
 
-    //TODO
-    // they play yawn and rear up sounds when they change pose for some reason
     public Goober(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new GooberMoveControl();
@@ -83,6 +83,9 @@ public class Goober extends Animal {
     @Override
     public void tick() {
         super.tick();
+
+        if (this.getRearUpCooldown() > 0) this.setRearUpCooldown(this.getRearUpCooldown()-1);
+        if (this.getYawnCooldown() > 0) this.setYawnCooldown(this.getYawnCooldown()-1);
 
         if ((this.level()).isClientSide()) {
             this.setupAnimationStates();
@@ -154,7 +157,7 @@ public class Goober extends Animal {
     }
 
     public boolean refuseToMove() {
-        return this.isGooberLayingDown() || this.isInPoseTransition() || this.getPose() == SpeciesPose.REARING_UP.get();
+        return this.isGooberLayingDown() || this.isInPoseTransition();
     }
 
     @Override
@@ -162,6 +165,8 @@ public class Goober extends Animal {
         super.defineSynchedData();
         this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
         this.entityData.define(BEHAVIOR, GooberBehavior.IDLE.getName());
+        this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
+        this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
     }
 
     @Override
@@ -169,12 +174,16 @@ public class Goober extends Animal {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putLong("LastPoseTick", this.entityData.get(LAST_POSE_CHANGE_TICK));
         compoundTag.putString("Behavior", this.getBehavior());
+        compoundTag.putInt("YawnCooldown", this.getYawnCooldown());
+        compoundTag.putInt("RearUpCooldown", this.getRearUpCooldown());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
 
+        this.setYawnCooldown(compoundTag.getInt("YawnCooldown"));
+        this.setRearUpCooldown(compoundTag.getInt("RearUpCooldown"));
         this.setBehavior(compoundTag.getString("Behavior"));
         long l = compoundTag.getLong("LastPoseTick");
         if (l < 0L) this.setPose(SpeciesPose.LAYING_DOWN.get());
@@ -186,6 +195,26 @@ public class Goober extends Animal {
     }
     public void setBehavior(String behavior) {
         this.entityData.set(BEHAVIOR, behavior);
+    }
+
+    public int getYawnCooldown() {
+        return this.entityData.get(YAWN_COOLDOWN);
+    }
+    public void setYawnCooldown(int cooldown) {
+        this.entityData.set(YAWN_COOLDOWN, cooldown);
+    }
+    public void yawnCooldown() {
+        this.entityData.set(YAWN_COOLDOWN, 6 * 20 + random.nextInt(60 * 2 * 20));
+    }
+
+    public int getRearUpCooldown() {
+        return this.entityData.get(REAR_UP_COOLDOWN);
+    }
+    public void setRearUpCooldown(int cooldown) {
+        this.entityData.set(REAR_UP_COOLDOWN, cooldown);
+    }
+    public void rearUpCooldown() {
+        this.entityData.set(REAR_UP_COOLDOWN, 60 * 2 * 20 + random.nextInt(60 * 8 * 20));
     }
 
     public boolean isGooberLayingDown() {
@@ -257,7 +286,7 @@ public class Goober extends Animal {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_STEP, 0.15f, 1.0f);
+        this.playSound(SpeciesSoundEvents.ENTITY_GOOBER_STEP, 0.35f, 1.0f);
     }
 
     @Nullable

@@ -24,7 +24,6 @@ public class GooberRenderer<T extends LivingEntity> extends MobRenderer<Goober, 
 
     @Override
     public ResourceLocation getTextureLocation(Goober entity) {
-        //return entity.getBehavior() == GooberBehavior.YAWN.getName() ? TEXTURE_TIRED : TEXTURE;
-        return entity.getBehavior() != GooberBehavior.IDLE.getName() ? TEXTURE_TIRED : TEXTURE;
+        return entity.getBehavior() == GooberBehavior.YAWN.getName() ? TEXTURE_TIRED : TEXTURE;
     }
 }

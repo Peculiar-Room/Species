@@ -13,7 +13,7 @@ public class GooberRearUpGoal extends GooberBehaviorGoal {
 
     @Override
     public boolean canUse() {
-        return !goober.isGooberLayingDown() && super.canUse();
+        return goober.getRearUpCooldown() == 0 && !goober.isGooberLayingDown() && super.canUse();
     }
 
     @Override
@@ -25,5 +25,11 @@ public class GooberRearUpGoal extends GooberBehaviorGoal {
     public void start() {
         super.start();
         goober.setPose(SpeciesPose.REARING_UP.get());
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        goober.rearUpCooldown();
     }
 }

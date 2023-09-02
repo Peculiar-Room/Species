@@ -12,9 +12,20 @@ public class GooberYawnGoal extends GooberBehaviorGoal {
     }
 
     @Override
+    public boolean canUse() {
+        return goober.getYawnCooldown() == 0 && super.canUse();
+    }
+
+    @Override
     public void start() {
         super.start();
         if (goober.isGooberLayingDown()) goober.setPose(SpeciesPose.YAWNING_LAYING_DOWN.get());
         else goober.setPose(SpeciesPose.YAWNING.get());
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        goober.yawnCooldown();
     }
 }
