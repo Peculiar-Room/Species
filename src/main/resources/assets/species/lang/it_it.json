@@ -102,8 +102,10 @@
   "subtitles.entity.species.goober.hurt": "Goober ferito",
   "subtitles.entity.species.goober.idle": "Goober brontola",
   "subtitles.entity.species.goober.idle_resting": "Goober geme stancamente",
+  "subtitles.entity.species.goober.sneeze": "Goober starnutisce",
   "subtitles.entity.species.goober.lay_down": "Goober si riposa",
   "subtitles.entity.species.goober.rear_up": "Goober si alza",
   "subtitles.entity.species.goober.step": "Goober cammina",
-  "subtitles.entity.species.goober.yawn": "Goober sbadiglia"
+  "subtitles.entity.species.goober.yawn": "Goober sbadiglia",
+  "subtitles.entity.species.goober.eat": "Goober mangia"
 }

@@ -67,10 +67,12 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ENTITY_GOOBER_HURT = register("entity.goober.hurt");
     public static final SoundEvent ENTITY_GOOBER_IDLE = register("entity.goober.idle");
     public static final SoundEvent ENTITY_GOOBER_IDLE_RESTING = register("entity.goober.idle_resting");
+    public static final SoundEvent ENTITY_GOOBER_SNEEZE = register("entity.goober.sneeze");
     public static final SoundEvent ENTITY_GOOBER_LAY_DOWN = register("entity.goober.lay_down");
     public static final SoundEvent ENTITY_GOOBER_REAR_UP = register("entity.goober.rear_up");
     public static final SoundEvent ENTITY_GOOBER_STEP = register("entity.goober.step");
     public static final SoundEvent ENTITY_GOOBER_YAWN = register("entity.goober.yawn");
+    public static final SoundEvent ENTITY_GOOBER_EAT = register("entity.goober.eat");
 
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);

@@ -102,8 +102,10 @@
   "subtitles.entity.species.goober.hurt": "Goober hurts",
   "subtitles.entity.species.goober.idle": "Goober grunts",
   "subtitles.entity.species.goober.idle_resting": "Goober groans tiredly",
+  "subtitles.entity.species.goober.sneeze": "Goober sneezes",
   "subtitles.entity.species.goober.lay_down": "Goober rests",
   "subtitles.entity.species.goober.rear_up": "Goober rears up",
   "subtitles.entity.species.goober.step": "Goober steps",
-  "subtitles.entity.species.goober.yawn": "Goober yawns"
+  "subtitles.entity.species.goober.yawn": "Goober yawns",
+  "subtitles.entity.species.goober.eat": "Goober eats"
 }

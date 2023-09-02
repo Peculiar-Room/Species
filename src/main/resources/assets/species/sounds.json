@@ -389,11 +389,7 @@
 			"species:entity/goober/idle3",
 			"species:entity/goober/idle4",
 			"species:entity/goober/idle5",
-			"species:entity/goober/idle6",
-			"species:entity/goober/sneeze1",
-			"species:entity/goober/sneeze2",
-			"species:entity/goober/sneeze3",
-			"species:entity/goober/sneeze4"
+			"species:entity/goober/idle6"
 		],
 		"subtitle": "subtitles.entity.species.goober.idle"
 	},
@@ -403,13 +399,18 @@
 			"species:entity/goober/idle_resting2",
 			"species:entity/goober/idle_resting3",
 			"species:entity/goober/idle_resting4",
-			"species:entity/goober/idle_resting5",
+			"species:entity/goober/idle_resting5"
+		],
+		"subtitle": "subtitles.entity.species.goober.idle_resting"
+	},
+	"entity.goober.sneeze": {
+		"sounds": [
 			"species:entity/goober/sneeze1",
 			"species:entity/goober/sneeze2",
 			"species:entity/goober/sneeze3",
 			"species:entity/goober/sneeze4"
 		],
-		"subtitle": "subtitles.entity.species.goober.idle_resting"
+		"subtitle": "subtitles.entity.species.goober.sneeze"
 	},
 	"entity.goober.lay_down": {
 		"sounds": [
@@ -444,5 +445,9 @@
 			"species:entity/goober/yawn5"
 		],
 		"subtitle": "subtitles.entity.species.goober.yawn"
+	},
+	"entity.goober.eat": {
+		"sounds": [],
+		"subtitle": "subtitles.entity.species.goober.eat"
 	}
 }
