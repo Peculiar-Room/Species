@@ -60,6 +60,7 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
         TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
         assert sapling != null;
         sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
+        //TODO possibly crashes when no player is nearby
         sapling.setOwnerUUID(Objects.requireNonNull(serverLevel.getNearestPlayer(sapling.getX(), sapling.getY(), sapling.getZ(), 10, false)).getUUID());
         sapling.setTame(true);
 

@@ -94,6 +94,7 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
         }
         if (treeper.getPose() != Pose.STANDING && treeper.getPose() != SpeciesPose.SHAKE_FAIL.get() && treeper.getPose() != SpeciesPose.SHAKE_SUCCESS.get()) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        this.animateWalk(TreeperAnimations.WALK, f, g, 5.0f, 5.5f);
         this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
         this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
 

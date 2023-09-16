@@ -85,6 +85,7 @@ public class Treeper extends AgeableMob {
         if (this.getSaplingCooldown() > 0) this.setSaplingCooldown(this.getSaplingCooldown() - 1);
 
         if (this.level().getDayTime() > 1000 && this.level().getDayTime() < 13000) {
+            //TODO doesnt work with gamerule doDaylightCycle
             this.setPose(SpeciesPose.PLANTING.get());
             this.setPlanted(true);
         } else {
