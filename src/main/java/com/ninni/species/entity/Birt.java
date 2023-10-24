@@ -97,7 +97,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
         this.goalSelector.addGoal(9, new BirtLookAroundGoal());
     }
 
-    public static AttributeSupplier.Builder createBirtAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.2F)

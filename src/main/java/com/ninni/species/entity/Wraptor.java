@@ -83,7 +83,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
         return 1;
     }
 
-    public static AttributeSupplier.Builder createWraptorAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return createMobAttributes()
             .add(Attributes.MOVEMENT_SPEED, 0.2)
             .add(Attributes.MAX_HEALTH, 18.0D)

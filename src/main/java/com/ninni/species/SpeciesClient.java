@@ -30,6 +30,7 @@ public class SpeciesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SpeciesEntities.TREEPER, TreeperRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.TREEPER_SAPLING, TreeperSaplingRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.GOOBER, GooberRenderer::new);
+        EntityRendererRegistry.register(SpeciesEntities.CRUNCHER, CruncherRenderer::new);
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.SNORING, SnoringParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, BirtdParticle.Factory::new);

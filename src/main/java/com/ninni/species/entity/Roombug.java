@@ -81,7 +81,7 @@ public class Roombug extends TamableAnimal {
         this.goalSelector.addGoal(3, new RoombugLookAtEntityGoal(this, Player.class, 8.0f));
     }
 
-    public static AttributeSupplier.Builder createRoombugAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 15.0).add(Attributes.MOVEMENT_SPEED, 0.225);
     }
 

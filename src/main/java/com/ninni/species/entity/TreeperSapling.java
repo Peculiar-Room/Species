@@ -69,7 +69,7 @@ public class TreeperSapling extends TamableAnimal {
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
     }
 
-    public static AttributeSupplier.Builder createTreeperAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.35);

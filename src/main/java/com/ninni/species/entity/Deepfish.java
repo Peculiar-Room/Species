@@ -29,7 +29,7 @@ public class Deepfish extends AbstractSchoolingFish {
         this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
-    public static AttributeSupplier.Builder createDeepfishAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 2.0);
     }
 

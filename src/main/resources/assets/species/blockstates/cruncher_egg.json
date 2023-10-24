@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "species:block/cruncher_egg_bottom"
+    },
+    "half=upper": {
+      "model": "species:block/cruncher_egg_top"
+    }
+  }
+}

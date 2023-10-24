@@ -72,7 +72,7 @@ public class Goober extends Animal {
         this.goalSelector.addGoal(9, new GooberLayDownGoal(this));
     }
 
-    public static AttributeSupplier.Builder createGooberAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 40.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
@@ -110,7 +110,6 @@ public class Goober extends Animal {
                 this.layDownIdleAnimationState.stop();
             } else {
                 this.layDownAnimationState.stop();
-                //TODO fix animation not looping correctly
                 this.layDownIdleAnimationState.startIfStopped(this.tickCount);
             }
         } else {

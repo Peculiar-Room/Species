@@ -127,7 +127,7 @@ public class Limpet extends Monster {
         super.customServerAiStep();
     }
 
-    public static AttributeSupplier.Builder createLimpetAttributes() {
+    public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.KNOCKBACK_RESISTANCE, 1.0).add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 

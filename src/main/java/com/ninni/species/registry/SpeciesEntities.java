@@ -23,7 +23,7 @@ public class SpeciesEntities {
             "wraptor",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Wraptor::new)
-                    .defaultAttributes(Wraptor::createWraptorAttributes)
+                    .defaultAttributes(Wraptor::createAttributes)
                     .spawnGroup(MobCategory.MONSTER)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Wraptor::canSpawn)
                     .dimensions(EntityDimensions.scalable(1.2F, 2F))
@@ -34,7 +34,7 @@ public class SpeciesEntities {
             "deepfish",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Deepfish::new)
-                    .defaultAttributes(Deepfish::createDeepfishAttributes)
+                    .defaultAttributes(Deepfish::createAttributes)
                     .spawnGroup(MobCategory.UNDERGROUND_WATER_CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Deepfish::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.5F, 0.5F))
@@ -45,7 +45,7 @@ public class SpeciesEntities {
             "roombug",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Roombug::new)
-                    .defaultAttributes(Roombug::createRoombugAttributes)
+                    .defaultAttributes(Roombug::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Roombug::canSpawn)
                     .dimensions(EntityDimensions.scalable(1.375F, 0.375F))
@@ -56,7 +56,7 @@ public class SpeciesEntities {
             "birt",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Birt::new)
-                    .defaultAttributes(Birt::createBirtAttributes)
+                    .defaultAttributes(Birt::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Birt::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.6F, 0.6F))
@@ -76,7 +76,7 @@ public class SpeciesEntities {
             "limpet",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Limpet::new)
-                    .defaultAttributes(Limpet::createLimpetAttributes)
+                    .defaultAttributes(Limpet::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Limpet::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.75F, 1.25F))
@@ -87,7 +87,7 @@ public class SpeciesEntities {
             "treeper",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Treeper::new)
-                    .defaultAttributes(Treeper::createTreeperAttributes)
+                    .defaultAttributes(Treeper::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Treeper::canSpawn)
                     .dimensions(EntityDimensions.scalable(2.5F, 7F))
@@ -98,7 +98,7 @@ public class SpeciesEntities {
             "treeper_sapling",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(TreeperSapling::new)
-                    .defaultAttributes(TreeperSapling::createTreeperAttributes)
+                    .defaultAttributes(TreeperSapling::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, TreeperSapling::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.7F, 1.2F))
@@ -109,10 +109,21 @@ public class SpeciesEntities {
             "goober",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(Goober::new)
-                    .defaultAttributes(Goober::createGooberAttributes)
+                    .defaultAttributes(Goober::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Goober::canSpawn)
                     .dimensions(EntityDimensions.scalable(1.5F, 2.2F))
+                    .trackRangeChunks(10)
+    );
+
+    public static final EntityType<Cruncher> CRUNCHER = register(
+            "cruncher",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Cruncher::new)
+                    .defaultAttributes(Cruncher::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Cruncher::canSpawn)
+                    .dimensions(EntityDimensions.scalable(4F, 4F))
                     .trackRangeChunks(10)
     );
 
