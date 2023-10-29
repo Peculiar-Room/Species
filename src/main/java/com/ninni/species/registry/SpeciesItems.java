@@ -45,6 +45,10 @@ public class SpeciesItems {
     public static final Item CRUNCHER_SPAWN_EGG = register("cruncher_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.CRUNCHER, 0x5522B6, 0x99032B, SpeciesDevelopers.NOON, new Item.Properties().stacksTo(64)));
     public static final Item CRUNCHER_EGG = register("cruncher_egg", new DoubleHighBlockItem(SpeciesBlocks.CRUNCHER_EGG, new FabricItemSettings()));
 
+    public static final Item MAMMUTILATION_SPAWN_EGG = register("mammutilation_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.MAMMUTILATION, 0x472418, 0xDE5D34, SpeciesDevelopers.REDA, new Item.Properties().stacksTo(64)));
+    public static final Item FROZEN_MEAT = register("frozen_meat", new BlockItem(SpeciesBlocks.FROZEN_MEAT, new FabricItemSettings()));
+    public static final Item FROZEN_HAIR = register("frozen_hair", new BlockItem(SpeciesBlocks.FROZEN_HAIR, new FabricItemSettings()));
+
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, id), item);
     }

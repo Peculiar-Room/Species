@@ -14,24 +14,37 @@ import net.minecraft.world.item.Items;
 public class SpeciesCreativeModeTabs {
 
     public static final CreativeModeTab SPECIES = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(Species.MOD_ID, "species"), FabricItemGroup.builder().title(Component.translatable("itemGroup.species.species")).icon(SpeciesItems.BIRT_EGG::getDefaultInstance).displayItems((itemDisplayParameters, output) -> {
+
         output.accept(SpeciesItems.WRAPTOR_SPAWN_EGG);
         output.accept(SpeciesItems.WRAPTOR_EGG);
         output.accept(SpeciesItems.CRACKED_WRAPTOR_EGG);
+
         output.accept(SpeciesItems.DEEPFISH_SPAWN_EGG);
         output.accept(SpeciesItems.DEEPFISH_BUCKET);
+
         output.accept(SpeciesItems.ROOMBUG_SPAWN_EGG);
+
         output.accept(SpeciesItems.BIRT_SPAWN_EGG);
         output.accept(SpeciesItems.BIRT_EGG);
         output.accept(SpeciesItems.BIRT_DWELLING);
         output.accept(SpeciesItems.MUSIC_DISC_DIAL);
+
         output.accept(SpeciesItems.LIMPET_SPAWN_EGG);
+
         output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
         output.accept(SpeciesItems.ANCIENT_PINECONE);
         output.accept(SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
+
         output.accept(SpeciesItems.GOOBER_SPAWN_EGG);
         output.accept(SpeciesItems.PETRIFIED_EGG);
+
         output.accept(SpeciesItems.CRUNCHER_SPAWN_EGG);
         output.accept(SpeciesItems.CRUNCHER_EGG);
+
+        output.accept(SpeciesItems.MAMMUTILATION_SPAWN_EGG);
+        output.accept(SpeciesItems.FROZEN_MEAT);
+        output.accept(SpeciesItems.FROZEN_HAIR);
+
     }).build());
 
     static {
@@ -39,7 +52,7 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.HAY_BLOCK, SpeciesItems.BIRT_DWELLING);
             entries.addAfter(Items.TURTLE_EGG, SpeciesItems.WRAPTOR_EGG);
             entries.addBefore(Items.WHEAT_SEEDS, SpeciesItems.ANCIENT_PINECONE);
-            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.PETRIFIED_EGG);
+            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.CRUNCHER_EGG, SpeciesItems.PETRIFIED_EGG, SpeciesItems.FROZEN_MEAT, SpeciesItems.FROZEN_HAIR);
         });
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, SpeciesItems.MUSIC_DISC_DIAL);
@@ -61,6 +74,8 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.BEE_SPAWN_EGG, SpeciesItems.BIRT_SPAWN_EGG);
             entries.addAfter(Items.RABBIT_SPAWN_EGG, SpeciesItems.ROOMBUG_SPAWN_EGG);
             entries.addAfter(Items.TRADER_LLAMA_SPAWN_EGG, SpeciesItems.TREEPER_SPAWN_EGG, SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
+            entries.addAfter(Items.CREEPER_SPAWN_EGG, SpeciesItems.CRUNCHER_SPAWN_EGG);
+            entries.addAfter(Items.MAGMA_CUBE_SPAWN_EGG, SpeciesItems.MAMMUTILATION_SPAWN_EGG);
             entries.addAfter(Items.GOAT_SPAWN_EGG, SpeciesItems.GOOBER_SPAWN_EGG);
         });
     }

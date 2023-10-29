@@ -101,7 +101,6 @@
   "entity.species.goober": "Goober",
   "item.species.goober_spawn_egg": "Goober Spawn Egg",
   "block.species.petrified_egg": "Petrified Egg",
-  "item.species.petrified_egg": "Petrified Egg",
   "subtitles.entity.species.goober.death": "Goober dies",
   "subtitles.entity.species.goober.hurt": "Goober hurts",
   "subtitles.entity.species.goober.idle": "Goober grunts",
@@ -113,5 +112,14 @@
   "subtitles.entity.species.goober.yawn": "Goober yawns",
   "subtitles.entity.species.goober.eat": "Goober eats",
   "subtitles.block.species.petrified_egg.crack": "Petrified Egg cracks",
-  "subtitles.block.species.petrified_egg.hatch": "Petrified Egg hatches"
+  "subtitles.block.species.petrified_egg.hatch": "Petrified Egg hatches",
+
+  "entity.species.cruncher": "Cruncher",
+  "item.species.cruncher_spawn_egg": "Cruncher Spawn Egg",
+  "block.species.cruncher_egg": "Cruncher Egg",
+
+  "entity.species.mammutilation": "Mammutilation",
+  "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
+  "block.species.frozen_meat": "Frozen Meat",
+  "block.species.frozen_hair": "Frozen Hair"
 }

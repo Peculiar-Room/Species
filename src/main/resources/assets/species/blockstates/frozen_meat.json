@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "axis=x": [
+      {
+        "model": "species:block/frozen_meat",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "species:block/frozen_meat"
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "species:block/frozen_meat",
+        "x": 90
+      }
+    ]
+  }
+}

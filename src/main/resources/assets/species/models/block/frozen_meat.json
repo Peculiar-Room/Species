@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "species:block/frozen_meat_top",
+    "side": "species:block/frozen_meat"
+  }
+}

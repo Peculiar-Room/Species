@@ -127,6 +127,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Mammutilation> MAMMUTILATION = register(
+            "mammutilation",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Mammutilation::new)
+                    .defaultAttributes(Mammutilation::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Mammutilation::canSpawn)
+                    .dimensions(EntityDimensions.scalable(2.6F, 3.8F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
