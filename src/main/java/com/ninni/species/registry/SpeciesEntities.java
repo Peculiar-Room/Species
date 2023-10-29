@@ -90,7 +90,7 @@ public class SpeciesEntities {
                     .defaultAttributes(Treeper::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Treeper::canSpawn)
-                    .dimensions(EntityDimensions.scalable(2.5F, 7F))
+                    .dimensions(EntityDimensions.scalable(1.9F, 7F))
                     .trackRangeChunks(10)
     );
 

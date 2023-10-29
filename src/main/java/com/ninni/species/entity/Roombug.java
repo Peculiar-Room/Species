@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.entity.ai.goal.RoombugFollowOwnerGoal;
 import com.ninni.species.registry.SpeciesSoundEvents;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -295,7 +294,7 @@ public class Roombug extends TamableAnimal {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        if ("Goofy Ahh".equals(ChatFormatting.stripFormatting(this.getName().getString()))) {
+        if (this.getName().getString().equalsIgnoreCase("goofy aah") || this.getName().getString().equalsIgnoreCase("goofy ah") || this.getName().getString().equalsIgnoreCase("goofy ahh")) {
             this.playSound(SpeciesSoundEvents.ROOMBUG_GOOFY_AAH_STEP, 1, 1);
         } else this.playSound(SpeciesSoundEvents.ROOMBUG_STEP, 0.5f, 1.0f);
     }

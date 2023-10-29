@@ -6,7 +6,6 @@ import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.Limpet;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -41,9 +40,9 @@ public class LimpetRenderer extends MobRenderer<Limpet, LimpetModel<Limpet>> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Limpet limpet) {
-        if ("Gary".equals(ChatFormatting.stripFormatting(limpet.getName().getString()))) {
-            return switch (limpet.getLimpetType()) {
+    public ResourceLocation getTextureLocation(Limpet entity) {
+        if (entity.getName().getString().equalsIgnoreCase("gary")) {
+            return switch (entity.getLimpetType()) {
                 case COAL -> GARY_TEXTURE_COAL;
                 case AMETHYST -> GARY_TEXTURE_AMETHYST;
                 case LAPIS -> GARY_TEXTURE_LAPIS;
@@ -52,7 +51,7 @@ public class LimpetRenderer extends MobRenderer<Limpet, LimpetModel<Limpet>> {
                 case SHELL, NO_SHELL -> GARY_TEXTURE;
             };
         } else
-            return switch (limpet.getLimpetType()) {
+            return switch (entity.getLimpetType()) {
                 case COAL -> TEXTURE_COAL;
                 case AMETHYST -> TEXTURE_AMETHYST;
                 case LAPIS -> TEXTURE_LAPIS;

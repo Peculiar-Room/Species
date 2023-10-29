@@ -24,6 +24,6 @@ public class TreeperRenderer<T extends LivingEntity> extends MobRenderer<Treeper
 
     @Override
     public ResourceLocation getTextureLocation(Treeper entity) {
-        return  TEXTURE;
+        return TEXTURE;
     }
 }

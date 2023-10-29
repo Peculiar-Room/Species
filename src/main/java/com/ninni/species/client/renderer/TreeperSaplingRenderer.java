@@ -45,6 +45,6 @@ public class TreeperSaplingRenderer<T extends LivingEntity> extends MobRenderer<
 
     @Override
     public ResourceLocation getTextureLocation(TreeperSapling entity) {
-        return  TEXTURE;
+        return TEXTURE;
     }
 }

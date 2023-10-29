@@ -5,7 +5,6 @@ import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.entity.WraptorModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +22,7 @@ public class WraptorRenderer<T extends LivingEntity> extends MobRenderer<Wraptor
     }
 
     @Override public ResourceLocation getTextureLocation(Wraptor entity) {
-        if ("Goth".equals(ChatFormatting.stripFormatting(entity.getName().getString()))) {
+        if (entity.getName().getString().equalsIgnoreCase("goth") || entity.getName().getString().equalsIgnoreCase("suzie")) {
             return TEXTURE_GOTH;
         } else return TEXTURE;
     }
