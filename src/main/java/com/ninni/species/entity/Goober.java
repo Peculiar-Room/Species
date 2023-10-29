@@ -63,6 +63,7 @@ public class Goober extends Animal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 2));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -312,8 +313,7 @@ public class Goober extends Animal {
         }
     }
 
-    class GooberMoveControl
-            extends MoveControl {
+    class GooberMoveControl extends MoveControl {
         public GooberMoveControl() {
             super(Goober.this);
         }

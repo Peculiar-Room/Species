@@ -123,7 +123,7 @@ public class SpeciesEntities {
                     .defaultAttributes(Cruncher::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Cruncher::canSpawn)
-                    .dimensions(EntityDimensions.scalable(4F, 4F))
+                    .dimensions(EntityDimensions.scalable(2.6F, 4.2F))
                     .trackRangeChunks(10)
     );
 

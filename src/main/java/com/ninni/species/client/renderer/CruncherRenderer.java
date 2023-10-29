@@ -18,12 +18,12 @@ public class CruncherRenderer<T extends LivingEntity> extends MobRenderer<Crunch
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/cruncher/cruncher.png");
 
     public CruncherRenderer(EntityRendererProvider.Context ctx) {
-        super(ctx, new CruncherModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.CRUNCHER)), 3F);
+        super(ctx, new CruncherModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.CRUNCHER)), 2.5F);
     }
 
     @Override
     protected void scale(Cruncher livingEntity, PoseStack poseStack, float f) {
-        poseStack.scale(1.5f,1.5f,1.5f);
+        poseStack.scale(1.2f,1.2f,1.2f);
         super.scale(livingEntity, poseStack, f);
     }
 
