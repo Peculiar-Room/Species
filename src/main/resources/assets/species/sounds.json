@@ -524,7 +524,8 @@
 		"sounds": [
 			"species:entity/treeper/step1",
 			"species:entity/treeper/step2",
-			"species:entity/treeper/step3"
+			"species:entity/treeper/step3",
+			"species:entity/treeper/step4"
 		],
 		"subtitle": "subtitles.entity.species.treeper.step"
 	}

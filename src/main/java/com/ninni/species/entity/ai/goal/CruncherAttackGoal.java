@@ -13,12 +13,12 @@ public class CruncherAttackGoal extends CruncherBehaviorGoal {
     @Override
     public boolean canUse() {
         LivingEntity target = this.cruncher.getTarget();
-        return super.canUse() && cruncher.distanceToSqr(target) < 10f;
+        return super.canUse() && cruncher.distanceTo(target) < 5f;
     }
 
     @Override
     public boolean canContinueToUse() {
         LivingEntity target = this.cruncher.getTarget();
-        return super.canContinueToUse() && cruncher.distanceToSqr(target) < 10f;
+        return super.canContinueToUse() && cruncher.distanceTo(target) < 5f;
     }
 }

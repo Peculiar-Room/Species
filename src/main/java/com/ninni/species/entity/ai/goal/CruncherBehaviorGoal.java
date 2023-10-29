@@ -46,7 +46,6 @@ public class CruncherBehaviorGoal extends Goal {
     public void tick() {
         super.tick();
         timer--;
-        System.out.println(timer);
     }
 
     @Override

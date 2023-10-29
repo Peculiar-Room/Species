@@ -115,6 +115,8 @@ public class Treeper extends AgeableMob {
         }
     }
 
+
+
     public boolean isInPoseTransition() {
         long l = this.getPoseTime();
         return l < (long)(this.isPlanted() ? 80 : 152);
@@ -192,22 +194,26 @@ public class Treeper extends AgeableMob {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof Player player && this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
-            if (this.getSaplingCooldown() == 0) {
-                this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
-                if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
-                if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
-                this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
-                this.shakingSuccessAnimationState.start(this.tickCount);
-                this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);
-            } else {
-                this.shakingFailAnimationState.start(this.tickCount);
-                this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_FAIL, 0.5f, 1.0f);
+        if (source.getEntity() instanceof Player player) {
+            this.playSound(SpeciesSoundEvents.TREEPER_HURT, 1.0f, 1.0f);
+            if (this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
+                if (this.getSaplingCooldown() == 0) {
+                    this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
+                    this.shakingSuccessAnimationState.start(this.tickCount);
+                    this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);
+                } else {
+                    this.shakingFailAnimationState.start(this.tickCount);
+                    this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_FAIL, 0.5f, 1.0f);
+                }
             }
-
         }
-        this.playSound(SpeciesSoundEvents.TREEPER_HURT, 1.0f, 1.0f);
-        return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) && super.hurt(source, amount);
+
+
+
+        return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))  && super.hurt(source, amount);
     }
 
     @Override
@@ -222,6 +228,11 @@ public class Treeper extends AgeableMob {
             movementInput = movementInput.multiply(0.0, 1.0, 0.0);
         }
         super.travel(movementInput);
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        return this.isPlanted() ? 320 : 160;
     }
 
     @Nullable

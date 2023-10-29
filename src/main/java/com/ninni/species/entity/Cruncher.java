@@ -40,7 +40,6 @@ public class Cruncher extends Animal {
     protected void registerGoals() {
 //THIS SHIT BROKEN
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1, true));
         this.goalSelector.addGoal(1, new CruncherAttackGoal(this));
         this.goalSelector.addGoal(2, new CruncherRoarGoal(this));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
