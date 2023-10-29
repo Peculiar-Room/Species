@@ -12,7 +12,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
 
 @Environment(EnvType.CLIENT)
@@ -93,8 +92,10 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
             this.leftEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) + 8.5F;
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
         }
-        if (treeper.getPose() != Pose.STANDING && treeper.getPose() != SpeciesPose.SHAKE_FAIL.get() && treeper.getPose() != SpeciesPose.SHAKE_SUCCESS.get()) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+
         this.animateWalk(TreeperAnimations.WALK, f, g, 5.0f, 5.5f);
+        this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        this.animate(treeper.uprootingAnimationState, TreeperAnimations.UPROOTS, h);
         this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
         this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);
 

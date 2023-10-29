@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Pose;
 
 public enum SpeciesPose {
     PLANTING,
+    UPROOTING,
     SHAKE_SUCCESS,
     SHAKE_FAIL,
     YAWNING,

@@ -1,5 +1,8 @@
 package com.ninni.species.entity;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.ninni.species.entity.ai.goal.TreeperPlantGoal;
+import com.ninni.species.entity.ai.goal.TreeperUprootGoal;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesTags;
@@ -32,10 +35,12 @@ import java.util.Optional;
 
 public class Treeper extends AgeableMob {
     private static final EntityDataAccessor<Integer> SAPLING_COOLDOWN = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Boolean> PLANTED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
     public final AnimationState shakingSuccessAnimationState = new AnimationState();
     public final AnimationState shakingFailAnimationState = new AnimationState();
     public final AnimationState plantingAnimationState = new AnimationState();
+    public final AnimationState uprootingAnimationState = new AnimationState();
 
     public Treeper(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);
@@ -66,9 +71,11 @@ public class Treeper extends AgeableMob {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new TreeperLookGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(0, new TreeperPlantGoal(this));
+        this.goalSelector.addGoal(0, new TreeperUprootGoal(this));
+        this.goalSelector.addGoal(1, new TreeperLookGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1));
     }
 
 
@@ -81,21 +88,32 @@ public class Treeper extends AgeableMob {
     @Override
     public void tick() {
         super.tick();
+
         if (this.getSaplingCooldown() > 0) this.setSaplingCooldown(this.getSaplingCooldown() - 1);
 
-        if (this.level().getDayTime() > 1000 && this.level().getDayTime() < 13000) {
-            //TODO doesnt work with gamerule doDaylightCycle
-            this.setPose(SpeciesPose.PLANTING.get());
-            this.setPlanted(true);
-        } else {
-            this.setPose(Pose.STANDING);
-            this.setPlanted(false);
+
+        if (this.level().isClientSide) {
+
+            if (this.getPoseTime() < 0L != this.isPlanted()) {
+                this.uprootingAnimationState.stop();
+                if (this.isPlanted() && this.getPoseTime() < 80L && this.getPoseTime() >= 0L) {
+                    this.plantingAnimationState.startIfStopped(this.tickCount);
+                }
+            } else {
+                this.plantingAnimationState.stop();
+                this.uprootingAnimationState.animateWhen(this.isInPoseTransition() && this.getPoseTime() >= 0L, this.tickCount);
+            }
         }
 
         if (this.isPlanted()) {
             this.yBodyRot = Math.round(this.yBodyRot / 90.0) * 90;
             this.setPos(Math.floor(position().x) + 0.99F, this.getY(), Math.floor(position().z) + 0.99F);
         }
+    }
+
+    public boolean isInPoseTransition() {
+        long l = this.getPoseTime();
+        return l < (long)(this.isPlanted() ? 80 : 152);
     }
 
     @Override
@@ -109,6 +127,26 @@ public class Treeper extends AgeableMob {
     }
 
 
+    public void plant() {
+        if (this.isPlanted()) return;
+        //this.playSound(SpeciesSoundEvents.GOOBER_LAY_DOWN, 1.0f, 1.0f);
+        this.setPose(SpeciesPose.PLANTING.get());
+        this.setPlanted(true);
+        this.resetLastPoseChangeTick(-(this.level()).getGameTime());
+    }
+    public void uproot() {
+        if (!this.isPlanted()) {
+            return;
+        }
+        this.setPose(Pose.STANDING);
+        this.setPlanted(false);
+        this.resetLastPoseChangeTick((this.level()).getGameTime());
+    }
+
+    public long getPoseTime() {
+        return (this.level()).getGameTime() - Math.abs(this.entityData.get(LAST_POSE_CHANGE_TICK));
+    }
+
     @Override
     public boolean canBeCollidedWith() {
         return this.isPlanted();
@@ -118,12 +156,14 @@ public class Treeper extends AgeableMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SAPLING_COOLDOWN, 0);
+        this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
         this.entityData.define(PLANTED, false);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
+        compoundTag.putLong("LastPoseTick", this.entityData.get(LAST_POSE_CHANGE_TICK));
         compoundTag.putInt("saplingCooldown", this.getSaplingCooldown());
         compoundTag.putBoolean("planted", this.isPlanted());
     }
@@ -133,11 +173,21 @@ public class Treeper extends AgeableMob {
         super.readAdditionalSaveData(compoundTag);
         this.setSaplingCooldown(compoundTag.getInt("saplingCooldown"));
         this.setPlanted(compoundTag.getBoolean("planted"));
+        long l = compoundTag.getLong("LastPoseTick");
+        if (l < 0L) this.setPose(SpeciesPose.PLANTING.get());
+        this.resetLastPoseChangeTick(l);
     }
+
+    @VisibleForTesting
+    public void resetLastPoseChangeTick(long l) {
+        this.entityData.set(LAST_POSE_CHANGE_TICK, l);
+    }
+
 
     public Optional<ItemStack> getStackInHand(Player player) {
         return Arrays.stream(InteractionHand.values()).filter(hand -> player.getItemInHand(hand).getItem() instanceof AxeItem).map(player::getItemInHand).findFirst();
     }
+
 
     @Override
     public boolean hurt(DamageSource source, float amount) {

@@ -10,7 +10,7 @@ public class GooberLayDownGoal extends Goal {
 
     public GooberLayDownGoal(Goober goober) {
         this.goober = goober;
-        this.minimalPoseTicks = 20 * 20;
+        this.minimalPoseTicks = 20 * 20 + goober.getRandom().nextInt(20 * 20);
     }
 
     @Override
