@@ -74,6 +74,16 @@ public class SpeciesSoundEvents {
     public static final SoundEvent GOOBER_YAWN = register("entity.goober.yawn");
     public static final SoundEvent GOOBER_EAT = register("entity.goober.eat");
 
+    public static final SoundEvent TREEPER_DEATH = register("entity.treeper.death");
+    public static final SoundEvent TREEPER_HURT = register("entity.treeper.hurt");
+    public static final SoundEvent TREEPER_IDLE = register("entity.treeper.idle");
+    public static final SoundEvent TREEPER_IDLE_PLANTED = register("entity.treeper.idle_planted");
+    public static final SoundEvent TREEPER_PLANT = register("entity.treeper.plant");
+    public static final SoundEvent TREEPER_UPROOT = register("entity.treeper.uproot");
+    public static final SoundEvent TREEPER_STEP = register("entity.treeper.step");
+    public static final SoundEvent TREEPER_SHAKE_FAIL = register("entity.treeper.shake_fail");
+    public static final SoundEvent TREEPER_SHAKE_SUCCESS = register("entity.treeper.shake_success");
+
     public static final SoundEvent PETRIFIED_EGG_CRACK = register("block.petrified_egg.crack");
     public static final SoundEvent PETRIFIED_EGG_HATCH = register("block.petrified_egg.hatch");
 

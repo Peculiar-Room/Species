@@ -291,15 +291,15 @@ public class TreeperAnimations {
                 .addAnimation("trunk",
                         new AnimationChannel(AnimationChannel.Targets.ROTATION,
                                 new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM),
+                                        AnimationChannel.Interpolations.LINEAR),
                                 new Keyframe(0.041676664f, KeyframeAnimations.degreeVec(0f, 0f, 2.5f),
-                                        AnimationChannel.Interpolations.CATMULLROM),
+                                        AnimationChannel.Interpolations.LINEAR),
                                 new Keyframe(0.125f, KeyframeAnimations.degreeVec(0f, 0f, -2.5f),
-                                        AnimationChannel.Interpolations.CATMULLROM),
+                                        AnimationChannel.Interpolations.LINEAR),
                                 new Keyframe(0.20834334f, KeyframeAnimations.degreeVec(0f, 0f, 1.25f),
-                                        AnimationChannel.Interpolations.CATMULLROM),
+                                        AnimationChannel.Interpolations.LINEAR),
                                 new Keyframe(0.2916767f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                        AnimationChannel.Interpolations.CATMULLROM)))
+                                        AnimationChannel.Interpolations.LINEAR)))
                 .build();
 
         public static final AnimationDefinition SHAKE_SUCCESS = AnimationDefinition.Builder.withLength(1.25f)

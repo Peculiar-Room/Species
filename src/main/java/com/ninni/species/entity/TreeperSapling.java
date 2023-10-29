@@ -2,6 +2,7 @@ package com.ninni.species.entity;
 
 import com.ninni.species.entity.ai.goal.TreeperSaplingSwellGoal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -76,22 +77,35 @@ public class TreeperSapling extends TamableAnimal {
     }
 
     @Override
-    public InteractionResult mobInteract(Player player2, InteractionHand interactionHand) {
-        ItemStack itemStack = player2.getItemInHand(interactionHand);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
-            this.level().playSound(player2, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
+            this.level().playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
             if (!this.level().isClientSide) {
                 this.ignite();
                 if (!itemStack.isDamageableItem()) {
                     itemStack.shrink(1);
                 } else {
-                    itemStack.hurtAndBreak(1, player2, player -> player.broadcastBreakEvent(interactionHand));
+                    itemStack.hurtAndBreak(1, player, player2 -> player2.broadcastBreakEvent(hand));
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
-        return super.mobInteract(player2, interactionHand);
+
+        if (itemStack.is(Items.BONE_MEAL) && !this.isTame()) {
+            if (!player.isCreative()) itemStack.shrink(1);
+            double d = this.random.nextGaussian() * 0.02;
+            double e = this.random.nextGaussian() * 0.02;
+            double f = this.random.nextGaussian() * 0.02;
+            this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
+            this.playSound(SoundEvents.BONE_MEAL_USE);
+
+            this.setOwnerUUID(player.getUUID());
+            this.setTame(true);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.mobInteract(player, hand);
     }
 
 

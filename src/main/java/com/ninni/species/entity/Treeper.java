@@ -5,6 +5,7 @@ import com.ninni.species.entity.ai.goal.TreeperPlantGoal;
 import com.ninni.species.entity.ai.goal.TreeperUprootGoal;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +30,9 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -120,8 +124,6 @@ public class Treeper extends AgeableMob {
     public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
         if (DATA_POSE.equals(entityDataAccessor)) {
             if (this.getPose() == SpeciesPose.PLANTING.get()) this.plantingAnimationState.start(this.tickCount);
-            if (this.getPose() == SpeciesPose.SHAKE_SUCCESS.get()) this.shakingSuccessAnimationState.start(this.tickCount);
-            if (this.getPose() == SpeciesPose.SHAKE_FAIL.get()) this.shakingFailAnimationState.start(this.tickCount);
         }
         super.onSyncedDataUpdated(entityDataAccessor);
     }
@@ -129,15 +131,14 @@ public class Treeper extends AgeableMob {
 
     public void plant() {
         if (this.isPlanted()) return;
-        //this.playSound(SpeciesSoundEvents.GOOBER_LAY_DOWN, 1.0f, 1.0f);
+        this.playSound(SpeciesSoundEvents.TREEPER_PLANT, 2.0f, 1.0f);
         this.setPose(SpeciesPose.PLANTING.get());
         this.setPlanted(true);
         this.resetLastPoseChangeTick(-(this.level()).getGameTime());
     }
     public void uproot() {
-        if (!this.isPlanted()) {
-            return;
-        }
+        if (!this.isPlanted()) return;
+        this.playSound(SpeciesSoundEvents.TREEPER_UPROOT, 1.0f, 1.0f);
         this.setPose(Pose.STANDING);
         this.setPlanted(false);
         this.resetLastPoseChangeTick((this.level()).getGameTime());
@@ -197,11 +198,15 @@ public class Treeper extends AgeableMob {
                 if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                 if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                 this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
-                this.setPose(SpeciesPose.SHAKE_SUCCESS.get());
-            }else this.setPose(SpeciesPose.SHAKE_FAIL.get());
+                this.shakingSuccessAnimationState.start(this.tickCount);
+                this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);
+            } else {
+                this.shakingFailAnimationState.start(this.tickCount);
+                this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_FAIL, 0.5f, 1.0f);
+            }
 
         }
-
+        this.playSound(SpeciesSoundEvents.TREEPER_HURT, 1.0f, 1.0f);
         return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) && super.hurt(source, amount);
     }
 
@@ -217,6 +222,29 @@ public class Treeper extends AgeableMob {
             movementInput = movementInput.multiply(0.0, 1.0, 0.0);
         }
         super.travel(movementInput);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpeciesSoundEvents.TREEPER_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.isPlanted() ? SpeciesSoundEvents.TREEPER_IDLE_PLANTED : SpeciesSoundEvents.TREEPER_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.TREEPER_DEATH;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpeciesSoundEvents.TREEPER_STEP, 1f, 1);
     }
 
     @Override

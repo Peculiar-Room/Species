@@ -457,5 +457,75 @@
 	"block.petrified_egg.hatch": {
 		"sounds": [],
 		"subtitle": "subtitles.block.species.petrified_egg.hatch"
+	},
+	"entity.treeper.death": {
+		"sounds": [
+			"species:entity/treeper/death"
+		],
+		"subtitle": "subtitles.entity.species.treeper.death"
+	},
+	"entity.treeper.hurt": {
+		"sounds": [
+			"species:entity/treeper/hurt1",
+			"species:entity/treeper/hurt2",
+			"species:entity/treeper/hurt3"
+		],
+		"subtitle": "subtitles.entity.species.treeper.hurt"
+	},
+	"entity.treeper.idle": {
+		"sounds": [
+			"species:entity/treeper/idle1",
+			"species:entity/treeper/idle2",
+			"species:entity/treeper/idle3",
+			"species:entity/treeper/idle4"
+		],
+		"subtitle": "subtitles.entity.species.treeper.idle"
+	},
+	"entity.treeper.idle_planted": {
+		"sounds": [
+			"species:entity/treeper/idle_planted1",
+			"species:entity/treeper/idle_planted2",
+			"species:entity/treeper/idle_planted3",
+			"species:entity/treeper/idle_planted4"
+		],
+		"subtitle": "subtitles.entity.species.treeper.idle_planted"
+	},
+	"entity.treeper.plant": {
+		"sounds": [
+			"species:entity/treeper/plant1",
+			"species:entity/treeper/plant2",
+			"species:entity/treeper/plant3"
+		],
+		"subtitle": "subtitles.entity.species.treeper.plant"
+	},
+	"entity.treeper.uproot": {
+		"sounds": [
+			"species:entity/treeper/uproot1",
+			"species:entity/treeper/uproot2",
+			"species:entity/treeper/uproot3"
+		],
+		"subtitle": "subtitles.entity.species.treeper.uproot"
+	},
+	"entity.treeper.shake_fail": {
+		"sounds": [
+			"species:entity/treeper/shake_fail1",
+			"species:entity/treeper/shake_fail2",
+			"species:entity/treeper/shake_fail3"
+		],
+		"subtitle": "subtitles.entity.species.treeper.shake_fail"
+	},
+	"entity.treeper.shake_success": {
+		"sounds": [
+			"species:entity/treeper/shake_success"
+		],
+		"subtitle": "subtitles.entity.species.treeper.shake_success"
+	},
+	"entity.treeper.step": {
+		"sounds": [
+			"species:entity/treeper/step1",
+			"species:entity/treeper/step2",
+			"species:entity/treeper/step3"
+		],
+		"subtitle": "subtitles.entity.species.treeper.step"
 	}
 }
