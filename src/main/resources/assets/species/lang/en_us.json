@@ -135,5 +135,9 @@
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
   "block.species.frozen_meat": "Frozen Meat",
-  "block.species.frozen_hair": "Frozen Hair"
+  "block.species.frozen_hair": "Frozen Hair",
+
+  "entity.species.springling": "Springling",
+  "item.species.springling_spawn_egg": "Springling Spawn Egg",
+  "springling.keybinds": "Press %s to Extend and %s to Retract"
 }

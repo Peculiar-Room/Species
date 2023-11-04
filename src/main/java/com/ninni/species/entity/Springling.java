@@ -1,9 +1,11 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.SpeciesClient;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,10 +23,8 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
-import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -32,9 +32,11 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class Springling extends Animal implements PlayerRideableJumping {
+public class Springling extends Animal implements PlayerRideable {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
     private static final EntityDimensions EXTENDED_DIMENSIONS = EntityDimensions.scalable(0.8F, 1.3F);
+    private static boolean extending = false;
+    private static int messageCooldown;
 
     public Springling(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -53,15 +55,13 @@ public class Springling extends Animal implements PlayerRideableJumping {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void tick() {
         super.tick();
-
-
         this.refreshDimensions();
 
-
         //TODO this has to run on both server and client and be player specific
-        if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < 10 && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player) {
+        if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < 9 && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
             this.setExtendedAmount(this.getExtendedAmount() + 0.1f);
             player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
         }
@@ -69,6 +69,18 @@ public class Springling extends Animal implements PlayerRideableJumping {
         if (SpeciesClient.retractKey.isDown() && this.getExtendedAmount() > 0 && !SpeciesClient.extendKey.isDown() && this.getFirstPassenger() instanceof Player player) {
             this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
             player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
+        }
+
+        if (extending) {
+            if (this.getExtendedAmount() > 0) {
+                this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
+                this.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
+            } else extending = false;
+        }
+
+        if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
+        if (messageCooldown == 1 && this.isVehicle()) {
+            if (this.getFirstPassenger() instanceof LocalPlayer localPlayer) localPlayer.displayClientMessage(Component.translatable("springling.keybinds", SpeciesClient.extendKey.getTranslatedKeyMessage(), SpeciesClient.retractKey.getTranslatedKeyMessage()), true);
         }
 
         if (this.getExtendedAmount() < 0) this.setExtendedAmount(0);
@@ -80,8 +92,13 @@ public class Springling extends Animal implements PlayerRideableJumping {
         if (this.isVehicle() || this.isBaby()) {
             return super.mobInteract(player, interactionHand);
         }
+        if (player.isShiftKeyDown()) {
+            if (this.getExtendedAmount() > 0) extending = true;
+        } else {
+            messageCooldown = 70;
+            this.doPlayerRide(player);
+        }
 
-        this.doPlayerRide(player);
         return InteractionResult.sidedSuccess((this.level()).isClientSide);
     }
 
@@ -184,7 +201,7 @@ public class Springling extends Animal implements PlayerRideableJumping {
 
     @Override
     protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height - 0.25f;
+        return entityDimensions.height - 0.15f;
     }
 
     @Override
@@ -193,15 +210,14 @@ public class Springling extends Animal implements PlayerRideableJumping {
     }
 
     @Override
-    public double getMyRidingOffset() {
-        return super.getMyRidingOffset();
+    public boolean isPushable() {
+        return !this.isVehicle() && this.getExtendedAmount() == 0;
     }
 
     @Override
-    public boolean isPushable() {
-        return !this.isVehicle();
+    public boolean canBeCollidedWith() {
+        return false;
     }
-
 
     @Override
     @Nullable
@@ -231,7 +247,8 @@ public class Springling extends Animal implements PlayerRideableJumping {
                 if (DismountHelper.isBlockFloorValid(h)) {
                     AABB aABB = livingEntity.getLocalBoundsForPose(pose);
                     Vec3 vec32 = new Vec3(d, (double)mutableBlockPos.getY() + h, f);
-                    if (DismountHelper.canDismountTo((CollisionGetter)((Object)this.level()), livingEntity, aABB.move(vec32))) {
+
+                    if (DismountHelper.canDismountTo((this.level()), livingEntity, aABB.move(vec32))) {
                         livingEntity.setPose(pose);
                         return vec32;
                     }
@@ -244,37 +261,17 @@ public class Springling extends Animal implements PlayerRideableJumping {
 
     @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
-        Vec3 vec3 = AbstractHorse.getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.RIGHT ? 90.0f : -90.0f));
+        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.RIGHT ? 90.0f : -90.0f));
         Vec3 vec32 = this.getDismountLocationInDirection(vec3, livingEntity);
         if (vec32 != null) {
             return vec32;
         }
-        Vec3 vec33 = AbstractHorse.getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.LEFT ? 90.0f : -90.0f));
+        Vec3 vec33 = getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.LEFT ? 90.0f : -90.0f));
         Vec3 vec34 = this.getDismountLocationInDirection(vec33, livingEntity);
         if (vec34 != null) {
             return vec34;
         }
         return this.position();
-    }
-
-    @Override
-    public void onPlayerJump(int i) {
-
-    }
-
-    @Override
-    public boolean canJump() {
-        return false;
-    }
-
-    @Override
-    public void handleStartJump(int i) {
-
-    }
-
-    @Override
-    public void handleStopJump() {
-
     }
 
     @SuppressWarnings("unused")

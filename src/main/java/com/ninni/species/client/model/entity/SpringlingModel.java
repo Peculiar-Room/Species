@@ -38,7 +38,7 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
         this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
         this.neck.yScale = entity.getExtendedAmount() * 2.8f + 1;
-        this.head.yRot = entity.getExtendedAmount();
+        this.neck.yRot = entity.getExtendedAmount();
         this.head.y = 4.5F - entity.getExtendedAmount() * 20.75f;
     }
 
