@@ -14,6 +14,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -22,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Springling extends AbstractHorse {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
+    private static final EntityDimensions EXTENDED_DIMENSIONS = EntityDimensions.scalable(0.8F, 1.3F);
 
     public Springling(EntityType<? extends AbstractHorse> entityType, Level level) {
         super(entityType, level);
@@ -29,7 +33,14 @@ public class Springling extends AbstractHorse {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 0.3);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 0.2);
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.7));
+        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -37,12 +48,18 @@ public class Springling extends AbstractHorse {
         super.tick();
 
 
+        this.refreshDimensions();
+
+
+        //TODO this has to run on both server and client
         if (this.getFirstPassenger() instanceof LocalPlayer player) {
-            if (player.input.down && this.getExtendedAmount() > 0) {
+            if (player.isShiftKeyDown() && this.getExtendedAmount() > 0 && !player.input.jumping) {
                 this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
+                player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
             }
-            if (player.input.jumping && this.getExtendedAmount() < 20f) {
-                this.setExtendedAmount(this.getExtendedAmount() + 0.25f);
+            if (player.input.jumping && this.getExtendedAmount() < 10 && !player.isShiftKeyDown()) {
+                this.setExtendedAmount(this.getExtendedAmount() + 0.1f);
+                player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
             }
         }
 
@@ -51,14 +68,7 @@ public class Springling extends AbstractHorse {
     }
 
     @Override
-    public void dismountTo(double d, double e, double f) {
-        this.setExtendedAmount(0);
-        super.dismountTo(d, e, f);
-    }
-
-    @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-
 
         if (player.getItemInHand(interactionHand).isEmpty()) {
             return player.startRiding(this) ? InteractionResult.SUCCESS : InteractionResult.PASS;
@@ -67,20 +77,39 @@ public class Springling extends AbstractHorse {
         return super.mobInteract(player, interactionHand);
     }
 
-
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(1F, 1.2f + this.getExtendedAmount()/2);
+        return EXTENDED_DIMENSIONS.scale(1, this.getExtendedAmount() + 1);
     }
 
     @Override
+    public boolean isSaddled() {
+        return true;
+    }
+    @Override
+    protected boolean canPerformRearing() {
+        return false;
+    }
+
+    @Override
+    public boolean canJump() {
+        return false;
+    }
+
+    @Override
+    public boolean isTamed() {
+        return true;
+    }
+
+
+    @Override
     public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset() + this.getExtendedAmount();
+        return this.getDimensions(Pose.STANDING).height - 0.25f;
     }
 
     @Override
     public double getMyRidingOffset() {
-        return super.getMyRidingOffset() + this.getExtendedAmount();
+        return super.getMyRidingOffset();
     }
 
     @SuppressWarnings("unused")

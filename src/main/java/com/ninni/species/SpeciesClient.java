@@ -1,22 +1,37 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
-import com.ninni.species.client.renderer.*;
-import com.ninni.species.registry.SpeciesBlocks;
-import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.particles.BirtdParticle;
 import com.ninni.species.client.particles.SnoringParticle;
-import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.client.renderer.LimpetRenderer;
+import com.ninni.species.client.renderer.*;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 
 public class SpeciesClient implements ClientModInitializer {
+    private static final KeyMapping extendKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+            "key.extend",
+            265,
+            "key.categories.species"
+    ));
+
+    private static final KeyMapping retractKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+            "key.retract",
+            264,
+            "key.categories.species"
+    ));
+
+
+
 
     @Override
     public void onInitializeClient() {

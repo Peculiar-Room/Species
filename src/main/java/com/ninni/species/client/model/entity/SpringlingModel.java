@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> {
     private final ModelPart root;
     private final ModelPart body;
+    private final ModelPart head;
     private final ModelPart neck;
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
@@ -22,10 +23,23 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         this.root = root;
 
         this.body = root.getChild("body");
+        this.head = root.getChild("head");
         this.neck = root.getChild("neck");
         this.rightLeg = root.getChild("right_leg");
         this.leftLeg = root.getChild("left_leg");
 
+    }
+
+    @Override
+    public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        limbDistance = Mth.clamp(limbDistance, -0.25F, 0.25F);
+        float speed = 1.5f;
+        float degree = 1.0f;
+        this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
+        this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
+        this.neck.yScale = entity.getExtendedAmount() * 2.8f + 1;
+        this.head.yRot = entity.getExtendedAmount();
+        this.head.y = 4.5F - entity.getExtendedAmount() * 20.75f;
     }
 
     public static LayerDefinition getLayerDefinition() {
@@ -52,12 +66,4 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         return this.root;
     }
 
-    @Override
-    public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        limbDistance = Mth.clamp(limbDistance, -0.25F, 0.25F);
-        float speed = 1.5f;
-        float degree = 1.0f;
-        this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
-        this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
-    }
 }
