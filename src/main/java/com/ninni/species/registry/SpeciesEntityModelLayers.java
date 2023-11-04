@@ -23,6 +23,7 @@ public interface SpeciesEntityModelLayers {
     ModelLayerLocation GOOBER = main("goober", GooberModel::getLayerDefinition);
     ModelLayerLocation CRUNCHER = main("cruncher", CruncherModel::getLayerDefinition);
     ModelLayerLocation MAMMUTILATION = main("mammutilation", MammutilationModel::getLayerDefinition);
+    ModelLayerLocation SPRINGLING = main("springling", SpringlingModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

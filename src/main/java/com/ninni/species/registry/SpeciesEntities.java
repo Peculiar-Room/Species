@@ -138,6 +138,17 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Springling> SPRINGLING = register(
+            "springling",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Springling::new)
+                    .defaultAttributes(Springling::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Springling::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.8F, 1.3F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

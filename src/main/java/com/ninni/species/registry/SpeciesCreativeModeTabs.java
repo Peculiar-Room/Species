@@ -45,6 +45,8 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.FROZEN_MEAT);
         output.accept(SpeciesItems.FROZEN_HAIR);
 
+        output.accept(SpeciesItems.SPRINGLING_SPAWN_EGG);
+
     }).build());
 
     static {
