@@ -18,13 +18,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 
 public class SpeciesClient implements ClientModInitializer {
-    private static final KeyMapping extendKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+    public static final KeyMapping extendKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
             "key.extend",
             265,
             "key.categories.species"
     ));
 
-    private static final KeyMapping retractKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+    public static final KeyMapping retractKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
             "key.retract",
             264,
             "key.categories.species"
