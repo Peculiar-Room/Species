@@ -36,6 +36,7 @@ public class Springling extends Animal implements PlayerRideable {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
     public static final EntityDataAccessor<Boolean> RETRACTING = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.BOOLEAN);
     private static int messageCooldown;
+    public int maxExtendedAmount = 4;
 
     public Springling(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -58,6 +59,9 @@ public class Springling extends Animal implements PlayerRideable {
     public void tick() {
         super.tick();
         this.refreshDimensions();
+
+
+        if (this.getExtendedAmount() > 9) this.setExtendedAmount(9);
 
         //TODO this has to run on both server and client and be player specific
         if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < 9 && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
@@ -84,7 +88,6 @@ public class Springling extends Animal implements PlayerRideable {
         }
 
         if (this.getExtendedAmount() < 0) this.setExtendedAmount(0);
-
     }
 
     @Override
@@ -105,7 +108,7 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(0.8F, 1.3F).scale(1, this.getExtendedAmount() + 1);
+        return EntityDimensions.scalable(0.99F, 1.3F).scale(1, this.getExtendedAmount() + 1);
     }
     @Override
     protected void defineSynchedData() {
@@ -224,11 +227,6 @@ public class Springling extends Animal implements PlayerRideable {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         Entity entity = this.getFirstPassenger();
@@ -241,6 +239,7 @@ public class Springling extends Animal implements PlayerRideable {
         return null;
     }
 
+
     @Nullable
     private Vec3 getDismountLocationInDirection(Vec3 vec3, LivingEntity livingEntity) {
         double d = this.getX() + vec3.x;
@@ -251,11 +250,10 @@ public class Springling extends Animal implements PlayerRideable {
             mutableBlockPos.set(d, e, f);
             double g = this.getBoundingBox().maxY + 0.75;
             do {
-                double h = this.level().getBlockFloorHeight(mutableBlockPos);
-                if ((double)mutableBlockPos.getY() + h > g) continue block0;
-                if (DismountHelper.isBlockFloorValid(h)) {
+                if ((double)mutableBlockPos.getY() > g) continue block0;
+                if (DismountHelper.isBlockFloorValid(0)) {
                     AABB aABB = livingEntity.getLocalBoundsForPose(pose);
-                    Vec3 vec32 = new Vec3(d, (double)mutableBlockPos.getY() + h, f);
+                    Vec3 vec32 = new Vec3(d, g, f);
 
                     if (DismountHelper.canDismountTo((this.level()), livingEntity, aABB.move(vec32))) {
                         livingEntity.setPose(pose);
@@ -265,22 +263,18 @@ public class Springling extends Animal implements PlayerRideable {
                 mutableBlockPos.move(Direction.UP);
             } while ((double)mutableBlockPos.getY() < g);
         }
+
         return null;
     }
 
     @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
-        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.RIGHT ? 90.0f : -90.0f));
+        Vec3 vec3 = getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot());
         Vec3 vec32 = this.getDismountLocationInDirection(vec3, livingEntity);
         if (vec32 != null) {
             return vec32;
         }
-        Vec3 vec33 = getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), this.getYRot() + (livingEntity.getMainArm() == HumanoidArm.LEFT ? 90.0f : -90.0f));
-        Vec3 vec34 = this.getDismountLocationInDirection(vec33, livingEntity);
-        if (vec34 != null) {
-            return vec34;
-        }
-        return this.position();
+        return this.position().add(0,this.getEyeHeight(),0);
     }
 
     @SuppressWarnings("unused")

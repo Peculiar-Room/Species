@@ -24,8 +24,8 @@ public class SpringlingRenderer<T extends LivingEntity> extends MobRenderer<Spri
 
     @Override
     public ResourceLocation getTextureLocation(Springling entity) {
-        if (entity.getExtendedAmount() > 3 && entity.getExtendedAmount() < 6) return TEXTURE_1;
-        if (entity.getExtendedAmount() >= 6) return TEXTURE_2;
+        if (entity.getExtendedAmount() > entity.maxExtendedAmount/3f && entity.getExtendedAmount() < entity.maxExtendedAmount/1.5f) return TEXTURE_1;
+        if (entity.getExtendedAmount() >= entity.maxExtendedAmount/1.5f) return TEXTURE_2;
         return TEXTURE;
     }
 }
