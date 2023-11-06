@@ -34,8 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Springling extends Animal implements PlayerRideable {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
-    private static final EntityDimensions EXTENDED_DIMENSIONS = EntityDimensions.scalable(0.8F, 1.3F);
-    private static boolean extending = false;
+    public static final EntityDataAccessor<Boolean> RETRACTING = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.BOOLEAN);
     private static int messageCooldown;
 
     public Springling(EntityType<? extends Animal> entityType, Level level) {
@@ -71,11 +70,12 @@ public class Springling extends Animal implements PlayerRideable {
             player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
         }
 
-        if (extending) {
+        if (this.isRetracting() && !this.level().isClientSide) {
             if (this.getExtendedAmount() > 0) {
                 this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
-                this.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
-            } else extending = false;
+                this.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount() / 10 + 0.5f);
+            }
+            if (this.getExtendedAmount() == 0) this.setRetracting(false);
         }
 
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
@@ -92,9 +92,10 @@ public class Springling extends Animal implements PlayerRideable {
         if (this.isVehicle() || this.isBaby()) {
             return super.mobInteract(player, interactionHand);
         }
-        if (player.isShiftKeyDown()) {
-            if (this.getExtendedAmount() > 0) extending = true;
-        } else {
+        if (player.isShiftKeyDown() && !isRetracting() && this.getExtendedAmount() > 0 && !this.level().isClientSide) {
+            this.setRetracting(true);
+        }
+        if (!player.isShiftKeyDown()) {
             messageCooldown = 70;
             this.doPlayerRide(player);
         }
@@ -104,24 +105,26 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EXTENDED_DIMENSIONS.scale(1, this.getExtendedAmount() + 1);
+        return EntityDimensions.scalable(0.8F, 1.3F).scale(1, this.getExtendedAmount() + 1);
     }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EXTENDED_AMOUNT, 0f);
+        this.entityData.define(RETRACTING, false);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
+        compoundTag.putBoolean("Retracting", this.isRetracting());
         compoundTag.putFloat("ExtendedAmount", this.getExtendedAmount());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
-
+        this.setRetracting(compoundTag.getBoolean("Retracting"));
         this.setExtendedAmount(compoundTag.getFloat("ExtendedAmount"));
     }
 
@@ -130,6 +133,12 @@ public class Springling extends Animal implements PlayerRideable {
     }
     public void setExtendedAmount(float amount) {
         this.entityData.set(EXTENDED_AMOUNT, amount);
+    }
+    public boolean isRetracting() {
+        return this.entityData.get(RETRACTING);
+    }
+    public void setRetracting(boolean bl) {
+        this.entityData.set(RETRACTING, bl);
     }
 
     @Override
