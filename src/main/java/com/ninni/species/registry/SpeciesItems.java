@@ -50,6 +50,7 @@ public class SpeciesItems {
     public static final Item FROZEN_HAIR = register("frozen_hair", new BlockItem(SpeciesBlocks.FROZEN_HAIR, new FabricItemSettings()));
 
     public static final Item SPRINGLING_SPAWN_EGG = register("springling_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.SPRINGLING, 0xFF7600, 0x3D3FAD, SpeciesDevelopers.GLADOS, new Item.Properties().stacksTo(64)));
+    public static final Item SPRINGLING_EGG = register("springling_egg", new DoubleHighBlockItem(SpeciesBlocks.SPRINGLING_EGG, new FabricItemSettings()));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, id), item);

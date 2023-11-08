@@ -36,7 +36,7 @@ public class Springling extends Animal implements PlayerRideable {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
     public static final EntityDataAccessor<Boolean> RETRACTING = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.BOOLEAN);
     private static int messageCooldown;
-    public int maxExtendedAmount = 4;
+    public int maxExtendedAmount = 9;
 
     public Springling(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -61,10 +61,10 @@ public class Springling extends Animal implements PlayerRideable {
         this.refreshDimensions();
 
 
-        if (this.getExtendedAmount() > 9) this.setExtendedAmount(9);
+        if (this.getExtendedAmount() > maxExtendedAmount) this.setExtendedAmount(maxExtendedAmount);
 
         //TODO this has to run on both server and client and be player specific
-        if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < 9 && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
+        if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < maxExtendedAmount && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
             this.setExtendedAmount(this.getExtendedAmount() + 0.1f);
             player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
         }
@@ -108,7 +108,7 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(0.99F, 1.3F).scale(1, this.getExtendedAmount() + 1);
+        return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getScale(), this.getScale() + this.getExtendedAmount()/1.5f);
     }
     @Override
     protected void defineSynchedData() {

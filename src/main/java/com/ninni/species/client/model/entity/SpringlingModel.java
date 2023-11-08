@@ -1,5 +1,7 @@
 package com.ninni.species.client.model.entity;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.entity.Springling;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,9 +43,22 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         limbDistance = Mth.clamp(limbDistance, -0.25F, 0.25F);
         this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 3.4f * limbDistance;
         this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 3.4f * limbDistance;
-        this.neck.yScale = entity.getExtendedAmount() * 1.3f;
+        this.neck.yScale = entity.getExtendedAmount() * 1.46f + 1;
         this.neck.yRot = entity.getExtendedAmount();
-        this.head.y = 4.5F - entity.getExtendedAmount() * 20.75f;
+        this.tail.yRot = Mth.cos(limbAngle * 0.6F) * 2.4F * limbDistance;
+        this.tail.xRot = - 0.5f;
+        this.head.y = - 8.5F - entity.getExtendedAmount() * 23.5f;
+        this.leftArm.y = Mth.cos(animationProgress * 0.15F + (float)Math.PI / 2 + 2f) * 0.5f -11.5F;
+        this.rightArm.y = Mth.cos(animationProgress * 0.15F + (float)Math.PI / 2) * 0.5f -11.5F;
+        this.leftArm.xRot = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
+        this.rightArm.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
+        if (entity.isVehicle() || entity.getExtendedAmount() > 0) {
+            this.head.xRot = 0;
+            this.head.yRot = 0;
+        } else {
+            this.head.xRot = headPitch * ((float) Math.PI / 180f);
+            this.head.yRot = headYaw * ((float) Math.PI / 180f);
+        }
     }
 
     public static LayerDefinition getLayerDefinition() {
@@ -125,6 +140,31 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         );
 
         return LayerDefinition.create(meshdefinition, 64, 64);
+    }
+
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
+        if (this.young) {
+            float l;
+            poseStack.pushPose();
+            l = 1.5f / 2;
+            poseStack.scale(l, l, l);
+
+            poseStack.translate(0.0f, 18 / 16.0f, 0f);
+            this.head.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            poseStack.popPose();
+            poseStack.pushPose();
+            l = 1.0f / 2;
+            poseStack.scale(l, l, l);
+            poseStack.translate(0.0f, 24 / 16.0f, 0.0f);
+            this.body.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.neck.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            poseStack.popPose();
+        } else {
+            this.head.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.body.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.neck.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+        }
     }
 
     @Override

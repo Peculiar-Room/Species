@@ -27,6 +27,8 @@ public class SpeciesBlocks {
     public static final Block FROZEN_MEAT = register("frozen_meat", new RotatedPillarBlock(FabricBlockSettings.create().mapColor(MapColor.TERRACOTTA_RED).strength(0.5f).sound(SoundType.SCULK)));
     public static final Block FROZEN_HAIR = register("frozen_hair", new Block(FabricBlockSettings.create().mapColor(MapColor.COLOR_BROWN).strength(0.5f).sound(SoundType.WOOL)));
 
+    public static final Block SPRINGLING_EGG = register("springling_egg", new SpringlingEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_YELLOW).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
+
     private static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(MOD_ID, id), block);
     }

@@ -4,13 +4,16 @@ import com.ninni.species.entity.ai.goal.CruncherAttackGoal;
 import com.ninni.species.entity.ai.goal.CruncherRoarGoal;
 import com.ninni.species.entity.enums.CruncherBehavior;
 import com.ninni.species.entity.pose.SpeciesPose;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -110,6 +113,23 @@ public class Cruncher extends Animal {
         this.setBehavior(compoundTag.getString("Behavior"));
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.CRUNCHER_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.CRUNCHER_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.CRUNCHER_DEATH;
+    }
 
     public String getBehavior() {
         return this.entityData.get(BEHAVIOR);

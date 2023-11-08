@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "hatch=0,half=lower": {
+      "model": "species:block/springling_egg_bottom"
+    },
+    "hatch=1,half=lower": {
+      "model": "species:block/springling_egg_bottom_cracked0"
+    },
+    "hatch=2,half=lower": {
+      "model": "species:block/springling_egg_bottom_cracked1"
+    },
+    "hatch=0,half=upper": {
+      "model": "species:block/springling_egg_top"
+    },
+    "hatch=1,half=upper": {
+      "model": "species:block/springling_egg_top_cracked0"
+    },
+    "hatch=2,half=upper": {
+      "model": "species:block/springling_egg_top_cracked1"
+    }
+  }
+}

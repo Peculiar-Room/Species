@@ -46,6 +46,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.FROZEN_HAIR);
 
         output.accept(SpeciesItems.SPRINGLING_SPAWN_EGG);
+        output.accept(SpeciesItems.SPRINGLING_EGG);
 
     }).build());
 

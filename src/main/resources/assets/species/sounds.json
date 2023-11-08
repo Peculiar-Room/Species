@@ -528,5 +528,30 @@
 			"species:entity/treeper/step4"
 		],
 		"subtitle": "subtitles.entity.species.treeper.step"
+	},
+	"entity.cruncher.idle": {
+		"sounds": [
+			"species:entity/cruncher/idle1",
+			"species:entity/cruncher/idle2",
+			"species:entity/cruncher/idle3",
+			"species:entity/cruncher/idle4"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.idle"
+	},
+	"entity.cruncher.hurt": {
+		"sounds": [
+			"species:entity/cruncher/hurt1",
+			"species:entity/cruncher/hurt2",
+			"species:entity/cruncher/hurt3"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.hurt"
+	},
+	"entity.cruncher.death": {
+		"sounds": [
+			"species:entity/cruncher/death1",
+			"species:entity/cruncher/death2",
+			"species:entity/cruncher/death3"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.death"
 	}
 }

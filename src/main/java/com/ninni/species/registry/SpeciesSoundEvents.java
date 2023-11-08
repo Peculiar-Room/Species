@@ -87,6 +87,10 @@ public class SpeciesSoundEvents {
     public static final SoundEvent PETRIFIED_EGG_CRACK = register("block.petrified_egg.crack");
     public static final SoundEvent PETRIFIED_EGG_HATCH = register("block.petrified_egg.hatch");
 
+    public static final SoundEvent CRUNCHER_DEATH = register("entity.cruncher.death");
+    public static final SoundEvent CRUNCHER_HURT = register("entity.cruncher.hurt");
+    public static final SoundEvent CRUNCHER_IDLE = register("entity.cruncher.idle");
+
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
