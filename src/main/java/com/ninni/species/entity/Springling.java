@@ -63,26 +63,26 @@ public class Springling extends Animal implements PlayerRideable {
         this.refreshDimensions();
 
 
-        if (this.getExtendedAmount() > maxExtendedAmount) this.setExtendedAmount(maxExtendedAmount);
+        if (getExtendedAmount() > maxExtendedAmount) this.setExtendedAmount(maxExtendedAmount);
 
         //TODO this has to run on both server and client and be player specific
-        if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < maxExtendedAmount && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
-            this.setExtendedAmount(this.getExtendedAmount() + 0.1f);
+        if (SpeciesClient.extendKey.isDown() && getExtendedAmount() < maxExtendedAmount && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
+            this.setExtendedAmount(getExtendedAmount() + 0.1f);
             this.playExtendingSound(player);
         }
 
-        if (SpeciesClient.retractKey.isDown() && this.getExtendedAmount() > 0 && !SpeciesClient.extendKey.isDown() && this.getFirstPassenger() instanceof Player player) {
-            this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
+        if (SpeciesClient.retractKey.isDown() && getExtendedAmount() > 0 && !SpeciesClient.extendKey.isDown() && this.getFirstPassenger() instanceof Player player) {
+            this.setExtendedAmount(getExtendedAmount() - 0.25f);
             this.playExtendingSound(player);
         }
 
         if (this.isRetracting() && !this.level().isClientSide) {
-            if (this.getExtendedAmount() > 0) {
-                this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
+            if (getExtendedAmount() > 0) {
+                this.setExtendedAmount(getExtendedAmount() - 0.25f);
                 this.playExtendingSound(this);
             }
-            if (this.getExtendedAmount() < 0.5f) this.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
-            if (this.getExtendedAmount() == 0) this.setRetracting(false);
+            if (getExtendedAmount() < 0.5f) this.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
+            if (getExtendedAmount() == 0) this.setRetracting(false);
         }
 
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
@@ -90,12 +90,12 @@ public class Springling extends Animal implements PlayerRideable {
             if (this.getFirstPassenger() instanceof LocalPlayer localPlayer) localPlayer.displayClientMessage(Component.translatable("springling.keybinds", SpeciesClient.extendKey.getTranslatedKeyMessage(), SpeciesClient.retractKey.getTranslatedKeyMessage()), true);
         }
 
-        if (this.getExtendedAmount() < 0) this.setExtendedAmount(0);
+        if (getExtendedAmount() < 0) this.setExtendedAmount(0);
     }
 
     public void playExtendingSound(Entity entity) {
-        if (this.getExtendedAmount() >= this.maxExtendedAmount - 0.1f) entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
-        entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND, 0.5f, this.getExtendedAmount()/10 + 0.5f);
+        if (getExtendedAmount() >= maxExtendedAmount - 0.1f) entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
+        entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND, 0.5f, getExtendedAmount()/10 + 0.5f);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class Springling extends Animal implements PlayerRideable {
         if (this.isVehicle() || this.isBaby()) {
             return super.mobInteract(player, interactionHand);
         }
-        if (player.isShiftKeyDown() && !isRetracting() && this.getExtendedAmount() > 0 && !this.level().isClientSide) {
+        if (player.isShiftKeyDown() && !isRetracting() && getExtendedAmount() > 0 && !this.level().isClientSide) {
             this.setRetracting(true);
         }
         if (!player.isShiftKeyDown()) {
@@ -111,12 +111,12 @@ public class Springling extends Animal implements PlayerRideable {
             this.doPlayerRide(player);
         }
 
-        return InteractionResult.sidedSuccess((this.level()).isClientSide);
+        return super.mobInteract(player, interactionHand);
     }
 
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getScale(), this.getScale() + this.getExtendedAmount()/1.5f);
+        return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getScale(), this.getScale() + getExtendedAmount()/1.5f);
     }
     @Override
     protected void defineSynchedData() {
@@ -129,7 +129,7 @@ public class Springling extends Animal implements PlayerRideable {
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("Retracting", this.isRetracting());
-        compoundTag.putFloat("ExtendedAmount", this.getExtendedAmount());
+        compoundTag.putFloat("ExtendedAmount", getExtendedAmount());
     }
 
     @Override
@@ -170,7 +170,7 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public boolean isImmobile() {
-        return (super.isImmobile() && this.isVehicle()) || (this.getExtendedAmount() > 0 && !this.isVehicle());
+        return (super.isImmobile() && this.isVehicle()) || (getExtendedAmount() > 0 && !this.isVehicle());
     }
 
     @Override
@@ -229,7 +229,7 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        if (this.getFirstPassenger() != null) this.getFirstPassenger().playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f * this.getExtendedAmount()/10, 1.0f);
+        if (this.getFirstPassenger() != null) this.getFirstPassenger().playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f * getExtendedAmount()/10, 1.0f);
         this.playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f, 1.0f);
     }
 
@@ -256,7 +256,7 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public boolean isPushable() {
-        return !this.isVehicle() && this.getExtendedAmount() == 0;
+        return !this.isVehicle() && getExtendedAmount() == 0;
     }
 
     @Override

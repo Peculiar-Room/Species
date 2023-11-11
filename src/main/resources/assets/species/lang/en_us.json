@@ -139,5 +139,13 @@
 
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Springling Spawn Egg",
-  "springling.keybinds": "Press %s to Extend and %s to Retract"
+  "block.species.springling_egg": "Springling Egg",
+  "springling.keybinds": "Press %s to Extend and %s to Retract",
+  "subtitles.entity.species.springling.death": "Springling dies",
+  "subtitles.entity.species.springling.hurt": "Springling hurts",
+  "subtitles.entity.species.springling.idle": "Springling snorts",
+  "subtitles.entity.species.springling.step": "Springling steps",
+  "subtitles.entity.species.springling.eat": "Springling eats",
+  "subtitles.entity.species.springling.extend": "Springling extends",
+  "subtitles.entity.species.springling.extend_finish": "Springling finishes extending"
 }
