@@ -458,6 +458,23 @@
 		"sounds": [],
 		"subtitle": "subtitles.block.species.petrified_egg.hatch"
 	},
+	"block.petrified_egg.plop": {
+		"sounds": [
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.6
+			},
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.7
+			},
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.8
+			}
+		],
+		"subtitle": "subtitles.block.species.petrified_egg.plop"
+	},
 	"entity.treeper.death": {
 		"sounds": [
 			"species:entity/treeper/death"
@@ -610,5 +627,22 @@
 			"species:entity/springling/step6"
 		],
 		"subtitle": "subtitles.entity.species.springling.step"
+	},
+	"block.springling_egg.plop": {
+		"sounds": [
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.6
+			},
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.7
+			},
+			{
+				"name": "mob/chicken/plop",
+				"pitch": 0.8
+			}
+		],
+		"subtitle": "subtitles.block.species.springling_egg.plop"
 	}
 }

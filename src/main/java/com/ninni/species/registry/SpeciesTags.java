@@ -14,6 +14,8 @@ import static com.ninni.species.Species.MOD_ID;
 public interface SpeciesTags {
     //itemTags
     TagKey<Item> WRAPTOR_BREED_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "wraptor_breed_items"));
+    TagKey<Item> GOOBER_BREED_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "goober_breed_items"));
+    TagKey<Item> SPRINGLING_BREED_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "springling_breed_items"));
 
     //blockTags
     TagKey<Block> WRAPTOR_NESTING_BLOCKS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "wraptor_nesting_blocks"));

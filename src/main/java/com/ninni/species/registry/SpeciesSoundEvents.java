@@ -86,6 +86,7 @@ public class SpeciesSoundEvents {
 
     public static final SoundEvent PETRIFIED_EGG_CRACK = register("block.petrified_egg.crack");
     public static final SoundEvent PETRIFIED_EGG_HATCH = register("block.petrified_egg.hatch");
+    public static final SoundEvent PETRIFIED_EGG_PLOP = register("block.petrified_egg.plop");
 
     public static final SoundEvent CRUNCHER_DEATH = register("entity.cruncher.death");
     public static final SoundEvent CRUNCHER_HURT = register("entity.cruncher.hurt");
@@ -98,6 +99,9 @@ public class SpeciesSoundEvents {
     public static final SoundEvent SPRINGLING_EAT = register("entity.springling.eat");
     public static final SoundEvent SPRINGLING_EXTEND = register("entity.springling.extend");
     public static final SoundEvent SPRINGLING_EXTEND_FINISH = register("entity.springling.extend_finish");
+    public static final SoundEvent SPRINGLING_EGG_CRACK = register("block.springling_egg.crack");
+    public static final SoundEvent SPRINGLING_EGG_HATCH = register("block.springling_egg.hatch");
+    public static final SoundEvent SPRINGLING_EGG_PLOP = register("block.springling_egg.plop");
 
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);

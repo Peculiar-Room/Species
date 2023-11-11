@@ -1,7 +1,10 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.SpeciesClient;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -20,12 +24,13 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -51,9 +56,11 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.7));
-        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 6.0f));
-        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new BreedGoal(this, 1));
+        this.goalSelector.addGoal(2, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.GOOBER_BREED_ITEMS), false));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.7));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -100,18 +107,59 @@ public class Springling extends Animal implements PlayerRideable {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        if (this.isVehicle() || this.isBaby()) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+
+        if (this.isVehicle()) {
             return super.mobInteract(player, interactionHand);
         }
-        if (player.isShiftKeyDown() && !isRetracting() && getExtendedAmount() > 0 && !this.level().isClientSide) {
-            this.setRetracting(true);
+
+        if (this.isFood(itemStack)) {
+            int i = this.getAge();
+            if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
+                this.usePlayerItem(player, interactionHand, itemStack);
+                this.setInLove(player);
+                this.level().playSound(null, this, SpeciesSoundEvents.SPRINGLING_EAT, SoundSource.NEUTRAL, 1.0f, this.isBaby() ? Mth.randomBetween(this.level().random, 0.8f, 1.2f) * 1.5f : Mth.randomBetween(this.level().random, 0.8f, 1.2f));
+                return InteractionResult.SUCCESS;
+            }
+            if (this.isBaby()) {
+                this.usePlayerItem(player, interactionHand, itemStack);
+                this.ageUp(Animal.getSpeedUpSecondsWhenFeeding(-i), true);
+                this.level().playSound(null, this, SpeciesSoundEvents.SPRINGLING_EAT, SoundSource.NEUTRAL, 1.0f, this.isBaby() ? Mth.randomBetween(this.level().random, 0.8f, 1.2f) * 1.5f : Mth.randomBetween(this.level().random, 0.8f, 1.2f));
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+            if (this.level().isClientSide) {
+                return InteractionResult.CONSUME;
+            }
         }
-        if (!player.isShiftKeyDown()) {
-            messageCooldown = 70;
-            this.doPlayerRide(player);
+
+        if (!this.isBaby() && !this.isFood(itemStack)) {
+            if (player.isShiftKeyDown() && !isRetracting() && getExtendedAmount() > 0 && !this.level().isClientSide) {
+                this.setRetracting(true);
+                return InteractionResult.SUCCESS;
+            }
+            if (!player.isShiftKeyDown()) {
+                messageCooldown = 70;
+                this.doPlayerRide(player);
+                return InteractionResult.SUCCESS;
+            }
         }
 
         return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
+    public void spawnChildFromBreeding(ServerLevel serverLevel, Animal animal) {
+        ItemStack itemStack = new ItemStack(SpeciesItems.SPRINGLING_EGG);
+        ItemEntity itemEntity = new ItemEntity(serverLevel, this.position().x(), this.position().y(), this.position().z(), itemStack);
+        itemEntity.setDefaultPickUpDelay();
+        this.finalizeSpawnChildFromBreeding(serverLevel, animal, null);
+        this.playSound(SpeciesSoundEvents.SPRINGLING_EGG_PLOP, 1.0f, (this.random.nextFloat() - this.random.nextFloat()) * 0.2f + 0.5f);
+        serverLevel.addFreshEntity(itemEntity);
+    }
+
+    @Override
+    public boolean isFood(ItemStack itemStack) {
+        return itemStack.is(SpeciesTags.SPRINGLING_BREED_ITEMS);
     }
 
     @Override
@@ -233,6 +281,10 @@ public class Springling extends Animal implements PlayerRideable {
         this.playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f, 1.0f);
     }
 
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+        return SpeciesEntities.SPRINGLING.create(serverLevel);
+    }
 
     @Override
     protected float getRiddenSpeed(Player player) {
@@ -313,11 +365,5 @@ public class Springling extends Animal implements PlayerRideable {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Springling> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return false;
-    }
-
-    @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
     }
 }

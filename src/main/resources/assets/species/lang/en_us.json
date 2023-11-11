@@ -127,6 +127,7 @@
   "subtitles.entity.species.goober.eat": "Goober eats",
   "subtitles.block.species.petrified_egg.crack": "Petrified Egg cracks",
   "subtitles.block.species.petrified_egg.hatch": "Petrified Egg hatches",
+  "subtitles.block.species.petrified_egg.plop": "Goober plops",
 
   "entity.species.cruncher": "Cruncher",
   "item.species.cruncher_spawn_egg": "Cruncher Spawn Egg",
@@ -147,5 +148,8 @@
   "subtitles.entity.species.springling.step": "Springling steps",
   "subtitles.entity.species.springling.eat": "Springling eats",
   "subtitles.entity.species.springling.extend": "Springling extends",
-  "subtitles.entity.species.springling.extend_finish": "Springling finishes extending"
+  "subtitles.entity.species.springling.extend_finish": "Springling finishes extending",
+  "subtitles.block.species.springling_egg.crack": "Springling Egg cracks",
+  "subtitles.block.species.springling_egg.hatch": "Springling Egg hatches",
+  "subtitles.block.species.springling_egg.plop": "Springling plops"
 }
