@@ -144,6 +144,15 @@ public class Springling extends Animal implements PlayerRideable {
     }
 
     @Override
+    public void handleEntityEvent(byte b) {
+        if (b == 4) {
+            this.playExtendingSound(this.getFirstPassenger());
+        } else {
+            super.handleEntityEvent(b);
+        }
+    }
+
+    @Override
     public void spawnChildFromBreeding(ServerLevel serverLevel, Animal animal) {
         ItemStack itemStack = new ItemStack(SpeciesItems.SPRINGLING_EGG);
         ItemEntity itemEntity = new ItemEntity(serverLevel, this.position().x(), this.position().y(), this.position().z(), itemStack);

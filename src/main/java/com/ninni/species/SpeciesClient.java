@@ -14,11 +14,14 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 
 public class SpeciesClient implements ClientModInitializer {
@@ -51,19 +54,23 @@ public class SpeciesClient implements ClientModInitializer {
                 SpeciesBlocks.TREEPER_SAPLING
         );
 
-        SpeciesNetwork.init();
+        SpeciesNetwork.clientInit();
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             Player player = client.player;
             if (player != null && player.getVehicle() instanceof Springling springling) {
                 float extendedAmount = springling.getExtendedAmount();
-                if (!retractKey.isDown() && extendedAmount < springling.maxExtendedAmount && !springling.level().getBlockState(player.blockPosition().above(2)).isSolid() && extendKey.isDown()) {
-                    springling.setExtendedAmount(extendedAmount + 0.1F);
-                    springling.playExtendingSound(player);
+                if (!retractKey.isDown() && !springling.level().getBlockState(player.blockPosition().above(2)).isSolid() && extendKey.isDown()) {
+                    FriendlyByteBuf friendlyByteBuf = PacketByteBufs.create();
+                    friendlyByteBuf.writeFloat(0.1F);
+                    friendlyByteBuf.writeBoolean(extendedAmount < springling.maxExtendedAmount);
+                    ClientPlayNetworking.send(SpeciesNetwork.UPDATE_SPRINGLING_EXTENDED_DATA, friendlyByteBuf);
                 }
-                if (retractKey.isDown() && !extendKey.isDown() && extendedAmount > 0) {
-                    springling.setExtendedAmount(extendedAmount - 0.25F);
-                    springling.playExtendingSound(player);
+                if (retractKey.isDown() && !extendKey.isDown()) {
+                    FriendlyByteBuf friendlyByteBuf = PacketByteBufs.create();
+                    friendlyByteBuf.writeFloat(-0.25F);
+                    friendlyByteBuf.writeBoolean(extendedAmount > 0);
+                    ClientPlayNetworking.send(SpeciesNetwork.UPDATE_SPRINGLING_EXTENDED_DATA, friendlyByteBuf);
                 }
             }
         });
