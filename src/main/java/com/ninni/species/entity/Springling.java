@@ -1,6 +1,7 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.SpeciesClient;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,7 +11,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -66,19 +68,20 @@ public class Springling extends Animal implements PlayerRideable {
         //TODO this has to run on both server and client and be player specific
         if (SpeciesClient.extendKey.isDown() && this.getExtendedAmount() < maxExtendedAmount && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
             this.setExtendedAmount(this.getExtendedAmount() + 0.1f);
-            player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
+            this.playExtendingSound(player);
         }
 
         if (SpeciesClient.retractKey.isDown() && this.getExtendedAmount() > 0 && !SpeciesClient.extendKey.isDown() && this.getFirstPassenger() instanceof Player player) {
             this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
-            player.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount()/10 + 0.5f);
+            this.playExtendingSound(player);
         }
 
         if (this.isRetracting() && !this.level().isClientSide) {
             if (this.getExtendedAmount() > 0) {
                 this.setExtendedAmount(this.getExtendedAmount() - 0.25f);
-                this.playSound(SoundEvents.BONE_BLOCK_BREAK, 0.25f, this.getExtendedAmount() / 10 + 0.5f);
+                this.playExtendingSound(this);
             }
+            if (this.getExtendedAmount() < 0.5f) this.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
             if (this.getExtendedAmount() == 0) this.setRetracting(false);
         }
 
@@ -88,6 +91,11 @@ public class Springling extends Animal implements PlayerRideable {
         }
 
         if (this.getExtendedAmount() < 0) this.setExtendedAmount(0);
+    }
+
+    public void playExtendingSound(Entity entity) {
+        if (this.getExtendedAmount() >= this.maxExtendedAmount - 0.1f) entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
+        entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND, 0.5f, this.getExtendedAmount()/10 + 0.5f);
     }
 
     @Override
@@ -200,6 +208,31 @@ public class Springling extends Animal implements PlayerRideable {
         }
         return new Vec3(f, 0.0, g);
     }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.SPRINGLING_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SpeciesSoundEvents.SPRINGLING_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.SPRINGLING_DEATH;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if (this.getFirstPassenger() != null) this.getFirstPassenger().playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f * this.getExtendedAmount()/10, 1.0f);
+        this.playSound(SpeciesSoundEvents.SPRINGLING_STEP, 0.15f, 1.0f);
+    }
+
 
     @Override
     protected float getRiddenSpeed(Player player) {

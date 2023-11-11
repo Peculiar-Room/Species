@@ -553,5 +553,62 @@
 			"species:entity/cruncher/death3"
 		],
 		"subtitle": "subtitles.entity.species.cruncher.death"
+	},
+	"entity.springling.idle": {
+		"sounds": [
+			"species:entity/springling/idle1",
+			"species:entity/springling/idle2",
+			"species:entity/springling/idle3",
+			"species:entity/springling/idle4",
+			"species:entity/springling/idle5",
+			"species:entity/springling/idle6"
+		],
+		"subtitle": "subtitles.entity.species.springling.idle"
+	},
+	"entity.springling.hurt": {
+		"sounds": [
+			"species:entity/springling/hurt1",
+			"species:entity/springling/hurt2",
+			"species:entity/springling/hurt3"
+		],
+		"subtitle": "subtitles.entity.species.springling.hurt"
+	},
+	"entity.springling.death": {
+		"sounds": [
+			"species:entity/springling/death1",
+			"species:entity/springling/death2"
+		],
+		"subtitle": "subtitles.entity.species.springling.death"
+	},
+	"entity.springling.eat": {
+		"sounds": [
+			"species:entity/springling/eat1",
+			"species:entity/springling/eat2",
+			"species:entity/springling/eat3"
+		],
+		"subtitle": "subtitles.entity.species.springling.eat"
+	},
+	"entity.springling.extend": {
+		"sounds": [
+			"species:entity/springling/extend"
+		],
+		"subtitle": "subtitles.entity.species.springling.extend"
+	},
+	"entity.springling.extend_finish": {
+		"sounds": [
+			"species:entity/springling/extend_finish"
+		],
+		"subtitle": "subtitles.entity.species.springling.extend_finish"
+	},
+	"entity.springling.step": {
+		"sounds": [
+			"species:entity/springling/step1",
+			"species:entity/springling/step2",
+			"species:entity/springling/step3",
+			"species:entity/springling/step4",
+			"species:entity/springling/step5",
+			"species:entity/springling/step6"
+		],
+		"subtitle": "subtitles.entity.species.springling.step"
 	}
 }

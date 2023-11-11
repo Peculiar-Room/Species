@@ -91,6 +91,14 @@ public class SpeciesSoundEvents {
     public static final SoundEvent CRUNCHER_HURT = register("entity.cruncher.hurt");
     public static final SoundEvent CRUNCHER_IDLE = register("entity.cruncher.idle");
 
+    public static final SoundEvent SPRINGLING_DEATH = register("entity.springling.death");
+    public static final SoundEvent SPRINGLING_HURT = register("entity.springling.hurt");
+    public static final SoundEvent SPRINGLING_IDLE = register("entity.springling.idle");
+    public static final SoundEvent SPRINGLING_STEP = register("entity.springling.step");
+    public static final SoundEvent SPRINGLING_EAT = register("entity.springling.eat");
+    public static final SoundEvent SPRINGLING_EXTEND = register("entity.springling.extend");
+    public static final SoundEvent SPRINGLING_EXTEND_FINISH = register("entity.springling.extend_finish");
+
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
