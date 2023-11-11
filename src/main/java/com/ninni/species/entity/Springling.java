@@ -3,17 +3,22 @@ package com.ninni.species.entity;
 import com.ninni.species.SpeciesClient;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -69,19 +74,7 @@ public class Springling extends Animal implements PlayerRideable {
         super.tick();
         this.refreshDimensions();
 
-
         if (getExtendedAmount() > maxExtendedAmount) this.setExtendedAmount(maxExtendedAmount);
-
-        //TODO this has to run on both server and client and be player specific
-        if (SpeciesClient.extendKey.isDown() && getExtendedAmount() < maxExtendedAmount && !SpeciesClient.retractKey.isDown() && this.getFirstPassenger() instanceof Player player && !this.level().getBlockState(player.blockPosition().above(2)).isSolid()) {
-            this.setExtendedAmount(getExtendedAmount() + 0.1f);
-            this.playExtendingSound(player);
-        }
-
-        if (SpeciesClient.retractKey.isDown() && getExtendedAmount() > 0 && !SpeciesClient.extendKey.isDown() && this.getFirstPassenger() instanceof Player player) {
-            this.setExtendedAmount(getExtendedAmount() - 0.25f);
-            this.playExtendingSound(player);
-        }
 
         if (this.isRetracting() && !this.level().isClientSide) {
             if (getExtendedAmount() > 0) {
@@ -94,7 +87,10 @@ public class Springling extends Animal implements PlayerRideable {
 
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
         if (messageCooldown == 1 && this.isVehicle()) {
-            if (this.getFirstPassenger() instanceof LocalPlayer localPlayer) localPlayer.displayClientMessage(Component.translatable("springling.keybinds", SpeciesClient.extendKey.getTranslatedKeyMessage(), SpeciesClient.retractKey.getTranslatedKeyMessage()), true);
+            if (this.getFirstPassenger() instanceof ServerPlayer serverPlayer) {
+                FriendlyByteBuf buf = PacketByteBufs.create();
+                ServerPlayNetworking.send(serverPlayer, SpeciesNetwork.SEND_SPRINGLING_MESSAGE, buf);
+            }
         }
 
         if (getExtendedAmount() < 0) this.setExtendedAmount(0);
