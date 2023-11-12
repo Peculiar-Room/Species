@@ -31,6 +31,8 @@ public class SpeciesCreativeModeTabs {
 
         output.accept(SpeciesItems.LIMPET_SPAWN_EGG);
 
+        output.accept(SpeciesItems.RED_SUSPICIOUS_SAND);
+
         output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
         output.accept(SpeciesItems.ANCIENT_PINECONE);
         output.accept(SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);

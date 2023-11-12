@@ -2,7 +2,6 @@
   "itemGroup.species.species": "Species",
 
   "species.developer.made_by": "Made by:",
-
   "key.categories.species": "Species",
   "key.extend": "Springling Extend",
   "key.retract": "Springling Retract",
@@ -12,9 +11,7 @@
   "block.species.cracked_wraptor_egg": "Cracked Wraptor Egg",
   "item.species.cracked_wraptor_egg": "Cracked Wraptor Egg",
   "item.species.wraptor_spawn_egg": "Wraptor Spawn Egg",
-
   "effect.species.wither_resistance": "Wither Resistance",
-
   "subtitles.entity.species.wraptor.aggro": "Wraptor crows",
   "subtitles.entity.species.wraptor.agitated": "Wraptor bawks",
   "subtitles.entity.species.wraptor.attack": "Wraptor pecks",
@@ -28,7 +25,6 @@
   "subtitles.block.species.wraptor_egg.crack": "Wraptor egg cracks",
   "subtitles.block.species.wraptor_egg.hatch": "Wraptor egg hatches",
   "subtitles.item.species.cracked_wraptor_egg.slurp": "Slurping",
-
   "advancements.species.shear_wraptor_completely.title": "Clever Girl",
   "advancements.species.shear_wraptor_completely.description": "Shear a Wraptor completely and face the consequences",
   "advancements.species.hatch_wraptor.title": "Tough Love",
@@ -37,18 +33,15 @@
   "entity.species.deepfish": "Deepfish",
   "item.species.deepfish_spawn_egg": "Deepfish Spawn Egg",
   "item.species.deepfish_bucket": "Bucket of Deepfish",
-
   "subtitles.entity.species.deepfish.flop": "Deepfish flops",
   "subtitles.entity.species.deepfish.death": "Deepfish dies",
   "subtitles.entity.species.deepfish.hurt": "Deepfish hurts",
   "subtitles.entity.species.deepfish.idle": "Deepfish howls",
-
   "advancements.species.deepfish_in_a_bucket.title": "Song of the deep",
   "advancements.species.deepfish_in_a_bucket.description": "Catch a Deepfish in a Bucket",
 
   "entity.species.roombug": "Roombug",
   "item.species.roombug_spawn_egg": "Roombug Spawn Egg",
-
   "subtitles.entity.species.roombug.eat": "Roombug eats",
   "subtitles.entity.species.roombug.death": "Roombug dies",
   "subtitles.entity.species.roombug.hurt": "Roombug hurts",
@@ -61,12 +54,9 @@
   "item.species.birt_spawn_egg": "Birt Spawn Egg",
   "item.species.birt_egg": "Birt Egg",
   "block.species.birt_dwelling": "Birt Dwelling",
-
   "item.species.music_disc_dial": "Music Disc",
   "item.species.music_disc_dial.desc": "bunten - dial",
-
   "effect.species.birtd": "Birt'd",
-
   "subtitles.entity.species.birt.death": "Birt dies",
   "subtitles.entity.species.birt.hurt": "Birt hurts",
   "subtitles.entity.species.birt.idle": "Birt chirps",
@@ -79,21 +69,20 @@
   "subtitles.block.species.birt_dwelling.work": "Birts are plotting",
   "subtitles.item.species.birt_egg.throw": "Birt Egg thrown",
   "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
-
   "advancements.species.birt_egg_at_warden.title": "Birt is the Word",
   "advancements.species.birt_egg_at_warden.description": "Throw a birt egg at a warden and live to tell the tale",
 
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Limpet Spawn Egg",
-
   "subtitles.entity.species.limpet.death": "Limpet dies",
   "subtitles.entity.species.limpet.hurt": "Limpet hurts",
   "subtitles.entity.species.limpet.idle": "Limpet squeaks",
   "subtitles.entity.species.limpet.step": "Limpet steps",
   "subtitles.entity.species.limpet.deflect": "Limpet deflects",
-
   "advancements.species.silk_touch_break_limpet.title": "The Conchequences of Hiding",
   "advancements.species.silk_touch_break_limpet.description": "Break the Shell of a Limpet using Silk Touch",
+
+  "block.species.red_suspicious_sand": "Red Suspicious Sand",
 
   "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Treeper Spawn Egg",

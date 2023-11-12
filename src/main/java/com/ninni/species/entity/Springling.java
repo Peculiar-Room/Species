@@ -1,19 +1,12 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.SpeciesClient;
-import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesNetwork;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.*;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -63,13 +56,12 @@ public class Springling extends Animal implements PlayerRideable {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1));
         this.goalSelector.addGoal(2, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.GOOBER_BREED_ITEMS), false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.7));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void tick() {
         super.tick();
         this.refreshDimensions();
@@ -171,6 +163,12 @@ public class Springling extends Animal implements PlayerRideable {
     public EntityDimensions getDimensions(Pose pose) {
         return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getScale(), this.getScale() + getExtendedAmount()/1.5f);
     }
+
+    @Override
+    public float getScale() {
+        return this.isBaby() ? 0.25f : 1.0f;
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

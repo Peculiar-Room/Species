@@ -147,16 +147,16 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
         if (this.young) {
             float l;
             poseStack.pushPose();
-            l = 1.5f / 2;
+            l = 1.5f / 4;
             poseStack.scale(l, l, l);
 
-            poseStack.translate(0.0f, 18 / 16.0f, 0f);
+            poseStack.translate(0.0f, 3.15f, 0f);
             this.head.render(poseStack, vertexConsumer, i, j, f, g, h, k);
             poseStack.popPose();
             poseStack.pushPose();
-            l = 1.0f / 2;
+            l = 1.0f / 4;
             poseStack.scale(l, l, l);
-            poseStack.translate(0.0f, 24 / 16.0f, 0.0f);
+            poseStack.translate(0.0f, 4.5f, 0.0f);
             this.body.render(poseStack, vertexConsumer, i, j, f, g, h, k);
             this.neck.render(poseStack, vertexConsumer, i, j, f, g, h, k);
             poseStack.popPose();
