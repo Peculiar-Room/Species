@@ -16,6 +16,7 @@ public class GooberLayDownGoal extends Goal {
     @Override
     public boolean canUse() {
         return !goober.isInWater()
+                && goober.getLayDownCooldown() == 0
                 && goober.getPoseTime() >= (long)this.minimalPoseTicks
                 && !goober.isLeashed()
                 && goober.onGround()
@@ -30,8 +31,11 @@ public class GooberLayDownGoal extends Goal {
     @Override
     public void start() {
             if (goober.isGooberLayingDown()) {
+                goober.layDownCooldown();
+                goober.setRearUpCooldown(6 * 20 + goober.getRandom().nextInt(10 * 20));
                 goober.standUp();
             } else {
+                goober.standUpCooldown();
                 goober.layDown();
             }
     }

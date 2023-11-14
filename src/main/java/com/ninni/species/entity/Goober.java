@@ -51,6 +51,7 @@ public class Goober extends Animal {
     public final AnimationState rearUpAnimationState = new AnimationState();
     public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<String> BEHAVIOR = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> LAY_DOWN_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> YAWN_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> REAR_UP_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
@@ -121,6 +122,7 @@ public class Goober extends Animal {
     public void tick() {
         super.tick();
 
+        if (this.getLayDownCooldown() > 0) this.setLayDownCooldown(this.getLayDownCooldown()-1);
         if (this.getRearUpCooldown() > 0) this.setRearUpCooldown(this.getRearUpCooldown()-1);
         if (this.getYawnCooldown() > 0) this.setYawnCooldown(this.getYawnCooldown()-1);
 
@@ -206,6 +208,7 @@ public class Goober extends Animal {
         super.defineSynchedData();
         this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
         this.entityData.define(BEHAVIOR, GooberBehavior.IDLE.getName());
+        this.entityData.define(LAY_DOWN_COOLDOWN, 12 * 20 + random.nextInt(30 * 20));
         this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
         this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
     }
@@ -215,6 +218,7 @@ public class Goober extends Animal {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putLong("LastPoseTick", this.entityData.get(LAST_POSE_CHANGE_TICK));
         compoundTag.putString("Behavior", this.getBehavior());
+        compoundTag.putInt("LayDownCooldown", this.getLayDownCooldown());
         compoundTag.putInt("YawnCooldown", this.getYawnCooldown());
         compoundTag.putInt("RearUpCooldown", this.getRearUpCooldown());
     }
@@ -223,6 +227,8 @@ public class Goober extends Animal {
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
 
+        this.setLayDownCooldown(compoundTag.getInt("LayDownCooldown"));
+        this.setLayDownCooldown(compoundTag.getInt("LayDownCooldown"));
         this.setYawnCooldown(compoundTag.getInt("YawnCooldown"));
         this.setRearUpCooldown(compoundTag.getInt("RearUpCooldown"));
         this.setBehavior(compoundTag.getString("Behavior"));
@@ -236,6 +242,19 @@ public class Goober extends Animal {
     }
     public void setBehavior(String behavior) {
         this.entityData.set(BEHAVIOR, behavior);
+    }
+
+    public int getLayDownCooldown() {
+        return this.entityData.get(LAY_DOWN_COOLDOWN);
+    }
+    public void setLayDownCooldown(int cooldown) {
+        this.entityData.set(LAY_DOWN_COOLDOWN, cooldown);
+    }
+    public void layDownCooldown() {
+        this.entityData.set(LAY_DOWN_COOLDOWN, 30 * 20 + random.nextInt(60 * 2 * 20));
+    }
+    public void standUpCooldown() {
+        this.entityData.set(LAY_DOWN_COOLDOWN, 60 * 20 + random.nextInt(60 * 2 * 20));
     }
 
     public int getYawnCooldown() {
