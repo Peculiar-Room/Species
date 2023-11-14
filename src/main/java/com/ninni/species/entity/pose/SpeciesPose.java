@@ -3,6 +3,7 @@ package com.ninni.species.entity.pose;
 import net.minecraft.world.entity.Pose;
 
 public enum SpeciesPose {
+    SCARED,
     PLANTING,
     UPROOTING,
     YAWNING,

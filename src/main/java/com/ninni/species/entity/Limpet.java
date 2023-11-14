@@ -5,6 +5,7 @@ import com.mojang.serialization.Dynamic;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.LimpetAi;
 import com.ninni.species.entity.enums.LimpetType;
+import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
@@ -26,11 +27,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -61,6 +58,7 @@ public class Limpet extends Monster {
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CRACKED_STAGE = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
+    private static final EntityDimensions SCARED_DIMENSIONS = EntityDimensions.scalable(0.75F, 0.75F);
 
     public Limpet(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
@@ -161,8 +159,10 @@ public class Limpet extends Monster {
     public void setCrackedStage(int crackedStage) {
         this.entityData.set(CRACKED_STAGE, crackedStage);
     }
+
     public LimpetType getLimpetType() { return LimpetType.TYPES[this.entityData.get(TYPE)]; }
     public void setLimpetType(int id) { this.entityData.set(TYPE, id); }
+
     public int getScaredTicks() {
         return this.entityData.get(SCARED_TICKS);
     }
@@ -176,17 +176,31 @@ public class Limpet extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
+
+        if (this.isScared()) this.setPose(SpeciesPose.SCARED.get());
+        else this.setPose(Pose.STANDING);
+
         if (!this.level().isClientSide) {
             if (!this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET)) {
                 this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(4D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
             }
-            if (this.getScaredTicks() > 0) {
+            if (this.isScared()) {
                 int scaredTicks = this.getBrain().hasMemoryValue(MemoryModuleType.AVOID_TARGET) ? 0 : this.getScaredTicks() - 1;
                 this.getNavigation().stop();
                 this.setScaredTicks(scaredTicks);
             }
         }
 
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        return pose == SpeciesPose.SCARED.get() ? SCARED_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return this.isScared();
     }
 
     @Override
