@@ -113,7 +113,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     }
 
     private static boolean releaseBirt(Level world, BlockPos pos, BlockState state, Birt birt, @Nullable List<Entity> entities, BirtState birtState) {
-        if ((world.isNight() || world.isRaining()) && birtState != BirtState.EMERGENCY) {
+        if (world.isDay() && birtState != BirtState.EMERGENCY) {
             return false;
         }
         CompoundTag nbtCompound = birt.entityData.copy();

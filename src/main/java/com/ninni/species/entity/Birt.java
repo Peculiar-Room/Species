@@ -307,7 +307,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
     }
     
     boolean canEnterDwelling() {
-        if (this.cannotEnterDwellingTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight();
+        if (this.cannotEnterDwellingTicks <= 0 && this.getTarget() == null) return this.level().isDay();
         else return false;
     }
 
