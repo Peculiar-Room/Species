@@ -51,6 +51,7 @@ public class SpeciesClient implements ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 SpeciesBlocks.BIRT_DWELLING,
+                SpeciesBlocks.BONE_SPIKE,
                 SpeciesBlocks.TREEPER_SAPLING
         );
 

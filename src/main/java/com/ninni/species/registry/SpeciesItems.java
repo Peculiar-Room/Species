@@ -39,6 +39,10 @@ public class SpeciesItems {
     //UPDATE 2
     public static final Item RED_SUSPICIOUS_SAND = register("red_suspicious_sand", new BlockItem(SpeciesBlocks.RED_SUSPICIOUS_SAND, new FabricItemSettings()));
 
+    public static final Item BONE_BARK = register("bone_bark", new BlockItem(SpeciesBlocks.BONE_BARK, new FabricItemSettings()));
+    public static final Item BONE_VERTEBRA = register("bone_vertebra", new BlockItem(SpeciesBlocks.BONE_VERTEBRA, new FabricItemSettings()));
+    public static final Item BONE_SPIKE = register("bone_spike", new BlockItem(SpeciesBlocks.BONE_SPIKE, new FabricItemSettings()));
+
     public static final Item TREEPER_SPAWN_EGG = register("treeper_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.TREEPER, 0x402E1B, 0x32992D, SpeciesDevelopers.NINNI, new Item.Properties().stacksTo(64)));
     public static final Item ANCIENT_PINECONE = register("ancient_pinecone", new ItemNameBlockItem(SpeciesBlocks.TREEPER_SAPLING, new FabricItemSettings()));
     public static final Item TREEPER_SAPLING_SPAWN_EGG = register("treeper_sapling_spawn_egg", new SpawnEggItem(SpeciesEntities.TREEPER_SAPLING, 0x6f5535, 0x32992D, new Item.Properties().stacksTo(64)));

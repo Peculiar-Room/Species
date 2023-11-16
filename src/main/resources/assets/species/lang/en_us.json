@@ -84,6 +84,10 @@
 
   "block.species.red_suspicious_sand": "Red Suspicious Sand",
 
+  "block.species.bone_bark": "Bone Bark",
+  "block.species.bone_vertebra": "Bone Vertebra",
+  "block.species.bone_spike": "Bone Spike",
+
   "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Treeper Spawn Egg",
   "item.species.ancient_pinecone": "Ancient Pinecone",

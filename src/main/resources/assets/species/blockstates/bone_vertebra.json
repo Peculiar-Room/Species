@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "axis=x": [
+      {
+        "model": "species:block/bone_vertebra",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "species:block/bone_vertebra"
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "species:block/bone_vertebra",
+        "x": 90
+      }
+    ]
+  }
+}

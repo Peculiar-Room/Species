@@ -1,0 +1,6 @@
+{
+  "parent": "species:block/bone_spike_template",
+  "textures": {
+    "cross": "species:block/bone_spike_down"
+  }
+}

@@ -33,6 +33,10 @@ public class SpeciesCreativeModeTabs {
 
         output.accept(SpeciesItems.RED_SUSPICIOUS_SAND);
 
+        output.accept(SpeciesItems.BONE_BARK);
+        output.accept(SpeciesItems.BONE_VERTEBRA);
+        output.accept(SpeciesItems.BONE_SPIKE);
+
         output.accept(SpeciesItems.TREEPER_SPAWN_EGG);
         output.accept(SpeciesItems.ANCIENT_PINECONE);
         output.accept(SpeciesItems.TREEPER_SAPLING_SPAWN_EGG);
@@ -57,7 +61,8 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.HAY_BLOCK, SpeciesItems.BIRT_DWELLING);
             entries.addAfter(Items.TURTLE_EGG, SpeciesItems.WRAPTOR_EGG);
             entries.addBefore(Items.WHEAT_SEEDS, SpeciesItems.ANCIENT_PINECONE);
-            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.CRUNCHER_EGG, SpeciesItems.PETRIFIED_EGG, SpeciesItems.FROZEN_MEAT, SpeciesItems.FROZEN_HAIR);
+            entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.CRUNCHER_EGG, SpeciesItems.SPRINGLING_EGG, SpeciesItems.PETRIFIED_EGG, SpeciesItems.FROZEN_MEAT, SpeciesItems.FROZEN_HAIR);
+            entries.addAfter(Items.BONE_BLOCK, SpeciesItems.BONE_BARK, SpeciesItems.BONE_VERTEBRA, SpeciesItems.BONE_SPIKE);
         });
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, SpeciesItems.MUSIC_DISC_DIAL);
@@ -82,6 +87,7 @@ public class SpeciesCreativeModeTabs {
             entries.addAfter(Items.CREEPER_SPAWN_EGG, SpeciesItems.CRUNCHER_SPAWN_EGG);
             entries.addAfter(Items.MAGMA_CUBE_SPAWN_EGG, SpeciesItems.MAMMUTILATION_SPAWN_EGG);
             entries.addAfter(Items.GOAT_SPAWN_EGG, SpeciesItems.GOOBER_SPAWN_EGG);
+            entries.addAfter(Items.SPIDER_SPAWN_EGG, SpeciesItems.SPRINGLING_SPAWN_EGG);
         });
     }
 
