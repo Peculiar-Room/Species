@@ -37,13 +37,13 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class Springling extends Animal implements PlayerRideable {
+public class Springling extends TamableAnimal implements PlayerRideable {
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
     public static final EntityDataAccessor<Boolean> RETRACTING = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.BOOLEAN);
     private static int messageCooldown;
     public int maxExtendedAmount = 9;
 
-    public Springling(EntityType<? extends Animal> entityType, Level level) {
+    public Springling(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.setMaxUpStep(1f);
     }
@@ -55,10 +55,11 @@ public class Springling extends Animal implements PlayerRideable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1));
-        this.goalSelector.addGoal(2, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.GOOBER_BREED_ITEMS), false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.8));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new SpringlingFollowOwnerGoal(this, 1.25, 5.0f, 2.0f, true));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.SPRINGLING_BREED_ITEMS), false));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0f));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -101,6 +102,25 @@ public class Springling extends Animal implements PlayerRideable {
             return super.mobInteract(player, interactionHand);
         }
 
+        if (!this.isTame() && itemStack.is(SpeciesTags.SPRINGLING_TAMING_ITEMS)) {
+
+            if (!player.getAbilities().instabuild) itemStack.shrink(1);
+            if (!this.isSilent()) {
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.SPRINGLING_EAT, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+            }
+
+            if (!this.level().isClientSide) {
+                if (this.random.nextInt(5) == 0) {
+                    this.tame(player);
+                    this.level().broadcastEntityEvent(this, (byte) 7);
+                } else {
+                    this.level().broadcastEntityEvent(this, (byte) 6);
+                }
+            }
+
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+
         if (this.isFood(itemStack)) {
             int i = this.getAge();
             if (!this.level().isClientSide && i == 0 && this.canFallInLove()) {
@@ -120,7 +140,7 @@ public class Springling extends Animal implements PlayerRideable {
             }
         }
 
-        if (!this.isBaby() && !this.isFood(itemStack)) {
+        if (!this.isBaby() && !this.isFood(itemStack) && this.getOwnerUUID() == player.getUUID()) {
             if (player.isShiftKeyDown() && !isRetracting() && getExtendedAmount() > 0 && !this.level().isClientSide) {
                 this.setRetracting(true);
                 return InteractionResult.SUCCESS;
@@ -133,6 +153,12 @@ public class Springling extends Animal implements PlayerRideable {
         }
 
         return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float f) {
+        if (f > 0 && this.getExtendedAmount() > 0) this.setRetracting(true);
+        return super.hurt(damageSource, f);
     }
 
     @Override
@@ -368,5 +394,22 @@ public class Springling extends Animal implements PlayerRideable {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Springling> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return false;
+    }
+
+    public class SpringlingFollowOwnerGoal extends FollowOwnerGoal {
+
+        public SpringlingFollowOwnerGoal(TamableAnimal tamableAnimal, double d, float f, float g, boolean bl) {
+            super(tamableAnimal, d, f, g, bl);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return super.canContinueToUse() && Springling.this.getExtendedAmount() == 0;
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse() && Springling.this.getExtendedAmount() == 0;
+        }
     }
 }
