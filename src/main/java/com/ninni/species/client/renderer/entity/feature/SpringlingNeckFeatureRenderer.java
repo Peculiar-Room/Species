@@ -15,8 +15,11 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(value= EnvType.CLIENT)
 public class SpringlingNeckFeatureRenderer<T extends Springling, M extends SpringlingModel<T>> extends RenderLayer<T, M> {
     private static final ResourceLocation NECK = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck.png");
+    private static final ResourceLocation NECK_PISTON = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_piston.png");
     private static final ResourceLocation NECK_EXTENDING = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_extending.png");
+    private static final ResourceLocation NECK_EXTENDING_PISTON = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_extending_piston.png");
     private static final ResourceLocation NECK_EXTENDED = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_extended.png");
+    private static final ResourceLocation NECK_EXTENDED_PISTON = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_extended_piston.png");
 
     public SpringlingNeckFeatureRenderer(RenderLayerParent<T, M> renderLayerParent) {
         super(renderLayerParent);
@@ -28,8 +31,8 @@ public class SpringlingNeckFeatureRenderer<T extends Springling, M extends Sprin
     }
 
     public ResourceLocation resourceLocation(T entity) {
-        if (entity.getExtendedAmount() > entity.maxExtendedAmount/3f && entity.getExtendedAmount() < entity.maxExtendedAmount/1.5f) return NECK_EXTENDING;
-        if (entity.getExtendedAmount() >= entity.maxExtendedAmount/1.5f) return NECK_EXTENDED;
-        return NECK;
+        if (entity.getExtendedAmount() > entity.maxExtendedAmount/3f && entity.getExtendedAmount() < entity.maxExtendedAmount/1.5f) return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDING_PISTON : NECK_EXTENDING;
+        if (entity.getExtendedAmount() >= entity.maxExtendedAmount/1.5f)  return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDED_PISTON : NECK_EXTENDED;
+        return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_PISTON : NECK;
     }
 }
