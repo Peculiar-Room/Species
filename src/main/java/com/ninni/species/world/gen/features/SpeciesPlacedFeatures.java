@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
@@ -26,8 +27,8 @@ public class SpeciesPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> holderGetter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREE_CHECKED, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH), PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_SAPLING));
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREES, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH_TREE_FILTERED), VegetationPlacements.treePlacement(RarityFilter.onAverageOnceEvery(75)));
-        PlacementUtils.register(bootstapContext, ORE_FROZEN_MEAT, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_MEAT), InSquarePlacement.spread(), PlacementUtils.RANGE_8_8, BiomeFilter.biome());
-        PlacementUtils.register(bootstapContext, ORE_FROZEN_HAIR, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_HAIR), InSquarePlacement.spread(), PlacementUtils.RANGE_8_8, BiomeFilter.biome());
+        PlacementUtils.register(bootstapContext, ORE_FROZEN_MEAT, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_MEAT), CountPlacement.of(80), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome());
+        PlacementUtils.register(bootstapContext, ORE_FROZEN_HAIR, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_HAIR), CountPlacement.of(80), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome());
     }
 
     public static ResourceKey<PlacedFeature> registerPlacedFeature(String id) {

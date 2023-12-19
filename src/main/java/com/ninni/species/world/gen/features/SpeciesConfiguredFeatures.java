@@ -40,8 +40,8 @@ public class SpeciesConfiguredFeatures {
         HolderGetter<PlacedFeature> holderGetter2 = bootstapContext.lookup(Registries.PLACED_FEATURE);
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH, Feature.TREE, birtedBirch().build());
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH_TREE_FILTERED, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED), 0.0F)), holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED)));
-        FeatureUtils.register(bootstapContext, ORE_FROZEN_HAIR, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_HAIR.defaultBlockState(), 3, 0.75f));
-        FeatureUtils.register(bootstapContext, ORE_FROZEN_MEAT, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_MEAT.defaultBlockState(), 3, 0.75f));
+        FeatureUtils.register(bootstapContext, ORE_FROZEN_HAIR, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_HAIR.defaultBlockState(), 3, 1.0F));
+        FeatureUtils.register(bootstapContext, ORE_FROZEN_MEAT, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_MEAT.defaultBlockState(), 3, 1.0F));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfiguredFeature(String id) {

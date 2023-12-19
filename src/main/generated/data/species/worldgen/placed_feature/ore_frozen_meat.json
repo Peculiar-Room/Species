@@ -2,6 +2,10 @@
   "feature": "species:ore_frozen_hair",
   "placement": [
     {
+      "type": "minecraft:count",
+      "count": 80
+    },
+    {
       "type": "minecraft:in_square"
     },
     {
@@ -9,10 +13,10 @@
       "height": {
         "type": "minecraft:uniform",
         "max_inclusive": {
-          "below_top": 8
+          "absolute": 256
         },
         "min_inclusive": {
-          "above_bottom": 8
+          "above_bottom": 0
         }
       }
     },
