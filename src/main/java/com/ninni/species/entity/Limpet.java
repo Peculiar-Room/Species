@@ -27,7 +27,13 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -241,7 +247,6 @@ public class Limpet extends Monster {
         return Arrays.stream(InteractionHand.values()).filter(hand -> player.getItemInHand(hand).getItem() instanceof PickaxeItem).map(player::getItemInHand).findFirst();
     }
 
-
     @Override
     public boolean hurt(DamageSource source, float amount) {
         LimpetType type = this.getLimpetType();
@@ -260,24 +265,22 @@ public class Limpet extends Monster {
                 this.setCrackedStage(this.getCrackedStage() + 1);
                 this.playSound(type.getMiningSound(), 1, 1);
                 this.setScaredTicks(0);
-                player.getCooldowns().addCooldown(stack.getItem(), 80);
+                if (!player.getAbilities().instabuild) {
+                    player.getCooldowns().addCooldown(stack.getItem(), 80);
+                }
                 return false;
             } else {
-                this.spawnAtLocation(type.getItem(), 1);
-                if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-                switch (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack)) {
-                    case 1:
-                        if (random.nextInt(4) == 1) this.spawnAtLocation(type.getItem(), 1);
-                    case 2:
-                        if (random.nextInt(2) == 1) this.spawnAtLocation(type.getItem(), 1);
-                    case 3:
-                        this.spawnAtLocation(type.getItem(), 1);
+                int count = UniformInt.of(1, 2).sample(random) + EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
+                for (int i = 0; i < count; i++) {
+                    this.spawnAtLocation(type.getItem(), i);
                 }
                 this.setCrackedStage(0);
                 this.playSound(type.getMiningSound(), 1, 1);
                 if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
                     this.setLimpetType(1);
-                    if (player instanceof ServerPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger((ServerPlayer) player);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger(serverPlayer);
+                    }
                     return false;
                 } else {
                     this.setLimpetType(0);

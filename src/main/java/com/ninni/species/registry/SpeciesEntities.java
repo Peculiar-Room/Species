@@ -15,6 +15,8 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
+import java.util.function.Predicate;
+
 import static com.ninni.species.Species.MOD_ID;
 
 public class SpeciesEntities {
@@ -78,7 +80,7 @@ public class SpeciesEntities {
                     .entityFactory(Limpet::new)
                     .defaultAttributes(Limpet::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Limpet::canSpawn)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Limpet::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.75F, 1.25F))
                     .trackRangeChunks(10)
     );
@@ -153,7 +155,7 @@ public class SpeciesEntities {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), MobCategory.CREATURE, SpeciesEntities.ROOMBUG, 10, 1, 3);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.LIMPET_SPAWNS), MobCategory.MONSTER, SpeciesEntities.LIMPET, 10, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(Predicate.not(BiomeSelectors.tag(SpeciesTags.WITHOUT_LIMPET_SPAWNS))), MobCategory.MONSTER, SpeciesEntities.LIMPET, 80, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.TREEPER_SPAWNS), MobCategory.CREATURE, SpeciesEntities.TREEPER, 80, 1, 1);
     }
 
