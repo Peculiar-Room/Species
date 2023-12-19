@@ -50,6 +50,8 @@ public class Species implements ModInitializer {
 		SpeciesNetwork.commonInit();
 
 		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES);
+		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.ORE_FROZEN_HAIR_SPAWNS_IN), GenerationStep.Decoration.UNDERGROUND_ORES, SpeciesPlacedFeatures.ORE_FROZEN_HAIR);
+		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.ORE_FROZEN_MEAT_SPAWNS_IN), GenerationStep.Decoration.UNDERGROUND_ORES, SpeciesPlacedFeatures.ORE_FROZEN_MEAT);
 
 		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new AbstractProjectileDispenseBehavior() {
 			@Override

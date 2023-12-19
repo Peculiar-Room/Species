@@ -1,18 +1,21 @@
 package com.ninni.species.world.gen.features;
 
 import com.ninni.species.Species;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlac
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -28,11 +32,16 @@ public class SpeciesConfiguredFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH = registerConfiguredFeature("birted_birch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH_TREE_FILTERED = registerConfiguredFeature("birted_birch_tree_filtered");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_FROZEN_HAIR = registerConfiguredFeature("ore_frozen_hair");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_FROZEN_MEAT = registerConfiguredFeature("ore_frozen_meat");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
+        TagMatchTest ruleTest5 = new TagMatchTest(BlockTags.ICE);
         HolderGetter<PlacedFeature> holderGetter2 = bootstapContext.lookup(Registries.PLACED_FEATURE);
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH, Feature.TREE, birtedBirch().build());
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH_TREE_FILTERED, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED), 0.0F)), holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED)));
+        FeatureUtils.register(bootstapContext, ORE_FROZEN_HAIR, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_HAIR.defaultBlockState(), 3, 0.75f));
+        FeatureUtils.register(bootstapContext, ORE_FROZEN_MEAT, Feature.SCATTERED_ORE, new OreConfiguration(ruleTest5, SpeciesBlocks.FROZEN_MEAT.defaultBlockState(), 3, 0.75f));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfiguredFeature(String id) {

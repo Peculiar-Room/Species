@@ -29,6 +29,8 @@ public interface SpeciesTags {
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wraptor_coop_has_structure"));
     TagKey<Biome> ROOMBUG_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "roombug_spawns"));
     TagKey<Biome> BIRT_TREE_SPAWNS_IN = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "birt_tree_spawns_in"));
+    TagKey<Biome> ORE_FROZEN_MEAT_SPAWNS_IN = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "ore_frozen_meat_spawns_in"));
+    TagKey<Biome> ORE_FROZEN_HAIR_SPAWNS_IN = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "ore_frozen_hair_spawns_in"));
     TagKey<Biome> WITHOUT_LIMPET_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "without_limpet_spawns"));
     TagKey<Biome> TREEPER_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "treeper_spawns"));
 
