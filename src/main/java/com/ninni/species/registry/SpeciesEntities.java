@@ -153,7 +153,7 @@ public class SpeciesEntities {
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
-        BiomeModifications.addSpawn(BiomeSelectors.all(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
+        BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.ROOMBUG_SPAWNS), MobCategory.CREATURE, SpeciesEntities.ROOMBUG, 10, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(Predicate.not(BiomeSelectors.tag(SpeciesTags.WITHOUT_LIMPET_SPAWNS))), MobCategory.MONSTER, SpeciesEntities.LIMPET, 80, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpeciesTags.TREEPER_SPAWNS), MobCategory.CREATURE, SpeciesEntities.TREEPER, 80, 1, 1);
