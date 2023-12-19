@@ -4,6 +4,7 @@
   "package": "com.ninni.species.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockEntityTypeMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
     "PlayerMixin",
