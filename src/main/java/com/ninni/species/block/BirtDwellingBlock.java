@@ -23,12 +23,15 @@ import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -75,9 +78,11 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
         if (!level.isClientSide && blockEntity instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
-            birtDwellingBlockEntity.angerBirts(player, blockState, BirtDwellingBlockEntity.BirtState.EMERGENCY);
-            level.updateNeighbourForOutputSignal(blockPos, this);
-            this.angerNearbyBirts(level, blockPos);
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+                birtDwellingBlockEntity.angerBirts(player, blockState, BirtDwellingBlockEntity.BirtState.EMERGENCY);
+                level.updateNeighbourForOutputSignal(blockPos, this);
+                this.angerNearbyBirts(level, blockPos);
+            }
         }
     }
 
@@ -121,24 +126,30 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level world, BlockPos pos, BlockState blockState, Player player) {
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState blockState, Player player) {
         BlockEntity blockEntity;
-        if (!world.isClientSide() && player.isCreative() && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && (blockEntity = world.getBlockEntity(pos)) instanceof BirtDwellingBlockEntity) {
+        if (!level.isClientSide() && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && (blockEntity = level.getBlockEntity(pos)) instanceof BirtDwellingBlockEntity) {
             BirtDwellingBlockEntity blockEntity1 = (BirtDwellingBlockEntity)blockEntity;
             ItemStack itemStack = new ItemStack(this);
+            int i = blockState.getValue(EGGS);
             boolean bl = !blockEntity1.hasNoBirts();
-            if (bl) {
-                CompoundTag nbtCompound = new CompoundTag();
-                nbtCompound.put("Birts", blockEntity1.getBirts());
-                BlockItem.setBlockEntityData(itemStack, SpeciesBlockEntities.BIRT_DWELLING, nbtCompound);
-                nbtCompound = new CompoundTag();
-                itemStack.addTagElement("BlockStateTag", nbtCompound);
-                ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+            if (bl || i > 0) {
+                CompoundTag compoundTag;
+                if (bl) {
+                    compoundTag = new CompoundTag();
+                    compoundTag.put("Birts", blockEntity1.getBirts());
+                    BlockItem.setBlockEntityData(itemStack, BlockEntityType.BEEHIVE, compoundTag);
+                }
+
+                compoundTag = new CompoundTag();
+                compoundTag.putInt("eggs", i);
+                itemStack.addTagElement("BlockStateTag", compoundTag);
+                ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
                 itemEntity.setDefaultPickUpDelay();
-                world.addFreshEntity(itemEntity);
+                level.addFreshEntity(itemEntity);
             }
         }
-        super.playerWillDestroy(world, pos, blockState, player);
+        super.playerWillDestroy(level, pos, blockState, player);
     }
 
 

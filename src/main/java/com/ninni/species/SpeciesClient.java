@@ -64,7 +64,7 @@ public class SpeciesClient implements ClientModInitializer {
                 if (!retractKey.isDown() && !springling.level().getBlockState(player.blockPosition().above(2)).isSolid() && extendKey.isDown()) {
                     FriendlyByteBuf friendlyByteBuf = PacketByteBufs.create();
                     friendlyByteBuf.writeFloat(0.1F);
-                    friendlyByteBuf.writeBoolean(extendedAmount < springling.maxExtendedAmount);
+                    friendlyByteBuf.writeBoolean(extendedAmount < springling.getMaxExtendedAmount());
                     ClientPlayNetworking.send(SpeciesNetwork.UPDATE_SPRINGLING_EXTENDED_DATA, friendlyByteBuf);
                 }
                 if (retractKey.isDown() && !extendKey.isDown()) {

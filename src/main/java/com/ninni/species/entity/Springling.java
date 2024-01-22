@@ -38,10 +38,10 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class Springling extends TamableAnimal implements PlayerRideable {
+    public static final EntityDataAccessor<Integer> MAX_EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Float> EXTENDED_AMOUNT = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.FLOAT);
     public static final EntityDataAccessor<Boolean> RETRACTING = SynchedEntityData.defineId(Springling.class, EntityDataSerializers.BOOLEAN);
     private static int messageCooldown;
-    public int maxExtendedAmount = 9;
 
     public Springling(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -55,6 +55,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
         this.goalSelector.addGoal(2, new SpringlingFollowOwnerGoal(this, 1.25, 5.0f, 2.0f, true));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.SPRINGLING_BREED_ITEMS), false));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8));
@@ -67,7 +68,9 @@ public class Springling extends TamableAnimal implements PlayerRideable {
         super.tick();
         this.refreshDimensions();
 
-        if (getExtendedAmount() > maxExtendedAmount) this.setExtendedAmount(maxExtendedAmount);
+        if (getExtendedAmount() > this.getMaxExtendedAmount()) this.setExtendedAmount(this.getMaxExtendedAmount());
+
+        if (this.getMaxExtendedAmount() > 18) this.setMaxExtendedAmount(18);
 
         if (this.isRetracting() && !this.level().isClientSide) {
             if (getExtendedAmount() > 0) {
@@ -77,8 +80,6 @@ public class Springling extends TamableAnimal implements PlayerRideable {
             if (getExtendedAmount() < 0.5f) this.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
             if (getExtendedAmount() == 0) this.setRetracting(false);
         }
-
-        System.out.println(messageCooldown);
 
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
         if (messageCooldown < 10 && messageCooldown > 0 && this.isVehicle()) {
@@ -92,7 +93,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     }
 
     public void playExtendingSound(Entity entity) {
-        if (getExtendedAmount() >= maxExtendedAmount - 0.1f) entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
+        if (getExtendedAmount() >= this.getMaxExtendedAmount() - 0.1f) entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND_FINISH, 2f, 1f);
         entity.playSound(SpeciesSoundEvents.SPRINGLING_EXTEND, 0.5f, getExtendedAmount()/10 + 0.5f);
     }
 
@@ -200,6 +201,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(MAX_EXTENDED_AMOUNT, 9);
         this.entityData.define(EXTENDED_AMOUNT, 0f);
         this.entityData.define(RETRACTING, false);
     }
@@ -208,6 +210,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("Retracting", this.isRetracting());
+        compoundTag.putInt("MaxExtendedAmount", getMaxExtendedAmount());
         compoundTag.putFloat("ExtendedAmount", getExtendedAmount());
     }
 
@@ -215,7 +218,15 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.setRetracting(compoundTag.getBoolean("Retracting"));
+        this.setMaxExtendedAmount(compoundTag.getInt("MaxExtendedAmount"));
         this.setExtendedAmount(compoundTag.getFloat("ExtendedAmount"));
+    }
+
+    public int getMaxExtendedAmount() {
+        return this.entityData.get(MAX_EXTENDED_AMOUNT);
+    }
+    public void setMaxExtendedAmount(int amount) {
+        this.entityData.set(MAX_EXTENDED_AMOUNT, amount);
     }
 
     public float getExtendedAmount() {

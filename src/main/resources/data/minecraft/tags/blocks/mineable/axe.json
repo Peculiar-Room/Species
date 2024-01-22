@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "species:birt_dwelling",
     "species:frozen_meat"
   ]
 }

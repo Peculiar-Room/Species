@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube",
-	"ambientocclusion": false,
+	"ambientocclusion": true,
 	"textures": {
 		"6": "block/birch_log",
 		"7": "block/birch_log_top",

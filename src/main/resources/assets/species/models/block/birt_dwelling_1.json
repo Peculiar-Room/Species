@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cube",
-	"ambientocclusion": false,
+	"ambientocclusion": true,
 	"textures": {
 		"front_inside": "species:block/birt_nest_front_inside",
 		"side_inside": "species:block/birt_nest_side_inside",

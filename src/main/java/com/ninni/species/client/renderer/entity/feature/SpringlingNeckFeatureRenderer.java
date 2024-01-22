@@ -31,8 +31,8 @@ public class SpringlingNeckFeatureRenderer<T extends Springling, M extends Sprin
     }
 
     public ResourceLocation resourceLocation(T entity) {
-        if (entity.getExtendedAmount() > entity.maxExtendedAmount/3f && entity.getExtendedAmount() < entity.maxExtendedAmount/1.5f) return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDING_PISTON : NECK_EXTENDING;
-        if (entity.getExtendedAmount() >= entity.maxExtendedAmount/1.5f)  return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDED_PISTON : NECK_EXTENDED;
+        if (entity.getExtendedAmount() > entity.getMaxExtendedAmount()/3f && entity.getExtendedAmount() < entity.getMaxExtendedAmount()/1.5f) return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDING_PISTON : NECK_EXTENDING;
+        if (entity.getExtendedAmount() >= entity.getMaxExtendedAmount()/1.5f)  return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_EXTENDED_PISTON : NECK_EXTENDED;
         return entity.getName().getString().equalsIgnoreCase("piston") ? NECK_PISTON : NECK;
     }
 }

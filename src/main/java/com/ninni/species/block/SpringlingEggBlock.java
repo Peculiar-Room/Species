@@ -83,6 +83,7 @@ public class SpringlingEggBlock extends Block {
             if (springling != null) {
                 Vec3 vec3 = blockPos.getCenter();
                 springling.setBaby(true);
+                springling.setMaxExtendedAmount(9 + randomSource.nextInt(9));
                 springling.moveTo(vec3.x(), vec3.y(), vec3.z(), Mth.wrapDegrees(serverLevel.random.nextFloat() * 360.0f), 0.0f);
                 serverLevel.addFreshEntity(springling);
             }
