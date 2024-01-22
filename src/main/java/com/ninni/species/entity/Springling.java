@@ -78,8 +78,10 @@ public class Springling extends TamableAnimal implements PlayerRideable {
             if (getExtendedAmount() == 0) this.setRetracting(false);
         }
 
+        System.out.println(messageCooldown);
+
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
-        if (messageCooldown == 1 && this.isVehicle()) {
+        if (messageCooldown < 10 && messageCooldown > 0 && this.isVehicle()) {
             if (this.getFirstPassenger() instanceof ServerPlayer serverPlayer) {
                 FriendlyByteBuf buf = PacketByteBufs.create();
                 ServerPlayNetworking.send(serverPlayer, SpeciesNetwork.SEND_SPRINGLING_MESSAGE, buf);
@@ -146,7 +148,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
                 return InteractionResult.SUCCESS;
             }
             if (!player.isShiftKeyDown()) {
-                messageCooldown = 70;
+                messageCooldown = 260;
                 this.doPlayerRide(player);
                 return InteractionResult.SUCCESS;
             }
