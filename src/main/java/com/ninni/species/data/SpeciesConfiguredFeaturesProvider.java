@@ -21,8 +21,6 @@ public class SpeciesConfiguredFeaturesProvider extends FabricDynamicRegistryProv
     protected void configure(HolderLookup.Provider registries, Entries entries) {
         add(registries, entries, SpeciesConfiguredFeatures.BIRTED_BIRCH);
         add(registries, entries, SpeciesConfiguredFeatures.BIRTED_BIRCH_TREE_FILTERED);
-        add(registries, entries, SpeciesConfiguredFeatures.ORE_FROZEN_MEAT);
-        add(registries, entries, SpeciesConfiguredFeatures.ORE_FROZEN_HAIR);
     }
 
     private void add(HolderLookup.Provider registries, Entries entries, ResourceKey<ConfiguredFeature<?, ?>> resourceKey) {

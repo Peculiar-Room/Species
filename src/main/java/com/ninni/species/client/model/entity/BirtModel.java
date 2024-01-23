@@ -2,6 +2,7 @@ package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.ninni.species.client.animation.BirtAnimations;
+import com.ninni.species.client.animation.CruncherAnimations;
 import com.ninni.species.entity.Birt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -122,6 +123,11 @@ public class BirtModel<T extends Birt> extends HierarchicalModel<T> {
         if (entity.antennaTicks > 0) {
             this.antenna.xRot += Mth.cos(animationProgress) * 0.25F;
         }
+
+
+        this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 1.8f * limbDistance;
+        this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.8f * limbDistance;
+
         this.animate(entity.flyingAnimationState, BirtAnimations.FLY, animationProgress);
     }
 

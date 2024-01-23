@@ -21,8 +21,6 @@ public class SpeciesPlacedFeaturesProvider extends FabricDynamicRegistryProvider
     protected void configure(HolderLookup.Provider registries, Entries entries) {
         add(registries, entries, SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED);
         add(registries, entries, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES);
-        add(registries, entries, SpeciesPlacedFeatures.ORE_FROZEN_MEAT);
-        add(registries, entries, SpeciesPlacedFeatures.ORE_FROZEN_HAIR);
     }
 
     private void add(HolderLookup.Provider registries, Entries entries, ResourceKey<PlacedFeature> resourceKey) {

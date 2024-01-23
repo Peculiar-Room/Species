@@ -20,15 +20,12 @@ public class SpeciesPlacedFeatures {
 
     public static final ResourceKey<PlacedFeature> BIRTED_BIRCH_TREE_CHECKED = registerPlacedFeature("birted_birch");
     public static final ResourceKey<PlacedFeature> BIRTED_BIRCH_TREES = registerPlacedFeature("birted_birch_trees");
-    public static final ResourceKey<PlacedFeature> ORE_FROZEN_MEAT = registerPlacedFeature("ore_frozen_hair");
-    public static final ResourceKey<PlacedFeature> ORE_FROZEN_HAIR = registerPlacedFeature("ore_frozen_meat");
+    public static final ResourceKey<PlacedFeature> MAMMUTILATION_REMNANT = registerPlacedFeature("mammutilation_remnant");
 
     public static void bootstrap(BootstapContext<PlacedFeature> bootstapContext) {
         HolderGetter<ConfiguredFeature<?, ?>> holderGetter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREE_CHECKED, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH), PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_SAPLING));
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREES, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH_TREE_FILTERED), VegetationPlacements.treePlacement(RarityFilter.onAverageOnceEvery(75)));
-        PlacementUtils.register(bootstapContext, ORE_FROZEN_MEAT, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_MEAT), CountPlacement.of(80), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome());
-        PlacementUtils.register(bootstapContext, ORE_FROZEN_HAIR, holderGetter.getOrThrow(SpeciesConfiguredFeatures.ORE_FROZEN_HAIR), CountPlacement.of(80), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome());
     }
 
     public static ResourceKey<PlacedFeature> registerPlacedFeature(String id) {
