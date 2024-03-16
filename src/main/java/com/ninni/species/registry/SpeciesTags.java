@@ -25,6 +25,7 @@ public interface SpeciesTags {
     TagKey<Block> PETRIFIED_EGG_HATCH = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "petrified_egg_hatch"));
     TagKey<Block> PETRIFIED_EGG_HATCH_BOOST = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "petrified_egg_hatch_boost"));
     TagKey<Block> MAMMUTILATION_REMNANT_INVALID_BLOCKS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mammutilation_remnant_invalid_blocks"));
+    TagKey<Block> MAMMUTILATION_BODY_BLOCKS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mammutilation_body_blocks"));
 
     //biomeTags
     TagKey<Biome> WRAPTOR_COOP_HAS_STRUCTURE = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wraptor_coop_has_structure"));
