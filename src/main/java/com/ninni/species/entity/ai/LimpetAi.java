@@ -45,8 +45,9 @@ public class LimpetAi {
                 Pair.of(1, new RunOne<>(ImmutableList.of(
                         Pair.of(RandomStroll.stroll(1.0f), 2),
                         Pair.of(SetWalkTargetFromLookTarget.create(1.0f, 3), 2),
-                        Pair.of(new DoNothing(30, 60), 1))
-                ))));
+                        Pair.of(new DoNothing(30, 60), 1)
+                ))))
+        );
     }
 
     private static void initRetreatActivity(Brain<Limpet> brain) {

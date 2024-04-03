@@ -5,8 +5,11 @@ import com.ninni.species.entity.Mammutilation;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesTags;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,14 +43,17 @@ public class CarvedPumpkinBlockMixin {
                 }
             }
         }
-        BlockState rodState = level.getBlockState(blockPos.relative(value.getOpposite()).relative(value.getOpposite().getClockWise(), 2));
-        BlockState rodState1 = level.getBlockState(blockPos.relative(value.getOpposite()).relative(value.getOpposite().getCounterClockWise(), 2));
+        BlockPos rodPos = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getClockWise(), 2);
+        BlockPos rodPos1 = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getCounterClockWise(), 2);
+        BlockState rodState = level.getBlockState(rodPos);
+        BlockState rodState1 = level.getBlockState(rodPos1);
         if (rodState.is(Blocks.LIGHTNING_ROD) && rodState.getValue(BlockStateProperties.FACING) == value.getOpposite().getClockWise()) {
-            pos.add(blockPos.relative(value.getOpposite().getClockWise()));
+            pos.add(rodPos);
         }
         if (rodState1.is(Blocks.LIGHTNING_ROD) && rodState1.getValue(BlockStateProperties.FACING) == value.getOpposite().getCounterClockWise()) {
-            pos.add(blockPos.relative(value.getOpposite().getCounterClockWise()));
+            pos.add(rodPos1);
         }
+        Mammutilation mammutilation = null;
         if (pos.size() == 28) {
             pos.add(blockPos);
             pos.forEach(blockPos1 -> {
@@ -55,9 +61,18 @@ public class CarvedPumpkinBlockMixin {
                 level.levelEvent(2001, blockPos1, Block.getId(level.getBlockState(blockPos1)));
                 level.blockUpdated(blockPos1, Blocks.AIR);
             });
-            Mammutilation mammutilation = SpeciesEntities.MAMMUTILATION.create(level);
-            mammutilation.moveTo((double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.05, (double)blockPos.getZ() + 0.5, 0.0f, 0.0f);
+            mammutilation = SpeciesEntities.MAMMUTILATION.create(level);
+            // 90.0F - South
+            // 180.0F -
+            float x = 0.0F;
+            float y = 0.0F;
+            mammutilation.moveTo((double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.05, (double)blockPos.getZ() + 0.5, Mth.wrapDegrees(x), Mth.wrapDegrees(y));
             level.addFreshEntity(mammutilation);
+        }
+        if (mammutilation != null) {
+            for (ServerPlayer serverPlayer : level.getEntitiesOfClass(ServerPlayer.class, mammutilation.getBoundingBox().inflate(5.0))) {
+                CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, mammutilation);
+            }
         }
     }
 

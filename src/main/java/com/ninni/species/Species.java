@@ -46,6 +46,9 @@ public class Species implements ModInitializer {
 			SpeciesStructureSets.class,
 			SpeciesStructurePieceTypes.class
 		);
+		SpeciesEntityDataSerializers.init();
+		SpeciesSensorTypes.init();
+		SpeciesMemoryModuleTypes.init();
 		SpeciesTreeDecorators.init();
 		SpeciesNetwork.commonInit();
 
