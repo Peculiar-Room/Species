@@ -8,7 +8,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 import java.util.List;
 
@@ -53,10 +57,11 @@ public class CruncherModel<T extends Cruncher> extends HierarchicalModel<T> {
     public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animateWalk(CruncherAnimations.WALK, limbAngle, limbDistance, 2f, 2f);
+        this.animate(entity.stunAnimationState, CruncherAnimations.STUN, animationProgress);
         this.animate(entity.idleAnimationState, CruncherAnimations.IDLE, animationProgress);
         this.animate(entity.roarAnimationState, CruncherAnimations.ROAR, animationProgress);
         this.animate(entity.attackAnimationState, CruncherAnimations.ATTACK, animationProgress);
-        this.head.xRot +=headPitch * ((float) Math.PI / 180f);
+        this.head.xRot += headPitch * ((float) Math.PI / 180f);
         this.head.yRot += headYaw * ((float) Math.PI / 180f);
     }
 

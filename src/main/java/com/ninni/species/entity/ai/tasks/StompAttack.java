@@ -53,20 +53,26 @@ public class StompAttack extends Behavior<Cruncher> {
         if (target == null) return;
 
         livingEntity.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+        brain.eraseMemory(MemoryModuleType.WALK_TARGET);
 
         if (brain.getMemory(SpeciesMemoryModuleTypes.STOMP_CHARGING).isPresent()) return;
 
-        for (Player player : serverLevel.getEntitiesOfClass(Player.class, livingEntity.getBoundingBox().inflate(6.0D))) {
+        for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(6.0D))) {
 
-            if (player.getY() > livingEntity.getY() && player.distanceTo(livingEntity) > 4) continue;
+            boolean flag = entity.getY() > livingEntity.getY() && entity.distanceTo(livingEntity) > 6;
+            boolean self = entity instanceof Cruncher;
+
+            if (self || flag) continue;
+
+            float damage = 10.0F / (0.15F * entity.distanceTo(livingEntity));
 
             Vec3 vec3 = livingEntity.position().add(0.0, 1.6f, 0.0);
-            Vec3 vec32 = player.getEyePosition().subtract(vec3);
+            Vec3 vec32 = entity.getEyePosition().subtract(vec3);
             Vec3 vec33 = vec32.normalize();
-            player.hurt(serverLevel.damageSources().sonicBoom(livingEntity), 5.0F);
-            double d = 0.5 * (1.0 - player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-            double e = 2.5 * (1.0 - player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-            player.push(vec33.x() * e, vec33.y() * d, vec33.z() * e);
+            entity.hurt(serverLevel.damageSources().sonicBoom(livingEntity), damage);
+            double d = 0.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            double e = 2.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            entity.push(vec33.x() * e, vec33.y() * d, vec33.z() * e);
         }
         livingEntity.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 42);

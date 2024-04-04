@@ -58,6 +58,7 @@ public class RoarAttack extends Behavior<Cruncher> {
         if (target == null) return;
 
         livingEntity.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+        brain.eraseMemory(MemoryModuleType.WALK_TARGET);
 
         if (brain.getMemory(SpeciesMemoryModuleTypes.ROAR_CHARGING).isPresent()) return;
 

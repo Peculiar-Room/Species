@@ -1,18 +1,14 @@
 package com.ninni.species.entity;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.entity.ai.CruncherAi;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
 import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesMemoryModuleTypes;
-import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.registry.SpeciesSensorTypes;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -35,42 +31,38 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.sensing.Sensor;
-import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class Cruncher extends Animal {
-    protected static final ImmutableList<SensorType<? extends Sensor<? super Cruncher>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY, SpeciesSensorTypes.CRUNCHER_ATTACK_ENTITY_SENSOR);
-    protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_ATTACKABLE, SpeciesMemoryModuleTypes.ROAR_CHARGING, SpeciesMemoryModuleTypes.STOMP_CHARGING);
     private static final EntityDataAccessor<CruncherState> CRUNCHER_STATE = SynchedEntityData.defineId(Cruncher.class, SpeciesEntityDataSerializers.CRUNCHER_STATE);
+    private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState roarAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
+    public final AnimationState stunAnimationState = new AnimationState();
+    private final ServerBossEvent bossEvent = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+    private final int maxHunger = 3;
     private int hunger = 3;
     private int idleAnimationTimeout = 0;
-    private int stunnedTicks = 0;
-    private final int maxHunger = 3;
-    private final ServerBossEvent bossEvent = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
 
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 300.0).add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.KNOCKBACK_RESISTANCE, 1).add(Attributes.ATTACK_DAMAGE, 10);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 500.0).add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.KNOCKBACK_RESISTANCE, 1).add(Attributes.ATTACK_DAMAGE, 10);
     }
 
     @Override
     protected Brain.Provider<Cruncher> brainProvider() {
-        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
+        return Brain.provider(CruncherAi.MEMORY_TYPES, CruncherAi.SENSOR_TYPES);
     }
 
     @Override
@@ -92,19 +84,21 @@ public class Cruncher extends Animal {
         CruncherAi.updateActivity(this);
         this.level().getProfiler().pop();
 
+        super.customServerAiStep();
+
         if (this.hunger <= 0 && !this.bossEvent.getPlayers().isEmpty()) {
             this.bossEvent.removeAllPlayers();
+            this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
         }
 
         this.bossEvent.setProgress((float) this.hunger / this.maxHunger);
-
-        super.customServerAiStep();
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(CRUNCHER_STATE, CruncherState.IDLE);
+        this.entityData.define(STUNNED_TICKS, 0);
     }
 
     @Override
@@ -114,7 +108,7 @@ public class Cruncher extends Animal {
             this.bossEvent.setName(this.getDisplayName());
         }
         this.hunger = compoundTag.getInt("Hunger");
-        this.stunnedTicks = compoundTag.getInt("StunnedTicks");
+        this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
     }
 
     @Override
@@ -122,7 +116,7 @@ public class Cruncher extends Animal {
         super.addAdditionalSaveData(compoundTag);
         this.bossEvent.setName(this.getDisplayName());
         compoundTag.putInt("Hunger", this.hunger);
-        compoundTag.putInt("StunnedTicks", this.stunnedTicks);
+        compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
     }
 
     @Override
@@ -140,7 +134,7 @@ public class Cruncher extends Animal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getState() == CruncherState.STUNNED) {
+        if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
             if (!player.getAbilities().instabuild) {
                 itemStack.shrink(1);
             }
@@ -148,47 +142,48 @@ public class Cruncher extends Animal {
             if (this.hunger == 0) {
                 this.bossEvent.setProgress(0.0f);
                 this.bossEvent.setVisible(false);
+                this.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
             }
+            this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
             this.setHealth(this.getMaxHealth());
             this.transitionTo(CruncherState.IDLE);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            this.setStunnedTicks(0);
+            return InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, interactionHand);
     }
 
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
-        this.handleStunnedEffect();
+        if (this.getState() == CruncherState.ROAR) {
+            f = (f - 1.0f) / 2.0f;
+        }
         return super.hurt(damageSource, f);
     }
 
-    private void handleStunnedEffect() {
-        if (this.getHealth() / this.getMaxHealth() <= 0.6) {
-            this.transitionTo(CruncherState.STUNNED);
-            this.stunnedTicks = 180;
-        }
-    }
-
     @Override
-    public void travel(Vec3 vec3) {
-        if (this.getState() != CruncherState.IDLE) {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(0, 1, 0));
-            vec3 = vec3.multiply(0, 1, 0);
+    protected void actuallyHurt(DamageSource damageSource, float f) {
+        boolean flag = this.getHealth() / this.getMaxHealth() <= 0.6;
+        if (flag) {
+            this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
+            this.transitionTo(CruncherState.STUNNED);
+            this.setStunnedTicks(180);
         }
-        super.travel(vec3);
+        super.actuallyHurt(damageSource, f);
     }
 
     @Override
     public void tick() {
         super.tick();
-
         if (this.level().isClientSide()) {
             this.setupAnimationStates();
         } else {
-            if (this.getState() == CruncherState.STUNNED && this.stunnedTicks > 0) {
-                this.stunnedTicks--;
-                this.heal(1.0F);
-                if (this.stunnedTicks == 0) {
+            if (this.getState() == CruncherState.STUNNED) {
+                int ticks = this.getStunnedTicks();
+                if (ticks > 0) {
+                    this.setStunnedTicks(ticks - 1);
+                    this.heal(1.0F);
+                } else {
                     this.transitionTo(CruncherState.IDLE);
                 }
             }
@@ -210,16 +205,20 @@ public class Cruncher extends Animal {
                 }
                 this.roarAnimationState.stop();
                 this.attackAnimationState.stop();
+                this.stunAnimationState.stop();
             }
             case ROAR -> {
+                this.stunAnimationState.stop();
                 this.attackAnimationState.stop();
                 this.roarAnimationState.startIfStopped(this.tickCount);
             }
             case STOMP -> {
+                this.stunAnimationState.stop();
                 this.roarAnimationState.stop();
                 this.attackAnimationState.startIfStopped(this.tickCount);
             }
             case STUNNED -> {
+                this.stunAnimationState.startIfStopped(this.tickCount);
             }
         }
     }
@@ -234,6 +233,9 @@ public class Cruncher extends Animal {
     }
 
     public Optional<LivingEntity> getHurtBy() {
+        if (this.getHunger() == 0) {
+            return Optional.empty();
+        }
         return this.getBrain().getMemory(MemoryModuleType.HURT_BY).map(DamageSource::getEntity).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast);
     }
 
@@ -278,6 +280,14 @@ public class Cruncher extends Animal {
 
     public void setState(CruncherState cruncherState) {
         this.entityData.set(CRUNCHER_STATE, cruncherState);
+    }
+
+    public int getStunnedTicks() {
+        return this.entityData.get(STUNNED_TICKS);
+    }
+
+    public void setStunnedTicks(int stunnedTicks) {
+        this.entityData.set(STUNNED_TICKS, stunnedTicks);
     }
 
     @Nullable

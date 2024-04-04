@@ -27,6 +27,9 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
             if (cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE).isPresent()) {
                 cruncher.getBrain().eraseMemory(MemoryModuleType.NEAREST_ATTACKABLE);
             }
+            if (cruncher.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()) {
+                cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            }
             return;
         }
 
