@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:phantom",
+  "item": {
+    "id": "minecraft:phantom_membrane",
+    "Count": 1
+  }
+}

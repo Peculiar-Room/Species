@@ -1,6 +1,7 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.registry.*;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.BirtEgg;
@@ -14,10 +15,13 @@ import com.ninni.species.world.poi.SpeciesPointsOfInterests;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.Util;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -61,6 +65,8 @@ public class Species implements ModInitializer {
 				return Util.make(new BirtEgg(world, position.x(), position.y(), position.z()), entity -> entity.setItem(stack));
 			}
 		});
+
+		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new CruncherPelletManager());
 	}
 
 	private void addFeature(ResourceKey<PlacedFeature> placedFeatureRegistryKey) {

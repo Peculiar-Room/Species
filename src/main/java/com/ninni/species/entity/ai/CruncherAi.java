@@ -73,7 +73,6 @@ public class CruncherAi {
 
     private static void initCoreActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new AnimalPanic(1.4F),
                 new LookAtTargetSink(45, 90),
                 new MoveToTargetSink() {
                     @Override

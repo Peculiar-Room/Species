@@ -1,12 +1,17 @@
 package com.ninni.species.entity;
 
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
+import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -37,12 +42,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
 
 public class Cruncher extends Animal {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final EntityDataAccessor<CruncherState> CRUNCHER_STATE = SynchedEntityData.defineId(Cruncher.class, SpeciesEntityDataSerializers.CRUNCHER_STATE);
     private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     public final AnimationState idleAnimationState = new AnimationState();
@@ -51,6 +59,8 @@ public class Cruncher extends Animal {
     public final AnimationState stunAnimationState = new AnimationState();
     private final ServerBossEvent bossEvent = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
     private final int maxHunger = 3;
+    @Nullable
+    private CruncherPelletManager.CruncherPelletData pelletData = null;
     private int hunger = 3;
     private int idleAnimationTimeout = 0;
 
@@ -110,9 +120,19 @@ public class Cruncher extends Animal {
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
+
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
+
+        if (compoundTag.contains("PelletData", 10)) {
+            CruncherPelletManager.CruncherPelletData.CODEC.parse(
+                    new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("PelletData"))
+            ).resultOrPartial(LOGGER::error).ifPresent(data -> {
+                this.pelletData = data;
+            });
+        }
+
         this.hunger = compoundTag.getInt("Hunger");
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
     }
@@ -120,7 +140,17 @@ public class Cruncher extends Animal {
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
+
         this.bossEvent.setName(this.getDisplayName());
+
+        if (this.pelletData != null) {
+            CruncherPelletManager.CruncherPelletData.CODEC
+                    .encodeStart(NbtOps.INSTANCE, this.pelletData)
+                    .resultOrPartial(LOGGER::error)
+                    .ifPresent(tag -> compoundTag.put("PelletData", tag));
+        }
+
+
         compoundTag.putInt("Hunger", this.hunger);
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
     }
@@ -140,6 +170,24 @@ public class Cruncher extends Animal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
+        for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
+
+            if (this.pelletData == data) continue;
+
+            if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
+                this.pelletData = data;
+
+                if (!player.getAbilities().instabuild) {
+                    itemStack.shrink(1);
+                }
+
+                player.sendSystemMessage(Component.translatable(data.entityType().toString()));
+                player.sendSystemMessage(Component.translatable(data.item().toString()));
+
+                this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
+                return InteractionResult.SUCCESS;
+            }
+        }
         if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
             if (!player.getAbilities().instabuild) {
                 itemStack.shrink(1);

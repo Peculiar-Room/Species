@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:skeleton",
+  "item": {
+    "id": "minecraft:bone",
+    "Count": 1
+  }
+}

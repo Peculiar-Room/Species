@@ -71,6 +71,8 @@
   "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
   "advancements.species.birt_egg_at_warden.title": "Birt is the Word",
   "advancements.species.birt_egg_at_warden.description": "Throw a birt egg at a warden and live to tell the tale",
+  "advancements.species.ancient_eggs.title": "We're Back",
+  "advancements.species.ancient_eggs.description": "Have all Ancient Eggs in your inventory",
 
   "entity.species.limpet": "Limpet",
   "item.species.limpet_spawn_egg": "Limpet Spawn Egg",

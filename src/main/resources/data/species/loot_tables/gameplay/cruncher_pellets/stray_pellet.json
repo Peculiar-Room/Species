@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stray",
+  "item": {
+    "id": "minecraft:tipped_arrow",
+    "Count": 1,
+    "tag": {
+      "Potion": "minecraft:slowness"
+    }
+  }
+}

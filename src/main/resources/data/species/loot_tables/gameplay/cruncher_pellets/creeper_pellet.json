@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:creeper",
+  "item": {
+    "id": "minecraft:gunpowder",
+    "Count": 1
+  }
+}
