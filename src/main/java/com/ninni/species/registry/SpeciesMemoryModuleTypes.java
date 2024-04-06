@@ -17,6 +17,7 @@ public class SpeciesMemoryModuleTypes {
     public static final Map<ResourceLocation, MemoryModuleType<?>> MEMORY_MODULES = Maps.newLinkedHashMap();
 
     public static final MemoryModuleType<Unit> ROAR_CHARGING = register("roar_charging", Codec.unit(Unit.INSTANCE));
+    public static final MemoryModuleType<Unit> ROAR_COOLDOWN = register("roar_cooldown", Codec.unit(Unit.INSTANCE));
     public static final MemoryModuleType<Unit> STOMP_CHARGING = register("stomp_charging", Codec.unit(Unit.INSTANCE));
 
     private static <U> MemoryModuleType<U> register(String string, Codec<U> codec) {

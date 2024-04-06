@@ -6,8 +6,10 @@ import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Unit;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,11 +26,13 @@ import net.minecraft.world.phys.Vec3;
 
 public class RoarAttack extends Behavior<Cruncher> {
     private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.ROAR;
+    private final UniformInt cooldown = UniformInt.of(300, 600);
 
     public RoarAttack() {
         super(ImmutableMap.of(
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
-                SpeciesMemoryModuleTypes.ROAR_CHARGING, MemoryStatus.VALUE_ABSENT
+                SpeciesMemoryModuleTypes.ROAR_CHARGING, MemoryStatus.VALUE_ABSENT,
+                SpeciesMemoryModuleTypes.ROAR_COOLDOWN, MemoryStatus.VALUE_ABSENT
         ), cruncherState.getDuration());
     }
 
@@ -44,9 +48,7 @@ public class RoarAttack extends Behavior<Cruncher> {
 
     @Override
     protected void start(ServerLevel serverLevel, Cruncher livingEntity, long l) {
-        if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
-            livingEntity.transitionTo(cruncherState);
-        }
+        livingEntity.transitionTo(cruncherState);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 64);
     }
 
@@ -64,9 +66,15 @@ public class RoarAttack extends Behavior<Cruncher> {
 
         livingEntity.playSound(SoundEvents.WARDEN_ROAR, 2.0F, 1.0F);
 
-        for (Player player : serverLevel.getEntitiesOfClass(Player.class, livingEntity.getBoundingBox().inflate(13.0D))) {
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300));
-            player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300));
+        for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(13.0D))) {
+
+            boolean isCreative = entity instanceof Player player && player.getAbilities().instabuild;
+            boolean isCruncher = entity instanceof Cruncher;
+
+            if (isCreative || isCruncher) continue;
+
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300));
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300));
         }
 
         brain.setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 96);
@@ -76,6 +84,7 @@ public class RoarAttack extends Behavior<Cruncher> {
     protected void stop(ServerLevel serverLevel, Cruncher livingEntity, long l) {
         if (livingEntity.getState() == cruncherState) {
             livingEntity.transitionTo(Cruncher.CruncherState.IDLE);
+            livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_COOLDOWN, Unit.INSTANCE, this.cooldown.sample(livingEntity.getRandom()));
         }
     }
 }

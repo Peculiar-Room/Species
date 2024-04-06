@@ -1,7 +1,6 @@
 package com.ninni.species.entity.ai;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.ninni.species.entity.Cruncher;
@@ -11,36 +10,26 @@ import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import com.ninni.species.registry.SpeciesSensorTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.AnimalMakeLove;
 import net.minecraft.world.entity.ai.behavior.AnimalPanic;
-import net.minecraft.world.entity.ai.behavior.BabyFollowAdult;
 import net.minecraft.world.entity.ai.behavior.DoNothing;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.world.entity.ai.behavior.FollowTemptation;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
-import net.minecraft.world.entity.ai.behavior.RandomLookAround;
 import net.minecraft.world.entity.ai.behavior.RandomStroll;
 import net.minecraft.world.entity.ai.behavior.RunOne;
-import net.minecraft.world.entity.ai.behavior.SetEntityLookTargetSometimes;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
+import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
 import net.minecraft.world.entity.ai.behavior.StartAttacking;
 import net.minecraft.world.entity.ai.behavior.StayCloseToTarget;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
-import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.animal.camel.Camel;
-import net.minecraft.world.entity.animal.camel.CamelAi;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
@@ -68,7 +57,8 @@ public class CruncherAi {
             MemoryModuleType.NEAREST_ATTACKABLE,
             MemoryModuleType.LIKED_PLAYER,
             SpeciesMemoryModuleTypes.ROAR_CHARGING,
-            SpeciesMemoryModuleTypes.STOMP_CHARGING
+            SpeciesMemoryModuleTypes.STOMP_CHARGING,
+            SpeciesMemoryModuleTypes.ROAR_COOLDOWN
     );
 
     public static Brain<Cruncher> makeBrain(Brain<Cruncher> brain) {
@@ -88,11 +78,13 @@ public class CruncherAi {
                 new MoveToTargetSink() {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {
+                        boolean flag = super.checkExtraStartConditions(serverLevel, mob);
                         if (mob instanceof Cruncher cruncher && cruncher.getHunger() > 0) {
                             Cruncher.CruncherState state = cruncher.getState();
-                            return state == Cruncher.CruncherState.IDLE || state == Cruncher.CruncherState.STUNNED;
+                            boolean validState = state == Cruncher.CruncherState.IDLE || state == Cruncher.CruncherState.STUNNED;
+                            return flag && validState;
                         }
-                        return super.checkExtraStartConditions(serverLevel, mob);
+                        return flag;
                     }
                 }
         ));
@@ -116,7 +108,8 @@ public class CruncherAi {
                 ImmutableList.of(
                         Pair.of(0, StopAttackingIfTargetInvalid.create()),
                         Pair.of(1, new RoarAttack()),
-                        Pair.of(2, new StompAttack())
+                        Pair.of(2, SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.2F)),
+                        Pair.of(3, new StompAttack())
                 ),
                 ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)

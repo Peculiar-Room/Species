@@ -33,11 +33,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class Cruncher extends Animal {
@@ -86,10 +88,14 @@ public class Cruncher extends Animal {
 
         super.customServerAiStep();
 
-        if (this.hunger <= 0 && !this.bossEvent.getPlayers().isEmpty()) {
+        boolean flag = this.hunger <= 0;
+
+        if (flag && !this.bossEvent.getPlayers().isEmpty()) {
             this.bossEvent.removeAllPlayers();
             this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
         }
+
+        if (flag) return;
 
         this.bossEvent.setProgress((float) this.hunger / this.maxHunger);
     }
@@ -144,9 +150,9 @@ public class Cruncher extends Animal {
                 this.bossEvent.setVisible(false);
                 this.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
             }
+            this.transitionTo(CruncherState.IDLE);
             this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
             this.setHealth(this.getMaxHealth());
-            this.transitionTo(CruncherState.IDLE);
             this.setStunnedTicks(0);
             return InteractionResult.SUCCESS;
         }

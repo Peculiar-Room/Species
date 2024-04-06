@@ -59,10 +59,10 @@ public class StompAttack extends Behavior<Cruncher> {
 
         for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(6.0D))) {
 
-            boolean flag = entity.getY() > livingEntity.getY() && entity.distanceTo(livingEntity) > 6;
+            boolean reachable = entity.getY() > livingEntity.getY() && entity.distanceTo(livingEntity) > 6;
             boolean self = entity instanceof Cruncher;
 
-            if (self || flag) continue;
+            if (self || reachable) continue;
 
             float damage = 10.0F / (0.15F * entity.distanceTo(livingEntity));
 
