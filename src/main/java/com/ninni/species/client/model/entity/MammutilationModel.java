@@ -3,6 +3,7 @@ package com.ninni.species.client.model.entity;
 import com.ninni.species.entity.Mammutilation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
@@ -11,6 +12,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
@@ -56,7 +58,17 @@ public class MammutilationModel<T extends Mammutilation> extends HierarchicalMod
 
     @Override
     public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-
+        this.head.xRot = j * 0.0017453292F;
+        this.head.yRot = i * 0.0017453292F;
+        this.rightLeg.xRot = Mth.cos(f * 0.6662F) * 0.4F * g;
+        this.leftLeg.xRot = Mth.cos(f * 0.6662F + 3.1415927F) * 0.4F * g;
+        this.rightArm.xRot = Mth.cos(f * 0.6662F + 3.1415927F) * 0.4F * g;
+        this.leftArm.xRot = Mth.cos(f * 0.6662F) * 0.4F * g;
+        this.body.yScale = 1 + Mth.cos(h*0.08F)*0.15F + 0.4F * g;
+        this.body.zRot = Mth.cos(f * 0.6662F) * 0.4F * g;
+        this.tail.yRot = Mth.cos(f * 0.6662F) * 0.4F * g;
+        this.head.yScale = 1 + Mth.cos(h*2*0.08F)*0.02F;
+        this.head.zRot = -Mth.cos(f * 0.6662F) * 0.3F * g;
     }
 
     public static LayerDefinition getLayerDefinition() {
