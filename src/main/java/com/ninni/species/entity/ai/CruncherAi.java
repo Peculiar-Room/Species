@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.ninni.species.entity.Cruncher;
 import com.ninni.species.entity.ai.tasks.RoarAttack;
+import com.ninni.species.entity.ai.tasks.Sit;
 import com.ninni.species.entity.ai.tasks.SpitPellet;
 import com.ninni.species.entity.ai.tasks.StompAttack;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
@@ -43,6 +44,7 @@ public class CruncherAi {
             SensorType.NEAREST_LIVING_ENTITIES,
             SensorType.NEAREST_PLAYERS,
             SensorType.HURT_BY,
+            SensorType.NEAREST_PLAYERS,
             SpeciesSensorTypes.CRUNCHER_ATTACK_ENTITY_SENSOR
     );
     public static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
@@ -57,6 +59,9 @@ public class CruncherAi {
             MemoryModuleType.NEAREST_LIVING_ENTITIES,
             MemoryModuleType.NEAREST_ATTACKABLE,
             MemoryModuleType.LIKED_PLAYER,
+            MemoryModuleType.NEAREST_PLAYERS,
+            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
+            MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
             SpeciesMemoryModuleTypes.ROAR_CHARGING,
             SpeciesMemoryModuleTypes.STOMP_CHARGING,
             SpeciesMemoryModuleTypes.SPIT_CHARGING,
@@ -75,17 +80,14 @@ public class CruncherAi {
 
     private static void initCoreActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new Sit(),
                 new LookAtTargetSink(45, 90),
                 new MoveToTargetSink() {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {
-                        boolean flag = super.checkExtraStartConditions(serverLevel, mob);
-                        if (mob instanceof Cruncher cruncher) {
-                            Cruncher.CruncherState state = cruncher.getState();
-                            boolean immovableState = state == Cruncher.CruncherState.ROAR || state == Cruncher.CruncherState.STOMP || state == Cruncher.CruncherState.STUNNED;
-                            return !immovableState;
-                        }
-                        return flag;
+                        if (mob instanceof Cruncher cruncher && cruncher.cannotWalk()) return false;
+
+                        return super.checkExtraStartConditions(serverLevel, mob);
                     }
                 }
         ));

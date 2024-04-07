@@ -10,7 +10,6 @@ import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -32,24 +31,22 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Map;
 import java.util.Optional;
 
-public class Cruncher extends Animal {
+public class Cruncher extends TamableAnimal {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final EntityDataAccessor<CruncherState> CRUNCHER_STATE = SynchedEntityData.defineId(Cruncher.class, SpeciesEntityDataSerializers.CRUNCHER_STATE);
     private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
@@ -63,8 +60,9 @@ public class Cruncher extends Animal {
     private CruncherPelletManager.CruncherPelletData pelletData = null;
     private int hunger = 3;
     private int idleAnimationTimeout = 0;
+    public boolean readyToGift = false;
 
-    public Cruncher(EntityType<? extends Animal> entityType, Level level) {
+    public Cruncher(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -133,6 +131,7 @@ public class Cruncher extends Animal {
 
         this.setHunger(compoundTag.getInt("Hunger"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
+        this.setReadyToGift(compoundTag.getBoolean("ReadyToGift"));
     }
 
     @Override
@@ -151,6 +150,7 @@ public class Cruncher extends Animal {
 
         compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
+        compoundTag.putBoolean("ReadyToGift", this.getReadyToGift());
     }
 
     @Nullable
@@ -160,6 +160,14 @@ public class Cruncher extends Animal {
 
     public void setPelletData(CruncherPelletManager.CruncherPelletData data) {
         this.pelletData = data;
+    }
+
+    public boolean getReadyToGift() {
+        return this.readyToGift;
+    }
+
+    public void setReadyToGift(boolean readyToGift) {
+        this.readyToGift = readyToGift;
     }
 
     @Override
@@ -177,6 +185,7 @@ public class Cruncher extends Animal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
+        InteractionResult interactionResult = super.mobInteract(player, interactionHand);
         for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
 
             if (this.getPelletData() == data) continue;
@@ -190,18 +199,36 @@ public class Cruncher extends Animal {
                 return InteractionResult.SUCCESS;
             }
         }
+        if (this.isTame()) {
+
+            if (interactionResult.consumesAction() && !this.isBaby() || !this.isOwnedBy(player)) {
+                return interactionResult;
+            }
+
+            this.setOrderedToSit(!this.isOrderedToSit());
+            this.jumping = false;
+            this.navigation.stop();
+            this.setTarget(null);
+            return InteractionResult.SUCCESS;
+        }
         if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
 
-            int hunger = this.getHunger();
+            this.setHunger(this.getHunger() - 1);
 
-            this.setHunger(hunger - 1);
-
-            if (hunger == 0) {
+            if (this.getHunger() == 0) {
                 this.bossEvent.setProgress(0.0f);
                 this.bossEvent.setVisible(false);
+
                 this.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
+                this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+
+                this.tame(player);
+                this.navigation.stop();
+                this.setOrderedToSit(true);
+
+                this.level().broadcastEntityEvent(this, (byte)7);
             }
 
             this.transitionTo(CruncherState.IDLE);
@@ -210,7 +237,7 @@ public class Cruncher extends Animal {
             this.setStunnedTicks(0);
             return InteractionResult.SUCCESS;
         }
-        return super.mobInteract(player, interactionHand);
+        return interactionResult;
     }
 
     @Override
@@ -225,9 +252,11 @@ public class Cruncher extends Animal {
     protected void actuallyHurt(DamageSource damageSource, float f) {
         boolean flag = this.getHealth() / this.getMaxHealth() <= 0.6;
         if (flag) {
-            this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
-            this.transitionTo(CruncherState.STUNNED);
-            this.setStunnedTicks(180);
+            if (this.getState() != CruncherState.STUNNED) {
+                this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
+                this.transitionTo(CruncherState.STUNNED);
+                this.setStunnedTicks(180);
+            }
         }
         super.actuallyHurt(damageSource, f);
     }
@@ -352,6 +381,13 @@ public class Cruncher extends Animal {
 
     public void setStunnedTicks(int stunnedTicks) {
         this.entityData.set(STUNNED_TICKS, stunnedTicks);
+    }
+
+    public boolean cannotWalk() {
+        CruncherState state = this.getState();
+        boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP || state == CruncherState.STUNNED;
+        boolean sitting = this.isTame() && this.getOwner() != null && this.isOrderedToSit();
+        return inState || sitting;
     }
 
     @Nullable
