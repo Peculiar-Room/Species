@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.ninni.species.entity.Cruncher;
 import com.ninni.species.entity.ai.tasks.RoarAttack;
+import com.ninni.species.entity.ai.tasks.SpitPellet;
 import com.ninni.species.entity.ai.tasks.StompAttack;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import com.ninni.species.registry.SpeciesSensorTypes;
@@ -58,6 +59,7 @@ public class CruncherAi {
             MemoryModuleType.LIKED_PLAYER,
             SpeciesMemoryModuleTypes.ROAR_CHARGING,
             SpeciesMemoryModuleTypes.STOMP_CHARGING,
+            SpeciesMemoryModuleTypes.SPIT_CHARGING,
             SpeciesMemoryModuleTypes.ROAR_COOLDOWN
     );
 
@@ -78,10 +80,10 @@ public class CruncherAi {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {
                         boolean flag = super.checkExtraStartConditions(serverLevel, mob);
-                        if (mob instanceof Cruncher cruncher && cruncher.getHunger() > 0) {
+                        if (mob instanceof Cruncher cruncher) {
                             Cruncher.CruncherState state = cruncher.getState();
-                            boolean validState = state == Cruncher.CruncherState.IDLE || state == Cruncher.CruncherState.STUNNED;
-                            return flag && validState;
+                            boolean immovableState = state == Cruncher.CruncherState.ROAR || state == Cruncher.CruncherState.STOMP || state == Cruncher.CruncherState.STUNNED;
+                            return !immovableState;
                         }
                         return flag;
                     }
@@ -94,7 +96,8 @@ public class CruncherAi {
                 Pair.of(0, StayCloseToTarget.create(CruncherAi::getLikedTracker, CruncherAi::isPassive, 2, 4, 1.0F)),
                 Pair.of(1, StartAttacking.create(Predicate.not(CruncherAi::isPassive), cruncher -> cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE))),
                 Pair.of(2, StartAttacking.create(Predicate.not(CruncherAi::isPassive), Cruncher::getHurtBy)),
-                Pair.of(3, new RunOne<>(
+                Pair.of(3, new SpitPellet()),
+                Pair.of(4, new RunOne<>(
                         ImmutableList.of(
                                 Pair.of(RandomStroll.stroll(1.0F), 1),
                                 Pair.of(new DoNothing(30, 60), 1)

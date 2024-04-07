@@ -46,6 +46,7 @@ public class SpeciesCreativeModeTabs {
 
         output.accept(SpeciesItems.CRUNCHER_SPAWN_EGG);
         output.accept(SpeciesItems.CRUNCHER_EGG);
+        output.accept(SpeciesItems.CRUNCHER_PELLET);
 
         output.accept(SpeciesItems.MAMMUTILATION_SPAWN_EGG);
         output.accept(SpeciesItems.FROZEN_MEAT);
@@ -63,6 +64,9 @@ public class SpeciesCreativeModeTabs {
             entries.addBefore(Items.WHEAT_SEEDS, SpeciesItems.ANCIENT_PINECONE);
             entries.addAfter(Items.SNIFFER_EGG, SpeciesItems.CRUNCHER_EGG, SpeciesItems.SPRINGLING_EGG, SpeciesItems.PETRIFIED_EGG, SpeciesItems.FROZEN_MEAT, SpeciesItems.FROZEN_HAIR);
             entries.addAfter(Items.BONE_BLOCK, SpeciesItems.BONE_BARK, SpeciesItems.BONE_VERTEBRA, SpeciesItems.BONE_SPIKE);
+        });
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
+            entries.addAfter(Items.SUSPICIOUS_GRAVEL, SpeciesItems.CRUNCHER_PELLET);
         });
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, SpeciesItems.MUSIC_DISC_DIAL);

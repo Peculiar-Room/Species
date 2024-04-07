@@ -98,7 +98,7 @@ public class Cruncher extends Animal {
 
         super.customServerAiStep();
 
-        boolean flag = this.hunger <= 0;
+        boolean flag = this.getHunger() <= 0;
 
         if (flag && !this.bossEvent.getPlayers().isEmpty()) {
             this.bossEvent.removeAllPlayers();
@@ -107,7 +107,7 @@ public class Cruncher extends Animal {
 
         if (flag) return;
 
-        this.bossEvent.setProgress((float) this.hunger / this.maxHunger);
+        this.bossEvent.setProgress((float) this.getHunger() / this.maxHunger);
     }
 
     @Override
@@ -128,12 +128,10 @@ public class Cruncher extends Animal {
         if (compoundTag.contains("PelletData", 10)) {
             CruncherPelletManager.CruncherPelletData.CODEC.parse(
                     new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("PelletData"))
-            ).resultOrPartial(LOGGER::error).ifPresent(data -> {
-                this.pelletData = data;
-            });
+            ).resultOrPartial(LOGGER::error).ifPresent(this::setPelletData);
         }
 
-        this.hunger = compoundTag.getInt("Hunger");
+        this.setHunger(compoundTag.getInt("Hunger"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
     }
 
@@ -145,14 +143,23 @@ public class Cruncher extends Animal {
 
         if (this.pelletData != null) {
             CruncherPelletManager.CruncherPelletData.CODEC
-                    .encodeStart(NbtOps.INSTANCE, this.pelletData)
+                    .encodeStart(NbtOps.INSTANCE, this.getPelletData())
                     .resultOrPartial(LOGGER::error)
                     .ifPresent(tag -> compoundTag.put("PelletData", tag));
         }
 
 
-        compoundTag.putInt("Hunger", this.hunger);
+        compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
+    }
+
+    @Nullable
+    public CruncherPelletManager.CruncherPelletData getPelletData() {
+        return this.pelletData;
+    }
+
+    public void setPelletData(CruncherPelletManager.CruncherPelletData data) {
+        this.pelletData = data;
     }
 
     @Override
@@ -172,32 +179,31 @@ public class Cruncher extends Animal {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
 
-            if (this.pelletData == data) continue;
+            if (this.getPelletData() == data) continue;
 
             if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
-                this.pelletData = data;
+                this.setPelletData(data);
 
-                if (!player.getAbilities().instabuild) {
-                    itemStack.shrink(1);
-                }
-
-                player.sendSystemMessage(Component.translatable(data.entityType().toString()));
-                player.sendSystemMessage(Component.translatable(data.item().toString()));
+                if (!player.getAbilities().instabuild) itemStack.shrink(1);
 
                 this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
         }
         if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
-            if (!player.getAbilities().instabuild) {
-                itemStack.shrink(1);
-            }
-            this.hunger--;
-            if (this.hunger == 0) {
+
+            itemStack.shrink(1);
+
+            int hunger = this.getHunger();
+
+            this.setHunger(hunger - 1);
+
+            if (hunger == 0) {
                 this.bossEvent.setProgress(0.0f);
                 this.bossEvent.setVisible(false);
                 this.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
             }
+
             this.transitionTo(CruncherState.IDLE);
             this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
             this.setHealth(this.getMaxHealth());
@@ -246,6 +252,10 @@ public class Cruncher extends Animal {
 
     public int getHunger() {
         return this.hunger;
+    }
+
+    public void setHunger(int hunger) {
+        this.hunger = hunger;
     }
 
     private void setupAnimationStates() {

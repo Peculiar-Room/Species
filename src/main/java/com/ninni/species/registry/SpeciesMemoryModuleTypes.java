@@ -19,6 +19,7 @@ public class SpeciesMemoryModuleTypes {
     public static final MemoryModuleType<Unit> ROAR_CHARGING = register("roar_charging", Codec.unit(Unit.INSTANCE));
     public static final MemoryModuleType<Unit> ROAR_COOLDOWN = register("roar_cooldown", Codec.unit(Unit.INSTANCE));
     public static final MemoryModuleType<Unit> STOMP_CHARGING = register("stomp_charging", Codec.unit(Unit.INSTANCE));
+    public static final MemoryModuleType<Unit> SPIT_CHARGING = register("spit_charging", Codec.unit(Unit.INSTANCE));
 
     private static <U> MemoryModuleType<U> register(String string, Codec<U> codec) {
         MemoryModuleType<U> type = new MemoryModuleType<>(Optional.of(codec));

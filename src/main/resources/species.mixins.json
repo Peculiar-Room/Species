@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityTypeMixin",
+    "BrushableBlockEntityAccessor",
     "CarvedPumpkinBlockMixin",
+    "FallingBlockEntityAccessor",
     "LivingEntityMixin",
     "MobEntityMixin",
     "PlayerMixin",

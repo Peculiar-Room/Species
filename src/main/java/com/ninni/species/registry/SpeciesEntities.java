@@ -150,6 +150,15 @@ public class SpeciesEntities {
                     .dimensions(EntityDimensions.scalable(0.8F, 1.3F))
                     .trackRangeChunks(10)
     );
+    public static final EntityType<CruncherPellet> CRUNCHER_PELLET = register(
+            "cruncher_pellet",
+            FabricEntityTypeBuilder.create()
+                    .<CruncherPellet>entityFactory(CruncherPellet::new)
+                    .spawnGroup(MobCategory.MISC)
+                    .dimensions(EntityDimensions.fixed(0.98F, 0.98F))
+                    .trackRangeChunks(10)
+                    .trackedUpdateRate(20)
+    );
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
