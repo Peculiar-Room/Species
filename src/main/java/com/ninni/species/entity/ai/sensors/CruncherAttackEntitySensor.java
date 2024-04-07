@@ -35,6 +35,7 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
         }
 
         super.doTick(serverLevel, cruncher);
+
         cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).stream()
                 .flatMap(Collection::stream)
                 .filter(EntitySelector.NO_CREATIVE_OR_SPECTATOR)

@@ -128,6 +128,9 @@
   "entity.species.cruncher": "Cruncher",
   "item.species.cruncher_spawn_egg": "Cruncher Spawn Egg",
   "block.species.cruncher_egg": "Cruncher Egg",
+  "subtitles.entity.species.cruncher.death": "Cruncher dies",
+  "subtitles.entity.species.cruncher.hurt": "Cruncher hurts",
+  "subtitles.entity.species.cruncher.idle": "Cruncher grunts",
 
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
