@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.ninni.species.entity.Cruncher;
 import com.ninni.species.entity.ai.tasks.RoarAttack;
-import com.ninni.species.entity.ai.tasks.Sit;
 import com.ninni.species.entity.ai.tasks.SpitPellet;
 import com.ninni.species.entity.ai.tasks.StompAttack;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
@@ -43,7 +42,6 @@ public class CruncherAi {
             SensorType.NEAREST_LIVING_ENTITIES,
             SensorType.NEAREST_PLAYERS,
             SensorType.HURT_BY,
-            SensorType.NEAREST_PLAYERS,
             SpeciesSensorTypes.CRUNCHER_ATTACK_ENTITY_SENSOR
     );
     public static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
@@ -57,7 +55,6 @@ public class CruncherAi {
             MemoryModuleType.ATTACK_TARGET,
             MemoryModuleType.NEAREST_LIVING_ENTITIES,
             MemoryModuleType.NEAREST_ATTACKABLE,
-            MemoryModuleType.LIKED_PLAYER,
             MemoryModuleType.NEAREST_PLAYERS,
             MemoryModuleType.NEAREST_VISIBLE_PLAYER,
             MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
@@ -79,7 +76,6 @@ public class CruncherAi {
 
     private static void initCoreActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new Sit(),
                 new LookAtTargetSink(45, 90),
                 new MoveToTargetSink() {
                     @Override
@@ -94,11 +90,10 @@ public class CruncherAi {
 
     private static void initIdleActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
-                Pair.of(0, StayCloseToTarget.create(CruncherAi::getLikedTracker, CruncherAi::isPassive, 2, 16, 1.0F)),
-                Pair.of(1, StartAttacking.create(Predicate.not(CruncherAi::isPassive), cruncher -> cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE))),
-                Pair.of(2, StartAttacking.create(Predicate.not(CruncherAi::isPassive), Cruncher::getHurtBy)),
-                Pair.of(3, new SpitPellet()),
-                Pair.of(4, new RunOne<>(
+                Pair.of(0, StartAttacking.create(Predicate.not(CruncherAi::isPassive), cruncher -> cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE))),
+                Pair.of(1, StartAttacking.create(Predicate.not(CruncherAi::isPassive), Cruncher::getHurtBy)),
+                Pair.of(2, new SpitPellet()),
+                Pair.of(3, new RunOne<>(
                         ImmutableList.of(
                                 Pair.of(RandomStroll.stroll(1.0F), 1),
                                 Pair.of(new DoNothing(30, 60), 1)
@@ -122,27 +117,6 @@ public class CruncherAi {
 
     private static boolean isPassive(LivingEntity livingEntity) {
         return livingEntity instanceof Cruncher cruncher && cruncher.getHunger() <= 0;
-    }
-
-    private static Optional<PositionTracker> getLikedTracker(LivingEntity livingEntity) {
-        return CruncherAi.getLikedPlayer(livingEntity).map(serverPlayer -> new EntityTracker(serverPlayer, true));
-    }
-
-    public static Optional<ServerPlayer> getLikedPlayer(LivingEntity livingEntity) {
-        Level level = livingEntity.level();
-        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
-            Optional<UUID> optional = livingEntity.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
-            if (optional.isPresent()) {
-                Entity entity = serverLevel.getEntity(optional.get());
-                if (entity instanceof ServerPlayer serverPlayer) {
-                    if ((serverPlayer.gameMode.isSurvival() || serverPlayer.gameMode.isCreative()) && serverPlayer.closerThan(livingEntity, 64.0)) {
-                        return Optional.of(serverPlayer);
-                    }
-                }
-                return Optional.empty();
-            }
-        }
-        return Optional.empty();
     }
 
     public static void updateActivity(Cruncher cruncher) {

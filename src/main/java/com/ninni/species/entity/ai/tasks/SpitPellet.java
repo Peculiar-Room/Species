@@ -6,6 +6,7 @@ import com.ninni.species.entity.CruncherPellet;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.ai.Brain;
@@ -17,12 +18,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
+import static com.ninni.species.block.BirtDwellingBlock.BIRTS;
+import static com.ninni.species.block.BirtDwellingBlock.EGGS;
+
 public class SpitPellet extends Behavior<Cruncher> {
     private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.ROAR;
 
     public SpitPellet() {
         super(ImmutableMap.of(
-                MemoryModuleType.LIKED_PLAYER, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 SpeciesMemoryModuleTypes.SPIT_CHARGING, MemoryStatus.VALUE_ABSENT
@@ -33,17 +36,21 @@ public class SpitPellet extends Behavior<Cruncher> {
     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Cruncher livingEntity) {
         Optional<Player> nearestPlayer = livingEntity.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER);
 
-        if (!(livingEntity.getOwner() instanceof Player player)) return false;
+        long day = serverLevel.getDayTime() / 24000L;
+        long cruncherDay = livingEntity.getDay();
 
-        float timeOfDay = livingEntity.level().getTimeOfDay(1.0f);
+        if (cruncherDay == -1 || day != cruncherDay && day == 0) {
+            livingEntity.setDay(day);
+        }
 
-        boolean validTime = (double) timeOfDay > 0.77 && (double) timeOfDay < 0.8;
-        boolean readyToGift = livingEntity.getReadyToGift();
-        boolean hasSlept = player.getSleepTimer() >= 100;
+        if (cruncherDay < day) {
 
-        if (validTime && !readyToGift && hasSlept) livingEntity.setReadyToGift(true);
 
-        return readyToGift && livingEntity.getPelletData() != null && nearestPlayer.isPresent() && nearestPlayer.get() == livingEntity.getOwner();
+            livingEntity.setDay(cruncherDay + 1);
+            return livingEntity.getPelletData() != null && nearestPlayer.isPresent();
+        }
+
+        return false;
     }
 
     @Override
@@ -83,7 +90,6 @@ public class SpitPellet extends Behavior<Cruncher> {
     protected void stop(ServerLevel serverLevel, Cruncher livingEntity, long l) {
         if (livingEntity.getState() == cruncherState) {
             livingEntity.transitionTo(Cruncher.CruncherState.IDLE);
-            livingEntity.setReadyToGift(false);
         }
     }
 

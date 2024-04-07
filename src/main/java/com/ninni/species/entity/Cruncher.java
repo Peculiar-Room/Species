@@ -32,11 +32,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 
 import java.util.Optional;
 
-public class Cruncher extends TamableAnimal {
+public class Cruncher extends Animal {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final EntityDataAccessor<CruncherState> CRUNCHER_STATE = SynchedEntityData.defineId(Cruncher.class, SpeciesEntityDataSerializers.CRUNCHER_STATE);
     private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
@@ -60,9 +60,9 @@ public class Cruncher extends TamableAnimal {
     private CruncherPelletManager.CruncherPelletData pelletData = null;
     private int hunger;
     private int idleAnimationTimeout = 0;
-    public boolean readyToGift = false;
+    private long day = -1L;
 
-    public Cruncher(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -131,7 +131,7 @@ public class Cruncher extends TamableAnimal {
 
         this.setHunger(compoundTag.getInt("Hunger"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
-        this.setReadyToGift(compoundTag.getBoolean("ReadyToGift"));
+        this.setDay(compoundTag.getLong("Day"));
     }
 
     @Override
@@ -150,7 +150,7 @@ public class Cruncher extends TamableAnimal {
 
         compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
-        compoundTag.putBoolean("ReadyToGift", this.getReadyToGift());
+        compoundTag.putLong("Day", this.getDay());
     }
 
     @Nullable
@@ -162,18 +162,18 @@ public class Cruncher extends TamableAnimal {
         this.pelletData = data;
     }
 
-    public boolean getReadyToGift() {
-        return this.readyToGift;
+    public long getDay() {
+        return this.day;
     }
 
-    public void setReadyToGift(boolean readyToGift) {
-        this.readyToGift = readyToGift;
+    public void setDay(long day) {
+        this.day = day;
     }
 
     @Override
     public void startSeenByPlayer(ServerPlayer serverPlayer) {
         super.startSeenByPlayer(serverPlayer);
-        if (!this.isTame()) {
+        if (this.getHunger() > 0) {
             this.bossEvent.addPlayer(serverPlayer);
         }
     }
@@ -201,18 +201,6 @@ public class Cruncher extends TamableAnimal {
                 return InteractionResult.SUCCESS;
             }
         }
-        if (this.isTame()) {
-
-            if (interactionResult.consumesAction() && !this.isBaby() || !this.isOwnedBy(player)) {
-                return interactionResult;
-            }
-
-            this.setOrderedToSit(!this.isOrderedToSit());
-            this.jumping = false;
-            this.navigation.stop();
-            this.setTarget(null);
-            return InteractionResult.SUCCESS;
-        }
         if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
@@ -223,12 +211,7 @@ public class Cruncher extends TamableAnimal {
                 this.bossEvent.setProgress(0.0f);
                 this.bossEvent.setVisible(false);
 
-                this.getBrain().setMemory(MemoryModuleType.LIKED_PLAYER, player.getUUID());
                 this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
-
-                this.tame(player);
-                this.navigation.stop();
-                this.setOrderedToSit(true);
 
                 this.level().broadcastEntityEvent(this, (byte)7);
             }
@@ -388,8 +371,7 @@ public class Cruncher extends TamableAnimal {
     public boolean cannotWalk() {
         CruncherState state = this.getState();
         boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP || state == CruncherState.STUNNED;
-        boolean sitting = this.isTame() && this.getOwner() != null && this.isOrderedToSit();
-        return inState || sitting;
+        return inState;
     }
 
     @Nullable
