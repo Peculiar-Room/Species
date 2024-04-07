@@ -57,8 +57,6 @@ public class SpeciesClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.SNORING, SnoringParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, BirtdParticle.Factory::new);
 
-        BlockEntityRenderers.register(SpeciesBlockEntities.CRUNCHER_PELLET, BrushableBlockRenderer::new);
-
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 SpeciesBlocks.BIRT_DWELLING,
                 SpeciesBlocks.BONE_SPIKE,
