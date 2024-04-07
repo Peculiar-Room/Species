@@ -16,7 +16,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.AnimalPanic;
 import net.minecraft.world.entity.ai.behavior.DoNothing;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
@@ -95,7 +94,7 @@ public class CruncherAi {
 
     private static void initIdleActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
-                Pair.of(0, StayCloseToTarget.create(CruncherAi::getLikedTracker, CruncherAi::isPassive, 2, 4, 1.0F)),
+                Pair.of(0, StayCloseToTarget.create(CruncherAi::getLikedTracker, CruncherAi::isPassive, 2, 16, 1.0F)),
                 Pair.of(1, StartAttacking.create(Predicate.not(CruncherAi::isPassive), cruncher -> cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE))),
                 Pair.of(2, StartAttacking.create(Predicate.not(CruncherAi::isPassive), Cruncher::getHurtBy)),
                 Pair.of(3, new SpitPellet()),

@@ -6,7 +6,6 @@ import com.ninni.species.entity.CruncherPellet;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.ai.Brain;

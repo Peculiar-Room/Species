@@ -10,7 +10,6 @@ import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +21,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,12 +31,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -58,7 +58,7 @@ public class Cruncher extends TamableAnimal {
     private final int maxHunger = 3;
     @Nullable
     private CruncherPelletManager.CruncherPelletData pelletData = null;
-    private int hunger = 3;
+    private int hunger;
     private int idleAnimationTimeout = 0;
     public boolean readyToGift = false;
 
@@ -173,7 +173,9 @@ public class Cruncher extends TamableAnimal {
     @Override
     public void startSeenByPlayer(ServerPlayer serverPlayer) {
         super.startSeenByPlayer(serverPlayer);
-        this.bossEvent.addPlayer(serverPlayer);
+        if (!this.isTame()) {
+            this.bossEvent.addPlayer(serverPlayer);
+        }
     }
 
     @Override
@@ -251,7 +253,7 @@ public class Cruncher extends TamableAnimal {
     @Override
     protected void actuallyHurt(DamageSource damageSource, float f) {
         boolean flag = this.getHealth() / this.getMaxHealth() <= 0.6;
-        if (flag) {
+        if (this.getHunger() > 0 && flag) {
             if (this.getState() != CruncherState.STUNNED) {
                 this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
                 this.transitionTo(CruncherState.STUNNED);
@@ -399,6 +401,12 @@ public class Cruncher extends TamableAnimal {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Cruncher> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return false;
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+        this.setHunger(3);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 
     public enum CruncherState implements StringRepresentable {
