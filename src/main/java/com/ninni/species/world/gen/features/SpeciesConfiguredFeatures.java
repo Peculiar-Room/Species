@@ -2,6 +2,7 @@ package com.ninni.species.world.gen.features;
 
 import com.ninni.species.Species;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -10,13 +11,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GeodeBlockSettings;
+import net.minecraft.world.level.levelgen.GeodeCrackSettings;
+import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -24,7 +28,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlac
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -33,11 +36,36 @@ public class SpeciesConfiguredFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH = registerConfiguredFeature("birted_birch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH_TREE_FILTERED = registerConfiguredFeature("birted_birch_tree_filtered");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MAMMUTILATION_REMNANT = registerConfiguredFeature("mammutilation_remnant");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
         HolderGetter<PlacedFeature> holderGetter2 = bootstapContext.lookup(Registries.PLACED_FEATURE);
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH, Feature.TREE, birtedBirch().build());
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH_TREE_FILTERED, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED), 0.0F)), holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED)));
+        FeatureUtils.register(bootstapContext, MAMMUTILATION_REMNANT, Feature.GEODE, new GeodeConfiguration(
+                new GeodeBlockSettings(
+                        BlockStateProvider.simple(SpeciesBlocks.FROZEN_MEAT),
+                        BlockStateProvider.simple(SpeciesBlocks.FROZEN_MEAT),
+                        BlockStateProvider.simple(SpeciesBlocks.FROZEN_HAIR),
+                        BlockStateProvider.simple(SpeciesBlocks.FROZEN_HAIR),
+                        BlockStateProvider.simple(Blocks.PACKED_ICE),
+                        List.of(Blocks.AIR.defaultBlockState()),
+                        BlockTags.FEATURES_CANNOT_REPLACE,
+                        SpeciesTags.MAMMUTILATION_REMNANT_INVALID_BLOCKS
+                ),
+                new GeodeLayerSettings(0.7D, 1.2D, 2.2D, 3.2D),
+                new GeodeCrackSettings(0.95D, 2.0D, 2),
+                0.0,
+                0.35,
+                true,
+                UniformInt.of(4, 6),
+                UniformInt.of(3, 4),
+                UniformInt.of(1, 2),
+                -16,
+                16,
+                0.05D,
+                1
+                ));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfiguredFeature(String id) {

@@ -9,9 +9,11 @@ import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
@@ -26,6 +28,7 @@ public class SpeciesPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> holderGetter = bootstapContext.lookup(Registries.CONFIGURED_FEATURE);
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREE_CHECKED, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH), PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_SAPLING));
         PlacementUtils.register(bootstapContext, BIRTED_BIRCH_TREES, holderGetter.getOrThrow(SpeciesConfiguredFeatures.BIRTED_BIRCH_TREE_FILTERED), VegetationPlacements.treePlacement(RarityFilter.onAverageOnceEvery(75)));
+        PlacementUtils.register(bootstapContext, MAMMUTILATION_REMNANT, holderGetter.getOrThrow(SpeciesConfiguredFeatures.MAMMUTILATION_REMNANT), RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(20), VerticalAnchor.absolute(200)), BiomeFilter.biome());
     }
 
     public static ResourceKey<PlacedFeature> registerPlacedFeature(String id) {
