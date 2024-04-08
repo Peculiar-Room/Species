@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.client.particles.BirtdParticle;
+import com.ninni.species.client.particles.PelletDripParticle;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.renderer.*;
 import com.ninni.species.entity.Springling;
@@ -21,12 +22,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.impl.client.rendering.BlockEntityRendererRegistryImpl;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.particle.DripParticle;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.minecraft.client.renderer.entity.FallingBlockRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
@@ -56,6 +59,15 @@ public class SpeciesClient implements ClientModInitializer {
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.SNORING, SnoringParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, BirtdParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.DRIPPING_PELLET_DRIP, provider -> (particleOptions, clientLevel, d, e, f, g, h, i) -> {
+            return PelletDripParticle.createPelletDripHangParticle(particleOptions, clientLevel, d, e, f, g, h, i, provider);
+        });
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.FALLING_PELLET_DRIP, provider -> (particleOptions, clientLevel, d, e, f, g, h, i) -> {
+            return PelletDripParticle.createPelletDripFallParticle(particleOptions, clientLevel, d, e, f, g, h, i, provider);
+        });
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.LANDING_PELLET_DRIP, provider -> (particleOptions, clientLevel, d, e, f, g, h, i) -> {
+            return PelletDripParticle.createPelletDripLandParticle(particleOptions, clientLevel, d, e, f, g, h, i, provider);
+        });
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 SpeciesBlocks.BIRT_DWELLING,

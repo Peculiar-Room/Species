@@ -141,19 +141,27 @@ public class CruncherPellet extends FallingBlockEntity {
                                 }
                             } else if (this.dropItem && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                                 this.discard();
-                                this.callOnBrokenAfterFall(block, blockPos);
-                                this.spawnAtLocation(block);
+                                this.level().setBlock(blockPos, accessor.getBlockState(), 3);
+                                this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
+                                if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
+                                    cruncherPelletBlock.setPelletData(this.pelletData);
+                                }
                             }
                         } else {
                             this.discard();
-                            if (this.dropItem && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                                this.callOnBrokenAfterFall(block, blockPos);
-                                this.spawnAtLocation(block);
+                            this.level().setBlock(blockPos, accessor.getBlockState(), 3);
+                            this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
+                            if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
+                                cruncherPelletBlock.setPelletData(this.pelletData);
                             }
                         }
                     } else {
                         this.discard();
-                        this.callOnBrokenAfterFall(block, blockPos);
+                        this.level().setBlock(blockPos, accessor.getBlockState(), 3);
+                        this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
+                        if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
+                            cruncherPelletBlock.setPelletData(this.pelletData);
+                        }
                     }
                 }
             } else if (!(this.level().isClientSide || (this.time <= 100 || blockPos.getY() > this.level().getMinBuildHeight() && blockPos.getY() <= this.level().getMaxBuildHeight()) && this.time <= 600)) {

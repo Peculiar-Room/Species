@@ -17,7 +17,6 @@ import net.minecraft.util.Mth;
 public class BirtdParticle extends TextureSheetParticle {
     private final SpriteSet spriteProvider;
 
-
     BirtdParticle(ClientLevel world, double x, double y, double z, SpriteSet spriteProvider) {
         super(world, x, y, z);
         this.spriteProvider = spriteProvider;
