@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -143,8 +144,8 @@ public class Springling extends TamableAnimal implements PlayerRideable {
             }
         }
 
-        if (!this.isBaby() && !this.isFood(itemStack) && this.getOwnerUUID() == player.getUUID()) {
-            if (player.isShiftKeyDown() && !isRetracting() && getExtendedAmount() > 0 && !this.level().isClientSide) {
+        if (!this.isBaby() && !this.isFood(itemStack) && this.isTame() && this.isOwnedBy(player)) {
+            if (!this.level().isClientSide && player.isShiftKeyDown() && !this.isRetracting() && this.getExtendedAmount() > 0) {
                 this.setRetracting(true);
                 return InteractionResult.SUCCESS;
             }

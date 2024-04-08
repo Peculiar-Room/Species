@@ -14,6 +14,4 @@ public interface FallingBlockEntityAccessor {
     @Accessor
     BlockState getBlockState();
 
-    @Accessor
-    boolean isCancelDrop();
 }

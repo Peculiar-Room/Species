@@ -6,9 +6,12 @@ import com.ninni.species.block.CruncherPelletBlock;
 import com.ninni.species.block.entity.CruncherPelletBlockEntity;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.mixin.FallingBlockEntityAccessor;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -107,47 +110,38 @@ public class CruncherPellet extends FallingBlockEntity {
                 BlockState blockState = this.level().getBlockState(blockPos);
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.7, -0.5, 0.7));
                 if (!blockState.is(Blocks.MOVING_PISTON)) {
-                    if (!accessor.isCancelDrop()) {
-                        boolean bl3 = blockState.canBeReplaced(new DirectionalPlaceContext(this.level(), blockPos, Direction.DOWN, ItemStack.EMPTY, Direction.UP));
-                        boolean bl4 = FallingBlock.isFree(this.level().getBlockState(blockPos.below())) && (!bl || !bl2);
-                        boolean bl5 = accessor.getBlockState().canSurvive(this.level(), blockPos) && !bl4;
-                        if (bl3 && bl5) {
-                            if (accessor.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) && this.level().getFluidState(blockPos).getType() == Fluids.WATER) {
-                                accessor.setBlockState(accessor.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+                    boolean bl3 = blockState.canBeReplaced(new DirectionalPlaceContext(this.level(), blockPos, Direction.DOWN, ItemStack.EMPTY, Direction.UP));
+                    boolean bl4 = FallingBlock.isFree(this.level().getBlockState(blockPos.below())) && (!bl || !bl2);
+                    boolean bl5 = accessor.getBlockState().canSurvive(this.level(), blockPos) && !bl4;
+                    if (bl3 && bl5) {
+                        if (accessor.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) && this.level().getFluidState(blockPos).getType() == Fluids.WATER) {
+                            accessor.setBlockState(accessor.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+                        }
+                        if (this.level().setBlock(blockPos, accessor.getBlockState(), 3)) {
+                            this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
+                            if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
+                                cruncherPelletBlock.setPelletData(this.pelletData);
                             }
-                            if (this.level().setBlock(blockPos, accessor.getBlockState(), 3)) {
-                                this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
-                                if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
-                                    cruncherPelletBlock.setPelletData(this.pelletData);
-                                }
-                                BlockEntity blockEntity;
-                                ((ServerLevel)this.level()).getChunkSource().chunkMap.broadcast(this, new ClientboundBlockUpdatePacket(blockPos, this.level().getBlockState(blockPos)));
-                                this.discard();
-                                if (block instanceof Fallable fallable) {
-                                    fallable.onLand(this.level(), blockPos, accessor.getBlockState(), blockState, this);
-                                }
-                                if (this.blockData != null && accessor.getBlockState().hasBlockEntity() && (blockEntity = this.level().getBlockEntity(blockPos)) != null) {
-                                    CompoundTag compoundTag = blockEntity.saveWithoutMetadata();
-                                    for (String string : this.blockData.getAllKeys()) {
-                                        compoundTag.put(string, this.blockData.get(string).copy());
-                                    }
-                                    try {
-                                        blockEntity.load(compoundTag);
-                                    }
-                                    catch (Exception exception) {
-                                        LOGGER.error("Failed to load block entity from falling block", exception);
-                                    }
-                                    blockEntity.setChanged();
-                                }
-                            } else if (this.dropItem && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                                this.discard();
-                                this.level().setBlock(blockPos, accessor.getBlockState(), 3);
-                                this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
-                                if (this.level().getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
-                                    cruncherPelletBlock.setPelletData(this.pelletData);
-                                }
+                            BlockEntity blockEntity;
+                            ((ServerLevel)this.level()).getChunkSource().chunkMap.broadcast(this, new ClientboundBlockUpdatePacket(blockPos, this.level().getBlockState(blockPos)));
+                            this.discard();
+                            if (block instanceof Fallable fallable) {
+                                fallable.onLand(this.level(), blockPos, accessor.getBlockState(), blockState, this);
                             }
-                        } else {
+                            if (this.blockData != null && accessor.getBlockState().hasBlockEntity() && (blockEntity = this.level().getBlockEntity(blockPos)) != null) {
+                                CompoundTag compoundTag = blockEntity.saveWithoutMetadata();
+                                for (String string : this.blockData.getAllKeys()) {
+                                    compoundTag.put(string, this.blockData.get(string).copy());
+                                }
+                                try {
+                                    blockEntity.load(compoundTag);
+                                }
+                                catch (Exception exception) {
+                                    LOGGER.error("Failed to load block entity from falling block", exception);
+                                }
+                                blockEntity.setChanged();
+                            }
+                        } else if (this.dropItem && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                             this.discard();
                             this.level().setBlock(blockPos, accessor.getBlockState(), 3);
                             this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
@@ -165,8 +159,8 @@ public class CruncherPellet extends FallingBlockEntity {
                     }
                 }
             } else if (!(this.level().isClientSide || (this.time <= 100 || blockPos.getY() > this.level().getMinBuildHeight() && blockPos.getY() <= this.level().getMaxBuildHeight()) && this.time <= 600)) {
-                if (this.dropItem && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                    this.spawnAtLocation(block);
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, SpeciesBlocks.CRUNCHER_PELLET.defaultBlockState()), this.getX(), this.getY(), this.getZ(), 3, 0.0, 0.0, 0.0, 1.0F);
                 }
                 this.discard();
             }
