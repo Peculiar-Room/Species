@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,7 +68,9 @@ public class CruncherPelletBlockEntity extends BlockEntity {
             CriteriaTriggers.GENERATE_LOOT.trigger(serverPlayer, this.getPelletData().entityType().getDefaultLootTable());
         }
 
-        for (int i = 0; i < 32; i++) {
+        int count = UniformInt.of(16, 32).sample(player.getRandom());
+
+        for (int i = 0; i < count; i++) {
             ObjectArrayList<ItemStack> randomDrops = this.getRandomDrops(player);
             randomDrops.forEach(this::spawnItem);
         }

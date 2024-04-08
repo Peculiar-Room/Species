@@ -51,7 +51,7 @@ public class CruncherPelletBlock extends BaseEntityBlock {
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         super.playerWillDestroy(level, blockPos, blockState, player);
-        if (level.getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
+        if (!player.getAbilities().instabuild && level.getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
             cruncherPelletBlock.unpackLootTable(player);
             level.destroyBlock(blockPos, false);
         }
