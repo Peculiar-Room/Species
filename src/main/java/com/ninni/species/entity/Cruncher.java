@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.BossEvent;
@@ -40,11 +41,18 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 public class Cruncher extends Animal {
@@ -66,6 +74,7 @@ public class Cruncher extends Animal {
 
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
+        this.setPathfindingMalus(BlockPathTypes.LEAVES, 0.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -85,6 +94,39 @@ public class Cruncher extends Animal {
     @Override
     public Brain<Cruncher> getBrain() {
         return (Brain<Cruncher>) super.getBrain();
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.isAlive()) {
+            if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                boolean bl = false;
+                AABB aABB = this.getBoundingBox().inflate(0.2);
+                Iterator var8 = BlockPos.betweenClosed(Mth.floor(aABB.minX), Mth.floor(aABB.minY), Mth.floor(aABB.minZ), Mth.floor(aABB.maxX), Mth.floor(aABB.maxY), Mth.floor(aABB.maxZ)).iterator();
+
+                label60:
+                while(true) {
+                    BlockPos blockPos;
+                    Block block;
+                    do {
+                        if (!var8.hasNext()) {
+                            if (!bl && this.onGround()) {
+                                this.jumpFromGround();
+                            }
+                            break label60;
+                        }
+
+                        blockPos = (BlockPos)var8.next();
+                        BlockState blockState = this.level().getBlockState(blockPos);
+                        block = blockState.getBlock();
+                    } while(!(block instanceof LeavesBlock));
+
+                    bl = this.level().destroyBlock(blockPos, true, this) || bl;
+                }
+            }
+
+        }
     }
 
     @Override
@@ -273,10 +315,19 @@ public class Cruncher extends Animal {
     @Override
     public void tick() {
         super.tick();
+        final float angle = (0.0174532925F * this.yBodyRot);
+        final double headX = 2F * getScale() * Mth.sin(Mth.PI + angle);
+        final double headZ = 2F * getScale() * Mth.cos(angle);
+
         if (this.level().isClientSide()) {
             this.setupAnimationStates();
         } else {
             if (this.getState() == CruncherState.STUNNED) {
+                if (this.level() instanceof ServerLevel world) {
+                    if (this.tickCount % 6 == 1) {
+                        world.sendParticles(SpeciesParticles.FOOD, this.getX() + headX, this.getEyeY() + 1.5, this.getZ() + headZ, 1,0, 0, 0, 0);
+                    }
+                }
                 int ticks = this.getStunnedTicks();
                 if (ticks > 0) {
                     this.setStunnedTicks(ticks - 1);
@@ -285,6 +336,16 @@ public class Cruncher extends Animal {
                     this.transitionTo(CruncherState.IDLE);
                 }
             }
+
+            if (getHunger() > 0) {
+                if (this.level() instanceof ServerLevel world) {
+                    if (this.random.nextFloat() < 0.1f) {
+                        world.sendParticles(SpeciesParticles.FALLING_PELLET_DRIP, this.getRandomX(0.4) + headX, this.getEyeY(), this.getRandomZ(0.4) + headZ, 1,0, 0, 0, 0);
+                    }
+                }
+
+            }
+
         }
     }
 

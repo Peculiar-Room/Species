@@ -8,6 +8,7 @@ import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -78,8 +79,10 @@ public class SpitPellet extends Behavior<Cruncher> {
 
         BlockState blockState = SpeciesBlocks.CRUNCHER_PELLET.defaultBlockState();
 
-        //TODO make it spit from its mouth not from the back of its head
-        CruncherPellet pellet = new CruncherPellet(serverLevel, (double) blockPos.getX() + 0.5, blockPos.getY() + livingEntity.getEyeHeight(), (double) blockPos.getZ() + 0.5, blockState, livingEntity.getPelletData());
+        final float angle = (0.0174532925F * livingEntity.yBodyRot);
+        final double headX = 3F * livingEntity.getScale() * Mth.sin(Mth.PI + angle);
+        final double headZ = 3F * livingEntity.getScale() * Mth.cos(angle);
+        CruncherPellet pellet = new CruncherPellet(serverLevel, (double) blockPos.getX() + headX, blockPos.getY() + livingEntity.getEyeHeight(), (double) blockPos.getZ() + headZ, blockState, livingEntity.getPelletData());
         pellet.setDeltaMovement(livingEntity.getLookAngle().scale(2.0D).multiply(0.5D, 1.0D, 0.5D));
 
         serverLevel.addFreshEntity(pellet);

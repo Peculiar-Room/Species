@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.ninni.species.entity.Cruncher;
 import com.ninni.species.registry.SpeciesDamageTypes;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
+import com.ninni.species.registry.SpeciesParticles;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -75,6 +77,10 @@ public class StompAttack extends Behavior<Cruncher> {
             double e = 2 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
             entity.push(vec33.x() * e, vec33.y() * d, vec33.z() * e);
         }
+
+        for (int i = 0; i <= (cruncher.getRandom().nextInt(50) + 80); i++) serverLevel.sendParticles(ParticleTypes.CLOUD, cruncher.getRandomX(2), cruncher.getY() + 0.25f, cruncher.getRandomZ(2), 1, 0.0, 0.0, 0.0,0.0);
+        for (int i = 0; i <= (cruncher.getRandom().nextInt(20) + 20); i++) serverLevel.sendParticles(SpeciesParticles.ASCENDING_DUST, cruncher.getRandomX(2), cruncher.getY() + 0.25f, cruncher.getRandomZ(2), 1, 0.0, 1.0, 0.0,0.0);
+
         cruncher.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);
         cruncher.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 42);
     }
