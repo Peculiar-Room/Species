@@ -42,6 +42,7 @@ public class Species implements ModInitializer {
 			SpeciesPointsOfInterests.class,
 			SpeciesItems.class,
 			SpeciesSoundEvents.class,
+			SpeciesDamageTypes.class,
 			SpeciesStatusEffects.class,
 			SpeciesParticles.class,
 			SpeciesEntities.class,

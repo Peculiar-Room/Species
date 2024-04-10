@@ -2,6 +2,7 @@ package com.ninni.species.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.ninni.species.entity.Cruncher;
+import com.ninni.species.registry.SpeciesDamageTypes;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
@@ -69,9 +70,9 @@ public class StompAttack extends Behavior<Cruncher> {
             Vec3 vec3 = cruncher.position().add(0.0, 1.6f, 0.0);
             Vec3 vec32 = entity.getEyePosition().subtract(vec3);
             Vec3 vec33 = vec32.normalize();
-            entity.hurt(serverLevel.damageSources().mobAttack(cruncher), damage);
-            double d = 0.25 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-            double e = 1.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            entity.hurt(serverLevel.damageSources().source(SpeciesDamageTypes.CRUNCH, cruncher), damage);
+            double d = 0.35 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            double e = 2 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
             entity.push(vec33.x() * e, vec33.y() * d, vec33.z() * e);
         }
         cruncher.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);

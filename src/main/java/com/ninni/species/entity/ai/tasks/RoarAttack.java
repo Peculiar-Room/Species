@@ -73,8 +73,8 @@ public class RoarAttack extends Behavior<Cruncher> {
 
             if (isCreative || isCruncher) continue;
 
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300));
-            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300));
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 20 * 20));
         }
 
         brain.setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 96);

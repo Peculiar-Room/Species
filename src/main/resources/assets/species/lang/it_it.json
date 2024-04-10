@@ -147,6 +147,10 @@
   "block.species.cruncher_egg": "Uovo di cruncher",
   "block.species.cruncher_pellet": "Bolo di cruncher",
 
+  "death.attack.crunch": "%1$s è stato sgranocchiato",
+  "death.attack.crunch.item": "%1$s è stato sgranocchiato da %2$s usando %3$s",
+  "death.attack.crunch.player": "%1$s è stato sgranocchiato da %2$s",
+
   "subtitles.entity.species.cruncher.death": "Cruncher muore",
   "subtitles.entity.species.cruncher.hurt": "Cruncher ferito",
   "subtitles.entity.species.cruncher.idle": "Cruncher brontola",

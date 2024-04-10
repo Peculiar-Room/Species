@@ -4,9 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
-import com.ninni.species.registry.SpeciesEntityDataSerializers;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.*;
 import com.ninni.species.world.CruncherBossEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +38,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -164,7 +163,7 @@ public class Cruncher extends Animal {
             case 3 -> BossEvent.BossBarColor.BLUE;
             case 2 -> BossEvent.BossBarColor.PURPLE;
             case 1 -> BossEvent.BossBarColor.RED;
-            default -> BossEvent.BossBarColor.PINK;
+            default -> BossEvent.BossBarColor.BLUE;
         };
     }
 
@@ -183,6 +182,14 @@ public class Cruncher extends Animal {
 
     public void setDay(long day) {
         this.day = day;
+    }
+
+    public boolean canDisableShield() {
+        return true;
+    }
+
+    public DamageSource crunch(LivingEntity livingEntity) {
+        return this.damageSources().source(SpeciesDamageTypes.CRUNCH, livingEntity);
     }
 
     @Override
@@ -216,12 +223,12 @@ public class Cruncher extends Animal {
                 return InteractionResult.SUCCESS;
             }
         }
-        //todo replace with all meat
-        if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
+        if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
 
             this.setHunger(this.getHunger() - 1);
+            this.bossEvent.setColor(this.getBarColor());
 
             if (this.getHunger() == 0) {
                 this.bossEvent.setProgress(0.0f);
@@ -251,7 +258,7 @@ public class Cruncher extends Animal {
 
     @Override
     protected void actuallyHurt(DamageSource damageSource, float f) {
-        boolean flag = this.getHealth() / this.getMaxHealth() <= 0.6;
+        boolean flag = this.getHealth() / this.getMaxHealth() <= 0.75;
         if (this.getHunger() > 0 && flag) {
             if (this.getState() != CruncherState.STUNNED) {
                 //todo custom sound event

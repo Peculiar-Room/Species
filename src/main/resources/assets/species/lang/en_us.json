@@ -151,6 +151,10 @@
   "subtitles.entity.species.cruncher.hurt": "Cruncher hurts",
   "subtitles.entity.species.cruncher.idle": "Cruncher grunts",
 
+  "death.attack.crunch": "%1$s was crunched",
+  "death.attack.crunch.item": "%1$s was crunched by %2$s using %3$s",
+  "death.attack.crunch.player": "%1$s was crunched by %2$s",
+
   "advancements.species.obtain_cruncher_egg.title": "Tastes Interesting",
   "advancements.species.obtain_cruncher_egg.description": "Obtain a Cruncher Egg",
 
