@@ -103,6 +103,10 @@ public class SpeciesSoundEvents {
     public static final SoundEvent SPRINGLING_EGG_HATCH = register("block.springling_egg.hatch");
     public static final SoundEvent SPRINGLING_EGG_PLOP = register("block.springling_egg.plop");
 
+    public static final SoundEvent MAMMUTILATION_DEATH = register("entity.mammutilation.death");
+    public static final SoundEvent MAMMUTILATION_HURT = register("entity.mammutilation.hurt");
+    public static final SoundEvent MAMMUTILATION_IDLE = register("entity.mammutilation.idle");
+
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));

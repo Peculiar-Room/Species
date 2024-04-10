@@ -644,5 +644,27 @@
 			}
 		],
 		"subtitle": "subtitles.block.species.springling_egg.plop"
+	},
+	"entity.mammutilation.idle": {
+		"sounds": [
+			"species:entity/mammutilation/idle1",
+			"species:entity/mammutilation/idle2",
+			"species:entity/mammutilation/idle3",
+			"species:entity/mammutilation/idle4"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.idle"
+	},
+	"entity.mammutilation.hurt": {
+		"sounds": [
+			"species:entity/mammutilation/hurt1",
+			"species:entity/mammutilation/hurt2"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.hurt"
+	},
+	"entity.mammutilation.death": {
+		"sounds": [
+			"species:entity/mammutilation/death"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.death"
 	}
 }

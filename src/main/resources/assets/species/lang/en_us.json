@@ -136,6 +136,9 @@
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
   "block.species.frozen_meat": "Frozen Meat",
   "block.species.frozen_hair": "Frozen Hair",
+  "subtitles.entity.species.mammutilation.death": "Mammutilation dies again",
+  "subtitles.entity.species.mammutilation.hurt": "Mammutilation hurts even more",
+  "subtitles.entity.species.mammutilation.idle": "Mammutilation tries to breathe",
 
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Springling Spawn Egg",

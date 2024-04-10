@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -150,6 +151,24 @@ public class Mammutilation extends PathfinderMob {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         this.hatchCooldown = UniformInt.of(6000, 12000).sample(this.getRandom());
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.MAMMUTILATION_DEATH;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpeciesSoundEvents.MAMMUTILATION_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpeciesSoundEvents.MAMMUTILATION_IDLE;
     }
 
     @SuppressWarnings("unused")
