@@ -63,7 +63,7 @@ public class SpitPellet extends Behavior<Cruncher> {
         if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
             livingEntity.transitionTo(cruncherState);
         }
-        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 64);
+        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 12);
     }
 
     @Override
@@ -78,6 +78,7 @@ public class SpitPellet extends Behavior<Cruncher> {
 
         BlockState blockState = SpeciesBlocks.CRUNCHER_PELLET.defaultBlockState();
 
+        //TODO make it spit from its mouth not from the back of its head
         CruncherPellet pellet = new CruncherPellet(serverLevel, (double) blockPos.getX() + 0.5, blockPos.getY() + livingEntity.getEyeHeight(), (double) blockPos.getZ() + 0.5, blockState, livingEntity.getPelletData());
         pellet.setDeltaMovement(livingEntity.getLookAngle().scale(2.0D).multiply(0.5D, 1.0D, 0.5D));
 

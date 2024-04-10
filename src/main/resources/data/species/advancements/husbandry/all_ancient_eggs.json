@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/root",
+  "parent": "species:husbandry/obtain_cruncher_egg",
   "criteria": {
     "ancient_eggs": {
       "conditions": {
@@ -35,9 +35,9 @@
       "translate": "advancements.species.ancient_eggs.description"
     },
     "frame": "challenge",
-    "hidden": false,
+    "hidden": true,
     "icon": {
-      "item": "species:cruncher_egg"
+      "item": "minecraft:egg"
     },
     "show_toast": true,
     "title": {

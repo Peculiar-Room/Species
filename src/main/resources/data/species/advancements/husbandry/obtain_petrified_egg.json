@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/obtain_sniffer_egg",
+  "criteria": {
+    "obtain_petrified_egg": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "species:petrified_egg"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.species.obtain_petrified_egg.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "species:petrified_egg"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.species.obtain_petrified_egg.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_petrified_egg"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

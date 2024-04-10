@@ -1,6 +1,11 @@
 {
   "itemGroup.species.species": "Species",
 
+  "species.developer.made_by": "Sviluppato da:",
+  "key.categories.species": "Species",
+  "key.extend": "Estendi springling",
+  "key.retract": "Retrai springling",
+
   "entity.species.wraptor": "Wraptor",
   "block.species.wraptor_egg": "Uovo di wraptor",
   "block.species.cracked_wraptor_egg": "Uovo di wraptor crepato",
@@ -89,6 +94,15 @@
   "advancements.species.silk_touch_break_limpet.title": "Guscio di velluto",
   "advancements.species.silk_touch_break_limpet.description": "Rompi il guscio di un limpet con tocco di velluto",
 
+  "block.species.red_suspicious_sand": "Sabbia rossa sospetta",
+
+  "block.species.bone_bark": "Corteccia d'ossa",
+  "block.species.bone_vertebra": "Vertebre",
+  "block.species.bone_spike": "Spuntone d'ossa",
+
+  "advancements.species.ancient_eggs.title": "4 dinosauri a New York",
+  "advancements.species.ancient_eggs.description": "Ottieni tutte le uova antiche",
+
   "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Uovo generatore di Treeper",
   "item.species.ancient_pinecone": "Pigna Antica",
@@ -96,10 +110,20 @@
   "entity.species.treeper_sapling": "Arboscello di Treeper",
   "item.species.treeper_sapling_spawn_egg": "Uovo generatore di Arboscello di Treeper",
 
+  "subtitles.entity.species.treeper.death": "Treeper muore",
+  "subtitles.entity.species.treeper.hurt": "Treeper ferito",
+  "subtitles.entity.species.treeper.idle": "Treeper sussurra",
+  "subtitles.entity.species.treeper.idle_planted": "Albero si crepa in modo sospetto",
+  "subtitles.entity.species.treeper.plant": "Treeper si pianta",
+  "subtitles.entity.species.treeper.uproot": "Treeper si travasa",
+  "subtitles.entity.species.treeper.step": "Treeper cammina?",
+  "subtitles.entity.species.treeper.shake_fail": "Treeper si agita",
+  "subtitles.entity.species.treeper.shake_success": "Arboscelli di Treeper cadono",
+
   "entity.species.goober": "Goober",
   "item.species.goober_spawn_egg": "Uovo generatore di Goober",
   "block.species.petrified_egg": "Uovo pietrificato",
-  "item.species.petrified_egg": "Uovo pietrificato",
+
   "subtitles.entity.species.goober.death": "Goober muore",
   "subtitles.entity.species.goober.hurt": "Goober ferito",
   "subtitles.entity.species.goober.idle": "Goober brontola",
@@ -111,5 +135,50 @@
   "subtitles.entity.species.goober.yawn": "Goober sbadiglia",
   "subtitles.entity.species.goober.eat": "Goober mangia",
   "subtitles.block.species.petrified_egg.crack": "Uovo pietrificato si crepa",
-  "subtitles.block.species.petrified_egg.hatch": "Uovo pietrificato si schiude"
+  "subtitles.block.species.petrified_egg.hatch": "Uovo pietrificato si schiude",
+  "subtitles.block.species.petrified_egg.plop": "Goober depone un uovo",
+
+  "advancements.species.obtain_petrified_egg.title": "Interessante al tatto",
+  "advancements.species.obtain_petrified_egg.description": "Ottieni un uovo pietrificato",
+
+  "entity.species.cruncher": "Cruncher",
+  "bar.species.cruncher": "Appetito di %s",
+  "item.species.cruncher_spawn_egg": "Uovo generatore di cruncher",
+  "block.species.cruncher_egg": "Uovo di cruncher",
+  "block.species.cruncher_pellet": "Bolo di cruncher",
+
+  "subtitles.entity.species.cruncher.death": "Cruncher muore",
+  "subtitles.entity.species.cruncher.hurt": "Cruncher ferito",
+  "subtitles.entity.species.cruncher.idle": "Cruncher brontola",
+
+  "advancements.species.obtain_cruncher_egg.title": "Gusto interessante",
+  "advancements.species.obtain_cruncher_egg.description": "Ottieni un uovo di cruncher",
+
+  "entity.species.mammutilation": "Mammutilazione",
+  "item.species.mammutilation_spawn_egg": "Uovo generatore di mammutilazione",
+  "block.species.frozen_meat": "Carne congelata",
+  "block.species.frozen_hair": "Pelliccia congelata",
+
+  "subtitles.entity.species.mammutilation.death": "Mammutilazione muore di nuovo",
+  "subtitles.entity.species.mammutilation.hurt": "Mammutilazione soffre ancora di più",
+  "subtitles.entity.species.mammutilation.idle": "Mammutilazione prova a respirare",
+
+  "entity.species.springling": "Springling",
+  "item.species.springling_spawn_egg": "Uovo generatore di springling",
+  "block.species.springling_egg": "Uovo di springling",
+  "springling.keybinds": "Premi %s per estendere e %s per ritrarre",
+
+  "subtitles.entity.species.springling.death": "Springling muore",
+  "subtitles.entity.species.springling.hurt": "Springling ferito",
+  "subtitles.entity.species.springling.idle": "Springling sbuffa",
+  "subtitles.entity.species.springling.step": "Springling cammina",
+  "subtitles.entity.species.springling.eat": "Springling mangia",
+  "subtitles.entity.species.springling.extend": "Springling si estende",
+  "subtitles.entity.species.springling.extend_finish": "Springling si finisce di estendere",
+  "subtitles.block.species.springling_egg.crack": "Uovo di springling si crepa",
+  "subtitles.block.species.springling_egg.hatch": "Uovo di springling si schiude",
+  "subtitles.block.species.springling_egg.plop": "Springling depone un uovo",
+
+  "advancements.species.obtain_springling_egg.title": "Aspetto interessante",
+  "advancements.species.obtain_springling_egg.description": "Ottieni un uovo di springling"
 }

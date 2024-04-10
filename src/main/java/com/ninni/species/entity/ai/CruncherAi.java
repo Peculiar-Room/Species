@@ -76,12 +76,17 @@ public class CruncherAi {
 
     private static void initCoreActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new LookAtTargetSink(45, 90),
+                new LookAtTargetSink(45, 90) {
+                    @Override
+                    protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {
+                        if (mob instanceof Cruncher cruncher && cruncher.getStunnedTicks() > 0) return false;
+                        return super.checkExtraStartConditions(serverLevel, mob);
+                    }
+                },
                 new MoveToTargetSink() {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {
                         if (mob instanceof Cruncher cruncher && cruncher.cannotWalk()) return false;
-
                         return super.checkExtraStartConditions(serverLevel, mob);
                     }
                 }

@@ -7,9 +7,11 @@ import com.ninni.species.entity.ai.CruncherAi;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.world.CruncherBossEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -55,7 +57,7 @@ public class Cruncher extends Animal {
     public final AnimationState spitAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState stunAnimationState = new AnimationState();
-    private final ServerBossEvent bossEvent = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
+    private final ServerBossEvent bossEvent = new ServerBossEvent(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
     private final int maxHunger = 3;
     @Nullable
     private CruncherPelletManager.CruncherPelletData pelletData = null;
@@ -121,8 +123,10 @@ public class Cruncher extends Animal {
         super.readAdditionalSaveData(compoundTag);
 
         if (this.hasCustomName()) {
-            this.bossEvent.setName(this.getDisplayName());
+            this.bossEvent.setName(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()));
         }
+
+        this.bossEvent.setColor(this.getBarColor());
 
         if (compoundTag.contains("PelletData", 10)) {
             CruncherPelletManager.CruncherPelletData.CODEC.parse(
@@ -139,7 +143,8 @@ public class Cruncher extends Animal {
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
 
-        this.bossEvent.setName(this.getDisplayName());
+        this.bossEvent.setName(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()));
+        this.bossEvent.setColor(this.getBarColor());
 
         if (this.pelletData != null) {
             CruncherPelletManager.CruncherPelletData.CODEC
@@ -152,6 +157,15 @@ public class Cruncher extends Animal {
         compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
         compoundTag.putLong("Day", this.getDay());
+    }
+
+    public BossEvent.BossBarColor getBarColor() {
+        return switch (this.getHunger()) {
+            case 3 -> BossEvent.BossBarColor.BLUE;
+            case 2 -> BossEvent.BossBarColor.PURPLE;
+            case 1 -> BossEvent.BossBarColor.RED;
+            default -> BossEvent.BossBarColor.PINK;
+        };
     }
 
     @Nullable
@@ -202,6 +216,7 @@ public class Cruncher extends Animal {
                 return InteractionResult.SUCCESS;
             }
         }
+        //todo replace with all meat
         if (itemStack.is(SpeciesItems.FROZEN_MEAT) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
@@ -239,6 +254,7 @@ public class Cruncher extends Animal {
         boolean flag = this.getHealth() / this.getMaxHealth() <= 0.6;
         if (this.getHunger() > 0 && flag) {
             if (this.getState() != CruncherState.STUNNED) {
+                //todo custom sound event
                 this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
                 this.transitionTo(CruncherState.STUNNED);
                 this.setStunnedTicks(320);
@@ -289,9 +305,11 @@ public class Cruncher extends Animal {
             case ROAR -> {
                 this.stunAnimationState.stop();
                 this.attackAnimationState.stop();
+                this.spitAnimationState.stop();
                 this.roarAnimationState.startIfStopped(this.tickCount);
             }
             case SPIT -> {
+                //TODO only plays the first time it spits
                 this.stunAnimationState.stop();
                 this.attackAnimationState.stop();
                 this.roarAnimationState.stop();
@@ -300,11 +318,10 @@ public class Cruncher extends Animal {
             case STOMP -> {
                 this.stunAnimationState.stop();
                 this.roarAnimationState.stop();
+                this.spitAnimationState.stop();
                 this.attackAnimationState.startIfStopped(this.tickCount);
             }
-            case STUNNED -> {
-                this.stunAnimationState.startIfStopped(this.tickCount);
-            }
+            case STUNNED -> this.stunAnimationState.startIfStopped(this.tickCount);
         }
     }
 

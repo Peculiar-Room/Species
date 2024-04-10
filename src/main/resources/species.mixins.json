@@ -14,7 +14,8 @@
     "TreeDecoratorTypeAccessor",
     "WitherSkeletonEntityMixin"
   ],
-  "client": [],
+  "client": [
+  ],
   "injectors": {
     "defaultRequire": 1 }
 }

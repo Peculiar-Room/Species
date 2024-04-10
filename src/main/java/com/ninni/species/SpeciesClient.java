@@ -40,6 +40,8 @@ public class SpeciesClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        
+
         extendKey = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.extend", 265, "key.categories.species"));
         retractKey = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.retract", 264, "key.categories.species"));
         Reflection.initialize(SpeciesEntityModelLayers.class);

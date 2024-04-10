@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/obtain_sniffer_egg",
+  "criteria": {
+    "obtain_springling_egg": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "species:springling_egg"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.species.obtain_springling_egg.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "species:springling_egg"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.species.obtain_springling_egg.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_springling_egg"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

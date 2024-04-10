@@ -72,12 +72,12 @@ public class SpringlingEggBlock extends Block {
     public void tick(BlockState state, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             if (!this.isReadyToHatch(state)) {
-                serverLevel.playSound(null, blockPos, SpeciesSoundEvents.PETRIFIED_EGG_CRACK, SoundSource.BLOCKS, 0.7f, 0.9f + randomSource.nextFloat() * 0.2f);
+                serverLevel.playSound(null, blockPos, SpeciesSoundEvents.SPRINGLING_EGG_CRACK, SoundSource.BLOCKS, 0.7f, 0.9f + randomSource.nextFloat() * 0.2f);
                 serverLevel.setBlock(blockPos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER).setValue(HATCH, this.getHatchLevel(serverLevel.getBlockState(blockPos.above())) + 1), 2);
                 serverLevel.setBlock(blockPos, state.setValue(HATCH, this.getHatchLevel(state) + 1), 2);
                 return;
             }
-            serverLevel.playSound(null, blockPos, SpeciesSoundEvents.PETRIFIED_EGG_HATCH, SoundSource.BLOCKS, 0.7f, 0.9f + randomSource.nextFloat() * 0.2f);
+            serverLevel.playSound(null, blockPos, SpeciesSoundEvents.SPRINGLING_EGG_HATCH, SoundSource.BLOCKS, 0.7f, 0.9f + randomSource.nextFloat() * 0.2f);
             serverLevel.destroyBlock(blockPos, false);
             Springling springling = SpeciesEntities.SPRINGLING.create(serverLevel);
             if (springling != null) {

@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/obtain_sniffer_egg",
+  "criteria": {
+    "obtain_cruncher_egg": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "species:cruncher_egg"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.species.obtain_cruncher_egg.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "species:cruncher_egg"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.species.obtain_cruncher_egg.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_cruncher_egg"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
