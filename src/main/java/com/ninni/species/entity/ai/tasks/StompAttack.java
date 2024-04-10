@@ -42,40 +42,40 @@ public class StompAttack extends Behavior<Cruncher> {
         if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
             livingEntity.transitionTo(cruncherState);
         }
-        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 18);
+        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 14);
     }
 
     @Override
-    protected void tick(ServerLevel serverLevel, Cruncher livingEntity, long l) {
-        Brain<Cruncher> brain = livingEntity.getBrain();
+    protected void tick(ServerLevel serverLevel, Cruncher cruncher, long l) {
+        Brain<Cruncher> brain = cruncher.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
 
         if (target == null) return;
 
-        livingEntity.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
+        cruncher.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
         brain.eraseMemory(MemoryModuleType.WALK_TARGET);
 
         if (brain.getMemory(SpeciesMemoryModuleTypes.STOMP_CHARGING).isPresent()) return;
 
-        for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(6.0D))) {
+        for (LivingEntity entity : serverLevel.getEntitiesOfClass(LivingEntity.class, cruncher.getBoundingBox().inflate(6.0D))) {
 
-            boolean reachable = entity.getY() > livingEntity.getY() && entity.distanceTo(livingEntity) > 6;
+            boolean reachable = entity.getY() > cruncher.getY() && entity.distanceTo(cruncher) > 6;
             boolean self = entity instanceof Cruncher;
 
             if (self || reachable) continue;
 
-            float damage = 10.0F / (0.15F * entity.distanceTo(livingEntity));
+            float damage = 8.0F / (0.15F * entity.distanceTo(cruncher));
 
-            Vec3 vec3 = livingEntity.position().add(0.0, 1.6f, 0.0);
+            Vec3 vec3 = cruncher.position().add(0.0, 1.6f, 0.0);
             Vec3 vec32 = entity.getEyePosition().subtract(vec3);
             Vec3 vec33 = vec32.normalize();
-            entity.hurt(serverLevel.damageSources().sonicBoom(livingEntity), damage);
-            double d = 0.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-            double e = 2.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            entity.hurt(serverLevel.damageSources().mobAttack(cruncher), damage);
+            double d = 0.25 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            double e = 1.5 * (1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
             entity.push(vec33.x() * e, vec33.y() * d, vec33.z() * e);
         }
-        livingEntity.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);
-        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 42);
+        cruncher.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);
+        cruncher.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 42);
     }
 
     @Override

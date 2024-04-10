@@ -22,7 +22,7 @@ import static com.ninni.species.block.BirtDwellingBlock.BIRTS;
 import static com.ninni.species.block.BirtDwellingBlock.EGGS;
 
 public class SpitPellet extends Behavior<Cruncher> {
-    private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.ROAR;
+    private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.SPIT;
 
     public SpitPellet() {
         super(ImmutableMap.of(

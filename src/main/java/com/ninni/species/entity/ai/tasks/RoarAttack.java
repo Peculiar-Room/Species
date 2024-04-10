@@ -49,7 +49,7 @@ public class RoarAttack extends Behavior<Cruncher> {
     @Override
     protected void start(ServerLevel serverLevel, Cruncher livingEntity, long l) {
         livingEntity.transitionTo(cruncherState);
-        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 64);
+        livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 12);
     }
 
     @Override

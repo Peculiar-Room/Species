@@ -59,8 +59,9 @@ public class CruncherModel<T extends Cruncher> extends HierarchicalModel<T> {
         this.animateWalk(CruncherAnimations.WALK, limbAngle, limbDistance, 2f, 2f);
         this.animate(entity.stunAnimationState, CruncherAnimations.STUN, animationProgress);
         this.animate(entity.idleAnimationState, CruncherAnimations.IDLE, animationProgress);
+        this.animate(entity.spitAnimationState, CruncherAnimations.SPIT, animationProgress);
         this.animate(entity.roarAnimationState, CruncherAnimations.ROAR, animationProgress);
-        this.animate(entity.attackAnimationState, CruncherAnimations.ATTACK, animationProgress);
+        this.animate(entity.attackAnimationState, CruncherAnimations.STOMP, animationProgress);
         this.head.xRot += headPitch * ((float) Math.PI / 180f);
         this.head.yRot += headYaw * ((float) Math.PI / 180f);
     }

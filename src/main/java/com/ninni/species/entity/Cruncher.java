@@ -52,6 +52,7 @@ public class Cruncher extends Animal {
     private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState roarAnimationState = new AnimationState();
+    public final AnimationState spitAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState stunAnimationState = new AnimationState();
     private final ServerBossEvent bossEvent = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS);
@@ -67,7 +68,7 @@ public class Cruncher extends Animal {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 500.0).add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.KNOCKBACK_RESISTANCE, 1).add(Attributes.ATTACK_DAMAGE, 10);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 500.0).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.KNOCKBACK_RESISTANCE, 0.75).add(Attributes.ATTACK_DAMAGE, 10);
     }
 
     @Override
@@ -240,7 +241,7 @@ public class Cruncher extends Animal {
             if (this.getState() != CruncherState.STUNNED) {
                 this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
                 this.transitionTo(CruncherState.STUNNED);
-                this.setStunnedTicks(180);
+                this.setStunnedTicks(320);
             }
         }
         super.actuallyHurt(damageSource, f);
@@ -290,6 +291,12 @@ public class Cruncher extends Animal {
                 this.attackAnimationState.stop();
                 this.roarAnimationState.startIfStopped(this.tickCount);
             }
+            case SPIT -> {
+                this.stunAnimationState.stop();
+                this.attackAnimationState.stop();
+                this.roarAnimationState.stop();
+                this.spitAnimationState.startIfStopped(this.tickCount);
+            }
             case STOMP -> {
                 this.stunAnimationState.stop();
                 this.roarAnimationState.stop();
@@ -337,18 +344,11 @@ public class Cruncher extends Animal {
 
     public void transitionTo(CruncherState cruncherState) {
         switch (cruncherState) {
-            case IDLE -> {
-                this.setState(CruncherState.IDLE);
-            }
-            case ROAR -> {
-                this.setState(CruncherState.ROAR);
-            }
-            case STOMP -> {
-                this.setState(CruncherState.STOMP);
-            }
-            case STUNNED -> {
-                this.setState(CruncherState.STUNNED);
-            }
+            case IDLE -> this.setState(CruncherState.IDLE);
+            case ROAR -> this.setState(CruncherState.ROAR);
+            case SPIT -> this.setState(CruncherState.SPIT);
+            case STOMP -> this.setState(CruncherState.STOMP);
+            case STUNNED -> this.setState(CruncherState.STUNNED);
         }
     }
 
@@ -370,7 +370,7 @@ public class Cruncher extends Animal {
 
     public boolean cannotWalk() {
         CruncherState state = this.getState();
-        boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP || state == CruncherState.STUNNED;
+        boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP  || state == CruncherState.SPIT || state == CruncherState.STUNNED;
         return inState;
     }
 
@@ -393,8 +393,9 @@ public class Cruncher extends Animal {
 
     public enum CruncherState implements StringRepresentable {
         IDLE("idle", SoundEvents.EMPTY, 0),
-        ROAR("roar", SoundEvents.EMPTY, 160),
-        STOMP("stomp", SoundEvents.EMPTY, 60),
+        ROAR("roar", SoundEvents.EMPTY, 80),
+        SPIT("spit", SoundEvents.EMPTY, 30),
+        STOMP("stomp", SoundEvents.EMPTY, 20),
         STUNNED("stunned", SoundEvents.EMPTY, 0);
 
         private final String name;
