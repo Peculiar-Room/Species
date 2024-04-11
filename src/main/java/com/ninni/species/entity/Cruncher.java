@@ -20,26 +20,21 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -54,7 +49,7 @@ import org.slf4j.Logger;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class Cruncher extends Animal {
+public class Cruncher extends Animal implements InventoryCarrier, HasCustomInventoryScreen {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final EntityDataAccessor<CruncherState> CRUNCHER_STATE = SynchedEntityData.defineId(Cruncher.class, SpeciesEntityDataSerializers.CRUNCHER_STATE);
     private static final EntityDataAccessor<Integer> STUNNED_TICKS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
@@ -70,6 +65,7 @@ public class Cruncher extends Animal {
     private int hunger;
     private int idleAnimationTimeout = 0;
     private long day = -1L;
+    public final SimpleContainer inventory = new SimpleContainer(1);
 
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -255,19 +251,20 @@ public class Cruncher extends Animal {
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
-        for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
 
-            if (this.getPelletData() == data) continue;
+        //for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
 
-            if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
-                this.setPelletData(data);
+        //    if (this.getPelletData() == data) continue;
 
-                if (!player.getAbilities().instabuild) itemStack.shrink(1);
+        //    if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
+        //        this.setPelletData(data);
 
-                this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
-                return InteractionResult.SUCCESS;
-            }
-        }
+        //        if (!player.getAbilities().instabuild) itemStack.shrink(1);
+
+        //        this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
+        //        return InteractionResult.SUCCESS;
+        //    }
+        //}
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
@@ -290,7 +287,37 @@ public class Cruncher extends Animal {
             this.setStunnedTicks(0);
             return InteractionResult.SUCCESS;
         }
+        if (this.getHunger() == 0) {
+            if (!this.level().isClientSide) {
+                this.openCustomInventoryScreen(player);
+            }
+            return InteractionResult.SUCCESS;
+        }
         return interactionResult;
+    }
+
+    @Override
+    protected void dropEquipment() {
+        super.dropEquipment();
+        this.inventory.removeAllItems().forEach(this::spawnAtLocation);
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
+            this.spawnAtLocation(itemStack);
+            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
+    }
+
+
+    @Override
+    public SimpleContainer getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public void openCustomInventoryScreen(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ((CruncherOpenContainer)serverPlayer).openCruncherInventory(this, this.getInventory());
+        }
     }
 
     @Override

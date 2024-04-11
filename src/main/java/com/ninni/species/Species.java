@@ -20,6 +20,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
+	public static final ResourceLocation OPEN_CRUNCHER_SCREEN = new ResourceLocation(MOD_ID, "open_cruncher_screen");
 
 	@Override
 	public void onInitialize() {

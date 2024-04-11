@@ -1,11 +1,14 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.species.client.inventory.CruncherInventoryMenu;
+import com.ninni.species.client.inventory.CruncherInventoryScreen;
 import com.ninni.species.client.particles.AscendingDustParticle;
 import com.ninni.species.client.particles.RotatingParticle;
 import com.ninni.species.client.particles.PelletDripParticle;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.renderer.*;
+import com.ninni.species.entity.Cruncher;
 import com.ninni.species.entity.Springling;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
@@ -21,11 +24,17 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.FallingBlockRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class SpeciesClient implements ClientModInitializer {
     public static KeyMapping extendKey;
@@ -73,6 +82,24 @@ public class SpeciesClient implements ClientModInitializer {
         );
 
         SpeciesNetwork.clientInit();
+
+        ClientPlayNetworking.registerGlobalReceiver(Species.OPEN_CRUNCHER_SCREEN, (client, handler, buf, responseSender) -> {
+            int id = buf.readInt();
+            Level level = client.level;
+            Optional.ofNullable(level).ifPresent(world -> {
+                Entity entity = world.getEntity(id);
+                if (entity instanceof Cruncher cruncher) {
+                    int slotCount = buf.readInt();
+                    int syncId = buf.readInt();
+                    LocalPlayer clientPlayerEntity = client.player;
+                    SimpleContainer simpleInventory = new SimpleContainer(slotCount);
+                    assert clientPlayerEntity != null;
+                    CruncherInventoryMenu cruncherInventoryMenu = new CruncherInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, cruncher);
+                    clientPlayerEntity.containerMenu = cruncherInventoryMenu;
+                    client.execute(() -> client.setScreen(new CruncherInventoryScreen(cruncherInventoryMenu, clientPlayerEntity.getInventory(), cruncher)));
+                }
+            });
+        });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             Player player = client.player;
