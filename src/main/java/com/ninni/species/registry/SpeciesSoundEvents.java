@@ -91,6 +91,11 @@ public class SpeciesSoundEvents {
     public static final SoundEvent CRUNCHER_DEATH = register("entity.cruncher.death");
     public static final SoundEvent CRUNCHER_HURT = register("entity.cruncher.hurt");
     public static final SoundEvent CRUNCHER_IDLE = register("entity.cruncher.idle");
+    public static final SoundEvent CRUNCHER_STEP = register("entity.cruncher.step");
+    public static final SoundEvent CRUNCHER_ROAR = register("entity.cruncher.roar");
+    public static final SoundEvent CRUNCHER_STUN = register("entity.cruncher.stun");
+    public static final SoundEvent CRUNCHER_STOMP = register("entity.cruncher.stomp");
+    public static final SoundEvent CRUNCHER_SPIT = register("entity.cruncher.spit");
 
     public static final SoundEvent SPRINGLING_DEATH = register("entity.springling.death");
     public static final SoundEvent SPRINGLING_HURT = register("entity.springling.hurt");

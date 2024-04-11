@@ -21,7 +21,7 @@ public class CruncherInventoryMenu extends AbstractContainerMenu {
         int l;
         int m;
 
-        this.itemSlot = this.addSlot(new Slot(container, 0, 36, 35));
+        this.itemSlot = this.addSlot(new Slot(container, 0, 36, 41));
 
         for (l = 0; l < 3; ++l) {
             for (m = 0; m < 9; ++m) {

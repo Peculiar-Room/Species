@@ -550,8 +550,7 @@
 		"sounds": [
 			"species:entity/cruncher/idle1",
 			"species:entity/cruncher/idle2",
-			"species:entity/cruncher/idle3",
-			"species:entity/cruncher/idle4"
+			"species:entity/cruncher/idle3"
 		],
 		"subtitle": "subtitles.entity.species.cruncher.idle"
 	},
@@ -570,6 +569,42 @@
 			"species:entity/cruncher/death3"
 		],
 		"subtitle": "subtitles.entity.species.cruncher.death"
+	},
+	"entity.cruncher.step": {
+		"sounds": [
+			"species:entity/cruncher/step1",
+			"species:entity/cruncher/step2",
+			"species:entity/cruncher/step3",
+			"species:entity/cruncher/step4"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.step"
+	},
+	"entity.cruncher.roar": {
+		"sounds": [
+			"species:entity/cruncher/roar1",
+			"species:entity/cruncher/roar2"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.roar"
+	},
+	"entity.cruncher.stomp": {
+		"sounds": [
+			"species:entity/cruncher/stomp1",
+			"species:entity/cruncher/stomp2",
+			"species:entity/cruncher/stomp3"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.stomp"
+	},
+	"entity.cruncher.spit": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.species.cruncher.spit"
+	},
+	"entity.cruncher.stun": {
+		"sounds": [
+			"species:entity/cruncher/stun1",
+			"species:entity/cruncher/stun2"
+		],
+		"subtitle": "subtitles.entity.species.cruncher.stun"
 	},
 	"entity.springling.idle": {
 		"sounds": [

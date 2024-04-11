@@ -6,7 +6,7 @@ import com.ninni.species.entity.CruncherPellet;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import com.ninni.species.registry.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
@@ -18,9 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
-
-import static com.ninni.species.block.BirtDwellingBlock.BIRTS;
-import static com.ninni.species.block.BirtDwellingBlock.EGGS;
 
 public class SpitPellet extends Behavior<Cruncher> {
     private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.SPIT;
@@ -64,6 +61,7 @@ public class SpitPellet extends Behavior<Cruncher> {
         if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
             livingEntity.transitionTo(cruncherState);
         }
+        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_SPIT, 2.0F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 12);
     }
 

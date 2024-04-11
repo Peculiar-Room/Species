@@ -30,9 +30,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
@@ -58,7 +55,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     public final AnimationState spitAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState stunAnimationState = new AnimationState();
-    private final ServerBossEvent bossEvent = new ServerBossEvent(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
+    private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6).setDarkenScreen(true);
     private final int maxHunger = 3;
     @Nullable
     private CruncherPelletManager.CruncherPelletData pelletData = null;
@@ -333,8 +330,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         boolean flag = this.getHealth() / this.getMaxHealth() <= 0.75;
         if (this.getHunger() > 0 && flag) {
             if (this.getState() != CruncherState.STUNNED) {
-                //todo custom sound event
-                this.playSound(SoundEvents.PLAYER_LEVELUP, 2.0F, 1.0F);
+                this.playSound(SpeciesSoundEvents.CRUNCHER_STUN, 2.0F, 1.0F);
                 this.transitionTo(CruncherState.STUNNED);
                 this.setStunnedTicks(320);
             }
@@ -439,10 +435,15 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         return this.getBrain().getMemory(MemoryModuleType.HURT_BY).map(DamageSource::getEntity).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast);
     }
 
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpeciesSoundEvents.CRUNCHER_STEP, 1f, this.getVoicePitch());
+    }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.CRUNCHER_IDLE;
+        return this.getState() == CruncherState.IDLE ? SpeciesSoundEvents.CRUNCHER_IDLE : SoundEvents.EMPTY;
     }
 
     @Nullable
@@ -459,11 +460,21 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     public void transitionTo(CruncherState cruncherState) {
         switch (cruncherState) {
-            case IDLE -> this.setState(CruncherState.IDLE);
-            case ROAR -> this.setState(CruncherState.ROAR);
-            case SPIT -> this.setState(CruncherState.SPIT);
-            case STOMP -> this.setState(CruncherState.STOMP);
-            case STUNNED -> this.setState(CruncherState.STUNNED);
+            case IDLE -> {
+                this.setState(CruncherState.IDLE);
+            }
+            case ROAR -> {
+                this.setState(CruncherState.ROAR);
+            }
+            case SPIT -> {
+                this.setState(CruncherState.SPIT);
+            }
+            case STOMP -> {
+                this.setState(CruncherState.STOMP);
+            }
+            case STUNNED -> {
+                this.setState(CruncherState.STUNNED);
+            }
         }
     }
 

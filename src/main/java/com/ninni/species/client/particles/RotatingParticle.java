@@ -49,7 +49,6 @@ public class RotatingParticle extends TextureSheetParticle {
             this.z -= 1;
             if (age < 2) alpha = 0f;
             else alpha = 0.75f;
-            System.out.println(age);
             xd = Mth.cos((age) * 0.118F) * 0.1F;
             zd = Mth.sin((age) * 0.118F) * 0.1F;
             yd = Mth.sin(age * 0.8F) * 0.05F;

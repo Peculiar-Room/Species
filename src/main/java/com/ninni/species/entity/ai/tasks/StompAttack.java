@@ -7,9 +7,7 @@ import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import com.ninni.species.registry.SpeciesParticles;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -17,8 +15,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import com.ninni.species.registry.*;
 
 public class StompAttack extends Behavior<Cruncher> {
     private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.STOMP;
@@ -45,6 +43,7 @@ public class StompAttack extends Behavior<Cruncher> {
         if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
             livingEntity.transitionTo(cruncherState);
         }
+        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_STOMP, 2.0F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 14);
     }
 
@@ -81,7 +80,6 @@ public class StompAttack extends Behavior<Cruncher> {
         for (int i = 0; i <= (cruncher.getRandom().nextInt(50) + 80); i++) serverLevel.sendParticles(ParticleTypes.CLOUD, cruncher.getRandomX(2), cruncher.getY() + 0.25f, cruncher.getRandomZ(2), 1, 0.0, 0.0, 0.0,0.0);
         for (int i = 0; i <= (cruncher.getRandom().nextInt(20) + 20); i++) serverLevel.sendParticles(SpeciesParticles.ASCENDING_DUST, cruncher.getRandomX(2), cruncher.getY() + 0.25f, cruncher.getRandomZ(2), 1, 0.0, 1.0, 0.0,0.0);
 
-        cruncher.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 1.0F);
         cruncher.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.STOMP_CHARGING, Unit.INSTANCE, 42);
     }
 
