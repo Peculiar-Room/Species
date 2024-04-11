@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:spider",
+  "item": {
+    "id": "minecraft:spider_eye",
+    "Count": 1
+  }
+}

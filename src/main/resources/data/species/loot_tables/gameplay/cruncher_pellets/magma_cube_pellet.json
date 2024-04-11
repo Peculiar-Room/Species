@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:magma_cube",
+  "item": {
+    "id": "minecraft:magma_cream",
+    "Count": 1
+  }
+}

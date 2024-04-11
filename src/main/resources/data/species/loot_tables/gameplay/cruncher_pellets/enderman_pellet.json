@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:enderman",
+  "item": {
+    "id": "minecraft:ender_pearl",
+    "Count": 1
+  }
+}

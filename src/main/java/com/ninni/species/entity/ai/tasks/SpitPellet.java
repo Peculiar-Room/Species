@@ -83,7 +83,7 @@ public class SpitPellet extends Behavior<Cruncher> {
         final double headX = 3F * livingEntity.getScale() * Mth.sin(Mth.PI + angle);
         final double headZ = 3F * livingEntity.getScale() * Mth.cos(angle);
         CruncherPellet pellet = new CruncherPellet(serverLevel, (double) blockPos.getX() + headX, blockPos.getY() + livingEntity.getEyeHeight(), (double) blockPos.getZ() + headZ, blockState, livingEntity.getPelletData());
-        pellet.setDeltaMovement(livingEntity.getLookAngle().scale(2.0D).multiply(0.5D, 1.0D, 0.5D));
+        pellet.setDeltaMovement(livingEntity.getLookAngle().scale(2.0D).multiply(0.25D, 1.0D, 0.25D));
 
         serverLevel.addFreshEntity(pellet);
 

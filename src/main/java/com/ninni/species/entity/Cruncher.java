@@ -5,7 +5,6 @@ import com.mojang.serialization.Dynamic;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
 import com.ninni.species.registry.*;
-import com.ninni.species.world.CruncherBossEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -74,7 +73,6 @@ public class Cruncher extends Animal {
 
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
-        this.setPathfindingMalus(BlockPathTypes.LEAVES, 0.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -100,30 +98,35 @@ public class Cruncher extends Animal {
     public void aiStep() {
         super.aiStep();
         if (this.isAlive()) {
-            if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
-                boolean bl = false;
-                AABB aABB = this.getBoundingBox().inflate(0.2);
-                Iterator var8 = BlockPos.betweenClosed(Mth.floor(aABB.minX), Mth.floor(aABB.minY), Mth.floor(aABB.minZ), Mth.floor(aABB.maxX), Mth.floor(aABB.maxY), Mth.floor(aABB.maxZ)).iterator();
+            if (this.getHunger() > 0) {
+                if (this.getPathfindingMalus(BlockPathTypes.LEAVES) != 0) this.setPathfindingMalus(BlockPathTypes.LEAVES, 0.0F);
+                if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                    boolean bl = false;
+                    AABB aABB = this.getBoundingBox().inflate(0.2);
+                    Iterator var8 = BlockPos.betweenClosed(Mth.floor(aABB.minX), Mth.floor(aABB.minY), Mth.floor(aABB.minZ), Mth.floor(aABB.maxX), Mth.floor(aABB.maxY), Mth.floor(aABB.maxZ)).iterator();
 
-                label60:
-                while(true) {
-                    BlockPos blockPos;
-                    Block block;
-                    do {
-                        if (!var8.hasNext()) {
-                            if (!bl && this.onGround()) {
-                                this.jumpFromGround();
+                    label60:
+                    while (true) {
+                        BlockPos blockPos;
+                        Block block;
+                        do {
+                            if (!var8.hasNext()) {
+                                if (!bl && this.onGround()) {
+                                    this.jumpFromGround();
+                                }
+                                break label60;
                             }
-                            break label60;
-                        }
 
-                        blockPos = (BlockPos)var8.next();
-                        BlockState blockState = this.level().getBlockState(blockPos);
-                        block = blockState.getBlock();
-                    } while(!(block instanceof LeavesBlock));
+                            blockPos = (BlockPos) var8.next();
+                            BlockState blockState = this.level().getBlockState(blockPos);
+                            block = blockState.getBlock();
+                        } while (!(block instanceof LeavesBlock));
 
-                    bl = this.level().destroyBlock(blockPos, true, this) || bl;
+                        bl = this.level().destroyBlock(blockPos, true, this) || bl;
+                    }
                 }
+            } else {
+                if (this.getPathfindingMalus(BlockPathTypes.LEAVES) == 0) this.setPathfindingMalus(BlockPathTypes.LEAVES, -1.0f);
             }
 
         }

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:guardian",
+  "item": {
+    "id": "minecraft:prismarine_crystals",
+    "Count": 1
+  }
+}

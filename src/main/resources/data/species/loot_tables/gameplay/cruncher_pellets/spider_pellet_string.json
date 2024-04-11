@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:spider",
+  "item": {
+    "id": "minecraft:string",
+    "Count": 1
+  }
+}

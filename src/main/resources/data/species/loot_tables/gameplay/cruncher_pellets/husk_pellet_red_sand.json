@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:husk",
+  "item": {
+    "id": "minecraft:red_sand",
+    "Count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:slime",
+  "item": {
+    "id": "minecraft:slime_ball",
+    "Count": 1
+  }
+}
