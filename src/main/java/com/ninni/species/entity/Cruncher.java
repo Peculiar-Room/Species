@@ -55,7 +55,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     public final AnimationState spitAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState stunAnimationState = new AnimationState();
-    private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6).setDarkenScreen(true);
+    private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(Component.translatable("bar.species.cruncher" , this.getDisplayName().getString()), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6).setDarkenScreen(true).setPlayBossMusic(true);
     private final int maxHunger = 3;
     @Nullable
     private CruncherPelletManager.CruncherPelletData pelletData = null;
@@ -93,6 +93,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         if (this.isAlive()) {
             if (this.getHunger() > 0) {
                 if (this.getPathfindingMalus(BlockPathTypes.LEAVES) != 0) this.setPathfindingMalus(BlockPathTypes.LEAVES, 0.0F);
+                if (this.bossEvent.getColor() != this.getBarColor()) this.bossEvent.setColor(this.getBarColor());
                 if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                     boolean bl = false;
                     AABB aABB = this.getBoundingBox().inflate(0.2);

@@ -1,7 +1,12 @@
 package com.ninni.species.block;
 
+import com.ninni.species.block.entity.CruncherEggBlockEntity;
+import com.ninni.species.block.property.SpeciesProperties;
+import com.ninni.species.registry.SpeciesBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,16 +15,17 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -27,14 +33,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class CruncherEggBlock extends Block {
-    public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
+public class CruncherEggBlock extends BaseEntityBlock {
+    public static final BooleanProperty CRACKED = SpeciesProperties.CRUNCHER_EGG_CRACKED;
+    public static final IntegerProperty TIMER = SpeciesProperties.CRUNCHER_EGG_TIMER;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 8, 16);
 
     public CruncherEggBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState((this.stateDefinition.any()).setValue(HALF, DoubleBlockHalf.LOWER).setValue(HATCH, 0));
+        this.registerDefaultState((this.stateDefinition.any()).setValue(HALF, DoubleBlockHalf.LOWER).setValue(CRACKED, false).setValue(TIMER, 60));
     }
 
     @Override
@@ -55,6 +62,15 @@ public class CruncherEggBlock extends Block {
     }
 
     @Override
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
+        super.randomTick(blockState, serverLevel, blockPos, randomSource);
+        if (blockState.getValue(CRACKED) && blockState.getValue(TIMER) == 0) {
+            serverLevel.destroyBlock(blockPos, true, null);
+        }
+    }
+
+
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         BlockPos blockPos = blockPlaceContext.getClickedPos();
@@ -66,8 +82,16 @@ public class CruncherEggBlock extends Block {
     }
 
     @Override
+    public RenderShape getRenderShape(BlockState blockState) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
         BlockPos blockPos2 = blockPos.above();
+        if (level.getBlockEntity(blockPos) instanceof CruncherEggBlockEntity cruncherEggBlockEntity) {
+            cruncherEggBlockEntity.setPlayer(livingEntity);
+        }
         level.setBlock(blockPos2, CruncherEggBlock.copyWaterloggedFrom(level, blockPos2, this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER)), 3);
     }
 
@@ -116,7 +140,18 @@ public class CruncherEggBlock extends Block {
     }
 
     @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return CruncherEggBlock.createTickerHelper(blockEntityType, SpeciesBlockEntities.CRUNCHER_EGG, level.isClientSide ? CruncherEggBlockEntity::clientTick : CruncherEggBlockEntity::serverTick);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HALF, HATCH);
+        builder.add(HALF, CRACKED, TIMER);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new CruncherEggBlockEntity(blockPos, blockState);
     }
 }

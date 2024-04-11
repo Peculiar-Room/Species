@@ -29,7 +29,7 @@ public class SpeciesBlocks {
 
     public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
 
-    public static final Block CRUNCHER_EGG = register("cruncher_egg", new CruncherEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_PURPLE).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
+    public static final Block CRUNCHER_EGG = register("cruncher_egg", new CruncherEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_PURPLE).randomTicks().strength(0.5f).sound(SoundType.METAL).noOcclusion()));
     public static final Block CRUNCHER_PELLET = register("cruncher_pellet", new CruncherPelletBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.SCULK)));
 
     public static final Block FROZEN_MEAT = register("frozen_meat", new RotatedPillarBlock(FabricBlockSettings.create().mapColor(MapColor.TERRACOTTA_RED).strength(0.5f).sound(SoundType.SCULK)));

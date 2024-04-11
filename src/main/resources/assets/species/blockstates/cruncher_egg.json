@@ -1,10 +1,16 @@
 {
   "variants": {
-    "half=lower": {
+    "cracked=false,half=lower": {
       "model": "species:block/cruncher_egg_bottom"
     },
-    "half=upper": {
+    "cracked=false,half=upper": {
       "model": "species:block/cruncher_egg_top"
+    },
+    "cracked=true,half=lower": {
+      "model": "species:block/cruncher_egg_bottom_cracked"
+    },
+    "cracked=true,half=upper": {
+      "model": "species:block/cruncher_egg_top_cracked"
     }
   }
 }
