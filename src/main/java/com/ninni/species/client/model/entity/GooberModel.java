@@ -55,6 +55,8 @@ public class GooberModel<E extends Goober> extends HierarchicalModel<E> {
         this.animate(entity.yawnAnimationState, GooberAnimations.YAWN, animationProgress);
         this.animate(entity.layDownYawnAnimationState, GooberAnimations.LAY_DOWN_YAWN, animationProgress);
         this.animate(entity.rearUpAnimationState, GooberAnimations.REAR_UP, animationProgress);
+        this.animate(entity.sneezeAnimationState, GooberAnimations.SNEEZE, animationProgress);
+        this.animate(entity.layDownSneezeAnimationState, GooberAnimations.LAY_DOWN_SNEEZE, animationProgress);
         this.head.xRot += entity.isGooberLayingDown() ? 0f : headPitch * ((float) Math.PI / 180f) - (headPitch * ((float) Math.PI / 180f)) / 2;
         this.head.yRot += headYaw * ((float) Math.PI / 180f) - (headYaw * ((float) Math.PI / 180f)) / 2;
         this.neck.xRot += entity.isGooberLayingDown() ? 0f : (headPitch * ((float) Math.PI / 180f)) / 2;

@@ -6,6 +6,8 @@ public enum SpeciesPose {
     SCARED,
     PLANTING,
     UPROOTING,
+    SNEEZING,
+    SNEEZING_LAYING_DOWN,
     YAWNING,
     YAWNING_LAYING_DOWN,
     LAYING_DOWN,
