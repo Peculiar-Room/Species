@@ -8,12 +8,15 @@ import com.ninni.species.entity.enums.GooberBehavior;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -100,14 +103,16 @@ public class Goober extends Animal {
         boolean bl = this.isFood(itemStack);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
         if (interactionResult.consumesAction() && bl) {
+            if (this.isGooberLayingDown()) this.standUp();
             this.level().playSound(null, this, SpeciesSoundEvents.GOOBER_EAT, SoundSource.NEUTRAL, 1.0f, Mth.randomBetween(this.level().random, 0.8f, 1.2f));
         }
 
-        if ((itemStack.is(Items.FEATHER) || itemStack.is(Items.BRUSH)) && this.getSneezeCooldown() == 0) {
+        if ((itemStack.is(Items.FEATHER) || itemStack.is(Items.BRUSH)) && this.getSneezeCooldown() == 0 && this.getBehavior().equals(GooberBehavior.IDLE.getName())) {
             sneezeTimer = GooberBehavior.SNEEZING.getLength();
             this.setBehavior(GooberBehavior.SNEEZING.getName());
             this.setPose(this.isGooberLayingDown() ? SpeciesPose.SNEEZING_LAYING_DOWN.get() : SpeciesPose.SNEEZING.get());
             this.sneezeCooldown();
+            this.playSound(SpeciesSoundEvents.GOOBER_SNEEZE, 2, 1);
             return InteractionResult.SUCCESS;
         }
 
@@ -140,21 +145,34 @@ public class Goober extends Animal {
         if (sneezeTimer > 0)  {
             sneezeTimer--;
 
-            if (sneezeTimer == 35 && this.level() instanceof ServerLevel serverLevel) {
-
+            if (sneezeTimer == 35) {
                 BlockPos blockPos = this.blockPosition();
                 final float angle = (0.0174532925F * this.yBodyRot);
-                final double headX = 1.5F * this.getScale() * Mth.sin(Mth.PI + angle);
-                final double headZ = 1.5F * this.getScale() * Mth.cos(angle);
-                ItemEntity pellet = new ItemEntity(serverLevel, (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight(), (double) blockPos.getZ() + headZ, Items.SLIME_BALL.getDefaultInstance());
-                pellet.setDeltaMovement(this.getLookAngle().scale(2.0D).multiply(1.75D, 1.0D, 1.75D));
+                final double headX = 2F * this.getScale() * Mth.sin(Mth.PI + angle);
+                final double headZ = 2F * this.getScale() * Mth.cos(angle);
 
-                serverLevel.addFreshEntity(pellet);
+                Vec3 shootingVec = this.getLookAngle().scale(2.0D).multiply(0.25D, 1.0D, 0.25D);
+
+                for (int i = 0; i < 8; ++i) {
+                    this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, SpeciesItems.GOOBER_GOO.getDefaultInstance()), blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight(), (double) blockPos.getZ() + headZ, ((double) this.random.nextFloat() - 0.5) * 0.08 + shootingVec.x/2, ((double) this.random.nextFloat() - 0.5) * 0.08 + shootingVec.y, ((double) this.random.nextFloat() - 0.5) * 0.08 + shootingVec.z/2);
+                }
+
+                if (this.level() instanceof ServerLevel serverLevel) {
+
+                    ItemEntity goo = new ItemEntity(serverLevel, (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight(), (double) blockPos.getZ() + headZ, SpeciesItems.GOOBER_GOO.getDefaultInstance());
+                    goo.setDeltaMovement(shootingVec);
+                    if (!isGooberLayingDown()) {
+                        this.addDeltaMovement(new Vec3(0, 0.25D, 0));
+                        this.addDeltaMovement(this.getLookAngle().scale(2.0D).multiply(-0.5D, 0, -0.5D));
+                    }
+                    serverLevel.addFreshEntity(goo);
+                }
             }
 
             if (sneezeTimer == 1) {
                 if (this.isGooberLayingDown()) this.setPose(SpeciesPose.LAYING_DOWN.get());
                 else this.setPose(Pose.STANDING);
+
                 this.setBehavior(GooberBehavior.IDLE.getName());
             }
         }
@@ -168,7 +186,7 @@ public class Goober extends Animal {
     }
 
     private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
+        if (this.idleAnimationTimeout == 0) {
             this.idleAnimationTimeout = 80;
             this.idleAnimationState.start(this.tickCount);
         } else {
@@ -248,7 +266,7 @@ public class Goober extends Animal {
         this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
         this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
         this.entityData.define(SNEEZE_COOLDOWN,
-                20
+                0
                 //60 * 20 + random.nextInt(60 * 4 * 20)
         );
     }
@@ -317,7 +335,7 @@ public class Goober extends Animal {
     }
     public void sneezeCooldown() {
         this.entityData.set(SNEEZE_COOLDOWN,
-                20
+                0
                 //60 * 2 * 20 + random.nextInt(60 * 8 * 20)
         );
     }
@@ -353,6 +371,7 @@ public class Goober extends Animal {
         this.playSound(SpeciesSoundEvents.GOOBER_LAY_DOWN, 1.0f, 1.0f);
         this.setPose(SpeciesPose.LAYING_DOWN.get());
         this.resetLastPoseChangeTick(-(this.level()).getGameTime());
+        this.refreshDimensions();
     }
 
     public void standUp() {
@@ -361,11 +380,13 @@ public class Goober extends Animal {
         }
         this.setPose(Pose.STANDING);
         this.resetLastPoseChangeTick((this.level()).getGameTime());
+        this.refreshDimensions();
     }
 
     public void standUpInstantly() {
         this.setPose(Pose.STANDING);
         this.resetLastPoseChangeTickToFullStand((this.level()).getGameTime());
+        this.refreshDimensions();
     }
 
     @VisibleForTesting
@@ -384,7 +405,7 @@ public class Goober extends Animal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isGooberLayingDown() ? SpeciesSoundEvents.GOOBER_IDLE_RESTING : SpeciesSoundEvents.GOOBER_IDLE;
+        return this.getBehavior().equals(GooberBehavior.IDLE.getName())  ? this.isGooberLayingDown() ? SpeciesSoundEvents.GOOBER_IDLE_RESTING : SpeciesSoundEvents.GOOBER_IDLE : SoundEvents.EMPTY;
     }
 
     @Nullable

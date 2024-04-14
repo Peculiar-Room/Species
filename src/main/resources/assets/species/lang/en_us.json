@@ -123,6 +123,7 @@
   "entity.species.goober": "Goober",
   "item.species.goober_spawn_egg": "Goober Spawn Egg",
   "block.species.petrified_egg": "Petrified Egg",
+  "item.species.goober_goo": "Goober Goo",
 
   "subtitles.entity.species.goober.death": "Goober dies",
   "subtitles.entity.species.goober.hurt": "Goober hurts",
