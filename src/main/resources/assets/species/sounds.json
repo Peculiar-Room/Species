@@ -368,6 +368,15 @@
 		],
 		"subtitle": "subtitles.entity.species.limpet.deflect"
 	},
+	"entity.limpet.break": {
+		"sounds": [
+			"species:entity/limpet/break1",
+			"species:entity/limpet/break2",
+			"species:entity/limpet/break3",
+			"species:entity/limpet/break4"
+		],
+		"subtitle": "subtitles.entity.species.limpet.break"
+	},
 	"entity.goober.death": {
 		"sounds": [
 			"species:entity/goober/death"

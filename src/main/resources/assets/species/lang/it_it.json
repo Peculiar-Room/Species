@@ -90,6 +90,7 @@
   "subtitles.entity.species.limpet.idle": "Limpet squittisce",
   "subtitles.entity.species.limpet.step": "Limpet cammina",
   "subtitles.entity.species.limpet.deflect": "Limpet para",
+  "subtitles.entity.species.limpet.break": "Guscio di limpet si crepa",
 
   "advancements.species.silk_touch_break_limpet.title": "Guscio di velluto",
   "advancements.species.silk_touch_break_limpet.description": "Rompi il guscio di un limpet con tocco di velluto",

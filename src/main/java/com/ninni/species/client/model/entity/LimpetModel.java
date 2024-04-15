@@ -160,9 +160,7 @@ public class LimpetModel<T extends Limpet> extends HierarchicalModel<T> {
             this.rightLeg.visible = false;
             this.leftLeg.visible = false;
             this.root.y = 8.0F;
-            this.shell.zRot = 0.0F;
         } else {
-            shell.zRot = Mth.sin(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance;
             this.rightLeg.visible = true;
             this.leftLeg.visible = true;
             this.root.y = 0.0F;

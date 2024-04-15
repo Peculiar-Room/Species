@@ -42,6 +42,7 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -257,30 +258,37 @@ public class Limpet extends Monster {
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
-            if (type.getId() > 1 && !this.level().isClientSide()) spawnBreakingParticles();
+            if (type.getId() > 1) spawnBreakingParticles();
 
             ItemStack stack = this.getStackInHand(player).get();
             if (this.getCrackedStage() < 3) {
                 this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level().random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
-                this.playSound(type.getMiningSound(), 1, 1);
+                this.playSound(type.getAdditionalBreakSound(), 1, (float) this.getCrackedStage() * 0.3f + 0.5f);
+                this.playSound(SpeciesSoundEvents.LIMPET_BREAK, 0.6f, this.getCrackedStage() + 1);
                 this.setScaredTicks(0);
-                if (!player.getAbilities().instabuild) {
-                    player.getCooldowns().addCooldown(stack.getItem(), 80);
+                for (ItemStack itemStack : player.getInventory().items) {
+                    if (itemStack.getItem() instanceof PickaxeItem) {
+                        player.getCooldowns().addCooldown(itemStack.getItem(), player.getAbilities().instabuild ? 0 : 80);
+                    }
                 }
+
                 return false;
             } else {
-                int count = UniformInt.of(1, 2).sample(random) + EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
-                for (int i = 0; i < count; i++) {
-                    this.spawnAtLocation(type.getItem(), i);
-                }
-                this.setCrackedStage(0);
-                this.playSound(type.getMiningSound(), 1, 1);
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
-                    this.setLimpetType(1);
-                    if (player instanceof ServerPlayer serverPlayer) {
-                        SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger(serverPlayer);
+                int count = (int) ((type.getMaxCount()/2 + random.nextInt(type.getMaxCount()/2)) * ( 1 + (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack) * 0.15f)));
+                if (type.getId() > 1) {
+                    for (int i = 0; i < count; i++) {
+                        this.spawnAtLocation(type.getItem(), 1);
                     }
+                }
+
+                this.playSound(type.getAdditionalBreakSound(), 1, (float) this.getCrackedStage() * 0.3f + 1f);
+                this.playSound(SpeciesSoundEvents.LIMPET_BREAK, 0.6f, this.getCrackedStage() + 1.5f);
+                this.setCrackedStage(0);
+                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+                    if (type.getId() > 1) this.setLimpetType(1);
+                     else this.setLimpetType(0);
+                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger(serverPlayer);
                     return false;
                 } else {
                     this.setLimpetType(0);
@@ -297,8 +305,11 @@ public class Limpet extends Monster {
     }
 
     private void spawnBreakingParticles() {
-        Vec3 vec3 = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.5, Math.random() * 0.1 + 0.1, 0.0)).xRot(-this.getXRot() * 0.017453292F).yRot(-this.getYRot() * 0.5F);
-        ((ServerLevel)this.level()).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.getLimpetType().getItem().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 60, vec3.x + random.nextInt(-10, 10) * 0.5, vec3.y + random.nextInt(0, 10) * 0.1, vec3.z - random.nextInt(-10, 10) * 0.5, 0);
+        for (int i = 0; i < 40; ++i) {
+            this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getLimpetType().getItem().getDefaultInstance()),
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    ((double)this.random.nextFloat() - 0.5) * 0.5, ((double)this.random.nextFloat() - 0.5) * 0.8, ((double)this.random.nextFloat() - 0.5) * 0.5);
+        }
     }
 
     @Override
