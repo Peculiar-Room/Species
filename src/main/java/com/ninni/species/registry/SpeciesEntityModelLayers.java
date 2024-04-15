@@ -21,6 +21,7 @@ public interface SpeciesEntityModelLayers {
     ModelLayerLocation TREEPER = main("treeper", TreeperModel::getLayerDefinition);
     ModelLayerLocation TREEPER_SAPLING = main("treeper_sapling", TreeperSaplingModel::getLayerDefinition);
     ModelLayerLocation GOOBER = main("goober", GooberModel::getLayerDefinition);
+    ModelLayerLocation GOOBER_GOO = main("goober_goo", GooberGooModel::createLayer);
     ModelLayerLocation CRUNCHER = main("cruncher", CruncherModel::getLayerDefinition);
     ModelLayerLocation MAMMUTILATION = main("mammutilation", MammutilationModel::getLayerDefinition);
     ModelLayerLocation SPRINGLING = main("springling", SpringlingModel::getLayerDefinition);

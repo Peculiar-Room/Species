@@ -43,7 +43,6 @@ public class SpeciesCreativeModeTabs {
 
         output.accept(SpeciesItems.GOOBER_SPAWN_EGG);
         output.accept(SpeciesItems.PETRIFIED_EGG);
-        output.accept(SpeciesItems.GOOBER_GOO);
 
         output.accept(SpeciesItems.CRUNCHER_SPAWN_EGG);
         output.accept(SpeciesItems.CRUNCHER_EGG);
