@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -65,13 +66,19 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     }
 
     @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+        this.setMaxExtendedAmount(this.random.nextInt(10000) == 0? 24 : this.random.nextInt(7, 12));
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
+    @Override
     public void tick() {
         super.tick();
         this.refreshDimensions();
 
         if (getExtendedAmount() > this.getMaxExtendedAmount()) this.setExtendedAmount(this.getMaxExtendedAmount());
 
-        if (this.getMaxExtendedAmount() > 18) this.setMaxExtendedAmount(18);
+        if (this.getMaxExtendedAmount() > 24) this.setMaxExtendedAmount(24);
 
         if (this.isRetracting() && !this.level().isClientSide) {
             if (getExtendedAmount() > 0) {
