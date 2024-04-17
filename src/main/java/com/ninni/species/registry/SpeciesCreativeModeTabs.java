@@ -43,6 +43,13 @@ public class SpeciesCreativeModeTabs {
 
         output.accept(SpeciesItems.GOOBER_SPAWN_EGG);
         output.accept(SpeciesItems.PETRIFIED_EGG);
+        output.accept(SpeciesItems.ALPHACENE_MOSS_BLOCK);
+        output.accept(SpeciesItems.ALPHACENE_MOSS_CARPET);
+        output.accept(SpeciesItems.ALPHACENE_GRASS_BLOCK);
+        output.accept(SpeciesItems.ALPHACENE_GRASS);
+        output.accept(SpeciesItems.ALPHACENE_TALL_GRASS);
+        output.accept(SpeciesItems.ALPHACENE_MUSHROOM);
+        output.accept(SpeciesItems.ALPHACENE_MUSHROOM_BLOCK);
 
         output.accept(SpeciesItems.CRUNCHER_SPAWN_EGG);
         output.accept(SpeciesItems.CRUNCHER_EGG);

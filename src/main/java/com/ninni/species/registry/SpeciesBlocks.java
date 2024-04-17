@@ -4,6 +4,7 @@ import com.ninni.species.block.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.DyeColor;
@@ -28,6 +29,13 @@ public class SpeciesBlocks {
     public static final Block TROOPER = register("trooper", new TrooperBlock(FabricBlockSettings.copyOf(Blocks.SPRUCE_SAPLING)));
 
     public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
+    public static final Block ALPHACENE_MOSS_BLOCK = register("alphacene_moss_block", new MossBlock(FabricBlockSettings.copyOf(Blocks.MOSS_BLOCK)));
+    public static final Block ALPHACENE_MOSS_CARPET = register("alphacene_moss_carpet", new CarpetBlock(FabricBlockSettings.copyOf(Blocks.MOSS_CARPET)));
+    public static final Block ALPHACENE_GRASS_BLOCK = register("alphacene_grass_block", new GrassBlock(FabricBlockSettings.copyOf(Blocks.GRASS_BLOCK)));
+    public static final Block ALPHACENE_GRASS = register("alphacene_grass", new TallGrassBlock(FabricBlockSettings.copyOf(Blocks.GRASS)));
+    public static final Block ALPHACENE_TALL_GRASS = register("alphacene_tall_grass", new DoublePlantBlock(FabricBlockSettings.copyOf(Blocks.TALL_GRASS)));
+    public static final Block ALPHACENE_MUSHROOM = register("alphacene_mushroom", new MushroomBlock(FabricBlockSettings.copyOf(Blocks.BROWN_MUSHROOM), TreeFeatures.HUGE_BROWN_MUSHROOM));
+    public static final Block ALPHACENE_MUSHROOM_BLOCK = register("alphacene_mushroom_block", new HugeMushroomBlock(FabricBlockSettings.copyOf(Blocks.BROWN_MUSHROOM_BLOCK)));
 
     public static final Block CRUNCHER_EGG = register("cruncher_egg", new CruncherEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_PURPLE).randomTicks().strength(0.5f).sound(SoundType.METAL).noOcclusion()));
     public static final Block CRUNCHER_PELLET = register("cruncher_pellet", new CruncherPelletBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.SCULK)));

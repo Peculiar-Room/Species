@@ -28,12 +28,12 @@ public class GooberGoo extends ThrowableItemProjectile {
         super(SpeciesEntities.GOOBER_GOO, x, y, z, world);
     }
 
-
     @Override
     public void handleEntityEvent(byte status) {
         if (status == 3) {
-            for (int i = 0; i < 8; ++i) {
-                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getDefaultItem().getDefaultInstance()), this.getX(), this.getY(), this.getZ(), ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08, ((double)this.random.nextFloat() - 0.5) * 0.08);
+            for (int i = 0; i < 3; ++i) {
+                double h = this.random.nextGaussian() * 0.02;
+                this.level().addParticle(ParticleTypes.HAPPY_VILLAGER, this.getX() + 0.5 + random.nextFloat()*3 - random.nextFloat()*3, this.getY() + random.nextFloat(), this.getZ() + 0.5 + random.nextFloat()*3 - random.nextFloat()*3, h,h,h);
             }
         }
     }
@@ -43,7 +43,6 @@ public class GooberGoo extends ThrowableItemProjectile {
         super.onHit(hitResult);
         HitResult.Type type = hitResult.getType();
         if (type != HitResult.Type.ENTITY) {
-            this.level().broadcastEntityEvent(this, (byte) 3);
             this.discard();
         }
     }
@@ -62,12 +61,12 @@ public class GooberGoo extends ThrowableItemProjectile {
                     BlockState state = world.getBlockState(placePos);
                     BlockState aboveState = world.getBlockState(placePos.above());
 
-
                     boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
                     for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
                         if (!level().isClientSide && state.is(data.input()) && aboveStateFlag) {
                             Block output = data.output();
                             world.setBlock(placePos, output.defaultBlockState(), 2);
+                            this.level().broadcastEntityEvent(this, (byte)3);
                         }
                     }
                 }

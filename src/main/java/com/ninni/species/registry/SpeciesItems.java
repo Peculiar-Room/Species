@@ -49,6 +49,13 @@ public class SpeciesItems {
 
     public static final Item GOOBER_SPAWN_EGG = register("goober_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.GOOBER, 0x49674E, 0x49674E, SpeciesDevelopers.BORNHULU, new Item.Properties().stacksTo(64)));
     public static final Item PETRIFIED_EGG = register("petrified_egg", new BlockItem(SpeciesBlocks.PETRIFIED_EGG, new FabricItemSettings()));
+    public static final Item ALPHACENE_MOSS_BLOCK = register("alphacene_moss_block", new BlockItem(SpeciesBlocks.ALPHACENE_MOSS_BLOCK, new FabricItemSettings()));
+    public static final Item ALPHACENE_MOSS_CARPET = register("alphacene_moss_carpet", new BlockItem(SpeciesBlocks.ALPHACENE_MOSS_CARPET, new FabricItemSettings()));
+    public static final Item ALPHACENE_GRASS_BLOCK = register("alphacene_grass_block", new BlockItem(SpeciesBlocks.ALPHACENE_GRASS_BLOCK, new FabricItemSettings()));
+    public static final Item ALPHACENE_GRASS = register("alphacene_grass", new BlockItem(SpeciesBlocks.ALPHACENE_GRASS, new FabricItemSettings()));
+    public static final Item ALPHACENE_TALL_GRASS = register("alphacene_tall_grass", new DoubleHighBlockItem(SpeciesBlocks.ALPHACENE_TALL_GRASS, new FabricItemSettings()));
+    public static final Item ALPHACENE_MUSHROOM = register("alphacene_mushroom", new BlockItem(SpeciesBlocks.ALPHACENE_MUSHROOM, new FabricItemSettings()));
+    public static final Item ALPHACENE_MUSHROOM_BLOCK = register("alphacene_mushroom_block", new BlockItem(SpeciesBlocks.ALPHACENE_MUSHROOM_BLOCK, new FabricItemSettings()));
 
     public static final Item CRUNCHER_SPAWN_EGG = register("cruncher_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.CRUNCHER, 0x5522B6, 0x99032B, SpeciesDevelopers.NOON, new Item.Properties().stacksTo(64)));
     public static final Item CRUNCHER_EGG = register("cruncher_egg", new DoubleHighBlockItem(SpeciesBlocks.CRUNCHER_EGG, new FabricItemSettings()));
