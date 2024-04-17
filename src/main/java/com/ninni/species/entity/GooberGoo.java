@@ -1,13 +1,20 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.registry.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class GooberGoo extends ThrowableItemProjectile {
@@ -36,6 +43,30 @@ public class GooberGoo extends ThrowableItemProjectile {
         HitResult.Type type = hitResult.getType();
         this.level().broadcastEntityEvent(this, (byte)3);
         this.discard();
+    }
+
+    @Override
+    protected void onHitBlock(BlockHitResult blockHitResult) {
+        super.onHitBlock(blockHitResult);
+        Level world = this.level();
+        BlockPos blockPos = blockHitResult.getBlockPos();
+        int xRadius = UniformInt.of(1, 2).sample(this.random);
+        int zRadius = UniformInt.of(1, 2).sample(this.random);
+        for (int y = -1; y <= 1; y++) {
+            for (int x = -xRadius; x <= xRadius; x++) {
+                for (int z = -zRadius; z <= zRadius; z++) {
+                    BlockPos placePos = BlockPos.containing(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
+                    BlockState state = world.getBlockState(placePos);
+                    BlockState aboveState = world.getBlockState(placePos.above());
+                    boolean flag = state.is(Blocks.MUSHROOM_STEM) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MOSS_BLOCK) || state.is(Blocks.GRASS);
+                    boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
+                    if (flag && aboveStateFlag) {
+                        Block mycelium = Blocks.MYCELIUM;
+                        world.setBlock(placePos, mycelium.defaultBlockState(), 2);
+                    }
+                }
+            }
+        }
     }
 
     @Override
