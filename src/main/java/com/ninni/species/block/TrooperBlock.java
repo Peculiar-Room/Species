@@ -1,6 +1,6 @@
 package com.ninni.species.block;
 
-import com.ninni.species.entity.TreeperSapling;
+import com.ninni.species.entity.Trooper;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
@@ -23,11 +23,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 @SuppressWarnings("deprecation")
-public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock {
+public class TrooperBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
 
-    public TreeperSaplingBlock(Properties properties) {
+    public TrooperBlock(Properties properties) {
         super(properties);
         this.registerDefaultState((this.stateDefinition.any()).setValue(AGE, 0));
     }
@@ -56,7 +56,7 @@ public class TreeperSaplingBlock extends BushBlock implements BonemealableBlock 
     public void spawnSapling(ServerLevel serverLevel, BlockPos blockPos) {
         serverLevel.removeBlock(blockPos, true);
 
-        TreeperSapling sapling = SpeciesEntities.TREEPER_SAPLING.create(serverLevel);
+        Trooper sapling = SpeciesEntities.TROOPER.create(serverLevel);
         assert sapling != null;
         sapling.moveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0.0f);
         serverLevel.addFreshEntity(sapling);

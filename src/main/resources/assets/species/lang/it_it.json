@@ -107,9 +107,9 @@
   "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Uovo generatore di Treeper",
   "item.species.ancient_pinecone": "Pigna Antica",
-  "block.species.treeper_sapling": "Arboscello di Treeper",
-  "entity.species.treeper_sapling": "Arboscello di Treeper",
-  "item.species.treeper_sapling_spawn_egg": "Uovo generatore di Arboscello di Treeper",
+  "block.species.trooper": "Arboscello di Treeper",
+  "entity.species.trooper": "Arboscello di Treeper",
+  "item.species.trooper_spawn_egg": "Uovo generatore di Arboscello di Treeper",
 
   "subtitles.entity.species.treeper.death": "Treeper muore",
   "subtitles.entity.species.treeper.hurt": "Treeper ferito",

@@ -1,7 +1,7 @@
 package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.ninni.species.entity.TreeperSapling;
+import com.ninni.species.entity.Trooper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.AgeableListModel;
@@ -15,7 +15,7 @@ import java.util.Collections;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class TreeperSaplingModel<E extends TreeperSapling> extends AgeableListModel<E> {
+public class TrooperModel<E extends Trooper> extends AgeableListModel<E> {
 
     private final ModelPart root;
     private final ModelPart body;
@@ -25,7 +25,7 @@ public class TreeperSaplingModel<E extends TreeperSapling> extends AgeableListMo
     private final ModelPart rightArm;
     private final ModelPart leftArm;
 
-    public TreeperSaplingModel(ModelPart root) {
+    public TrooperModel(ModelPart root) {
         this.root = root;
 
         this.body = this.root.getChild(PartNames.BODY);

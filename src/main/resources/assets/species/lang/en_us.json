@@ -107,9 +107,9 @@
   "entity.species.treeper": "Treeper",
   "item.species.treeper_spawn_egg": "Treeper Spawn Egg",
   "item.species.ancient_pinecone": "Ancient Pinecone",
-  "block.species.treeper_sapling": "Treeper Sapling",
-  "entity.species.treeper_sapling": "Treeper Sapling",
-  "item.species.treeper_sapling_spawn_egg": "Treeper Sapling Spawn Egg",
+  "block.species.trooper": "Trooper",
+  "entity.species.trooper": "Trooper",
+  "item.species.trooper_spawn_egg": "Trooper Spawn Egg",
 
   "subtitles.entity.species.treeper.death": "Treeper dies",
   "subtitles.entity.species.treeper.hurt": "Treeper hurts",

@@ -1,6 +1,6 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.entity.ai.goal.TreeperSaplingSwellGoal;
+import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -35,15 +35,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class TreeperSapling extends TamableAnimal {
-    private static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(TreeperSapling.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> DATA_IS_IGNITED = SynchedEntityData.defineId(TreeperSapling.class, EntityDataSerializers.BOOLEAN);
+public class Trooper extends TamableAnimal {
+    private static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(Trooper.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_IS_IGNITED = SynchedEntityData.defineId(Trooper.class, EntityDataSerializers.BOOLEAN);
     private int oldSwell;
     private int swell;
     private int maxSwell = 30;
     private int explosionRadius = 0;
 
-    public TreeperSapling(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public Trooper(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -56,7 +56,7 @@ public class TreeperSapling extends TamableAnimal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new TreeperSaplingSwellGoal(this));
+        this.goalSelector.addGoal(1, new TrooperSwellGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f, false));
         this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Ocelot.class, 6.0f, 1.0, 1.2));
@@ -190,7 +190,7 @@ public class TreeperSapling extends TamableAnimal {
     }
 
     private boolean isValidTarget(LivingEntity mob) {
-        return mob.isAlive() && !(mob instanceof TreeperSapling);
+        return mob.isAlive() && !(mob instanceof Trooper);
     }
 
     private void spawnLingeringCloud() {
@@ -218,7 +218,7 @@ public class TreeperSapling extends TamableAnimal {
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<TreeperSapling> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+    public static boolean canSpawn(EntityType<Trooper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return false;
     }
 }

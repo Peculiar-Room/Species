@@ -3,7 +3,6 @@ package com.ninni.species;
 import com.google.common.reflect.Reflection;
 import com.ninni.species.client.inventory.CruncherInventoryMenu;
 import com.ninni.species.client.inventory.CruncherInventoryScreen;
-import com.ninni.species.client.model.entity.GooberGooModel;
 import com.ninni.species.client.particles.AscendingDustParticle;
 import com.ninni.species.client.particles.RotatingParticle;
 import com.ninni.species.client.particles.PelletDripParticle;
@@ -56,7 +55,7 @@ public class SpeciesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SpeciesEntities.BIRT_EGG, ThrownItemRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.LIMPET, LimpetRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.TREEPER, TreeperRenderer::new);
-        EntityRendererRegistry.register(SpeciesEntities.TREEPER_SAPLING, TreeperSaplingRenderer::new);
+        EntityRendererRegistry.register(SpeciesEntities.TROOPER, TrooperRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.GOOBER, GooberRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.GOOBER_GOO, GooberGooRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.CRUNCHER, CruncherRenderer::new);
@@ -82,7 +81,7 @@ public class SpeciesClient implements ClientModInitializer {
                 SpeciesBlocks.CRUNCHER_EGG,
                 SpeciesBlocks.BIRT_DWELLING,
                 SpeciesBlocks.BONE_SPIKE,
-                SpeciesBlocks.TREEPER_SAPLING
+                SpeciesBlocks.TROOPER
         );
 
         SpeciesNetwork.clientInit();

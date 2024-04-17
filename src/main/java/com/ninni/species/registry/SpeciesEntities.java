@@ -96,13 +96,13 @@ public class SpeciesEntities {
                     .trackRangeChunks(10)
     );
 
-    public static final EntityType<TreeperSapling> TREEPER_SAPLING = register(
-            "treeper_sapling",
+    public static final EntityType<Trooper> TROOPER = register(
+            "trooper",
             FabricEntityTypeBuilder.createMob()
-                    .entityFactory(TreeperSapling::new)
-                    .defaultAttributes(TreeperSapling::createAttributes)
+                    .entityFactory(Trooper::new)
+                    .defaultAttributes(Trooper::createAttributes)
                     .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, TreeperSapling::canSpawn)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Trooper::canSpawn)
                     .dimensions(EntityDimensions.scalable(0.7F, 1.2F))
                     .trackRangeChunks(10)
     );

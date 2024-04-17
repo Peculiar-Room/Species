@@ -25,7 +25,7 @@ public class SpeciesBlocks {
     public static final Block BONE_VERTEBRA = register("bone_vertebra", new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.BONE_BLOCK)));
     public static final Block BONE_SPIKE = register("bone_spike", new BoneSpikeBlock(BlockBehaviour.Properties.copy(Blocks.BONE_BLOCK)));
 
-    public static final Block TREEPER_SAPLING = register("treeper_sapling", new TreeperSaplingBlock(FabricBlockSettings.copyOf(Blocks.SPRUCE_SAPLING)));
+    public static final Block TROOPER = register("trooper", new TrooperBlock(FabricBlockSettings.copyOf(Blocks.SPRUCE_SAPLING)));
 
     public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
 

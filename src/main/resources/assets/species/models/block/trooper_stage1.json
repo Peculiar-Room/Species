@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/cross",
 	"textures": {
-		"cross": "species:block/treeper_sapling_stage1"
+		"cross": "species:block/trooper_stage1"
 	}
 }
