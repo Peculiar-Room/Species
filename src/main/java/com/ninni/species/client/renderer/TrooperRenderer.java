@@ -17,6 +17,7 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class TrooperRenderer<T extends LivingEntity> extends MobRenderer<Trooper, TrooperModel<Trooper>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/treeper/trooper.png");
+    public static final ResourceLocation TAMED_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/treeper/trooper_tame.png");
 
     public TrooperRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TrooperModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.TROOPER)), 0.3F);
@@ -45,6 +46,6 @@ public class TrooperRenderer<T extends LivingEntity> extends MobRenderer<Trooper
 
     @Override
     public ResourceLocation getTextureLocation(Trooper entity) {
-        return TEXTURE;
+        return entity.isTame() ? TAMED_TEXTURE : TEXTURE;
     }
 }

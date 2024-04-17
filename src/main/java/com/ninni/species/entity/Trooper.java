@@ -1,6 +1,7 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +14,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -28,12 +30,14 @@ import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Trooper extends TamableAnimal {
     private static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(Trooper.class, EntityDataSerializers.INT);
@@ -58,12 +62,13 @@ public class Trooper extends TamableAnimal {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TrooperSwellGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f, false));
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Ocelot.class, 6.0f, 1.0, 1.2));
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Cat.class, 6.0f, 1.0, 1.2));
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.BONE_MEAL), false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, 10.0f, 2.0f, false));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Ocelot.class, 6.0f, 1.0, 1.2));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Cat.class, 6.0f, 1.0, 1.2));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -95,12 +100,13 @@ public class Trooper extends TamableAnimal {
 
         if (itemStack.is(Items.BONE_MEAL) && !this.isTame()) {
             if (!player.isCreative()) itemStack.shrink(1);
-            double d = this.random.nextGaussian() * 0.02;
-            double e = this.random.nextGaussian() * 0.02;
-            double f = this.random.nextGaussian() * 0.02;
-            this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
-            this.playSound(SoundEvents.BONE_MEAL_USE);
-
+            for (int i = 0; i < 5; i++) {
+                double d = this.random.nextGaussian() * 0.02;
+                double e = this.random.nextGaussian() * 0.02;
+                double f = this.random.nextGaussian() * 0.02;
+                this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
+                this.playSound(SoundEvents.BONE_MEAL_USE);
+            }
             this.setOwnerUUID(player.getUUID());
             this.setTame(true);
             return InteractionResult.sidedSuccess(this.level().isClientSide);

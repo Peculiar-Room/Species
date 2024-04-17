@@ -8,15 +8,19 @@ import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -27,7 +31,9 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,6 +47,7 @@ public class Treeper extends AgeableMob {
     private static final EntityDataAccessor<Integer> SAPLING_COOLDOWN = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Boolean> PLANTED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> BURNED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
     public final AnimationState shakingSuccessAnimationState = new AnimationState();
     public final AnimationState shakingFailAnimationState = new AnimationState();
     public final AnimationState plantingAnimationState = new AnimationState();
@@ -67,7 +74,6 @@ public class Treeper extends AgeableMob {
         }
     }
 
-
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         return null;
@@ -82,11 +88,37 @@ public class Treeper extends AgeableMob {
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1));
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 300.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.15);
+    }
+
+    @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (itemStack.is(SpeciesTags.BURNS_TREEPER) && !this.isBurned()) {
+            SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
+            this.level().playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
+            for (int l = 0; l < 30; ++l) {
+                this.level().addParticle(ParticleTypes.FLAME, this.getRandomX(2), this.getY() + Math.random(), this.getRandomZ(2), 0.0, 0.0, 0.0);
+            }
+            this.setBurned(true);
+            if (!this.isPlanted()) this.plant();
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        } else if (itemStack.is(SpeciesTags.EXTINGUISHES_TREEPER) && this.isBurned()) {
+            this.level().playSound(player, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_EXTINGUISH, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
+            this.setBurned(false);
+            if (itemStack.is(Items.WATER_BUCKET)) {
+                if (!player.getAbilities().instabuild) player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
+            }
+            for (int l = 0; l < 30; ++l) {
+                this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(2), this.getY() + Math.random(), this.getRandomZ(2), 0.0, 0.0, 0.0);
+            }
+            if (this.isPlanted() && this.level().isNight() && this.onGround() && !this.isInWater()) this.uproot();
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.mobInteract(player, hand);
     }
 
     @Override
@@ -114,8 +146,6 @@ public class Treeper extends AgeableMob {
             this.setPos(Math.floor(position().x) + 0.99F, this.getY(), Math.floor(position().z) + 0.99F);
         }
     }
-
-
 
     public boolean isInPoseTransition() {
         long l = this.getPoseTime();
@@ -161,21 +191,24 @@ public class Treeper extends AgeableMob {
         this.entityData.define(SAPLING_COOLDOWN, 0);
         this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
         this.entityData.define(PLANTED, false);
+        this.entityData.define(BURNED, false);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putLong("LastPoseTick", this.entityData.get(LAST_POSE_CHANGE_TICK));
-        compoundTag.putInt("saplingCooldown", this.getSaplingCooldown());
-        compoundTag.putBoolean("planted", this.isPlanted());
+        compoundTag.putInt("SaplingCooldown", this.getSaplingCooldown());
+        compoundTag.putBoolean("Planted", this.isPlanted());
+        compoundTag.putBoolean("Burned", this.isBurned());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
-        this.setSaplingCooldown(compoundTag.getInt("saplingCooldown"));
-        this.setPlanted(compoundTag.getBoolean("planted"));
+        this.setSaplingCooldown(compoundTag.getInt("SaplingCooldown"));
+        this.setPlanted(compoundTag.getBoolean("Planted"));
+        this.setBurned(compoundTag.getBoolean("Burned"));
         long l = compoundTag.getLong("LastPoseTick");
         if (l < 0L) this.setPose(SpeciesPose.PLANTING.get());
         this.resetLastPoseChangeTick(l);
@@ -218,7 +251,7 @@ public class Treeper extends AgeableMob {
 
     @Override
     protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height * 0.65F;
+        return pose == SpeciesPose.PLANTING.get() ? entityDimensions.height * 0.5F : entityDimensions.height * 0.65F;
     }
 
     @Override
@@ -244,7 +277,7 @@ public class Treeper extends AgeableMob {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isPlanted() ? SpeciesSoundEvents.TREEPER_IDLE_PLANTED : SpeciesSoundEvents.TREEPER_IDLE;
+        return this.isPlanted() && !this.isBurned() ? SpeciesSoundEvents.TREEPER_IDLE_PLANTED : SpeciesSoundEvents.TREEPER_IDLE;
     }
 
     @Nullable
@@ -294,6 +327,13 @@ public class Treeper extends AgeableMob {
         this.entityData.set(PLANTED, planted);
     }
 
+    public boolean isBurned() {
+        return this.entityData.get(BURNED);
+    }
+
+    public void setBurned(boolean burned) {
+        this.entityData.set(BURNED, burned);
+    }
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Treeper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return world.getBlockState(pos.below()).is(SpeciesTags.TREEPER_SPAWNABLE_ON);

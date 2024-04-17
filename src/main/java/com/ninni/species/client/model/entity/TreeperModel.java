@@ -93,8 +93,15 @@ public class TreeperModel<T extends Treeper> extends HierarchicalModel<T> {
             this.rightEye.x = Mth.sqrt((float) Math.abs(e)) * 4.0F * (float) Math.signum(e) - 8.5F;
         }
 
+        this.rightEye.y += Mth.cos(h * 0.05F) * 0.5F;
+        this.leftEye.y += Mth.sin(h * 0.05F) * 0.5F;
+        this.rightEye.x += Mth.sin(h * 0.025F) * 0.5F;
+        this.leftEye.x += Mth.sin(h * 0.025F) * 0.5F;
+
+
         this.animateWalk(TreeperAnimations.WALK, f, g, 5.0f, 5.5f);
-        this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
+        if (treeper.isBurned()) this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS_BURNED, h);
+        else this.animate(treeper.plantingAnimationState, TreeperAnimations.PLANTS, h);
         this.animate(treeper.uprootingAnimationState, TreeperAnimations.UPROOTS, h);
         this.animate(treeper.shakingFailAnimationState, TreeperAnimations.SHAKE_FAIL, h);
         this.animate(treeper.shakingSuccessAnimationState, TreeperAnimations.SHAKE_SUCCESS, h);

@@ -12,12 +12,12 @@ public class TreeperUprootGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !treeper.isInWater() && treeper.level().isNight() && treeper.onGround() && treeper.isPlanted();
+        return !treeper.isInWater() && treeper.level().isNight() && treeper.onGround() && treeper.isPlanted() && !treeper.isBurned();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return !treeper.isInWater() && treeper.level().isNight() && treeper.onGround() && treeper.isPlanted();
+        return !treeper.isInWater() && treeper.level().isNight() && treeper.onGround() && treeper.isPlanted() && !treeper.isBurned();
     }
 
     @Override

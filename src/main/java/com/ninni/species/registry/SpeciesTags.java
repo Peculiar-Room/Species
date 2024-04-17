@@ -18,6 +18,8 @@ public interface SpeciesTags {
     TagKey<Item> SPRINGLING_BREED_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "springling_breed_items"));
     TagKey<Item> SPRINGLING_TAMING_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "springling_taming_items"));
     TagKey<Item> CRUNCHER_EATS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "cruncher_eats"));
+    TagKey<Item> BURNS_TREEPER = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "burns_treeper"));
+    TagKey<Item> EXTINGUISHES_TREEPER = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "extinguishes_treeper"));
 
     //blockTags
     TagKey<Block> WRAPTOR_NESTING_BLOCKS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "wraptor_nesting_blocks"));
