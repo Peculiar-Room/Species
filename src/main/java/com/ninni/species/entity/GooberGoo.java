@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.data.GooberGooManager;
 import com.ninni.species.registry.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -41,8 +42,10 @@ public class GooberGoo extends ThrowableItemProjectile {
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         HitResult.Type type = hitResult.getType();
-        this.level().broadcastEntityEvent(this, (byte)3);
-        this.discard();
+        if (type != HitResult.Type.ENTITY) {
+            this.level().broadcastEntityEvent(this, (byte) 3);
+            this.discard();
+        }
     }
 
     @Override
@@ -58,11 +61,14 @@ public class GooberGoo extends ThrowableItemProjectile {
                     BlockPos placePos = BlockPos.containing(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                     BlockState state = world.getBlockState(placePos);
                     BlockState aboveState = world.getBlockState(placePos.above());
-                    boolean flag = state.is(Blocks.MUSHROOM_STEM) || state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.MOSS_BLOCK) || state.is(Blocks.GRASS);
+
+
                     boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
-                    if (flag && aboveStateFlag) {
-                        Block mycelium = Blocks.MYCELIUM;
-                        world.setBlock(placePos, mycelium.defaultBlockState(), 2);
+                    for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
+                        if (!level().isClientSide && state.is(data.input()) && aboveStateFlag) {
+                            Block output = data.output();
+                            world.setBlock(placePos, output.defaultBlockState(), 2);
+                        }
                     }
                 }
             }

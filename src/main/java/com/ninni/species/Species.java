@@ -2,6 +2,7 @@ package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.species.data.CruncherPelletManager;
+import com.ninni.species.data.GooberGooManager;
 import com.ninni.species.registry.*;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.BirtEgg;
@@ -70,6 +71,7 @@ public class Species implements ModInitializer {
 		});
 
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new CruncherPelletManager());
+		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new GooberGooManager());
 	}
 
 	private void addFeature(ResourceKey<PlacedFeature> placedFeatureRegistryKey) {

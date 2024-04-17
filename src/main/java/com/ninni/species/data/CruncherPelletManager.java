@@ -30,12 +30,12 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener impl
     public static final List<CruncherPelletData> DATA = Lists.newArrayList();
 
     public CruncherPelletManager() {
-        super(GSON_INSTANCE, "loot_tables/gameplay/cruncher_pellets");
+        super(GSON_INSTANCE, "gameplay/cruncher_pellets");
     }
 
     @Override
     public ResourceLocation getFabricId() {
-        return new ResourceLocation(Species.MOD_ID, "loot_tables/gameplay/cruncher_pellets");
+        return new ResourceLocation(Species.MOD_ID, "gameplay/cruncher_pellets");
     }
 
     @Override

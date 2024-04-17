@@ -20,7 +20,7 @@ public class GooberLayDownGoal extends Goal {
                 && goober.getPoseTime() >= (long)this.minimalPoseTicks
                 && !goober.isLeashed()
                 && goober.onGround()
-                && goober.getBehavior() == GooberBehavior.IDLE.getName();
+                && goober.getBehavior().equals(GooberBehavior.IDLE.getName());
     }
 
     @Override

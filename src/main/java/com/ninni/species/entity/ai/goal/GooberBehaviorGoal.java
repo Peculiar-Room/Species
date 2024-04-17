@@ -19,7 +19,7 @@ public class GooberBehaviorGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return goober.getBehavior() == GooberBehavior.IDLE.getName() && !goober.isInWater() && goober.onGround();
+        return goober.getBehavior().equals(GooberBehavior.IDLE.getName()) && !goober.isInWater() && goober.onGround();
     }
 
     @Override

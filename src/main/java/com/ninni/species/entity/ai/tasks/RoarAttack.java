@@ -42,7 +42,7 @@ public class RoarAttack extends Behavior<Cruncher> {
     @Override
     protected void start(ServerLevel serverLevel, Cruncher livingEntity, long l) {
         livingEntity.transitionTo(cruncherState);
-        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_ROAR, 2.0F, 1.0F);
+        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_ROAR, 1.0F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 12);
     }
 

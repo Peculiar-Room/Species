@@ -140,9 +140,19 @@ public class Goober extends Animal {
         super.tick();
 
         if (this.getLayDownCooldown() > 0) this.setLayDownCooldown(this.getLayDownCooldown()-1);
-        if (this.getRearUpCooldown() > 0) this.setRearUpCooldown(this.getRearUpCooldown()-1);
-        if (this.getYawnCooldown() > 0) this.setYawnCooldown(this.getYawnCooldown()-1);
-        if (this.getSneezeCooldown() > 0) this.setSneezeCooldown(this.getSneezeCooldown()-1);
+        if (this.getRearUpCooldown() > 0) {
+            if (this.getBehavior().equals(GooberBehavior.REAR_UP.getName())) this.setBehavior(GooberBehavior.IDLE.getName());
+            this.setRearUpCooldown(this.getRearUpCooldown()-1);
+        }
+        if (this.getYawnCooldown() > 0) {
+            if (this.getBehavior().equals(GooberBehavior.YAWN.getName())) this.setBehavior(GooberBehavior.IDLE.getName());
+            this.setYawnCooldown(this.getYawnCooldown()-1);
+        }
+        if (this.getSneezeCooldown() > 0) {
+            if (this.getBehavior().equals(GooberBehavior.SNEEZING.getName())) this.setBehavior(GooberBehavior.IDLE.getName());
+            this.setSneezeCooldown(this.getSneezeCooldown()-1);
+        }
+
         if (this.getSneezeTimer() > 0)  {
             this.setSneezeTimer(this.getSneezeTimer() - 1);
 
