@@ -33,10 +33,11 @@ public class GooberGooManager extends SimpleJsonResourceReloadListener implement
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {   object.forEach((resourceLocation, jsonElement) -> {
-        GooberGooManager.GooberGooData cruncherPelletData = GooberGooManager.GooberGooData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result().orElseThrow();
-        DATA.add(cruncherPelletData);
-    });
+    protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        object.forEach((resourceLocation, jsonElement) -> {
+            GooberGooData gooberGooData = GooberGooData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result().orElseThrow();
+            DATA.add(gooberGooData);
+        });
     }
 
     public record GooberGooData(Block input, Block output) {

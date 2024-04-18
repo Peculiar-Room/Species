@@ -52,21 +52,28 @@ public class GooberGoo extends ThrowableItemProjectile {
         super.onHitBlock(blockHitResult);
         Level world = this.level();
         BlockPos blockPos = blockHitResult.getBlockPos();
+        int yRange = 1;
         int xRadius = UniformInt.of(1, 2).sample(this.random);
         int zRadius = UniformInt.of(1, 2).sample(this.random);
-        for (int y = -1; y <= 1; y++) {
-            for (int x = -xRadius; x <= xRadius; x++) {
-                for (int z = -zRadius; z <= zRadius; z++) {
-                    BlockPos placePos = BlockPos.containing(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
-                    BlockState state = world.getBlockState(placePos);
-                    BlockState aboveState = world.getBlockState(placePos.above());
+        if (!this.level().isClientSide) {
+            for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
+                for (int y = -yRange; y <= yRange; y++) {
+                    for (int x = -xRadius; x <= xRadius; x++) {
+                        for (int z = -zRadius; z <= zRadius; z++) {
+                            BlockPos placePos = BlockPos.containing(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
+                            BlockState state = world.getBlockState(placePos);
+                            BlockState aboveState = world.getBlockState(placePos.above());
 
-                    boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
-                    for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
-                        if (!level().isClientSide && state.is(data.input()) && aboveStateFlag) {
+                            Block input = data.input();
                             Block output = data.output();
-                            world.setBlock(placePos, output.defaultBlockState(), 2);
-                            this.level().broadcastEntityEvent(this, (byte)3);
+
+                            boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
+                            if (state.is(input) && aboveStateFlag) {
+                                world.setBlock(placePos, output.defaultBlockState(), 2);
+                                if (this.random.nextFloat() < 0.35F) {
+                                    this.level().levelEvent(2005, placePos, 0);
+                                }
+                            }
                         }
                     }
                 }
