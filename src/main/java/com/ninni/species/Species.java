@@ -1,11 +1,24 @@
 package com.ninni.species;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.data.GooberGooManager;
-import com.ninni.species.registry.*;
-import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.BirtEgg;
+import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesCreativeModeTabs;
+import com.ninni.species.registry.SpeciesDamageTypes;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesEntityDataSerializers;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesMemoryModuleTypes;
+import com.ninni.species.registry.SpeciesNetwork;
+import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.registry.SpeciesSensorTypes;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesStatusEffects;
+import com.ninni.species.registry.SpeciesTags;
 import com.ninni.species.structure.SpeciesStructurePieceTypes;
 import com.ninni.species.structure.SpeciesStructureSets;
 import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
@@ -20,16 +33,13 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.Util;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
@@ -74,7 +84,4 @@ public class Species implements ModInitializer {
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new GooberGooManager());
 	}
 
-	private void addFeature(ResourceKey<PlacedFeature> placedFeatureRegistryKey) {
-		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, placedFeatureRegistryKey);
-	}
 }

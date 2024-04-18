@@ -29,16 +29,6 @@ public class GooberGoo extends ThrowableItemProjectile {
     }
 
     @Override
-    public void handleEntityEvent(byte status) {
-        if (status == 3) {
-            for (int i = 0; i < 3; ++i) {
-                double h = this.random.nextGaussian() * 0.02;
-                this.level().addParticle(ParticleTypes.HAPPY_VILLAGER, this.getX() + 0.5 + random.nextFloat()*3 - random.nextFloat()*3, this.getY() + random.nextFloat(), this.getZ() + 0.5 + random.nextFloat()*3 - random.nextFloat()*3, h,h,h);
-            }
-        }
-    }
-
-    @Override
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         HitResult.Type type = hitResult.getType();
