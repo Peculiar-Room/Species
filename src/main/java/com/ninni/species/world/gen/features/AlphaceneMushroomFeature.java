@@ -44,7 +44,7 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
             int elevateIndex = 2;
             int primaryStemLength = 8;
 
-            this.placeStem(primaryStemLength, secondLayerCount, world, blockPos, stemBlock);
+            this.placeStem(primaryStemLength, secondLayerCount, world, blockPos, stemBlock, mushroomBlock);
 
             this.placeBaseRoof(baseSize, blockPos, world, mushroomBlock);
 
@@ -106,9 +106,14 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
         }
     }
 
-    private void placeStem(int primaryStemLength, int secondLayerCount, WorldGenLevel world, BlockPos blockPos, BlockState stemBlock) {
-        for (int i = 0; i < (primaryStemLength / 2) + (secondLayerCount / 2); i++) {
-            world.setBlock(blockPos.above(i), stemBlock, 2);
+    private void placeStem(int primaryStemLength, int secondLayerCount, WorldGenLevel world, BlockPos blockPos, BlockState stemBlock, BlockState mushroomBlock) {
+        BlockState placeState = stemBlock;
+        int length = (primaryStemLength / 2) + (secondLayerCount / 2);
+        for (int i = 0; i < length; i++) {
+            if (i == length - 1) {
+                placeState = mushroomBlock;
+            }
+            world.setBlock(blockPos.above(i), placeState, 2);
         }
     }
 

@@ -63,7 +63,6 @@ public class Goober extends Animal {
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
     private int idleAnimationTimeout = 0;
 
-
     public Goober(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new GooberMoveControl();
@@ -298,7 +297,6 @@ public class Goober extends Animal {
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
 
-        this.setLayDownCooldown(compoundTag.getInt("LayDownCooldown"));
         this.setLayDownCooldown(compoundTag.getInt("LayDownCooldown"));
         this.setYawnCooldown(compoundTag.getInt("YawnCooldown"));
         this.setRearUpCooldown(compoundTag.getInt("RearUpCooldown"));
