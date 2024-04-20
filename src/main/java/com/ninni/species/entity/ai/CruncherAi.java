@@ -26,6 +26,7 @@ import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTar
 import net.minecraft.world.entity.ai.behavior.StartAttacking;
 import net.minecraft.world.entity.ai.behavior.StayCloseToTarget;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
+import net.minecraft.world.entity.ai.behavior.Swim;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
@@ -76,6 +77,7 @@ public class CruncherAi {
 
     private static void initCoreActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new Swim(0.8F),
                 new LookAtTargetSink(45, 90) {
                     @Override
                     protected boolean checkExtraStartConditions(ServerLevel serverLevel, Mob mob) {

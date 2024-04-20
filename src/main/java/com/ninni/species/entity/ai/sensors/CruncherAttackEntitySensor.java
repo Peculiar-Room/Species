@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.NearestLivingEntitySensor;
 import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +41,7 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
                 .flatMap(Collection::stream)
                 .filter(EntitySelector.NO_CREATIVE_OR_SPECTATOR)
                 .filter(livingEntity -> Sensor.isEntityAttackable(cruncher, livingEntity))
-                .filter(Predicate.not(Cruncher.class::isInstance))
+                .filter(Player.class::isInstance)
                 .findFirst()
                 .ifPresentOrElse(
                         livingEntity -> cruncher.getBrain().setMemory(MemoryModuleType.NEAREST_ATTACKABLE, livingEntity),
