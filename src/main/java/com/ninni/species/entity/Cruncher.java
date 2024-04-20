@@ -113,7 +113,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                 if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                     boolean bl = false;
                     AABB aABB = this.getBoundingBox().inflate(0.2);
-                    Iterator var8 = BlockPos.betweenClosed(Mth.floor(aABB.minX), Mth.floor(aABB.minY), Mth.floor(aABB.minZ), Mth.floor(aABB.maxX), Mth.floor(aABB.maxY), Mth.floor(aABB.maxZ)).iterator();
+                    Iterator<BlockPos> var8 = BlockPos.betweenClosed(Mth.floor(aABB.minX), Mth.floor(aABB.minY), Mth.floor(aABB.minZ), Mth.floor(aABB.maxX), Mth.floor(aABB.maxY), Mth.floor(aABB.maxZ)).iterator();
 
                     label60:
                     while (true) {
@@ -127,7 +127,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                                 break label60;
                             }
 
-                            blockPos = (BlockPos) var8.next();
+                            blockPos = var8.next();
                             BlockState blockState = this.level().getBlockState(blockPos);
                             block = blockState.getBlock();
                         } while (!(block instanceof LeavesBlock));
