@@ -1,5 +1,7 @@
 package com.ninni.species.entity;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.ninni.species.data.GooberGooManager;
 import com.ninni.species.registry.*;
 import net.minecraft.core.BlockPos;
@@ -7,6 +9,7 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.BiasedToBottomInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -14,9 +17,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import java.util.List;
+import java.util.Map;
 
 public class GooberGoo extends ThrowableItemProjectile {
 
@@ -40,11 +50,15 @@ public class GooberGoo extends ThrowableItemProjectile {
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
+
         Level world = this.level();
         BlockPos blockPos = blockHitResult.getBlockPos();
+        Map<BlockPos, BlockState> posBlockStateMap = Maps.newHashMap();
+
         int yRange = 1;
         int xRadius = UniformInt.of(1, 2).sample(this.random);
         int zRadius = UniformInt.of(1, 2).sample(this.random);
+
         if (!this.level().isClientSide) {
             for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
                 for (int y = -yRange; y <= yRange; y++) {
@@ -58,15 +72,33 @@ public class GooberGoo extends ThrowableItemProjectile {
                             Block output = data.output();
 
                             boolean aboveStateFlag = aboveState.isAir() || aboveState.canBeReplaced();
+
                             if (state.is(input) && aboveStateFlag) {
-                                world.setBlock(placePos, output.defaultBlockState(), 2);
-                                if (this.random.nextFloat() < 0.35F) {
-                                    this.level().levelEvent(2005, placePos, 0);
-                                }
+
+                                if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) continue;
+
+                                posBlockStateMap.put(placePos, output.defaultBlockState());
                             }
                         }
                     }
                 }
+            }
+
+            for (BlockPos position : posBlockStateMap.keySet()) {
+                BlockState state = this.level().getBlockState(position);
+                BlockState output = posBlockStateMap.get(position);
+                if (this.random.nextFloat() < 0.35F) {
+                    this.level().levelEvent(2005, position, 0);
+                }
+                if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER) {
+                    BlockState aboveState = world.getBlockState(position.above());
+                    if (aboveState.getBlock() instanceof DoublePlantBlock && aboveState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+                        world.removeBlock(position.above(), false);
+                    }
+                    DoublePlantBlock.placeAt(this.level(), output, position, 2);
+                    continue;
+                }
+                world.setBlock(position, output, 2);
             }
         }
     }
