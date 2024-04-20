@@ -11,6 +11,7 @@ import com.ninni.species.registry.SpeciesCreativeModeTabs;
 import com.ninni.species.registry.SpeciesDamageTypes;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
+import com.ninni.species.registry.SpeciesFeatures;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import com.ninni.species.registry.SpeciesNetwork;
@@ -65,6 +66,7 @@ public class Species implements ModInitializer {
 			SpeciesStructurePieceTypes.class
 		);
 		SpeciesEntityDataSerializers.init();
+		SpeciesFeatures.init();
 		SpeciesSensorTypes.init();
 		SpeciesMemoryModuleTypes.init();
 		SpeciesTreeDecorators.init();

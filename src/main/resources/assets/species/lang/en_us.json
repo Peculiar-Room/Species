@@ -125,6 +125,13 @@
   "entity.species.goober_goo": "Goober Goo",
   "item.species.goober_spawn_egg": "Goober Spawn Egg",
   "block.species.petrified_egg": "Petrified Egg",
+  "block.species.alphacene_moss_block": "Alphacene Moss Block",
+  "block.species.alphacene_moss_carpet": "Alphacene Moss Carpet",
+  "block.species.alphacene_grass_block": "Alphacene Grass Block",
+  "block.species.alphacene_grass": "Alphacene Grass",
+  "block.species.alphacene_tall_grass": "Alphacene Tall Grass",
+  "block.species.alphacene_mushroom": "Alphacene Mushroom",
+  "block.species.alphacene_mushroom_block": "Alphacene Mushroom Block",
 
   "subtitles.entity.species.goober.death": "Goober dies",
   "subtitles.entity.species.goober.hurt": "Goober hurts",

@@ -2,6 +2,7 @@ package com.ninni.species.world.gen.features;
 
 import com.ninni.species.Species;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesFeatures;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -37,6 +39,7 @@ public class SpeciesConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH = registerConfiguredFeature("birted_birch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIRTED_BIRCH_TREE_FILTERED = registerConfiguredFeature("birted_birch_tree_filtered");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MAMMUTILATION_REMNANT = registerConfiguredFeature("mammutilation_remnant");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ALPHACENE_MUSHROOM = registerConfiguredFeature("alphacene_mushroom");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
         HolderGetter<PlacedFeature> holderGetter2 = bootstapContext.lookup(Registries.PLACED_FEATURE);
@@ -66,6 +69,7 @@ public class SpeciesConfiguredFeatures {
                 0.05D,
                 1
                 ));
+        FeatureUtils.register(bootstapContext, ALPHACENE_MUSHROOM, SpeciesFeatures.ALPHACENE_MUSHROOM, FeatureConfiguration.NONE);
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfiguredFeature(String id) {
