@@ -3,5 +3,7 @@
   "item": {
     "id": "minecraft:magma_cream",
     "Count": 1
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }

@@ -3,5 +3,7 @@
   "item": {
     "id": "minecraft:wither_skeleton_skull",
     "Count": 1
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }

@@ -3,5 +3,7 @@
   "item": {
     "id": "minecraft:ender_pearl",
     "Count": 1
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }

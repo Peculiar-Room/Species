@@ -3,5 +3,7 @@
   "item": {
     "id": "minecraft:creeper_head",
     "Count": 1
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }

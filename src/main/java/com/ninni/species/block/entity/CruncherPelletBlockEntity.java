@@ -62,13 +62,14 @@ public class CruncherPelletBlockEntity extends BlockEntity {
 
     public void unpackLootTable(Player player) {
 
-        if (this.getPelletData() == null || this.level == null || this.level.isClientSide || this.level.getServer() == null) return;
+        CruncherPelletManager.CruncherPelletData pelletData = this.getPelletData();
+        if (pelletData == null || this.level == null || this.level.isClientSide || this.level.getServer() == null) return;
 
         if (player instanceof ServerPlayer serverPlayer) {
-            CriteriaTriggers.GENERATE_LOOT.trigger(serverPlayer, this.getPelletData().entityType().getDefaultLootTable());
+            CriteriaTriggers.GENERATE_LOOT.trigger(serverPlayer, pelletData.entityType().getDefaultLootTable());
         }
 
-        int count = UniformInt.of(16, 32).sample(player.getRandom());
+        int count = UniformInt.of(pelletData.minTries(), pelletData.maxTries()).sample(player.getRandom());
 
         for (int i = 0; i < count; i++) {
             ObjectArrayList<ItemStack> randomDrops = this.getRandomDrops(player);

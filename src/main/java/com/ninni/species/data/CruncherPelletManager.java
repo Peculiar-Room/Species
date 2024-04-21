@@ -13,7 +13,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
@@ -41,11 +43,13 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener impl
         });
     }
 
-    public record CruncherPelletData(EntityType<?> entityType, ItemStack item) {
+    public record CruncherPelletData(EntityType<?> entityType, ItemStack item, int minTries, int maxTries) {
         public static final Codec<CruncherPelletData> CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(
                         BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(CruncherPelletData::entityType),
-                        ItemStack.CODEC.fieldOf("item").forGetter(CruncherPelletData::item)
+                        ItemStack.CODEC.fieldOf("item").forGetter(CruncherPelletData::item),
+                        Codec.INT.fieldOf("minTries").forGetter(CruncherPelletData::minTries),
+                        Codec.INT.fieldOf("maxTries").forGetter(CruncherPelletData::maxTries)
                 ).apply(instance, CruncherPelletData::new));
     }
 

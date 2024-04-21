@@ -26,7 +26,6 @@ public class CruncherInventoryScreen extends AbstractContainerScreen<CruncherInv
         this.cruncher = cruncher;
     }
 
-
     @Override
     protected void renderBg(GuiGraphics poseStack, float f, int i, int j) {
         this.renderBackground(poseStack);

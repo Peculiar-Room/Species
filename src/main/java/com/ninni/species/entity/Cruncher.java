@@ -266,19 +266,19 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
 
-        //for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
+        for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
 
-        //    if (this.getPelletData() == data) continue;
+            if (this.getPelletData() == data) continue;
 
-        //    if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
-        //        this.setPelletData(data);
+            if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
+                this.setPelletData(data);
 
-        //        if (!player.getAbilities().instabuild) itemStack.shrink(1);
+                if (!player.getAbilities().instabuild) itemStack.shrink(1);
 
-        //        this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
-        //        return InteractionResult.SUCCESS;
-        //    }
-        //}
+                this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
+                return InteractionResult.SUCCESS;
+            }
+        }
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);

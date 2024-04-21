@@ -3,5 +3,7 @@
   "item": {
     "id": "minecraft:red_sand",
     "Count": 1
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }

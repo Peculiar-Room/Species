@@ -6,5 +6,7 @@
     "tag": {
       "Potion": "minecraft:slowness"
     }
-  }
+  },
+  "minTries": 16,
+  "maxTries": 32
 }
