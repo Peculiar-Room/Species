@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "species:alphacene_grass_block",
     "species:red_suspicious_sand"
   ]
 }

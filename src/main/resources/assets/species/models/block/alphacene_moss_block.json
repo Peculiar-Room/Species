@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "species:block/alphacene_moss_bottom",
+    "side": "species:block/alphacene_moss",
+    "top": "species:block/alphacene_moss_top"
+  }
+}

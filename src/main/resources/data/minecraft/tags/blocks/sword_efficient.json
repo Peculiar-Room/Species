@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "species:alphacene_mushroom",
+    "species:alphacene_grass",
+    "species:alphacene_tall_grass"
+  ]
+}

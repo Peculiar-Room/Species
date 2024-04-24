@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "species:alphacene_moss_block",
     "species:frozen_meat",
     "species:frozen_hair",
     "species:wraptor_egg",

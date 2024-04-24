@@ -79,6 +79,9 @@ public class SpeciesClient implements ClientModInitializer {
         });
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+                SpeciesBlocks.ALPHACENE_GRASS,
+                SpeciesBlocks.ALPHACENE_TALL_GRASS,
+                SpeciesBlocks.ALPHACENE_MUSHROOM,
                 SpeciesBlocks.CRUNCHER_EGG,
                 SpeciesBlocks.BIRT_DWELLING,
                 SpeciesBlocks.BONE_SPIKE,
