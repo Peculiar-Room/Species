@@ -1,14 +1,6 @@
 package com.ninni.species.registry;
 
-import com.ninni.species.block.AlphaceneMushroomBlock;
-import com.ninni.species.block.BirtDwellingBlock;
-import com.ninni.species.block.BoneSpikeBlock;
-import com.ninni.species.block.CruncherEggBlock;
-import com.ninni.species.block.CruncherPelletBlock;
-import com.ninni.species.block.PetrifiedEggBlock;
-import com.ninni.species.block.SpringlingEggBlock;
-import com.ninni.species.block.TrooperBlock;
-import com.ninni.species.block.WraptorEggBlock;
+import com.ninni.species.block.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +11,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.HugeMushroomBlock;
-import net.minecraft.world.level.block.MossBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -45,10 +34,10 @@ public class SpeciesBlocks {
     public static final Block TROOPER = register("trooper", new TrooperBlock(BlockBehaviour.Properties.copy(Blocks.SPRUCE_SAPLING)));
 
     public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
-    public static final Block ALPHACENE_MOSS_BLOCK = register("alphacene_moss_block", new MossBlock(BlockBehaviour.Properties.copy(Blocks.MOSS_BLOCK)));
+    public static final Block ALPHACENE_MOSS_BLOCK = register("alphacene_moss_block", new Block(BlockBehaviour.Properties.copy(Blocks.MOSS_BLOCK)));
     public static final Block ALPHACENE_MOSS_CARPET = register("alphacene_moss_carpet", new CarpetBlock(BlockBehaviour.Properties.copy(Blocks.MOSS_CARPET)));
-    public static final Block ALPHACENE_GRASS_BLOCK = register("alphacene_grass_block", new GrassBlock(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK)));
-    public static final Block ALPHACENE_GRASS = register("alphacene_grass", new TallGrassBlock(BlockBehaviour.Properties.copy(Blocks.GRASS)));
+    public static final Block ALPHACENE_GRASS_BLOCK = register("alphacene_grass_block", new AlphaceneGrassBlock(BlockBehaviour.Properties.copy(Blocks.GRASS_BLOCK)));
+    public static final Block ALPHACENE_GRASS = register("alphacene_grass", new AlphaceneTallGrassBlock(BlockBehaviour.Properties.copy(Blocks.GRASS)));
     public static final Block ALPHACENE_TALL_GRASS = register("alphacene_tall_grass", new DoublePlantBlock(BlockBehaviour.Properties.copy(Blocks.TALL_GRASS)));
     public static final Block ALPHACENE_MUSHROOM = register("alphacene_mushroom", new AlphaceneMushroomBlock(BlockBehaviour.Properties.copy(Blocks.BROWN_MUSHROOM)));
     public static final Block ALPHACENE_MUSHROOM_BLOCK = register("alphacene_mushroom_block", new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.BROWN_MUSHROOM_BLOCK)));
