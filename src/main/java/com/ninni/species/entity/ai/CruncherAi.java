@@ -111,10 +111,9 @@ public class CruncherAi {
         brain.addActivityWithConditions(
                 Activity.FIGHT,
                 ImmutableList.of(
-                        Pair.of(0, StopAttackingIfTargetInvalid.create()),
+                        Pair.of(0, SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.5F)),
                         Pair.of(1, new RoarAttack()),
-                        Pair.of(2, SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.2F)),
-                        Pair.of(3, new StompAttack())
+                        Pair.of(2, new StompAttack())
                 ),
                 ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)

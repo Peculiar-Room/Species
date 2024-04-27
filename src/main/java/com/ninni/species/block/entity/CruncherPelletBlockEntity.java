@@ -49,7 +49,9 @@ public class CruncherPelletBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
-        CruncherPelletManager.CruncherPelletData.CODEC.encodeStart(NbtOps.INSTANCE, this.getPelletData()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("PelletData", tag));
+        if (this.getPelletData() != null) {
+            CruncherPelletManager.CruncherPelletData.CODEC.encodeStart(NbtOps.INSTANCE, this.getPelletData()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("PelletData", tag));
+        }
     }
 
     public CruncherPelletManager.CruncherPelletData getPelletData() {

@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.ninni.species.entity.Cruncher;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.NearestLivingEntitySensor;
 import net.minecraft.world.entity.ai.sensing.Sensor;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -25,14 +28,19 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
     @Override
     protected void doTick(ServerLevel serverLevel, Cruncher cruncher) {
 
+        Optional<LivingEntity> attackTarget = cruncher.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (cruncher.getHunger() == 0) {
             if (cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE).isPresent()) {
                 cruncher.getBrain().eraseMemory(MemoryModuleType.NEAREST_ATTACKABLE);
             }
-            if (cruncher.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()) {
+            if (attackTarget.isPresent()) {
                 cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
             }
             return;
+        }
+
+        if (attackTarget.isPresent() && attackTarget.get() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative() || serverPlayer.isSpectator())) {
+            cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
         }
 
         super.doTick(serverLevel, cruncher);

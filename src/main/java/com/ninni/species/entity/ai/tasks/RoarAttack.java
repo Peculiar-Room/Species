@@ -42,7 +42,7 @@ public class RoarAttack extends Behavior<Cruncher> {
     @Override
     protected void start(ServerLevel serverLevel, Cruncher livingEntity, long l) {
         livingEntity.transitionTo(cruncherState);
-        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_ROAR, 1.0F, 1.0F);
+        livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_ROAR, 3.5F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 12);
     }
 
@@ -65,8 +65,8 @@ public class RoarAttack extends Behavior<Cruncher> {
 
             if (isCreative || isCruncher) continue;
 
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 1));
-            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 20 * 20));
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400));
         }
 
         brain.setMemoryWithExpiry(SpeciesMemoryModuleTypes.ROAR_CHARGING, Unit.INSTANCE, 96);

@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -44,6 +45,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -442,13 +444,16 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     }
 
     public boolean isTargetClose() {
-        return this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get().distanceTo(this) <= 9;
+        LivingEntity entity = this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
+
+        if (!(entity instanceof ServerPlayer player)) return false;
+
+        return player.gameMode.isSurvival() && player.distanceTo(this) <= 9;
     }
 
     public Optional<LivingEntity> getHurtBy() {
-        if (this.getHunger() == 0) {
-            return Optional.empty();
-        }
+        if (this.getHunger() == 0) return Optional.empty();
+
         return this.getBrain().getMemory(MemoryModuleType.HURT_BY).map(DamageSource::getEntity).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast);
     }
 
@@ -525,7 +530,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Cruncher> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return false;
+        return world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Monster.checkMobSpawnRules(entity, world, spawnReason, pos, random);
     }
 
     @Override

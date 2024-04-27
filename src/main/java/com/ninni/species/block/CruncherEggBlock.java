@@ -5,8 +5,6 @@ import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +23,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -35,13 +36,13 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("deprecation")
 public class CruncherEggBlock extends BaseEntityBlock {
     public static final BooleanProperty CRACKED = SpeciesProperties.CRUNCHER_EGG_CRACKED;
-    public static final IntegerProperty TIMER = SpeciesProperties.CRUNCHER_EGG_TIMER;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 8, 16);
+    private static final VoxelShape UPPER_SHAPE = Block.box(0, 0, 0, 16, 8, 16);
+    private static final VoxelShape CRACKED_UPPER_SHAPE = Block.box(0, 0, 0, 16, 1, 16);
 
     public CruncherEggBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState((this.stateDefinition.any()).setValue(HALF, DoubleBlockHalf.LOWER).setValue(CRACKED, false).setValue(TIMER, 60));
+        this.registerDefaultState((this.stateDefinition.any()).setValue(HALF, DoubleBlockHalf.LOWER).setValue(CRACKED, false));
     }
 
     @Override
@@ -58,17 +59,14 @@ public class CruncherEggBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return blockState.getValue(HALF) == DoubleBlockHalf.LOWER ? Shapes.block() : SHAPE;
-    }
+        boolean lower = blockState.getValue(HALF) == DoubleBlockHalf.LOWER;
+        boolean cracked = blockState.getValue(CRACKED);
 
-    @Override
-    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
-        super.randomTick(blockState, serverLevel, blockPos, randomSource);
-        if (blockState.getValue(CRACKED) && blockState.getValue(TIMER) == 0) {
-            serverLevel.destroyBlock(blockPos, true, null);
-        }
-    }
+        VoxelShape upperShape = cracked ? CRACKED_UPPER_SHAPE : UPPER_SHAPE;
+        VoxelShape bottomShape = Shapes.block();
 
+        return lower ? bottomShape : upperShape;
+    }
 
     @Override
     @Nullable
@@ -90,7 +88,7 @@ public class CruncherEggBlock extends BaseEntityBlock {
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
         BlockPos blockPos2 = blockPos.above();
         if (level.getBlockEntity(blockPos) instanceof CruncherEggBlockEntity cruncherEggBlockEntity) {
-            cruncherEggBlockEntity.setPlayer(livingEntity);
+            cruncherEggBlockEntity.setTarget(livingEntity);
         }
         level.setBlock(blockPos2, CruncherEggBlock.copyWaterloggedFrom(level, blockPos2, this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER)), 3);
     }
@@ -146,7 +144,7 @@ public class CruncherEggBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HALF, CRACKED, TIMER);
+        builder.add(HALF, CRACKED);
     }
 
     @Nullable
