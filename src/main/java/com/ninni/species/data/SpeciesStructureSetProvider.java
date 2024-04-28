@@ -1,6 +1,6 @@
 package com.ninni.species.data;
 
-import com.ninni.species.structure.SpeciesStructureSets;
+import com.ninni.species.registry.SpeciesStructureSets;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
@@ -20,6 +20,7 @@ public class SpeciesStructureSetProvider extends FabricDynamicRegistryProvider {
     @Override
     protected void configure(HolderLookup.Provider registries, Entries entries) {
         add(registries, entries, SpeciesStructureSets.WRAPTOR_COOPS);
+        add(registries, entries, SpeciesStructureSets.PALEONTOLOGY_DIG_SITE);
     }
 
     private void add(HolderLookup.Provider registries, Entries entries, ResourceKey<StructureSet> resourceKey) {

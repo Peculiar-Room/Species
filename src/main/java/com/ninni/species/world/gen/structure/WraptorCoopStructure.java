@@ -1,7 +1,7 @@
 package com.ninni.species.world.gen.structure;
 
 import com.mojang.serialization.Codec;
-import com.ninni.species.structure.WraptorCoopGenerator;
+import com.ninni.species.registry.SpeciesStructureTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.NoiseColumn;

@@ -1,9 +1,9 @@
 package com.ninni.species.data;
 
-import com.ninni.species.structure.SpeciesStructureSets;
+import com.ninni.species.registry.SpeciesStructureSets;
 import com.ninni.species.world.gen.features.SpeciesConfiguredFeatures;
 import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
-import com.ninni.species.world.gen.structure.SpeciesStructures;
+import com.ninni.species.registry.SpeciesStructures;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
