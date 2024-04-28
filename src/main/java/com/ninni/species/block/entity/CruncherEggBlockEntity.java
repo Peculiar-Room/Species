@@ -6,7 +6,6 @@ import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,13 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
-import java.util.Optional;
-
 public class CruncherEggBlockEntity extends BlockEntity {
-    private final UniformInt THRESHOLD = UniformInt.of(12000, 24000);
     public LivingEntity target;
     private int timer;
-    private int threshold = -1;
 
     public CruncherEggBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(SpeciesBlockEntities.CRUNCHER_EGG, blockPos, blockState);
@@ -31,14 +26,12 @@ public class CruncherEggBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         compoundTag.putInt("Timer", this.timer);
-        compoundTag.putInt("Threshold", this.threshold);
     }
 
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.timer = compoundTag.getInt("Timer");
-        this.threshold = compoundTag.getInt("Threshold");
     }
 
     public LivingEntity getTarget() {
@@ -49,8 +42,8 @@ public class CruncherEggBlockEntity extends BlockEntity {
         this.target = livingEntity;
     }
 
-    public static void clientTick(Level level, BlockPos blockPos, BlockState state, CruncherEggBlockEntity blockEntity) {
-        if (state.getValue(CruncherEggBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(CruncherEggBlock.CRACKED) && level.random.nextInt(15) == 1) {
+    public static void clientTick(Level level, BlockPos blockPos, BlockState state) {
+        if (state.getValue(CruncherEggBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(CruncherEggBlock.CRACKED) && level.random.nextInt(10) == 1) {
             level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, (double)blockPos.getX() + 0.5 + level.random.nextDouble() / 3.0 * (double)(level.random.nextBoolean() ? 1 : -1), (double)blockPos.getY() + level.random.nextDouble() + level.random.nextDouble(), (double)blockPos.getZ() + 0.5 + level.random.nextDouble() / 3.0 * (double)(level.random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         }
     }
@@ -60,34 +53,30 @@ public class CruncherEggBlockEntity extends BlockEntity {
 
         if (state.getValue(CruncherEggBlock.CRACKED) || state.getValue(CruncherEggBlock.HALF) == DoubleBlockHalf.UPPER) return;
 
-        if (blockEntity.threshold == -1) blockEntity.threshold = blockEntity.THRESHOLD.sample(level.getRandom());
+        blockEntity.timer++;
 
+        if ((blockEntity.timer > 20 * 15 && level.random.nextInt(30) == 1) || (blockEntity.timer > 20 * 45)) {
+            if (target == null) {
+                Player nearestPlayer = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 10.0, true);
 
-        if (blockEntity.timer < blockEntity.threshold) {
-            blockEntity.timer++;
-            return;
-        }
+                boolean validPlayer = nearestPlayer != null && nearestPlayer.isAlive();
 
-        if (target == null) {
-            Player nearestPlayer = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 10.0, true);
+                if (validPlayer) {
+                    blockEntity.setTarget(nearestPlayer);
+                }
+            } else {
+                level.setBlock(blockPos, state.setValue(CruncherEggBlock.CRACKED, true), 2);
+                BlockState aboveState = level.getBlockState(blockPos.above());
+                if (aboveState.getBlock() instanceof CruncherEggBlock) {
+                    level.setBlock(blockPos.above(), aboveState.setValue(CruncherEggBlock.CRACKED, true), 2);
+                }
 
-            boolean validPlayer = nearestPlayer != null && nearestPlayer.isAlive();
+                if (!target.hasEffect(SpeciesStatusEffects.GUT_FEELING)) {
+                    target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING, 24000));
+                }
 
-            if (validPlayer) {
-                blockEntity.setTarget(nearestPlayer);
+                level.globalLevelEvent(1023, blockPos, 0);
             }
-        } else {
-            level.setBlock(blockPos, state.setValue(CruncherEggBlock.CRACKED, true), 2);
-            BlockState aboveState = level.getBlockState(blockPos.above());
-            if (aboveState.getBlock() instanceof CruncherEggBlock) {
-                level.setBlock(blockPos.above(), aboveState.setValue(CruncherEggBlock.CRACKED, true), 2);
-            }
-
-            if (!target.hasEffect(SpeciesStatusEffects.GUT_FEELING)) {
-                target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING, 24000));
-            }
-
-            level.globalLevelEvent(1023, blockPos, 0);
         }
     }
 

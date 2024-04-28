@@ -164,6 +164,8 @@
   "death.attack.crunch.item": "%1$s was crunched by %2$s using %3$s",
   "death.attack.crunch.player": "%1$s was crunched by %2$s",
 
+  "effect.species.gut_feeling": "Gut Feeling",
+
   "advancements.species.obtain_cruncher_egg.title": "Tastes Interesting",
   "advancements.species.obtain_cruncher_egg.description": "Obtain a Cruncher Egg",
 

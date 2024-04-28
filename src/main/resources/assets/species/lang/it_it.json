@@ -122,8 +122,16 @@
   "subtitles.entity.species.treeper.shake_success": "Arboscelli di Treeper cadono",
 
   "entity.species.goober": "Goober",
+  "entity.species.goober_goo": "Muco di goober",
   "item.species.goober_spawn_egg": "Uovo generatore di Goober",
   "block.species.petrified_egg": "Uovo pietrificato",
+  "block.species.alphacene_moss_block": "Blocco di muschio dell'alfacene",
+  "block.species.alphacene_moss_carpet": "Tappeto di muschio dell'alfacene",
+  "block.species.alphacene_grass_block": "Blocco d'erba dell'alfacene",
+  "block.species.alphacene_grass": "Erba dell'alfacene",
+  "block.species.alphacene_tall_grass": "Erba alta dell'alfacene",
+  "block.species.alphacene_mushroom": "Fungo dell'alfacene",
+  "block.species.alphacene_mushroom_block": "Blocco di fungo dell'alfacene",
 
   "subtitles.entity.species.goober.death": "Goober muore",
   "subtitles.entity.species.goober.hurt": "Goober ferito",
@@ -155,6 +163,8 @@
   "subtitles.entity.species.cruncher.death": "Cruncher muore",
   "subtitles.entity.species.cruncher.hurt": "Cruncher ferito",
   "subtitles.entity.species.cruncher.idle": "Cruncher brontola",
+
+  "effect.species.gut_feeling": "Cattivo Presagio",
 
   "advancements.species.obtain_cruncher_egg.title": "Gusto interessante",
   "advancements.species.obtain_cruncher_egg.description": "Ottieni un uovo di cruncher",
