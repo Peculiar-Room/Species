@@ -50,6 +50,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.ALPHACENE_TALL_GRASS);
         output.accept(SpeciesItems.ALPHACENE_MUSHROOM);
         output.accept(SpeciesItems.ALPHACENE_MUSHROOM_BLOCK);
+        output.accept(SpeciesItems.ALPHACENE_MUSHROOM_GROWTH);
 
         output.accept(SpeciesItems.CRUNCHER_SPAWN_EGG);
         output.accept(SpeciesItems.CRUNCHER_EGG);

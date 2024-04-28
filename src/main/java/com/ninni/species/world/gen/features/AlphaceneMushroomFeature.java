@@ -1,5 +1,6 @@
 package com.ninni.species.world.gen.features;
 
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
+import java.util.List;
+
 public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> {
 
     public AlphaceneMushroomFeature(Codec<NoneFeatureConfiguration> codec) {
@@ -29,6 +32,7 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
         RandomSource random = featurePlaceContext.random();
         BlockState stemBlock = Blocks.MUSHROOM_STEM.defaultBlockState();
         BlockState mushroomBlock = SpeciesBlocks.ALPHACENE_MUSHROOM_BLOCK.defaultBlockState();
+        List<BlockPos> conkPoses = Lists.newArrayList();
 
         boolean initialFlag = world.getBlockState(blockPos.below()).is(BlockTags.DIRT);
 
@@ -46,29 +50,46 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
 
             this.placeStem(primaryStemLength, secondLayerCount, world, blockPos, stemBlock, mushroomBlock);
 
-            this.placeBaseRoof(baseSize, blockPos, world, mushroomBlock);
+            this.placeBaseRoof(baseSize, blockPos, world, mushroomBlock, conkPoses);
 
-            this.placeSpiral(initialSprialPos, primaryStemLength, initialDirection, world, mushroomBlock, elevateIndex, secondLayerCount, rotatingIndex);
+            this.placeSpiral(initialSprialPos, primaryStemLength, initialDirection, world, mushroomBlock, elevateIndex, secondLayerCount, rotatingIndex, conkPoses);
+
+            this.placeConks(world, random, conkPoses);
 
             return true;
         }
     }
 
-    private void placeSpiral(BlockPos initialSprialPos, int primaryStemLength, Direction initialDirection, WorldGenLevel world, BlockState mushroomBlock, int elevateIndex, int secondLayerCount, int rotatingIndex) {
+    private void placeConks(WorldGenLevel worldGenLevel, RandomSource randomSource, List<BlockPos> conkPoses) {
+        for (BlockPos pos : conkPoses) {
+            if (worldGenLevel.isEmptyBlock(pos) && worldGenLevel.getBlockState(pos.above()).is(SpeciesBlocks.ALPHACENE_MUSHROOM_BLOCK) && randomSource.nextInt(10) != 0) {
+                worldGenLevel.setBlock(pos, SpeciesBlocks.ALPHACENE_MUSHROOM_GROWTH.defaultBlockState(), 2);
+            }
+        }
+    }
+
+    private void placeSpiral(BlockPos initialSprialPos, int primaryStemLength, Direction initialDirection, WorldGenLevel world, BlockState mushroomBlock, int elevateIndex, int secondLayerCount, int rotatingIndex, List<BlockPos> conkPoses) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos().set(initialSprialPos);
 
         for (int i = 0; i < primaryStemLength; i++) {
             if (i % 2 != 0) {
                 initialDirection = initialDirection.getClockWise();
             }
-            world.setBlock(mutableBlockPos, mushroomBlock, 2);
-            if (i == 7) {
+            if (world.isStateAtPosition(mutableBlockPos, DripstoneUtils::isEmptyOrWater)) {
+                world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                conkPoses.add(mutableBlockPos);
+            }
+            if (i == 7 && world.isStateAtPosition(mutableBlockPos.above(), DripstoneUtils::isEmptyOrWater)) {
                 world.setBlock(mutableBlockPos.above(), mushroomBlock, 2);
+                conkPoses.add(mutableBlockPos);
             }
             mutableBlockPos.move(initialDirection.getClockWise());
             elevateIndex++;
             if (elevateIndex % 4 == 0) {
-                world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                if (world.isStateAtPosition(mutableBlockPos, DripstoneUtils::isEmptyOrWater)) {
+                    world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                    conkPoses.add(mutableBlockPos.below());
+                }
                 mutableBlockPos.move(Direction.UP);
             }
         }
@@ -81,16 +102,22 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
                 rotatingIndex = 2;
             }
             if (i % 2 == 0 && i >= 2) {
-                world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                if (world.isStateAtPosition(mutableBlockPos, DripstoneUtils::isEmptyOrWater)) {
+                    world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                    conkPoses.add(mutableBlockPos.below());
+                }
                 mutableBlockPos.move(Direction.UP);
             }
-            world.setBlock(mutableBlockPos, mushroomBlock, 2);
+            if (world.isStateAtPosition(mutableBlockPos, DripstoneUtils::isEmptyOrWater)) {
+                world.setBlock(mutableBlockPos, mushroomBlock, 2);
+                conkPoses.add(mutableBlockPos.below());
+            }
             mutableBlockPos.move(initialDirection.getClockWise());
             rotatingIndex++;
         }
     }
 
-    private void placeBaseRoof(int baseSize, BlockPos blockPos, WorldGenLevel world, BlockState mushroomBlock) {
+    private void placeBaseRoof(int baseSize, BlockPos blockPos, WorldGenLevel world, BlockState mushroomBlock, List<BlockPos> conkPoses) {
         for (int x = -baseSize; x <= baseSize; x++) {
             for (int z = -baseSize; z <= baseSize; z++) {
                 BlockPos basePos = blockPos.above().offset(x, 0, z);
@@ -102,6 +129,7 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
                 if (invalid) continue;
 
                 world.setBlock(basePos, mushroomBlock, 2);
+                conkPoses.add(basePos.below());
             }
         }
     }
@@ -113,6 +141,10 @@ public class AlphaceneMushroomFeature extends Feature<NoneFeatureConfiguration> 
             if (i == length - 1) {
                 placeState = mushroomBlock;
             }
+            boolean placeable = world.isStateAtPosition(blockPos.above(i), DripstoneUtils::isEmptyOrWater) || world.getBlockState(blockPos).is(SpeciesBlocks.ALPHACENE_MUSHROOM);
+
+            if (!placeable) continue;
+
             world.setBlock(blockPos.above(i), placeState, 2);
         }
     }

@@ -85,7 +85,8 @@ public class SpeciesClient implements ClientModInitializer {
                 SpeciesBlocks.CRUNCHER_EGG,
                 SpeciesBlocks.BIRT_DWELLING,
                 SpeciesBlocks.BONE_SPIKE,
-                SpeciesBlocks.TROOPER
+                SpeciesBlocks.TROOPER,
+                SpeciesBlocks.ALPHACENE_MUSHROOM_GROWTH
         );
 
         SpeciesNetwork.clientInit();

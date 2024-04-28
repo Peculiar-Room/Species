@@ -139,7 +139,7 @@ public class CruncherEggBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return CruncherEggBlock.createTickerHelper(blockEntityType, SpeciesBlockEntities.CRUNCHER_EGG, level.isClientSide ? (level1, blockPos, state, blockEntity) -> CruncherEggBlockEntity.clientTick(level1, blockPos, state) : CruncherEggBlockEntity::serverTick);
+        return CruncherEggBlock.createTickerHelper(blockEntityType, SpeciesBlockEntities.CRUNCHER_EGG, level.isClientSide ? CruncherEggBlockEntity::clientTick : CruncherEggBlockEntity::serverTick);
     }
 
     @Override

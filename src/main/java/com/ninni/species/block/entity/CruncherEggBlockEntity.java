@@ -42,7 +42,7 @@ public class CruncherEggBlockEntity extends BlockEntity {
         this.target = livingEntity;
     }
 
-    public static void clientTick(Level level, BlockPos blockPos, BlockState state) {
+    public static void clientTick(Level level, BlockPos blockPos, BlockState state, BlockEntity blockEntity) {
         if (state.getValue(CruncherEggBlock.HALF) == DoubleBlockHalf.UPPER && state.getValue(CruncherEggBlock.CRACKED) && level.random.nextInt(10) == 1) {
             level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, (double)blockPos.getX() + 0.5 + level.random.nextDouble() / 3.0 * (double)(level.random.nextBoolean() ? 1 : -1), (double)blockPos.getY() + level.random.nextDouble() + level.random.nextDouble(), (double)blockPos.getZ() + 0.5 + level.random.nextDouble() / 3.0 * (double)(level.random.nextBoolean() ? 1 : -1), 0.0, 0.07, 0.0);
         }

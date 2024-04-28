@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.BiasedToBottomInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -55,18 +56,23 @@ public class GooberGoo extends ThrowableItemProjectile {
         BlockPos blockPos = blockHitResult.getBlockPos();
         Map<BlockPos, BlockState> posBlockStateMap = Maps.newHashMap();
 
-        int yRange = 1;
-        int xRadius = UniformInt.of(1, 2).sample(this.random);
-        int zRadius = UniformInt.of(1, 2).sample(this.random);
+        int yRange = 2;
+        int xRadius = UniformInt.of(4, 7).sample(this.random);
+        int zRadius = UniformInt.of(4, 7).sample(this.random);
 
         if (!this.level().isClientSide) {
             for (GooberGooManager.GooberGooData data : GooberGooManager.DATA) {
                 for (int y = -yRange; y <= yRange; y++) {
                     for (int x = -xRadius; x <= xRadius; x++) {
                         for (int z = -zRadius; z <= zRadius; z++) {
+
                             BlockPos placePos = BlockPos.containing(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                             BlockState state = world.getBlockState(placePos);
                             BlockState aboveState = world.getBlockState(placePos.above());
+
+                            int distance = Math.max(1, Math.round(Mth.sqrt((float) blockPos.distSqr(placePos))));
+
+                            if (x * x + z * z > xRadius * zRadius && this.random.nextInt(distance) != 0) continue;
 
                             Block input = data.input();
                             Block output = data.output();
