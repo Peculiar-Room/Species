@@ -39,11 +39,10 @@ public class PaleontologyDigSiteGenerator {
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_loser"), 3);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_shell"), 7);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_tail"), 5);
-        //TODO: These pieces are not working when generated even through structure blocks
-//        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_stroker"), 5);
-//        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_trampler"), 8);
-//        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_tremor"), 8);
-//        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_zipper"), 14);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_stroker"), 3);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_trampler"), 6);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_tremor"), 4);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_zipper"), 10);
     });
 
     public static void addPieces(StructureTemplateManager manager, BlockPos pos, StructurePieceAccessor holder, RandomSource random) {
