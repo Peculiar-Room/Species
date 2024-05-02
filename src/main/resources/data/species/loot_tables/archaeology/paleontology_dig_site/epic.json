@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "species:springling_egg"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sniffer_egg"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "species:cruncher_egg"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "species:petrified_egg"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "species:archaeology/paleontology_dig_site/epic"
+}
