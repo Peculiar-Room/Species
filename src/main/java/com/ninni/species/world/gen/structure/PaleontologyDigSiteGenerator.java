@@ -15,19 +15,25 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +46,12 @@ public class PaleontologyDigSiteGenerator {
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_crippler"), 6);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_gripper"), 7);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_extender"), 3);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_grinner"), 2);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_grinner"), 1);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_lilypadder"), 7);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_loser"), 3);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_shell"), 7);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_tail"), 5);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_stroker"), 3);
+        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_stroker"), 2);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_trampler"), 6);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_tremor"), 4);
         map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_zipper"), 10);
@@ -93,28 +99,31 @@ public class PaleontologyDigSiteGenerator {
 
         @Override
         protected void handleDataMarker(String metadata, BlockPos pos, ServerLevelAccessor world, RandomSource random, BoundingBox boundingBox) {
-            BlockState state = world.getBlockState(pos.below()).is(Blocks.SAND) || world.getBlockState(pos.below()).is(Blocks.SANDSTONE) ? Blocks.SUSPICIOUS_SAND.defaultBlockState() : SpeciesBlocks.RED_SUSPICIOUS_SAND.defaultBlockState();
+            if (metadata.equals("COMMON")) {
+                this.createRedSuspiciousSand(world, boundingBox, random, pos, SpeciesLootTables.PALEONTOLOGY_DIG_SITE_COMMON);
+            }
+            if (metadata.equals("RARE")) {
+                this.createRedSuspiciousSand(world, boundingBox, random, pos, SpeciesLootTables.PALEONTOLOGY_DIG_SITE_RARE);
+            }
+            if (metadata.equals("EPIC")) {
+                this.createRedSuspiciousSand(world, boundingBox, random, pos, SpeciesLootTables.PALEONTOLOGY_DIG_SITE_EPIC);
+            }
+        }
 
-            //TODO @Orcinus please <3 :)
+        protected void createRedSuspiciousSand(ServerLevelAccessor serverLevelAccessor, BoundingBox boundingBox, RandomSource randomSource, BlockPos blockPos, ResourceLocation resourceLocation) {
+            Block redSuspiciousSand = SpeciesBlocks.RED_SUSPICIOUS_SAND;
 
-            //if (metadata.equals("COMMON")) {
-            //    CompoundTag compoundTag = new CompoundTag();
-            //    compoundTag.putString("LootTable", SpeciesLootTables.PALEONTOLOGY_DIG_SITE_COMMON.toString());
-            //    world.setBlock(pos, state, 1);
-            //    world.getBlockEntity(pos).load(compoundTag);
-            //}
-            //if (metadata.equals("RARE")) {
-            //    CompoundTag compoundTag = new CompoundTag();
-            //    compoundTag.putString("LootTable", SpeciesLootTables.PALEONTOLOGY_DIG_SITE_RARE.toString());
-            //    world.setBlock(pos, state, 1);
-            //    world.getBlockEntity(pos).load(compoundTag);
-            //}
-            //if (metadata.equals("EPIC")) {
-            //    CompoundTag compoundTag = new CompoundTag();
-            //    compoundTag.putString("LootTable", SpeciesLootTables.PALEONTOLOGY_DIG_SITE_EPIC.toString());
-            //    world.setBlock(pos, state, 1);
-            //    world.getBlockEntity(pos).load(compoundTag);
-            //}
+            boolean outsideBoundingBox = !boundingBox.isInside(blockPos);
+            boolean stateIsSelf = serverLevelAccessor.getBlockState(blockPos).is(redSuspiciousSand);
+            boolean invalidBelowPos = !serverLevelAccessor.getBlockState(blockPos.below()).isFaceSturdy(serverLevelAccessor, blockPos.below(), Direction.UP);
+
+            if (outsideBoundingBox || stateIsSelf || invalidBelowPos) return;
+
+            serverLevelAccessor.setBlock(blockPos, redSuspiciousSand.defaultBlockState(), 2);
+
+            BlockEntity blockEntity = serverLevelAccessor.getBlockEntity(blockPos);
+
+            if (blockEntity instanceof BrushableBlockEntity entity) entity.setLootTable(resourceLocation, randomSource.nextLong());
         }
 
     }
