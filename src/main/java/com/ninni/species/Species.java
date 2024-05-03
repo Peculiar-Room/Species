@@ -5,27 +5,9 @@ import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.data.GooberGooManager;
 import com.ninni.species.entity.BirtEgg;
-import com.ninni.species.registry.SpeciesBlockEntities;
-import com.ninni.species.registry.SpeciesBlocks;
-import com.ninni.species.registry.SpeciesCreativeModeTabs;
-import com.ninni.species.registry.SpeciesDamageTypes;
-import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.registry.SpeciesEntityDataSerializers;
-import com.ninni.species.registry.SpeciesFeatures;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesMemoryModuleTypes;
-import com.ninni.species.registry.SpeciesNetwork;
-import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.registry.SpeciesSensorTypes;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesStatusEffects;
-import com.ninni.species.registry.SpeciesTags;
-import com.ninni.species.registry.SpeciesStructurePieceTypes;
-import com.ninni.species.registry.SpeciesStructureSets;
+import com.ninni.species.registry.*;
 import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
 import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
-import com.ninni.species.registry.SpeciesStructureTypes;
-import com.ninni.species.registry.SpeciesStructures;
 import com.ninni.species.world.poi.SpeciesPointsOfInterests;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -50,20 +32,20 @@ public class Species implements ModInitializer {
 	public void onInitialize() {
 		SpeciesCriterion.init();
 		Reflection.initialize(
-			SpeciesBlocks.class,
-			SpeciesBlockEntities.class,
-			SpeciesCreativeModeTabs.class,
-			SpeciesPointsOfInterests.class,
-			SpeciesItems.class,
-			SpeciesSoundEvents.class,
-			SpeciesDamageTypes.class,
-			SpeciesStatusEffects.class,
-			SpeciesParticles.class,
-			SpeciesEntities.class,
-			SpeciesStructures.class,
-			SpeciesStructureTypes.class,
-			SpeciesStructureSets.class,
-			SpeciesStructurePieceTypes.class
+				SpeciesBlocks.class,
+				SpeciesBlockEntities.class,
+				SpeciesCreativeModeTabs.class,
+				SpeciesPointsOfInterests.class,
+				SpeciesItems.class,
+				SpeciesSoundEvents.class,
+				SpeciesDamageTypes.class,
+				SpeciesStatusEffects.class,
+				SpeciesParticles.class,
+				SpeciesEntities.class,
+				SpeciesStructures.class,
+				SpeciesStructureTypes.class,
+				SpeciesStructureSets.class,
+				SpeciesStructurePieceTypes.class
 		);
 		SpeciesEntityDataSerializers.init();
 		SpeciesFeatures.init();
