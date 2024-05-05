@@ -25,34 +25,7 @@ public class SpeciesNetwork {
     public static final ResourceLocation UPDATE_SPRINGLING_EXTENDED_DATA = new ResourceLocation(Species.MOD_ID, "update_springling_extended_data");
     public static final ResourceLocation OPEN_CRUNCHER_SCREEN = new ResourceLocation(Species.MOD_ID, "open_cruncher_screen");
 
-    @Environment(EnvType.CLIENT)
-    public static void clientInit() {
-        ClientPlayNetworking.registerGlobalReceiver(SEND_SPRINGLING_MESSAGE, (client, handler, buf, responseSender) -> {
-            LocalPlayer localPlayer = client.player;
-            if (localPlayer != null && localPlayer.getVehicle() instanceof Springling) {
-                localPlayer.displayClientMessage(Component.translatable("springling.keybinds", SpeciesClient.extendKey.getTranslatedKeyMessage(), SpeciesClient.retractKey.getTranslatedKeyMessage()), true);
-            }
-        });
-        ClientPlayNetworking.registerGlobalReceiver(SpeciesNetwork.OPEN_CRUNCHER_SCREEN, (client, handler, buf, responseSender) -> {
-            int id = buf.readInt();
-            Level level = client.level;
-            Optional.ofNullable(level).ifPresent(world -> {
-                Entity entity = world.getEntity(id);
-                if (entity instanceof Cruncher cruncher) {
-                    int slotCount = buf.readInt();
-                    int syncId = buf.readInt();
-                    LocalPlayer clientPlayerEntity = client.player;
-                    SimpleContainer simpleInventory = new SimpleContainer(slotCount);
-                    assert clientPlayerEntity != null;
-                    CruncherInventoryMenu cruncherInventoryMenu = new CruncherInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, cruncher);
-                    clientPlayerEntity.containerMenu = cruncherInventoryMenu;
-                    client.execute(() -> client.setScreen(new CruncherInventoryScreen(cruncherInventoryMenu, clientPlayerEntity.getInventory(), cruncher)));
-                }
-            });
-        });
-    }
-
-    public static void commonInit() {
+    public static void init() {
         ServerPlayNetworking.registerGlobalReceiver(UPDATE_SPRINGLING_EXTENDED_DATA, (server, player, handler, buf, responseSender) -> {
             float change = buf.readFloat();
             boolean flag = buf.readBoolean();
@@ -61,6 +34,37 @@ public class SpeciesNetwork {
                 springling.level().broadcastEntityEvent(springling, (byte) 4);
             }
         });
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static class Client {
+
+        public static void init() {
+            ClientPlayNetworking.registerGlobalReceiver(SEND_SPRINGLING_MESSAGE, (client, handler, buf, responseSender) -> {
+                LocalPlayer localPlayer = client.player;
+                if (localPlayer != null && localPlayer.getVehicle() instanceof Springling) {
+                    localPlayer.displayClientMessage(Component.translatable("springling.keybinds", SpeciesClient.extendKey.getTranslatedKeyMessage(), SpeciesClient.retractKey.getTranslatedKeyMessage()), true);
+                }
+            });
+            ClientPlayNetworking.registerGlobalReceiver(OPEN_CRUNCHER_SCREEN, (client, handler, buf, responseSender) -> {
+                int id = buf.readInt();
+                Level level = client.level;
+                Optional.ofNullable(level).ifPresent(world -> {
+                    Entity entity = world.getEntity(id);
+                    if (entity instanceof Cruncher cruncher) {
+                        int slotCount = buf.readInt();
+                        int syncId = buf.readInt();
+                        LocalPlayer clientPlayerEntity = client.player;
+                        SimpleContainer simpleInventory = new SimpleContainer(slotCount);
+                        assert clientPlayerEntity != null;
+                        CruncherInventoryMenu cruncherInventoryMenu = new CruncherInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, cruncher);
+                        clientPlayerEntity.containerMenu = cruncherInventoryMenu;
+                        client.execute(() -> client.setScreen(new CruncherInventoryScreen(cruncherInventoryMenu, clientPlayerEntity.getInventory(), cruncher)));
+                    }
+                });
+            });
+        }
+
     }
 
 }

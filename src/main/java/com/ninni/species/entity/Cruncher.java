@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundHorseScreenOpenPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -56,6 +57,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.HorseInventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
@@ -276,20 +278,9 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
 
-        if (player.isShiftKeyDown()) {
-            for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA.values()) {
-
-                if (this.getPelletData() == data) continue;
-
-                if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
-                    this.setPelletData(data);
-
-                    if (!player.getAbilities().instabuild) itemStack.shrink(1);
-
-                    this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
-                }
-            }
-            return InteractionResult.SUCCESS;
+        if (this.getHunger() == 0) {
+            this.openCustomInventoryScreen(player);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
@@ -342,19 +333,23 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     @Override
     public void openCustomInventoryScreen(Player player) {
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             ServerPlayerAccessor accessor = (ServerPlayerAccessor) serverPlayer;
-            Container container = this.getInventory();
+
             if (serverPlayer.containerMenu != serverPlayer.inventoryMenu) {
                 serverPlayer.closeContainer();
             }
+
             accessor.callNextContainerCounter();
+
             FriendlyByteBuf buf = PacketByteBufs.create();
             buf.writeInt(this.getId());
-            buf.writeInt(container.getContainerSize());
+            buf.writeInt(this.inventory.getContainerSize());
             buf.writeInt(accessor.getContainerCounter());
+
             ServerPlayNetworking.send(serverPlayer, SpeciesNetwork.OPEN_CRUNCHER_SCREEN, buf);
-            serverPlayer.containerMenu = new CruncherInventoryMenu(accessor.getContainerCounter(), serverPlayer.getInventory(), container, this);
+
+            serverPlayer.containerMenu = new CruncherInventoryMenu(accessor.getContainerCounter(), serverPlayer.getInventory(), this.inventory, this);
             accessor.callInitMenu(serverPlayer.containerMenu);
         }
     }

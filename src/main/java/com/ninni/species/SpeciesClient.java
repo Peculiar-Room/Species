@@ -89,7 +89,7 @@ public class SpeciesClient implements ClientModInitializer {
                 SpeciesBlocks.ALPHACENE_MUSHROOM_GROWTH
         );
 
-        SpeciesNetwork.clientInit();
+        SpeciesNetwork.Client.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             Player player = client.player;

@@ -51,7 +51,7 @@ public class Species implements ModInitializer {
 		SpeciesSensorTypes.init();
 		SpeciesMemoryModuleTypes.init();
 		SpeciesTreeDecorators.init();
-		SpeciesNetwork.commonInit();
+		SpeciesNetwork.init();
 
 		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES);
 		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.MAMMUTILATION_REMNANT_SPAWNS_IN), GenerationStep.Decoration.UNDERGROUND_DECORATION, SpeciesPlacedFeatures.MAMMUTILATION_REMNANT);

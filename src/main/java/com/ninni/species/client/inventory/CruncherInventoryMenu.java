@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 public class CruncherInventoryMenu extends AbstractContainerMenu {
     private final Container container;
     private final Cruncher cruncher;
-    final Slot itemSlot;
 
     public CruncherInventoryMenu(int i, Inventory inventory, Container container, final Cruncher cruncher) {
         super(null, i);
@@ -22,7 +21,7 @@ public class CruncherInventoryMenu extends AbstractContainerMenu {
         int l;
         int m;
 
-        this.itemSlot = this.addSlot(new Slot(container, 0, 36, 41) {
+        this.addSlot(new Slot(container, 0, 36, 41) {
             @Override
             public void setChanged() {
                 Cruncher cruncher = CruncherInventoryMenu.this.cruncher;
