@@ -3,11 +3,13 @@ package com.ninni.species.client.inventory;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.Cruncher;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class CruncherInventoryMenu extends AbstractContainerMenu {
     private final Container container;
@@ -22,6 +24,12 @@ public class CruncherInventoryMenu extends AbstractContainerMenu {
         int m;
 
         this.addSlot(new Slot(container, 0, 36, 41) {
+
+            @Override
+            public int getMaxStackSize() {
+                return 1;
+            }
+
             @Override
             public void setChanged() {
                 Cruncher cruncher = CruncherInventoryMenu.this.cruncher;
@@ -63,23 +71,26 @@ public class CruncherInventoryMenu extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player player, int i) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(i);
+        Slot inputSlot = this.getSlot(0);
         if (slot.hasItem()) {
+
             ItemStack itemStack2 = slot.getItem();
             itemStack = itemStack2.copy();
-            int containerSize = this.container.getContainerSize();
-            if (i < containerSize) {
-                if (!this.moveItemStackTo(itemStack2, containerSize, this.slots.size(), false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (this.getSlot(0).mayPlace(itemStack2) && !this.getSlot(0).hasItem()) {
-                if (!this.moveItemStackTo(itemStack2, 0, 1, false)) {
+
+            if (i == 0 && !this.moveItemStackTo(itemStack2, 1, 37, true)) {
+                inputSlot.setChanged();
+                return ItemStack.EMPTY;
+            } else {
+                if (!inputSlot.hasItem() && inputSlot.mayPlace(itemStack2) && !this.moveItemStackTo(itemStack2, 0, 1, false)) {
+                    inputSlot.setChanged();
                     return ItemStack.EMPTY;
                 }
             }
-            if (itemStack2.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
+
+            slot.setChanged();
+
+            if (itemStack2.getCount() == itemStack.getCount()) {
+                return ItemStack.EMPTY;
             }
         }
         return itemStack;
