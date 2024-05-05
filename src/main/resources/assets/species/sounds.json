@@ -265,11 +265,11 @@
 		],
 		"subtitle": "subtitles.entity.species.birt.message"
 	},
-	"entity.birtd": {
+	"effect.birtd.applied": {
 		"sounds": [
 			"species:entity/birtd"
 		],
-		"subtitle": "subtitles.entity.birtd"
+		"subtitle": "subtitles.effect.birtd.applied"
 	},
 	"block.birt_dwelling.collect": {
 		"sounds": [
@@ -605,6 +605,10 @@
 	},
 	"entity.cruncher.spit": {
 		"sounds": [
+			"species:entity/cruncher/spit1",
+			"species:entity/cruncher/spit2",
+			"species:entity/cruncher/spit3",
+			"species:entity/cruncher/spit4"
 		],
 		"subtitle": "subtitles.entity.species.cruncher.spit"
 	},
@@ -614,6 +618,26 @@
 			"species:entity/cruncher/stun2"
 		],
 		"subtitle": "subtitles.entity.species.cruncher.stun"
+	},
+	"effect.gut_feeling.spawn": {
+		"sounds": [
+			"species:effect/gut_feeling/spawn"
+		],
+		"subtitle": "subtitles.effect.species.gut_feeling.spawn"
+	},
+	"effect.gut_feeling.applied": {
+		"sounds": [
+			"species:effect/gut_feeling/applied"
+		],
+		"subtitle": "subtitles.effect.species.gut_feeling.applied"
+	},
+	"effect.gut_feeling.roar": {
+		"sounds": [
+			"species:entity/cruncher/idle1",
+			"species:entity/cruncher/idle2",
+			"species:entity/cruncher/idle3"
+		],
+		"subtitle": "subtitles.effect.species.gut_feeling.roar"
 	},
 	"entity.springling.idle": {
 		"sounds": [

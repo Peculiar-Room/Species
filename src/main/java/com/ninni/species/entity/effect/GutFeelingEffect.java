@@ -2,9 +2,11 @@ package com.ninni.species.entity.effect;
 
 import com.ninni.species.entity.Cruncher;
 import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -57,10 +59,9 @@ public class GutFeelingEffect extends MobEffect {
                     break;
                 }
                 if (spawnPos != null) {
+                    serverLevel.playSound(null, livingEntity.blockPosition(), SpeciesSoundEvents.GUT_FEELING_SPAWN, SoundSource.HOSTILE, 2, 1);
                     Cruncher cruncher = SpeciesEntities.CRUNCHER.spawn(serverLevel, spawnPos, MobSpawnType.TRIGGERED);
-
                     if (cruncher != null) cruncher.getBrain().setMemory(MemoryModuleType.NEAREST_ATTACKABLE, serverPlayer);
-
                 }
             }
         }

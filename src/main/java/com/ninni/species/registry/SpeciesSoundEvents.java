@@ -98,6 +98,10 @@ public class SpeciesSoundEvents {
     public static final SoundEvent CRUNCHER_STOMP = register("entity.cruncher.stomp");
     public static final SoundEvent CRUNCHER_SPIT = register("entity.cruncher.spit");
 
+    public static final SoundEvent GUT_FEELING_SPAWN = register("effect.gut_feeling.spawn");
+    public static final SoundEvent GUT_FEELING_APPLIED = register("effect.gut_feeling.applied");
+    public static final SoundEvent GUT_FEELING_ROAR = register("effect.gut_feeling.roar");
+
     public static final SoundEvent SPRINGLING_DEATH = register("entity.springling.death");
     public static final SoundEvent SPRINGLING_HURT = register("entity.springling.hurt");
     public static final SoundEvent SPRINGLING_IDLE = register("entity.springling.idle");

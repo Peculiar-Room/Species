@@ -71,7 +71,7 @@
   "subtitles.entity.species.birt.idle": "Birt cinguetto",
   "subtitles.entity.species.birt.fly": "Birt vola",
   "subtitles.entity.species.birt.message": "Birt comunica",
-  "subtitles.entity.birtd": "Birt causano confusione",
+  "subtitles.effect.birtd.applied": "Birt causano confusione",
   "subtitles.block.species.birt_dwelling.collect": "Uovo di birt raccolto",
   "subtitles.block.species.birt_dwelling.enter": "Birt entra in un nido",
   "subtitles.block.species.birt_dwelling.exit": "Birt esce da un nido",
@@ -132,6 +132,7 @@
   "block.species.alphacene_tall_grass": "Erba alta dell'alfacene",
   "block.species.alphacene_mushroom": "Fungo dell'alfacene",
   "block.species.alphacene_mushroom_block": "Blocco di fungo dell'alfacene",
+  "block.species.alphacene_mushroom_growth": "Crescita di fungo dell'alfacene",
 
   "subtitles.entity.species.goober.death": "Goober muore",
   "subtitles.entity.species.goober.hurt": "Goober ferito",
@@ -156,15 +157,23 @@
   "block.species.cruncher_egg": "Uovo di cruncher",
   "block.species.cruncher_pellet": "Bolo di cruncher",
 
+  "subtitles.entity.species.cruncher.death": "Cruncher muore",
+  "subtitles.entity.species.cruncher.hurt": "Cruncher ferito",
+  "subtitles.entity.species.cruncher.idle": "Cruncher brontola",
+  "subtitles.entity.species.cruncher.step": "Cruncher barcolla",
+  "subtitles.entity.species.cruncher.roar": "Cruncher ruggisce",
+  "subtitles.entity.species.cruncher.spit": "Cruncher sputa",
+  "subtitles.entity.species.cruncher.stomp": "Cruncher calpesta",
+  "subtitles.entity.species.cruncher.stun": "Cruncher è confuso",
+
   "death.attack.crunch": "%1$s è stato sgranocchiato",
   "death.attack.crunch.item": "%1$s è stato sgranocchiato da %2$s usando %3$s",
   "death.attack.crunch.player": "%1$s è stato sgranocchiato da %2$s",
 
-  "subtitles.entity.species.cruncher.death": "Cruncher muore",
-  "subtitles.entity.species.cruncher.hurt": "Cruncher ferito",
-  "subtitles.entity.species.cruncher.idle": "Cruncher brontola",
-
   "effect.species.gut_feeling": "Cattivo Presagio",
+  "subtitles.effect.species.gut_feeling.applied": "Stomaco lamenta",
+  "subtitles.effect.species.gut_feeling.spawn": "Stomaco crolla",
+  "subtitles.effect.species.gut_feeling.roar": "Stomaco brontola",
 
   "advancements.species.obtain_cruncher_egg.title": "Gusto interessante",
   "advancements.species.obtain_cruncher_egg.description": "Ottieni un uovo di cruncher",

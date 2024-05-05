@@ -2,10 +2,14 @@ package com.ninni.species.block.entity;
 
 import com.ninni.species.block.CruncherEggBlock;
 import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -56,10 +60,13 @@ public class CruncherEggBlockEntity extends BlockEntity {
         blockEntity.timer++;
 
         if ((blockEntity.timer > 20 * 15 && level.random.nextInt(30) == 1) || (blockEntity.timer > 20 * 45)) {
+            //TODO once the sound playing is figured out enable this comment
+        //if ((blockEntity.timer > 20 * 60 * 20 && level.random.nextInt(30) == 1) || (blockEntity.timer > 20 * 60 * 22)) {
             if (target == null) {
-                Player nearestPlayer = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 10.0, true);
+                Player nearestPlayer = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 10.0, false);
 
                 boolean validPlayer = nearestPlayer != null && nearestPlayer.isAlive();
+
 
                 if (validPlayer) {
                     blockEntity.setTarget(nearestPlayer);
@@ -72,10 +79,12 @@ public class CruncherEggBlockEntity extends BlockEntity {
                 }
 
                 if (!target.hasEffect(SpeciesStatusEffects.GUT_FEELING)) {
-                    target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING, 24000));
+                    target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING, 24000, 0, true, true));
                 }
 
-                level.globalLevelEvent(1023, blockPos, 0);
+                //TODO figure out if this method of doing the sound is good or not
+                // because what if another mod uses the 1246 int? should we do a packet?
+                level.globalLevelEvent(1246, blockPos, 0);
             }
         }
     }
