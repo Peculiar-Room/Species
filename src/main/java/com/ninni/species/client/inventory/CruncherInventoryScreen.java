@@ -7,7 +7,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,9 +35,13 @@ public class CruncherInventoryScreen extends AbstractContainerScreen<CruncherInv
         int imgY = (this.height - this.imageHeight) / 2;
         poseStack.blit(HAMSTER_INVENTORY_LOCATION, imgX, imgY, 0, 0, this.imageWidth, this.imageHeight);
 
-        Zombie phantom = EntityType.ZOMBIE.create(cruncher.level());
-        //TODO replace with the entity being hunted
-        renderEntityInInventoryFollowsMouse(poseStack, imgX + 118, imgY + 64, 20, (float)(imgX + 118) - this.xMouse, (float)(imgY + 66 - 40) - this.yMouse, phantom);
+        if (this.cruncher.getPelletData() == null) return;
+
+        Entity entity = this.cruncher.getPelletData().entityType().create(cruncher.level());
+
+        if (!(entity instanceof LivingEntity livingEntity)) return;
+
+        renderEntityInInventoryFollowsMouse(poseStack, imgX + 118, imgY + 64, 20, (float)(imgX + 118) - this.xMouse, (float)(imgY + 66 - 40) - this.yMouse, livingEntity);
     }
 
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {

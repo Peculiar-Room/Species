@@ -11,7 +11,7 @@
     "MobEntityMixin",
     "PlayerMixin",
     "PoseMixin",
-    "ServerPlayerMixin",
+    "ServerPlayerAccessor",
     "TreeDecoratorTypeAccessor",
     "WitherSkeletonEntityMixin"
   ],

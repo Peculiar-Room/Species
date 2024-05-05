@@ -2,16 +2,23 @@ package com.ninni.species.entity;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
+import com.ninni.species.Species;
+import com.ninni.species.client.inventory.CruncherInventoryMenu;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
+import com.ninni.species.mixin.ServerPlayerAccessor;
 import com.ninni.species.registry.SpeciesDamageTypes;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
+import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,6 +32,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.Container;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -268,19 +276,22 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
 
-        for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA) {
+        if (player.isShiftKeyDown()) {
+            for (CruncherPelletManager.CruncherPelletData data : CruncherPelletManager.DATA.values()) {
 
-            if (this.getPelletData() == data) continue;
+                if (this.getPelletData() == data) continue;
 
-            if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
-                this.setPelletData(data);
+                if (!this.level().isClientSide() && ItemStack.isSameItemSameTags(itemStack, data.item())) {
+                    this.setPelletData(data);
 
-                if (!player.getAbilities().instabuild) itemStack.shrink(1);
+                    if (!player.getAbilities().instabuild) itemStack.shrink(1);
 
-                this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
-                return InteractionResult.SUCCESS;
+                    this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
+                }
             }
+            return InteractionResult.SUCCESS;
         }
+
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
@@ -332,7 +343,19 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     @Override
     public void openCustomInventoryScreen(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            ((CruncherOpenContainer)serverPlayer).openCruncherInventory(this, this.getInventory());
+            ServerPlayerAccessor accessor = (ServerPlayerAccessor) serverPlayer;
+            Container container = this.getInventory();
+            if (serverPlayer.containerMenu != serverPlayer.inventoryMenu) {
+                serverPlayer.closeContainer();
+            }
+            accessor.callNextContainerCounter();
+            FriendlyByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(this.getId());
+            buf.writeInt(container.getContainerSize());
+            buf.writeInt(accessor.getContainerCounter());
+            ServerPlayNetworking.send(serverPlayer, SpeciesNetwork.OPEN_CRUNCHER_SCREEN, buf);
+            serverPlayer.containerMenu = new CruncherInventoryMenu(accessor.getContainerCounter(), serverPlayer.getInventory(), container, this);
+            accessor.callInitMenu(serverPlayer.containerMenu);
         }
     }
 
@@ -520,6 +543,10 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         CruncherState state = this.getState();
         boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP  || state == CruncherState.SPIT || state == CruncherState.STUNNED;
         return inState;
+    }
+
+    public boolean hasInventoryChanged(Container container) {
+        return this.inventory != container;
     }
 
     @Nullable

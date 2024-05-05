@@ -1,6 +1,7 @@
 package com.ninni.species.data;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 public class CruncherPelletManager extends SimpleJsonResourceReloadListener implements IdentifiableResourceReloadListener {
     public static final Gson GSON_INSTANCE = (new GsonBuilder()).create();
-    public static final List<CruncherPelletData> DATA = Lists.newArrayList();
+    public static final Map<ItemStack, CruncherPelletData> DATA = Maps.newHashMap();
 
     public CruncherPelletManager() {
         super(GSON_INSTANCE, "gameplay/cruncher_pellets");
@@ -39,7 +40,7 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener impl
     protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         object.forEach((resourceLocation, jsonElement) -> {
             CruncherPelletData cruncherPelletData = CruncherPelletData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result().orElseThrow();
-            DATA.add(cruncherPelletData);
+            DATA.put(cruncherPelletData.item, cruncherPelletData);
         });
     }
 

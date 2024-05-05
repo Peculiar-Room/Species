@@ -91,24 +91,6 @@ public class SpeciesClient implements ClientModInitializer {
 
         SpeciesNetwork.clientInit();
 
-        ClientPlayNetworking.registerGlobalReceiver(Species.OPEN_CRUNCHER_SCREEN, (client, handler, buf, responseSender) -> {
-            int id = buf.readInt();
-            Level level = client.level;
-            Optional.ofNullable(level).ifPresent(world -> {
-                Entity entity = world.getEntity(id);
-                if (entity instanceof Cruncher cruncher) {
-                    int slotCount = buf.readInt();
-                    int syncId = buf.readInt();
-                    LocalPlayer clientPlayerEntity = client.player;
-                    SimpleContainer simpleInventory = new SimpleContainer(slotCount);
-                    assert clientPlayerEntity != null;
-                    CruncherInventoryMenu cruncherInventoryMenu = new CruncherInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, cruncher);
-                    clientPlayerEntity.containerMenu = cruncherInventoryMenu;
-                    client.execute(() -> client.setScreen(new CruncherInventoryScreen(cruncherInventoryMenu, clientPlayerEntity.getInventory(), cruncher)));
-                }
-            });
-        });
-
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             Player player = client.player;
             if (player != null && player.getVehicle() instanceof Springling springling) {

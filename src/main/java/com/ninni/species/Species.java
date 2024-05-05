@@ -26,7 +26,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class Species implements ModInitializer {
 	public static final String MOD_ID = "species";
-	public static final ResourceLocation OPEN_CRUNCHER_SCREEN = new ResourceLocation(MOD_ID, "open_cruncher_screen");
 
 	@Override
 	public void onInitialize() {
