@@ -20,14 +20,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Optional;
 
 public class SpitPellet extends Behavior<Cruncher> {
-    private static final Cruncher.CruncherState cruncherState = Cruncher.CruncherState.SPIT;
+    private static final int DURATION = 30;
 
     public SpitPellet() {
         super(ImmutableMap.of(
                 MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 SpeciesMemoryModuleTypes.SPIT_CHARGING, MemoryStatus.VALUE_ABSENT
-        ), cruncherState.getDuration());
+        ), DURATION);
     }
 
     @Override
@@ -58,9 +58,7 @@ public class SpitPellet extends Behavior<Cruncher> {
 
     @Override
     protected void start(ServerLevel serverLevel, Cruncher livingEntity, long l) {
-        if (livingEntity.getState() == Cruncher.CruncherState.IDLE) {
-            livingEntity.transitionTo(cruncherState);
-        }
+        serverLevel.broadcastEntityEvent(livingEntity, (byte) 4);
         livingEntity.playSound(SpeciesSoundEvents.CRUNCHER_SPIT, 2.0F, 1.0F);
         livingEntity.getBrain().setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 12);
     }
@@ -77,22 +75,17 @@ public class SpitPellet extends Behavior<Cruncher> {
 
         BlockState blockState = SpeciesBlocks.CRUNCHER_PELLET.defaultBlockState();
 
-        final float angle = (0.0174532925F * livingEntity.yBodyRot);
-        final double headX = 3F * livingEntity.getScale() * Mth.sin(Mth.PI + angle);
-        final double headZ = 3F * livingEntity.getScale() * Mth.cos(angle);
+        float angle = (0.0174532925F * livingEntity.yBodyRot);
+        double headX = 3F * livingEntity.getScale() * Mth.sin(Mth.PI + angle);
+        double headZ = 3F * livingEntity.getScale() * Mth.cos(angle);
+
         CruncherPellet pellet = new CruncherPellet(serverLevel, (double) blockPos.getX() + headX, blockPos.getY() + livingEntity.getEyeHeight(), (double) blockPos.getZ() + headZ, blockState, livingEntity.getPelletData());
+
         pellet.setDeltaMovement(livingEntity.getLookAngle().scale(2.0D).multiply(0.25D, 1.0D, 0.25D));
 
         serverLevel.addFreshEntity(pellet);
 
         brain.setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 96);
-    }
-
-    @Override
-    protected void stop(ServerLevel serverLevel, Cruncher livingEntity, long l) {
-        if (livingEntity.getState() == cruncherState) {
-            livingEntity.transitionTo(Cruncher.CruncherState.IDLE);
-        }
     }
 
 }

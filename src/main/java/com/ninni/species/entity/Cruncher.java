@@ -336,9 +336,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             ServerPlayerAccessor accessor = (ServerPlayerAccessor) serverPlayer;
 
-            if (serverPlayer.containerMenu != serverPlayer.inventoryMenu) {
-                serverPlayer.closeContainer();
-            }
+            if (serverPlayer.containerMenu != serverPlayer.inventoryMenu) serverPlayer.closeContainer();
 
             accessor.callNextContainerCounter();
 
@@ -439,13 +437,6 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                 this.spitAnimationState.stop();
                 this.roarAnimationState.startIfStopped(this.tickCount);
             }
-            case SPIT -> {
-                //TODO only plays the first time it spits
-                this.stunAnimationState.stop();
-                this.attackAnimationState.stop();
-                this.roarAnimationState.stop();
-                this.spitAnimationState.startIfStopped(this.tickCount);
-            }
             case STOMP -> {
                 this.stunAnimationState.stop();
                 this.roarAnimationState.stop();
@@ -453,6 +444,15 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                 this.attackAnimationState.startIfStopped(this.tickCount);
             }
             case STUNNED -> this.stunAnimationState.startIfStopped(this.tickCount);
+        }
+    }
+
+    @Override
+    public void handleEntityEvent(byte b) {
+        if (b == 4) {
+            this.spitAnimationState.start(this.tickCount);
+        } else {
+            super.handleEntityEvent(b);
         }
     }
 
@@ -506,9 +506,6 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
             case ROAR -> {
                 this.setState(CruncherState.ROAR);
             }
-            case SPIT -> {
-                this.setState(CruncherState.SPIT);
-            }
             case STOMP -> {
                 this.setState(CruncherState.STOMP);
             }
@@ -536,8 +533,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     public boolean cannotWalk() {
         CruncherState state = this.getState();
-        boolean inState = state == CruncherState.ROAR || state == CruncherState.STOMP  || state == CruncherState.SPIT || state == CruncherState.STUNNED;
-        return inState;
+        return state != CruncherState.IDLE;
     }
 
     public boolean hasInventoryChanged(Container container) {
@@ -564,7 +560,6 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     public enum CruncherState implements StringRepresentable {
         IDLE("idle", SoundEvents.EMPTY, 0),
         ROAR("roar", SoundEvents.EMPTY, 80),
-        SPIT("spit", SoundEvents.EMPTY, 30),
         STOMP("stomp", SoundEvents.EMPTY, 20),
         STUNNED("stunned", SoundEvents.EMPTY, 0);
 
