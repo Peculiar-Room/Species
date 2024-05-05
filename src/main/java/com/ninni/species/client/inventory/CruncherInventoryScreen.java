@@ -27,7 +27,26 @@ import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderE
 public class CruncherInventoryScreen extends AbstractContainerScreen<CruncherInventoryMenu> {
     private static final ResourceLocation CRUNCHER_INVENTORY_LOCATION = new ResourceLocation(Species.MOD_ID, "textures/gui/container/cruncher.png");
     private static final Function<String, ResourceLocation> FUNCTION = s -> new ResourceLocation(Species.MOD_ID, "item/empty_slot_" + s);
-    private static final List<ResourceLocation> INPUT_LIST = List.of(FUNCTION.apply("rotten_flesh"), FUNCTION.apply("bone"));
+    private static final List<ResourceLocation> INPUT_LIST = List.of(
+            FUNCTION.apply("arrow"),
+            FUNCTION.apply("bone"),
+            FUNCTION.apply("creeper_head"),
+            FUNCTION.apply("ender_pearl"),
+            FUNCTION.apply("gold_nugget"),
+            FUNCTION.apply("gunpowder"),
+            FUNCTION.apply("head"),
+            FUNCTION.apply("ingot"),
+            FUNCTION.apply("phantom_membrane"),
+            FUNCTION.apply("prismarine_crystals"),
+            FUNCTION.apply("prismarine_shard"),
+            FUNCTION.apply("rotten_flesh"),
+            FUNCTION.apply("sand"),
+            FUNCTION.apply("skull"),
+            FUNCTION.apply("slime_ball"),
+            FUNCTION.apply("spider_eye"),
+            FUNCTION.apply("string"),
+            FUNCTION.apply("tipped_arrow")
+    );
     private final CyclingSlotBackground inputIcon = new CyclingSlotBackground(0);
     private float xMouse;
     private float yMouse;
