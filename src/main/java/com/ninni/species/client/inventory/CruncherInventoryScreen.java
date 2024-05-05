@@ -1,22 +1,16 @@
 package com.ninni.species.client.inventory;
 
-import com.google.common.collect.Lists;
 import com.ninni.species.Species;
 import com.ninni.species.entity.Cruncher;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CyclingSlotBackground;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.SmithingTemplateItem;
 
 import java.util.List;
 import java.util.function.Function;
@@ -36,6 +30,7 @@ public class CruncherInventoryScreen extends AbstractContainerScreen<CruncherInv
             FUNCTION.apply("gunpowder"),
             FUNCTION.apply("head"),
             FUNCTION.apply("ingot"),
+            FUNCTION.apply("nautilus_shell"),
             FUNCTION.apply("phantom_membrane"),
             FUNCTION.apply("prismarine_crystals"),
             FUNCTION.apply("prismarine_shard"),

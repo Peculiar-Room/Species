@@ -4,6 +4,6 @@
     "id": "minecraft:prismarine_crystals",
     "Count": 1
   },
-  "minTries": 16,
-  "maxTries": 32
+  "minTries": 8,
+  "maxTries": 18
 }

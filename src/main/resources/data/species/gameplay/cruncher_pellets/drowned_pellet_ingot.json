@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:drowned_pellet",
+  "type": "minecraft:drowned",
   "item": {
     "id": "minecraft:copper_ingot",
     "Count": 1

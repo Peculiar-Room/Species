@@ -1,7 +1,7 @@
 {
-  "type": "minecraft:magma_cube",
+  "type": "minecraft:drowned",
   "item": {
-    "id": "minecraft:magma_cream",
+    "id": "minecraft:nautilus_shell",
     "Count": 1
   },
   "minTries": 16,
