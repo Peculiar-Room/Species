@@ -278,11 +278,10 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
 
-        if (this.getHunger() == 0) {
+        if (this.getHunger() == 0 && !this.level().isClientSide) {
             this.openCustomInventoryScreen(player);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
-
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
             itemStack.shrink(1);
@@ -303,12 +302,6 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
             this.playSound(SoundEvents.GENERIC_EAT, 2.0F, 1.0F);
             this.setHealth(this.getMaxHealth());
             this.setStunnedTicks(0);
-            return InteractionResult.SUCCESS;
-        }
-        if (this.getHunger() == 0) {
-            if (!this.level().isClientSide) {
-                this.openCustomInventoryScreen(player);
-            }
             return InteractionResult.SUCCESS;
         }
         return interactionResult;
