@@ -6,6 +6,7 @@ import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -66,6 +67,7 @@ public class Trooper extends TamableAnimal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new TrooperSwellGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.BONE_MEAL), false));
@@ -103,9 +105,7 @@ public class Trooper extends TamableAnimal {
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }
-
-        if (itemStack.is(Items.BONE_MEAL) && !this.isTame()) {
+        } else if (itemStack.is(Items.BONE_MEAL) && !this.isTame()) {
             if (!player.isCreative()) itemStack.shrink(1);
             for (int i = 0; i < 5; i++) {
                 double d = this.random.nextGaussian() * 0.02;
@@ -116,6 +116,18 @@ public class Trooper extends TamableAnimal {
             }
             this.setOwnerUUID(player.getUUID());
             this.setTame(true);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        } else if (this.isTame() && this.getOwner() == player) {
+            if (this.getTarget() != null) this.setTarget(null);
+            if (this.isIgnited()) this.entityData.set(DATA_IS_IGNITED, false);
+            this.setSwellDir(0);
+            this.swell = 0;
+            if (this.isOrderedToSit()) this.playSound(SpeciesSoundEvents.TROOPER_UPROOT, 1, 1.5f);
+            else this.playSound(SpeciesSoundEvents.TROOPER_PLANT, 1, 1.5f);
+            for (int i = 0; i < 10; i++) {
+                this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX(), this.getY(), this.getZ(), ((double) this.random.nextFloat() - 0.5) * 0.08, ((double) this.random.nextFloat() - 0.5) * 0.08, ((double) this.random.nextFloat() - 0.5) * 0.08);
+            }
+            if (!this.level().isClientSide) this.setOrderedToSit(!this.isOrderedToSit());
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         return super.mobInteract(player, hand);
@@ -228,6 +240,18 @@ public class Trooper extends TamableAnimal {
             }
             this.level().addFreshEntity(areaEffectCloud);
         }
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource damageSource, float f) {
+        if (this.isOrderedToSit()) {
+            this.playSound(SpeciesSoundEvents.TROOPER_UPROOT, 1, 1.5f);
+            for (int i = 0; i < 10; i++) {
+                this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()), this.getX(), this.getY(), this.getZ(), ((double) this.random.nextFloat() - 0.5) * 0.08, ((double) this.random.nextFloat() - 0.5) * 0.08, ((double) this.random.nextFloat() - 0.5) * 0.08);
+            }
+            if (!this.level().isClientSide) this.setOrderedToSit(!this.isOrderedToSit());
+        }
+        super.actuallyHurt(damageSource, f);
     }
 
     public boolean isIgnited() {

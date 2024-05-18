@@ -125,5 +125,18 @@ public class TrooperModel<E extends Trooper> extends AgeableListModel<E> {
         this.leftLeg.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
         this.rightArm.xRot = Mth.cos(limbAngle * 0.6662f + (float)Math.PI) * 1.4f * limbDistance;
         this.leftArm.xRot = Mth.cos(limbAngle * 0.6662f) * 1.4f * limbDistance;
+        if (entity.isInSittingPose()) {
+            this.body.y = 25;
+            this.rightLeg.visible = false;
+            this.leftLeg.visible = false;
+            this.rightArm.visible = false;
+            this.leftArm.visible = false;
+        } else {
+            this.body.y = 20;
+            this.rightLeg.visible = true;
+            this.leftLeg.visible = true;
+            this.rightArm.visible = true;
+            this.leftArm.visible = true;
+        }
     }
 }

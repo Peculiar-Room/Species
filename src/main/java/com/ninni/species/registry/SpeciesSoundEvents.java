@@ -90,6 +90,8 @@ public class SpeciesSoundEvents {
     public static final SoundEvent TROOPER_HURT = register("entity.trooper.hurt");
     public static final SoundEvent TROOPER_STEP = register("entity.trooper.step");
     public static final SoundEvent TROOPER_LEAVES = register("entity.trooper.leaves");
+    public static final SoundEvent TROOPER_UPROOT = register("entity.trooper.uproot");
+    public static final SoundEvent TROOPER_PLANT = register("entity.trooper.plant");
 
     public static final SoundEvent PETRIFIED_EGG_CRACK = register("block.petrified_egg.crack");
     public static final SoundEvent PETRIFIED_EGG_HATCH = register("block.petrified_egg.hatch");

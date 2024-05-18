@@ -591,6 +591,18 @@
 			"species:entity/trooper/leaves"
 		]
 	},
+	"entity.trooper.uproot": {
+		"sounds": [
+			"species:entity/trooper/uproot"
+		],
+		"subtitle": "subtitles.entity.species.trooper.uproot"
+	},
+	"entity.trooper.plant": {
+		"sounds": [
+			"species:entity/trooper/plant"
+		],
+		"subtitle": "subtitles.entity.species.trooper.plant"
+	},
 	"entity.cruncher.idle": {
 		"sounds": [
 			"species:entity/cruncher/idle1",

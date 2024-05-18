@@ -124,6 +124,8 @@
   "subtitles.entity.species.trooper.death": "Trooper dies",
   "subtitles.entity.species.trooper.hurt": "Trooper hurts",
   "subtitles.entity.species.trooper.step": "Trooper trots",
+  "subtitles.entity.species.trooper.uproot": "Trooper uproots",
+  "subtitles.entity.species.trooper.plant": "Trooper plants",
 
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Goober Goo",
