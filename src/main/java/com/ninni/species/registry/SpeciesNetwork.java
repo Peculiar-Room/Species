@@ -10,9 +10,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.Camera;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -24,6 +26,7 @@ public class SpeciesNetwork {
     public static final ResourceLocation SEND_SPRINGLING_MESSAGE = new ResourceLocation(Species.MOD_ID, "send_springling_message");
     public static final ResourceLocation UPDATE_SPRINGLING_EXTENDED_DATA = new ResourceLocation(Species.MOD_ID, "update_springling_extended_data");
     public static final ResourceLocation OPEN_CRUNCHER_SCREEN = new ResourceLocation(Species.MOD_ID, "open_cruncher_screen");
+    public static final ResourceLocation PLAY_GUT_FEELING_SOUND = new ResourceLocation(Species.MOD_ID, "play_gut_feeling_sound");
 
     public static void init() {
         ServerPlayNetworking.registerGlobalReceiver(UPDATE_SPRINGLING_EXTENDED_DATA, (server, player, handler, buf, responseSender) -> {
@@ -62,6 +65,16 @@ public class SpeciesNetwork {
                         client.execute(() -> client.setScreen(new CruncherInventoryScreen(cruncherInventoryMenu, clientPlayerEntity.getInventory(), cruncher)));
                     }
                 });
+            });
+            ClientPlayNetworking.registerGlobalReceiver(PLAY_GUT_FEELING_SOUND, (client, handler, buf, responseSender) -> {
+                Camera camera = client.gameRenderer.getMainCamera();
+                Level level = client.level;
+                double h = camera.getPosition().x;
+                double k = camera.getPosition().y;
+                double l = camera.getPosition().z;
+                if (camera.isInitialized() && level != null) {
+                    level.playLocalSound(h, k, l, SpeciesSoundEvents.GUT_FEELING_APPLIED, SoundSource.HOSTILE, 2.0f, 1.0f, false);
+                }
             });
         }
 

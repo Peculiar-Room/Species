@@ -59,6 +59,7 @@ public class SpeciesCreativeModeTabs {
         output.accept(SpeciesItems.MAMMUTILATION_SPAWN_EGG);
         output.accept(SpeciesItems.FROZEN_MEAT);
         output.accept(SpeciesItems.FROZEN_HAIR);
+        output.accept(SpeciesItems.MUTATED_JELLY_BOTTLE);
 
         output.accept(SpeciesItems.SPRINGLING_SPAWN_EGG);
         output.accept(SpeciesItems.SPRINGLING_EGG);

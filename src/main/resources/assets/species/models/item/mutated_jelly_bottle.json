@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "species:item/mutated_jelly_bottle"
+  }
+}
