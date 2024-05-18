@@ -6,14 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BrushableBlock;
-import net.minecraft.world.level.block.CarpetBlock;
-import net.minecraft.world.level.block.DoublePlantBlock;
-import net.minecraft.world.level.block.HugeMushroomBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -32,6 +25,7 @@ public class SpeciesBlocks {
     public static final Block BONE_SPIKE = register("bone_spike", new BoneSpikeBlock(BlockBehaviour.Properties.copy(Blocks.BONE_BLOCK)));
 
     public static final Block TROOPER = register("trooper", new TrooperBlock(BlockBehaviour.Properties.copy(Blocks.SPRUCE_SAPLING)));
+    public static final Block POTTED_TROOPER = register("potted_trooper", new PottedTrooperBlock(BlockBehaviour.Properties.copy(Blocks.POTTED_SPRUCE_SAPLING)));
 
     public static final Block PETRIFIED_EGG = register("petrified_egg", new PetrifiedEggBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
     public static final Block ALPHACENE_MOSS_BLOCK = register("alphacene_moss_block", new Block(BlockBehaviour.Properties.copy(Blocks.MOSS_BLOCK)));

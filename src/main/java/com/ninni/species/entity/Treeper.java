@@ -20,6 +20,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -37,6 +38,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +51,7 @@ public class Treeper extends AgeableMob {
     public static final EntityDataAccessor<Long> LAST_POSE_CHANGE_TICK = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Boolean> PLANTED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> BURNED = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> HAS_MOB = SynchedEntityData.defineId(Treeper.class, EntityDataSerializers.BOOLEAN);
     public final AnimationState shakingSuccessAnimationState = new AnimationState();
     public final AnimationState shakingFailAnimationState = new AnimationState();
     public final AnimationState plantingAnimationState = new AnimationState();
@@ -60,19 +63,10 @@ public class Treeper extends AgeableMob {
         this.lookControl = new TreeperLookControl(this);
     }
 
-    static class TreeperLookControl extends LookControl {
-        protected final Treeper mob;
-        TreeperLookControl(Treeper mob) {
-            super(mob);
-            this.mob = mob;
-        }
-
-        @Override
-        public void tick() {
-            if (!this.mob.isPlanted()) {
-                super.tick();
-            }
-        }
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+        this.setHasMob(this.random.nextInt(10) == 0);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 
     @Override
@@ -90,7 +84,7 @@ public class Treeper extends AgeableMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 300.0)
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.15);
     }
@@ -128,7 +122,6 @@ public class Treeper extends AgeableMob {
         super.tick();
 
         if (this.getSaplingCooldown() > 0) this.setSaplingCooldown(this.getSaplingCooldown() - 1);
-
 
         if (this.level().isClientSide) {
 
@@ -194,6 +187,7 @@ public class Treeper extends AgeableMob {
         this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
         this.entityData.define(PLANTED, false);
         this.entityData.define(BURNED, false);
+        this.entityData.define(HAS_MOB, false);
     }
 
     @Override
@@ -203,6 +197,7 @@ public class Treeper extends AgeableMob {
         compoundTag.putInt("SaplingCooldown", this.getSaplingCooldown());
         compoundTag.putBoolean("Planted", this.isPlanted());
         compoundTag.putBoolean("Burned", this.isBurned());
+        compoundTag.putBoolean("HasMob", this.hasMob());
     }
 
     @Override
@@ -211,6 +206,7 @@ public class Treeper extends AgeableMob {
         this.setSaplingCooldown(compoundTag.getInt("SaplingCooldown"));
         this.setPlanted(compoundTag.getBoolean("Planted"));
         this.setBurned(compoundTag.getBoolean("Burned"));
+        this.setHasMob(compoundTag.getBoolean("HasMob"));
         long l = compoundTag.getLong("LastPoseTick");
         if (l < 0L) this.setPose(SpeciesPose.PLANTING.get());
         this.resetLastPoseChangeTick(l);
@@ -241,6 +237,17 @@ public class Treeper extends AgeableMob {
                     this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);
                 } else {
                     this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_FAIL, 0.5f, 1.0f);
+                }
+
+                if (this.hasMob() && this.level() instanceof ServerLevel serverLevel) {
+                    this.setHasMob(false);
+                    BlockPos pos = new BlockPos(this.blockPosition().getX(), this.blockPosition().getY() + 7, this.blockPosition().getZ());
+
+                    if (random.nextBoolean()) {
+                        EntityType.FOX.spawn(serverLevel, pos, MobSpawnType.NATURAL);
+                    } else {
+                        EntityType.CHICKEN.spawn(serverLevel, pos, MobSpawnType.NATURAL);
+                    }
                 }
             }
         }
@@ -341,9 +348,32 @@ public class Treeper extends AgeableMob {
     public void setBurned(boolean burned) {
         this.entityData.set(BURNED, burned);
     }
+
+    public boolean hasMob() {
+        return this.entityData.get(HAS_MOB);
+    }
+
+    public void setHasMob(boolean bl) {
+        this.entityData.set(HAS_MOB, bl);
+    }
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Treeper> entity, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
         return world.getBlockState(pos.below()).is(SpeciesTags.TREEPER_SPAWNABLE_ON);
+    }
+
+    static class TreeperLookControl extends LookControl {
+        protected final Treeper mob;
+        TreeperLookControl(Treeper mob) {
+            super(mob);
+            this.mob = mob;
+        }
+
+        @Override
+        public void tick() {
+            if (!this.mob.isPlanted()) {
+                super.tick();
+            }
+        }
     }
 
     public static class TreeperLookGoal extends LookAtPlayerGoal {
