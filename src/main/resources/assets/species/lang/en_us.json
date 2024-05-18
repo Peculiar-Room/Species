@@ -120,6 +120,9 @@
   "subtitles.entity.species.treeper.step": "Treeper roams",
   "subtitles.entity.species.treeper.shake_fail": "Treeper shakes",
   "subtitles.entity.species.treeper.shake_success": "Treeper Saplings drop",
+  "subtitles.entity.species.trooper.death": "Trooper dies",
+  "subtitles.entity.species.trooper.hurt": "Trooper hurts",
+  "subtitles.entity.species.trooper.step": "Trooper trots",
 
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Goober Goo",

@@ -3,6 +3,7 @@ package com.ninni.species.entity;
 import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -20,6 +21,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -36,6 +38,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -165,6 +168,7 @@ public class Trooper extends TamableAnimal {
                 this.swell = 0;
             } else {
                 if (this.swell > 28) {
+                    this.playSound(SpeciesSoundEvents.TROOPER_LEAVES, 1, 1);
                     for (int a = 0; a < 20; a++) {
                         this.level().addParticle(SpeciesParticles.TREEPER_LEAF, this.getRandomX(2), this.getY() + this.getEyeHeight() - 0.5f + this.getRandom().nextFloat() * 2, this.getRandomZ(2), ((double)this.getRandom().nextFloat() - 0.5), ((double)this.getRandom().nextFloat() - 0.5), ((double)this.getRandom().nextFloat() - 0.5));
                     }
@@ -232,6 +236,23 @@ public class Trooper extends TamableAnimal {
 
     public void ignite() {
         this.entityData.set(DATA_IS_IGNITED, true);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpeciesSoundEvents.TROOPER_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpeciesSoundEvents.TROOPER_DEATH;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpeciesSoundEvents.TROOPER_STEP, 0.4f, 1f);
     }
 
     @SuppressWarnings("unused")

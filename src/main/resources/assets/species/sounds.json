@@ -555,6 +555,42 @@
 		],
 		"subtitle": "subtitles.entity.species.treeper.step"
 	},
+	"entity.treeper.burn": {
+		"sounds": [
+			"species:entity/treeper/burn"
+		]
+	},
+	"entity.trooper.step": {
+		"sounds": [
+			"species:entity/trooper/step1",
+			"species:entity/trooper/step2",
+			"species:entity/trooper/step3",
+			"species:entity/trooper/step4",
+			"species:entity/trooper/step5",
+			"species:entity/trooper/step6"
+		],
+		"subtitle": "subtitles.entity.species.trooper.step"
+	},
+	"entity.trooper.hurt": {
+		"sounds": [
+			"species:entity/trooper/hurt1",
+			"species:entity/trooper/hurt2",
+			"species:entity/trooper/hurt3",
+			"species:entity/trooper/hurt4"
+		],
+		"subtitle": "subtitles.entity.species.trooper.hurt"
+	},
+	"entity.trooper.death": {
+		"sounds": [
+			"species:entity/trooper/death"
+		],
+		"subtitle": "subtitles.entity.species.trooper.death"
+	},
+	"entity.trooper.leaves": {
+		"sounds": [
+			"species:entity/trooper/leaves"
+		]
+	},
 	"entity.cruncher.idle": {
 		"sounds": [
 			"species:entity/cruncher/idle1",

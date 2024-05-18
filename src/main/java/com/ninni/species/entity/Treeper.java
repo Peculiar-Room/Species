@@ -101,6 +101,7 @@ public class Treeper extends AgeableMob {
         if (itemStack.is(SpeciesTags.BURNS_TREEPER) && !this.isBurned()) {
             SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
             this.level().playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
+            this.level().playSound(player, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.TREEPER_BURN, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
             for (int l = 0; l < 30; ++l) {
                 this.level().addParticle(ParticleTypes.FLAME, this.getRandomX(2), this.getY() + Math.random(), this.getRandomZ(2), 0.0, 0.0, 0.0);
             }
