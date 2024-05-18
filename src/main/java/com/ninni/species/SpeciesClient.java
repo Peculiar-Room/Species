@@ -3,10 +3,7 @@ package com.ninni.species;
 import com.google.common.reflect.Reflection;
 import com.ninni.species.client.inventory.CruncherInventoryMenu;
 import com.ninni.species.client.inventory.CruncherInventoryScreen;
-import com.ninni.species.client.particles.AscendingDustParticle;
-import com.ninni.species.client.particles.RotatingParticle;
-import com.ninni.species.client.particles.PelletDripParticle;
-import com.ninni.species.client.particles.SnoringParticle;
+import com.ninni.species.client.particles.*;
 import com.ninni.species.client.renderer.*;
 import com.ninni.species.client.renderer.entity.GooberGooRenderer;
 import com.ninni.species.entity.Cruncher;
@@ -67,6 +64,7 @@ public class SpeciesClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.BIRTD, RotatingParticle.BirtdFactory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.FOOD, RotatingParticle.FoodFactory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.ASCENDING_DUST, AscendingDustParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.TREEPER_LEAF, TreeperLeafParticle.Factory::new);
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.DRIPPING_PELLET_DRIP, provider -> (particleOptions, clientLevel, d, e, f, g, h, i) -> {
             return PelletDripParticle.createPelletDripHangParticle(particleOptions, clientLevel, d, e, f, g, h, i, provider);

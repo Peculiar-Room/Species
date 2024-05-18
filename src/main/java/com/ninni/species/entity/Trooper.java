@@ -1,8 +1,11 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -84,6 +87,7 @@ public class Trooper extends TamableAnimal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
+
         if (itemStack.is(ItemTags.CREEPER_IGNITERS)) {
             SoundEvent soundEvent = itemStack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
             this.level().playSound(player, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
@@ -159,6 +163,12 @@ public class Trooper extends TamableAnimal {
             this.swell += i;
             if (this.swell < 0) {
                 this.swell = 0;
+            } else {
+                if (this.swell > 28) {
+                    for (int a = 0; a < 20; a++) {
+                        this.level().addParticle(SpeciesParticles.TREEPER_LEAF, this.getRandomX(2), this.getY() + this.getEyeHeight() - 0.5f + this.getRandom().nextFloat() * 2, this.getRandomZ(2), ((double)this.getRandom().nextFloat() - 0.5), ((double)this.getRandom().nextFloat() - 0.5), ((double)this.getRandom().nextFloat() - 0.5));
+                    }
+                }
             }
             if (this.swell >= this.maxSwell) {
                 this.swell = this.maxSwell;
@@ -186,10 +196,11 @@ public class Trooper extends TamableAnimal {
     }
 
     private void explodeCreeper() {
-        if (!this.level().isClientSide) {
+
+        if (this.level() instanceof ServerLevel serverLevel) {
             this.dead = true;
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, Level.ExplosionInteraction.MOB);
-            this.level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(3), this::isValidTarget).forEach(livingEntity -> livingEntity.hurt(this.level().damageSources().mobAttack(this), 30));
+            serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius, Level.ExplosionInteraction.MOB);
+            serverLevel.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(3), this::isValidTarget).forEach(livingEntity -> livingEntity.hurt(this.level().damageSources().mobAttack(this), 30));
             this.discard();
             this.spawnLingeringCloud();
         }

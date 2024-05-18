@@ -5,6 +5,7 @@ import com.ninni.species.entity.ai.goal.TreeperPlantGoal;
 import com.ninni.species.entity.ai.goal.TreeperUprootGoal;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
@@ -245,6 +246,11 @@ public class Treeper extends AgeableMob {
         }
 
 
+        if (this.level() instanceof ServerLevel serverLevel && !this.isPlanted()) {
+            for (int i = 0; i < this.random.nextInt(15) + 5; i++) {
+                serverLevel.sendParticles(SpeciesParticles.TREEPER_LEAF, this.getRandomX(1.8), this.getY() + 7, this.getRandomZ(1.8), 1,0, 0, 0, 0);
+            }
+        }
 
         return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))  && super.hurt(source, amount);
     }
