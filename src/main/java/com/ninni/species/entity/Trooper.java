@@ -69,7 +69,7 @@ public class Trooper extends TamableAnimal {
         this.goalSelector.addGoal(1, new TrooperSwellGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.BONE_MEAL), false));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, 10.0f, 2.0f, false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.2, 6.0f, 2.0f, false));
         this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Ocelot.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Cat.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));

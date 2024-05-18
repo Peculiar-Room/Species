@@ -240,14 +240,14 @@ public class Treeper extends AgeableMob {
                     this.shakingSuccessAnimationState.start(this.tickCount);
                     this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);
                 } else {
-                    this.shakingFailAnimationState.start(this.tickCount);
                     this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_FAIL, 0.5f, 1.0f);
                 }
             }
         }
 
 
-        if (this.level() instanceof ServerLevel serverLevel && !this.isPlanted()) {
+        this.shakingFailAnimationState.start(this.tickCount);
+        if (this.level() instanceof ServerLevel serverLevel) {
             for (int i = 0; i < this.random.nextInt(15) + 5; i++) {
                 serverLevel.sendParticles(SpeciesParticles.TREEPER_LEAF, this.getRandomX(1.8), this.getY() + 7, this.getRandomZ(1.8), 1,0, 0, 0, 0);
             }
