@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/carpet",
   "textures": {
-    "wool": "species:block/alphacene_grass_block_top"
+    "wool": "species:block/alphacene_moss_block"
   }
 }

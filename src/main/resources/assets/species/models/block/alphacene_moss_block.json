@@ -1,8 +1,6 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/cube_all",
   "textures": {
-    "bottom": "species:block/alphacene_moss_bottom",
-    "side": "species:block/alphacene_moss",
-    "top": "species:block/alphacene_moss_top"
+    "all": "species:block/alphacene_moss_block"
   }
 }
