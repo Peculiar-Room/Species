@@ -2,6 +2,7 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
@@ -9,9 +10,13 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
@@ -21,7 +26,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
@@ -39,6 +43,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -47,6 +52,9 @@ import java.util.Map;
 
 public class Mammutilation extends PathfinderMob {
     public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState coughAnimationState = new AnimationState();
+    public final AnimationState howlAnimationState = new AnimationState();
+    public static final EntityDataAccessor<Integer> COUGH_COOLDOWN = SynchedEntityData.defineId(Mammutilation.class, EntityDataSerializers.INT);
     private static final Map<Block, SoundEvent> SOUNDS_BY_EGG = Util.make(Maps.newHashMap(), map -> {
         map.put(Blocks.TURTLE_EGG, SoundEvents.TURTLE_EGG_CRACK);
         map.put(Blocks.SNIFFER_EGG, SoundEvents.SNIFFER_EGG_CRACK);
@@ -54,33 +62,21 @@ public class Mammutilation extends PathfinderMob {
         map.put(SpeciesBlocks.SPRINGLING_EGG, SpeciesSoundEvents.PETRIFIED_EGG_CRACK);
         map.put(SpeciesBlocks.CRUNCHER_EGG, SpeciesSoundEvents.PETRIFIED_EGG_CRACK);
     });
+    private int coughTimer;
     private int hatchCooldown;
     private int howlCooldown;
+    private int howlTimer;
     private int idleAnimationTimeout = 0;
 
     public Mammutilation(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new MoveControl(this);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-        this.hatchCooldown = compoundTag.getInt("HatchCooldown");
-        this.howlCooldown = compoundTag.getInt("HowlCooldown");
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-        compoundTag.putInt("HatchCooldown", this.hatchCooldown);
-        compoundTag.putInt("HowlCooldown", this.howlCooldown);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.75D));
-        this.goalSelector.addGoal(2, new HowAtMoonGoal(this));
+        this.goalSelector.addGoal(2, new CoughGoal(this));
+        this.goalSelector.addGoal(2, new HowlAtMoonGoal(this));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
@@ -119,18 +115,83 @@ public class Mammutilation extends PathfinderMob {
             if (this.hatchCooldown > 0) {
                 this.hatchCooldown--;
             }
+            if (this.coughTimer > 0) {
+                this.coughTimer--;
+
+                if (this.coughTimer == 15) {
+                    BlockPos blockPos = this.blockPosition();
+                    final float angle = (0.0174532925F * this.yBodyRot);
+                    final double headX = 3F * this.getScale() * Mth.sin(Mth.PI + angle);
+                    final double headZ = 3F * this.getScale() * Mth.cos(angle);
+
+                    Vec3 shootingVec = this.getLookAngle().scale(2.0D).multiply(0.25D, 1.0D, 0.25D);
+
+                    GooberGoo goo = new GooberGoo(this.level(), (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight() + 0.35f, (double) blockPos.getZ() + headZ);
+                    double d = shootingVec.x();
+                    double e = shootingVec.y();
+                    double g = shootingVec.z();
+                    double h = Math.sqrt(d * d + g * g);
+                    goo.shoot(d, e + h * (double)0.1f, g, 0.8f, 14 - this.level().getDifficulty().getId() * 4);
+                    this.level().addFreshEntity(goo);
+                    this.addDeltaMovement(new Vec3(0, 0.25D, 0));
+                    this.addDeltaMovement(this.getLookAngle().scale(2.0D).multiply(-0.5D, 0, -0.5D));
+
+                }
+            } else {
+                if (this.getPose() == SpeciesPose.COUGHING.get()) this.setPose(Pose.STANDING);
+            }
             if (this.howlCooldown > 0) {
                 this.howlCooldown--;
+            }
+            if (this.howlTimer > 0) {
+                this.howlTimer--;
+            } else {
+                if (this.getPose() == SpeciesPose.HOWLING.get()) this.setPose(Pose.STANDING);
             }
             if (this.hatchCooldown == 0) {
                 this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
             }
         }
     }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(COUGH_COOLDOWN, 0);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+        this.hatchCooldown = compoundTag.getInt("HatchCooldown");
+        this.howlCooldown = compoundTag.getInt("HowlCooldown");
+        this.coughTimer = compoundTag.getInt("CoughTimer");
+        this.setCoughCooldown(compoundTag.getInt("CoughCooldown"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        compoundTag.putInt("HatchCooldown", this.hatchCooldown);
+        compoundTag.putInt("HowlCooldown", this.howlCooldown);
+        compoundTag.putInt("CoughTimer", this.coughTimer);
+        compoundTag.putInt("CoughCooldown", this.getCoughCooldown());
+    }
+
+
+    public int getCoughCooldown() {
+        return this.entityData.get(COUGH_COOLDOWN);
+    }
+    public void setCoughCooldown(int cooldown) {
+        this.entityData.set(COUGH_COOLDOWN, cooldown);
+    }
+    public void coughCooldown() {
+        this.entityData.set(COUGH_COOLDOWN, 30 * 20 + random.nextInt(60 * 2 * 20));
+    }
 
     @Override
     public void tick() {
         super.tick();
+        if (this.getCoughCooldown() > 0) this.setCoughCooldown(this.getCoughCooldown()-1);
         if ((this.level()).isClientSide()) {
             this.setupAnimationStates();
         }
@@ -143,6 +204,15 @@ public class Mammutilation extends PathfinderMob {
         } else {
             --this.idleAnimationTimeout;
         }
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
+        if (DATA_POSE.equals(entityDataAccessor)) {
+            if (this.getPose() == SpeciesPose.COUGHING.get()) this.coughAnimationState.start(this.tickCount);
+            if (this.getPose() == SpeciesPose.HOWLING.get()) this.howlAnimationState.start(this.tickCount);
+        }
+        super.onSyncedDataUpdated(entityDataAccessor);
     }
 
     private void handleEggHatching(BlockPos blockPos) {
@@ -215,10 +285,31 @@ public class Mammutilation extends PathfinderMob {
         return false;
     }
 
-    public static class HowAtMoonGoal extends Goal{
+    public static class CoughGoal extends Goal{
         protected final Mammutilation mammutilation;
 
-        public HowAtMoonGoal(Mammutilation mammutilation) {
+        public CoughGoal(Mammutilation mammutilation) {
+            this.mammutilation = mammutilation;
+        }
+
+        @Override
+        public void start() {
+            this.mammutilation.playSound(SpeciesSoundEvents.GOOBER_SNEEZE, 1.0F, 0.1F);
+            this.mammutilation.coughCooldown();
+            this.mammutilation.coughTimer = 25;
+            this.mammutilation.setPose(SpeciesPose.COUGHING.get());
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.mammutilation.getCoughCooldown() == 0;
+        }
+    }
+
+    public static class HowlAtMoonGoal extends Goal{
+        protected final Mammutilation mammutilation;
+
+        public HowlAtMoonGoal(Mammutilation mammutilation) {
             this.mammutilation = mammutilation;
         }
 
@@ -226,6 +317,8 @@ public class Mammutilation extends PathfinderMob {
         public void start() {
             this.mammutilation.playSound(SoundEvents.WOLF_HOWL, 1.0F, 0.1F);
             this.mammutilation.howlCooldown = 1000;
+            this.mammutilation.howlTimer = 20 * 4;
+            this.mammutilation.setPose(SpeciesPose.HOWLING.get());
         }
 
         @Override

@@ -13,7 +13,9 @@ public enum SpeciesPose {
     LAYING_DOWN,
     REARING_UP,
     ATTACK,
-    STUN;
+    STUN,
+    COUGHING,
+    HOWLING;
 
     public Pose get() {
         return Pose.valueOf(this.name());

@@ -64,6 +64,8 @@ public class MammutilationModel<T extends Mammutilation> extends HierarchicalMod
 
         this.animateWalk(MammutilationAnimations.WALK, limbAngle, limbDistance, 4.5f, 8.0f);
         this.animate(entity.idleAnimationState, MammutilationAnimations.IDLE, animationProgress);
+        this.animate(entity.coughAnimationState, MammutilationAnimations.COUGH, animationProgress);
+        this.animate(entity.howlAnimationState, MammutilationAnimations.HOWL, animationProgress);
         this.head.xRot += headPitch * ((float) Math.PI / 180f);
         this.head.yRot += headYaw * ((float) Math.PI / 180f);
     }
