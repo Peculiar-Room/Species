@@ -1,10 +1,7 @@
 package com.ninni.species.registry;
 
 import com.ninni.species.SpeciesDevelopers;
-import com.ninni.species.item.BirtEggItem;
-import com.ninni.species.item.CrakedWraptorEggItem;
-import com.ninni.species.item.IchorBottle;
-import com.ninni.species.item.SpeciesSpawnEgg;
+import com.ninni.species.item.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -73,8 +70,8 @@ public class SpeciesItems {
     public static final Item MAMMUTILATION_SPAWN_EGG = register("mammutilation_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.MAMMUTILATION, 0x472418, 0xDE5D34, SpeciesDevelopers.REDA, new Item.Properties().stacksTo(64)));
     public static final Item FROZEN_MEAT = register("frozen_meat", new BlockItem(SpeciesBlocks.FROZEN_MEAT, new Item.Properties()));
     public static final Item FROZEN_HAIR = register("frozen_hair", new BlockItem(SpeciesBlocks.FROZEN_HAIR, new Item.Properties()));
-    public static final Item ICHOR_BOTTLE = register("ichor_bottle", new IchorBottle(new Item.Properties()));
-    public static final Item YOUTH_POTION = register("youth_potion", new IchorBottle(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final Item ICHOR_BOTTLE = register("ichor_bottle", new IchorBottle(new Item.Properties().stacksTo(16)));
+    public static final Item YOUTH_POTION = register("youth_potion", new YouthPotion(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 
     public static final Item SPRINGLING_SPAWN_EGG = register("springling_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.SPRINGLING, 0xFF7600, 0x3D3FAD, SpeciesDevelopers.GLADOS, new Item.Properties().stacksTo(64)));
     public static final Item SPRINGLING_EGG = register("springling_egg", new DoubleHighBlockItem(SpeciesBlocks.SPRINGLING_EGG, new Item.Properties()));
