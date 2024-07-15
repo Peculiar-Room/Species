@@ -188,8 +188,10 @@
 
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
+  "entity.species.mammutilation_ichor": "Mammutilation Ichor",
   "item.species.ichor_bottle": "Ichor Bottle",
   "item.species.youth_potion": "Youth Potion",
+  "block.species.ichor": "Ichor",
   "block.species.frozen_meat": "Frozen Meat",
   "block.species.frozen_hair": "Frozen Hair",
 

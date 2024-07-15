@@ -42,6 +42,7 @@ public class SpeciesBlocks {
 
     public static final Block FROZEN_MEAT = register("frozen_meat", new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_RED).strength(0.5f).sound(SoundType.SCULK)));
     public static final Block FROZEN_HAIR = register("frozen_hair", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5f).sound(SoundType.WOOL)));
+    public static final Block ICHOR = register("ichor", new IchorBlock(BlockBehaviour.Properties.of().instabreak().sound(SoundType.SLIME_BLOCK).noCollission().pushReaction(PushReaction.DESTROY).noLootTable().noOcclusion()));
 
     public static final Block SPRINGLING_EGG = register("springling_egg", new SpringlingEggBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5f).sound(SoundType.METAL).noOcclusion()));
 

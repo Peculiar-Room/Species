@@ -169,6 +169,15 @@ public class SpeciesEntities {
                     .trackRangeChunks(4)
     );
 
+    public static final EntityType<MammutilationIchor> MAMMUTILATION_ICHOR = register(
+            "mammutilation_ichor",
+            FabricEntityTypeBuilder.create()
+                    .<MammutilationIchor>entityFactory(MammutilationIchor::new)
+                    .spawnGroup(MobCategory.MISC)
+                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
+                    .trackRangeChunks(4)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.WARPED_FOREST), MobCategory.MONSTER, SpeciesEntities.WRAPTOR, 100, 4, 6);
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), MobCategory.UNDERGROUND_WATER_CREATURE, SpeciesEntities.DEEPFISH, 80, 4, 6);

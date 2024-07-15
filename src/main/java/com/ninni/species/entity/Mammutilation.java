@@ -121,15 +121,15 @@ public class Mammutilation extends PathfinderMob {
                     final double headX = 3F * this.getScale() * Mth.sin(Mth.PI + angle);
                     final double headZ = 3F * this.getScale() * Mth.cos(angle);
 
-                    Vec3 shootingVec = this.getLookAngle().scale(2.0D).multiply(0.25D, 1.0D, 0.25D);
+                    Vec3 shootingVec = this.getLookAngle().scale(2).multiply(0.05D, 1.0D, 0.05D);
 
-                    GooberGoo goo = new GooberGoo(this.level(), (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight() + 0.35f, (double) blockPos.getZ() + headZ);
+                    MammutilationIchor ichor = new MammutilationIchor(this.level(), (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight() + 0.35f, (double) blockPos.getZ() + headZ);
                     double d = shootingVec.x();
                     double e = shootingVec.y();
                     double g = shootingVec.z();
                     double h = Math.sqrt(d * d + g * g);
-                    goo.shoot(d, e + h * (double)0.1f, g, 0.8f, 14 - this.level().getDifficulty().getId() * 4);
-                    this.level().addFreshEntity(goo);
+                    ichor.shoot(d, e + h * (double)0.1f, g, 0.8f, 14 - this.level().getDifficulty().getId() * 4);
+                    this.level().addFreshEntity(ichor);
                     this.addDeltaMovement(new Vec3(0, 0.25D, 0));
                     this.addDeltaMovement(this.getLookAngle().scale(2.0D).multiply(-0.5D, 0, -0.5D));
 
