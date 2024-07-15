@@ -1,5 +1,7 @@
 package com.ninni.species.client.model.entity;
 
+import com.ninni.species.client.animation.GooberAnimations;
+import com.ninni.species.client.animation.MammutilationAnimations;
 import com.ninni.species.entity.Mammutilation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -57,18 +59,13 @@ public class MammutilationModel<T extends Mammutilation> extends HierarchicalMod
     }
 
     @Override
-    public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-        this.head.xRot = j * 0.0017453292F;
-        this.head.yRot = i * 0.0017453292F;
-        this.rightLeg.xRot = Mth.cos(f * 0.6662F) * 0.4F * g;
-        this.leftLeg.xRot = Mth.cos(f * 0.6662F + 3.1415927F) * 0.4F * g;
-        this.rightArm.xRot = Mth.cos(f * 0.6662F + 3.1415927F) * 0.4F * g;
-        this.leftArm.xRot = Mth.cos(f * 0.6662F) * 0.4F * g;
-        this.body.yScale = 1 + Mth.cos(h*0.08F)*0.15F + 0.4F * g;
-        this.body.zRot = Mth.cos(f * 0.6662F) * 0.4F * g;
-        this.tail.yRot = Mth.cos(f * 0.6662F) * 0.4F * g;
-        this.head.yScale = 1 + Mth.cos(h*2*0.08F)*0.02F;
-        this.head.zRot = -Mth.cos(f * 0.6662F) * 0.3F * g;
+    public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+
+        this.animateWalk(MammutilationAnimations.WALK, limbAngle, limbDistance, 4.5f, 8.0f);
+        this.animate(entity.idleAnimationState, MammutilationAnimations.IDLE, animationProgress);
+        this.head.xRot += headPitch * ((float) Math.PI / 180f);
+        this.head.yRot += headYaw * ((float) Math.PI / 180f);
     }
 
     public static LayerDefinition getLayerDefinition() {

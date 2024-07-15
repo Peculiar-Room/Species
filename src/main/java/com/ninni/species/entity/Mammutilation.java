@@ -18,12 +18,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -51,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Mammutilation extends PathfinderMob {
+    public final AnimationState idleAnimationState = new AnimationState();
     private static final Map<Block, SoundEvent> SOUNDS_BY_EGG = Util.make(Maps.newHashMap(), map -> {
         map.put(Blocks.TURTLE_EGG, SoundEvents.TURTLE_EGG_CRACK);
         map.put(Blocks.SNIFFER_EGG, SoundEvents.SNIFFER_EGG_CRACK);
@@ -60,6 +56,7 @@ public class Mammutilation extends PathfinderMob {
     });
     private int hatchCooldown;
     private int howlCooldown;
+    private int idleAnimationTimeout = 0;
 
     public Mammutilation(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -128,6 +125,23 @@ public class Mammutilation extends PathfinderMob {
             if (this.hatchCooldown == 0) {
                 this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
             }
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if ((this.level()).isClientSide()) {
+            this.setupAnimationStates();
+        }
+    }
+
+    private void setupAnimationStates() {
+        if (this.idleAnimationTimeout == 0) {
+            this.idleAnimationTimeout = 160;
+            this.idleAnimationState.start(this.tickCount);
+        } else {
+            --this.idleAnimationTimeout;
         }
     }
 
