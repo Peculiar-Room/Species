@@ -100,6 +100,8 @@
   "block.species.bone_bark": "Bone Bark",
   "block.species.bone_vertebra": "Bone Vertebra",
   "block.species.bone_spike": "Bone Spike",
+  "item.species.music_disc_lapidarian": "Music Disc",
+  "item.species.music_disc_lapidarian.desc": "Exclaim - Lapidarian",
 
   "advancements.species.ancient_eggs.title": "We're Back",
   "advancements.species.ancient_eggs.description": "Have all Ancient Eggs in your inventory",
@@ -186,6 +188,8 @@
 
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
+  "item.species.ichor_bottle": "Ichor Bottle",
+  "item.species.youth_potion": "Youth Potion",
   "block.species.frozen_meat": "Frozen Meat",
   "block.species.frozen_hair": "Frozen Hair",
 

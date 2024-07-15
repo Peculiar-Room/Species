@@ -3,7 +3,7 @@ package com.ninni.species.registry;
 import com.ninni.species.SpeciesDevelopers;
 import com.ninni.species.item.BirtEggItem;
 import com.ninni.species.item.CrakedWraptorEggItem;
-import com.ninni.species.item.MutatedJellyBottleItem;
+import com.ninni.species.item.IchorBottle;
 import com.ninni.species.item.SpeciesSpawnEgg;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,6 +45,7 @@ public class SpeciesItems {
 
     //UPDATE 2
     public static final Item RED_SUSPICIOUS_SAND = register("red_suspicious_sand", new BlockItem(SpeciesBlocks.RED_SUSPICIOUS_SAND, new Item.Properties()));
+    public static final Item MUSIC_DISC_LAPIDARIAN = register("music_disc_lapidarian", new RecordItem(14, SpeciesSoundEvents.MUSIC_DISC_DIAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 193));
 
     public static final Item BONE_BARK = register("bone_bark", new BlockItem(SpeciesBlocks.BONE_BARK, new Item.Properties()));
     public static final Item BONE_VERTEBRA = register("bone_vertebra", new BlockItem(SpeciesBlocks.BONE_VERTEBRA, new Item.Properties()));
@@ -72,7 +73,8 @@ public class SpeciesItems {
     public static final Item MAMMUTILATION_SPAWN_EGG = register("mammutilation_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.MAMMUTILATION, 0x472418, 0xDE5D34, SpeciesDevelopers.REDA, new Item.Properties().stacksTo(64)));
     public static final Item FROZEN_MEAT = register("frozen_meat", new BlockItem(SpeciesBlocks.FROZEN_MEAT, new Item.Properties()));
     public static final Item FROZEN_HAIR = register("frozen_hair", new BlockItem(SpeciesBlocks.FROZEN_HAIR, new Item.Properties()));
-    public static final Item MUTATED_JELLY_BOTTLE = register("mutated_jelly_bottle", new MutatedJellyBottleItem(new Item.Properties()));
+    public static final Item ICHOR_BOTTLE = register("ichor_bottle", new IchorBottle(new Item.Properties()));
+    public static final Item YOUTH_POTION = register("youth_potion", new IchorBottle(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
     public static final Item SPRINGLING_SPAWN_EGG = register("springling_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.SPRINGLING, 0xFF7600, 0x3D3FAD, SpeciesDevelopers.GLADOS, new Item.Properties().stacksTo(64)));
     public static final Item SPRINGLING_EGG = register("springling_egg", new DoubleHighBlockItem(SpeciesBlocks.SPRINGLING_EGG, new Item.Properties()));

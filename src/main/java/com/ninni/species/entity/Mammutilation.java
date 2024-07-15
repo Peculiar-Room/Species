@@ -90,7 +90,7 @@ public class Mammutilation extends PathfinderMob {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack stack = player.getItemInHand(interactionHand);
-        ItemStack mutatedJellyBottle = new ItemStack(SpeciesItems.MUTATED_JELLY_BOTTLE);
+        ItemStack mutatedJellyBottle = new ItemStack(SpeciesItems.ICHOR_BOTTLE);
         if (stack.is(Items.GLASS_BOTTLE)) {
             stack.shrink(1);
             this.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
