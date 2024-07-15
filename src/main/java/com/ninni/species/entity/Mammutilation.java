@@ -80,9 +80,6 @@ public class Mammutilation extends PathfinderMob {
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0f));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        //this.goalSelector.addGoal(5, new SitAndFollowMoonGoal(this));
-        //this.goalSelector.addGoal(5, new RiseGoal(this));
-        //this.goalSelector.addGoal(3, new TeleportIfCullingGoal(this));
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
