@@ -1,5 +1,6 @@
 package com.ninni.species.item;
 
+import com.ninni.species.mixin.AgeableMobMixin;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
@@ -27,9 +28,7 @@ public class YouthPotion extends Item {
                 }
             }
 
-            if (mob.isBaby()) {
-                //TODO make so they don't age
-            } else {
+            if (!mob.isBaby()) {
                 mob.setBaby(true);
             }
 
