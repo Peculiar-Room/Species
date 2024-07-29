@@ -43,8 +43,8 @@ public class CarvedPumpkinBlockMixin {
                 }
             }
         }
-        BlockPos rodPos = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getClockWise(), 2);
-        BlockPos rodPos1 = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getCounterClockWise(), 2);
+        BlockPos rodPos = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getClockWise(), 2).offset(0,1,0);
+        BlockPos rodPos1 = blockPos.relative(value.getOpposite()).relative(value.getOpposite().getCounterClockWise(), 2).offset(0,1,0);
         BlockState rodState = level.getBlockState(rodPos);
         BlockState rodState1 = level.getBlockState(rodPos1);
         if (rodState.is(Blocks.LIGHTNING_ROD) && rodState.getValue(BlockStateProperties.FACING) == value.getOpposite().getClockWise()) {

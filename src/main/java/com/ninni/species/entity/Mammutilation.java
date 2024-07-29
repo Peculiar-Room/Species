@@ -274,7 +274,9 @@ public class Mammutilation extends PathfinderMob {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpeciesSoundEvents.MAMMUTILATION_IDLE;
+        if (this.getName().getString().equalsIgnoreCase("mammutiful")) {
+            return SpeciesSoundEvents.MAMMUTIFUL_IDLE;
+        } else return SpeciesSoundEvents.MAMMUTILATION_IDLE;
     }
 
     @SuppressWarnings("unused")
@@ -295,11 +297,12 @@ public class Mammutilation extends PathfinderMob {
             this.mammutilation.coughCooldown();
             this.mammutilation.coughTimer = 25;
             this.mammutilation.setPose(SpeciesPose.COUGHING.get());
+            this.mammutilation.playSound(SpeciesSoundEvents.MAMMUTILATION_COUGH);
         }
 
         @Override
         public boolean canUse() {
-            return this.mammutilation.getCoughCooldown() == 0;
+            return this.mammutilation.getCoughCooldown() == 0 && this.mammutilation.getPose() != SpeciesPose.HOWLING.get();
         }
     }
 
@@ -312,7 +315,9 @@ public class Mammutilation extends PathfinderMob {
 
         @Override
         public void start() {
-            this.mammutilation.playSound(SoundEvents.WOLF_HOWL, 1.0F, 0.1F);
+            if (this.mammutilation.getName().getString().equalsIgnoreCase("mammutiful")) {
+                this.mammutilation.playSound(SpeciesSoundEvents.MAMMUTIFUL_HOWL);
+            } else this.mammutilation.playSound(SpeciesSoundEvents.MAMMUTILATION_HOWL);
             this.mammutilation.howlCooldown = 1000;
             this.mammutilation.howlTimer = 20 * 4;
             this.mammutilation.setPose(SpeciesPose.HOWLING.get());
@@ -320,7 +325,7 @@ public class Mammutilation extends PathfinderMob {
 
         @Override
         public boolean canUse() {
-            return this.mammutilation.level().isNight() && this.mammutilation.howlCooldown == 0;
+            return this.mammutilation.level().isNight() && this.mammutilation.howlCooldown == 0 && this.mammutilation.getPose() != SpeciesPose.COUGHING.get();
         }
     }
 }

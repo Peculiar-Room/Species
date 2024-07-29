@@ -770,6 +770,49 @@
 		],
 		"subtitle": "subtitles.entity.species.mammutilation.idle"
 	},
+	"entity.mammutilation.cough": {
+		"sounds": [
+			"species:entity/mammutilation/cough1",
+			"species:entity/mammutilation/cough2",
+			"species:entity/mammutilation/cough3"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.cough"
+	},
+	"entity.mammutilation.howl": {
+		"sounds": [
+			"species:entity/mammutilation/howl1",
+			"species:entity/mammutilation/howl2",
+			"species:entity/mammutilation/howl3",
+			"species:entity/mammutilation/howl4",
+			"species:entity/mammutilation/howl5"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.howl"
+	},
+	"entity.mammutilation.mammutiful_howl": {
+		"sounds": [
+			"species:entity/mammutilation/mammutiful_howl"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.howl"
+	},
+	"entity.mammutilation.mammutiful_idle": {
+		"sounds": [
+			"species:entity/mammutilation/mammutiful_idle1",
+			"species:entity/mammutilation/mammutiful_idle2",
+			"species:entity/mammutilation/mammutiful_idle3",
+			"species:entity/mammutilation/mammutiful_idle4",
+			"species:entity/mammutilation/mammutiful_idle5",
+			"species:entity/mammutilation/mammutiful_idle6",
+			"species:entity/mammutilation/mammutiful_idle7",
+			"species:entity/mammutilation/mammutiful_idle8",
+			"species:entity/mammutilation/mammutiful_idle9",
+			"species:entity/mammutilation/mammutiful_idle10",
+			"species:entity/mammutilation/mammutiful_idle11",
+			"species:entity/mammutilation/mammutiful_idle12",
+			"species:entity/mammutilation/mammutiful_idle13",
+			"species:entity/mammutilation/mammutiful_idle14"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.mammutiful_idle"
+	},
 	"entity.mammutilation.hurt": {
 		"sounds": [
 			"species:entity/mammutilation/hurt1",

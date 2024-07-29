@@ -43,6 +43,7 @@ public abstract class AgeableMobMixin extends PathfinderMob {
     private void S$aiStep(CallbackInfo ci) {
         if (potion) {
             ci.cancel();
+            super.aiStep();
         }
     }
 
