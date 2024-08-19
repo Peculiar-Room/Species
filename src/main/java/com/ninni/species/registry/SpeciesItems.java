@@ -42,7 +42,7 @@ public class SpeciesItems {
 
     //UPDATE 2
     public static final Item RED_SUSPICIOUS_SAND = register("red_suspicious_sand", new BlockItem(SpeciesBlocks.RED_SUSPICIOUS_SAND, new Item.Properties()));
-    public static final Item MUSIC_DISC_LAPIDARIAN = register("music_disc_lapidarian", new RecordItem(14, SpeciesSoundEvents.MUSIC_DISC_DIAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 193));
+    public static final Item MUSIC_DISC_LAPIDARIAN = register("music_disc_lapidarian", new RecordItem(14, SpeciesSoundEvents.MUSIC_DISC_LAPIDARIAN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 200));
 
     public static final Item BONE_BARK = register("bone_bark", new BlockItem(SpeciesBlocks.BONE_BARK, new Item.Properties()));
     public static final Item BONE_VERTEBRA = register("bone_vertebra", new BlockItem(SpeciesBlocks.BONE_VERTEBRA, new Item.Properties()));

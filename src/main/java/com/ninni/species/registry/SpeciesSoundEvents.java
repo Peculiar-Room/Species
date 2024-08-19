@@ -50,7 +50,7 @@ public class SpeciesSoundEvents {
     public static final SoundEvent BLOCK_BIRT_DWELLING_EXIT = register("block.birt_dwelling.exit");
     public static final SoundEvent BLOCK_BIRT_DWELLING_WORK = register("block.birt_dwelling.work");
 
-    public static final SoundEvent ENTITY_BIRTD = register("entity.birtd");
+    public static final SoundEvent ENTITY_BIRTD = register("effect.birtd.applied");
 
     public static final SoundEvent ITEM_BIRT_EGG_THROW = register("item.birt_egg.throw");
     public static final SoundEvent ITEM_BIRT_EGG_HIT = register("item.birt_egg.hit");
@@ -63,6 +63,8 @@ public class SpeciesSoundEvents {
     public static final SoundEvent LIMPET_BREAK = register("entity.limpet.break");
     public static final SoundEvent LIMPET_STEP = register("entity.limpet.step");
     public static final SoundEvent LIMPET_DEFLECT = register("entity.limpet.deflect");
+
+    public static final SoundEvent MUSIC_DISC_LAPIDARIAN = register("music.disc.lapidarian");
 
     public static final SoundEvent GOOBER_DEATH = register("entity.goober.death");
     public static final SoundEvent GOOBER_HURT = register("entity.goober.hurt");

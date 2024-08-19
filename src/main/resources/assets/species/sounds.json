@@ -267,7 +267,7 @@
 	},
 	"effect.birtd.applied": {
 		"sounds": [
-			"species:entity/birtd"
+			"species:effect/birtd/applied"
 		],
 		"subtitle": "subtitles.effect.birtd.applied"
 	},
@@ -376,6 +376,14 @@
 			"species:entity/limpet/break4"
 		],
 		"subtitle": "subtitles.entity.species.limpet.break"
+	},
+	"music.disc.lapidarian": {
+		"sounds": [
+			{
+				"name": "species:music/lapidarian",
+				"stream": true
+			}
+		]
 	},
 	"entity.goober.death": {
 		"sounds": [

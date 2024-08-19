@@ -47,7 +47,9 @@ public class BirtEgg extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
         if (entityHitResult.getEntity() instanceof LivingEntity entity) {
-            if (!entity.hasEffect(SpeciesStatusEffects.BIRTD)) this.level().playSound(null, this.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD, SoundSource.NEUTRAL, 1, 1);
+            if (!entity.hasEffect(SpeciesStatusEffects.BIRTD)) {
+                this.level().playSound(null, entity.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD, SoundSource.NEUTRAL, 1, 1);
+            }
             entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.BIRTD, 20 * 3, 0), this.getOwner());
         }
 
