@@ -230,8 +230,9 @@ public class Treeper extends AgeableMob {
             if (this.getStackInHand(player).isPresent() && this.getStackInHand(player).get().getItem() instanceof AxeItem && !this.isPlanted()) {
                 if (this.getSaplingCooldown() == 0) {
                     this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
-                    if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
-                    if (this.random.nextInt(5) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    if (this.random.nextInt(3) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    if (this.random.nextInt(3) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
+                    if (this.random.nextInt(3) == 0) this.spawnAtLocation(SpeciesItems.ANCIENT_PINECONE, 7);
                     this.setSaplingCooldown(this.random.nextIntBetweenInclusive(60 * 20 * 2, 60 * 20 * 7));
                     this.shakingSuccessAnimationState.start(this.tickCount);
                     this.playSound(SpeciesSoundEvents.TREEPER_SHAKE_SUCCESS, 1.0f, 1.0f);

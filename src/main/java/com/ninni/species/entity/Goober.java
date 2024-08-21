@@ -8,8 +8,6 @@ import com.ninni.species.entity.enums.GooberBehavior;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -57,7 +54,9 @@ public class Goober extends Animal {
     private static final EntityDataAccessor<String> BEHAVIOR = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> LAY_DOWN_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> YAWN_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> YAWN_TIMER = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> REAR_UP_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> REAR_UP_TIMER = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> SNEEZE_COOLDOWN = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> SNEEZE_TIMER = SynchedEntityData.defineId(Goober.class, EntityDataSerializers.INT);
     private static final EntityDimensions SITTING_DIMENSIONS = EntityDimensions.scalable(2F, 1.4f);
@@ -109,7 +108,6 @@ public class Goober extends Animal {
 
         if ((itemStack.is(Items.FEATHER) || itemStack.is(Items.BRUSH)) && this.getSneezeCooldown() == 0 && this.getBehavior().equals(GooberBehavior.IDLE.getName())) {
             this.setSneezeTimer(GooberBehavior.SNEEZING.getLength());
-            this.setBehavior(GooberBehavior.SNEEZING.getName());
             this.setPose(this.isGooberLayingDown() ? SpeciesPose.SNEEZING_LAYING_DOWN.get() : SpeciesPose.SNEEZING.get());
             this.sneezeCooldown();
             this.playSound(SpeciesSoundEvents.GOOBER_SNEEZE, 2, 1);
@@ -151,8 +149,26 @@ public class Goober extends Animal {
             if (this.getBehavior().equals(GooberBehavior.SNEEZING.getName())) this.setBehavior(GooberBehavior.IDLE.getName());
             this.setSneezeCooldown(this.getSneezeCooldown()-1);
         }
+        if (this.getRearUpTimer() > 0) {
+            this.setRearUpTimer(this.getRearUpTimer()-1);
+            if (this.getRearUpTimer() == 0) {
+                this.setPose(Pose.STANDING);
+                this.setBehavior(GooberBehavior.IDLE.getName());
+                this.rearUpCooldown();
+            }
+        }
+        if (this.getYawnTimer() > 0) {
+            this.setYawnTimer(this.getYawnTimer() - 1);
+            if (this.getYawnTimer() == 0) {
+                if (this.isGooberLayingDown()) this.setPose(SpeciesPose.LAYING_DOWN.get());
+                else this.setPose(Pose.STANDING);
+                this.setBehavior(GooberBehavior.IDLE.getName());
+                this.yawnCooldown();
+            }
+        }
 
         if (this.getSneezeTimer() > 0)  {
+            this.setBehavior(GooberBehavior.SNEEZING.getName());
             this.setSneezeTimer(this.getSneezeTimer() - 1);
 
             if (this.getSneezeTimer() == 35) {
@@ -275,6 +291,8 @@ public class Goober extends Animal {
         this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
         this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
         this.entityData.define(SNEEZE_TIMER, 0);
+        this.entityData.define(REAR_UP_TIMER, 0);
+        this.entityData.define(YAWN_TIMER, 0);
         this.entityData.define(SNEEZE_COOLDOWN, 0);
     }
 
@@ -286,6 +304,8 @@ public class Goober extends Animal {
         compoundTag.putInt("LayDownCooldown", this.getLayDownCooldown());
         compoundTag.putInt("YawnCooldown", this.getYawnCooldown());
         compoundTag.putInt("RearUpCooldown", this.getRearUpCooldown());
+        compoundTag.putInt("YawnTimer", this.getYawnTimer());
+        compoundTag.putInt("RearUpTimer", this.getRearUpTimer());
         compoundTag.putInt("SneezeTimer", this.getSneezeTimer());
         compoundTag.putInt("SneezeCooldown", this.getSneezeCooldown());
     }
@@ -297,6 +317,8 @@ public class Goober extends Animal {
         this.setLayDownCooldown(compoundTag.getInt("LayDownCooldown"));
         this.setYawnCooldown(compoundTag.getInt("YawnCooldown"));
         this.setRearUpCooldown(compoundTag.getInt("RearUpCooldown"));
+        this.setYawnTimer(compoundTag.getInt("YawnTimer"));
+        this.setRearUpTimer(compoundTag.getInt("RearUpTimer"));
         this.setSneezeTimer(compoundTag.getInt("SneezeTimer"));
         this.setSneezeCooldown(compoundTag.getInt("SneezeCooldown"));
         this.setBehavior(compoundTag.getString("Behavior"));
@@ -325,6 +347,13 @@ public class Goober extends Animal {
         this.entityData.set(LAY_DOWN_COOLDOWN, 60 * 20 + random.nextInt(60 * 2 * 20));
     }
 
+    public int getYawnTimer() {
+        return this.entityData.get(YAWN_TIMER);
+    }
+    public void setYawnTimer(int timer) {
+        this.entityData.set(YAWN_TIMER, timer);
+    }
+
     public int getYawnCooldown() {
         return this.entityData.get(YAWN_COOLDOWN);
     }
@@ -350,6 +379,13 @@ public class Goober extends Animal {
     }
     public void sneezeCooldown() {
         this.entityData.set(SNEEZE_COOLDOWN, 60 * 2 * 20 + random.nextInt(60 * 8 * 20));
+    }
+
+    public int getRearUpTimer() {
+        return this.entityData.get(REAR_UP_TIMER);
+    }
+    public void setRearUpTimer(int timer) {
+        this.entityData.set(REAR_UP_TIMER, timer);
     }
 
     public int getRearUpCooldown() {
