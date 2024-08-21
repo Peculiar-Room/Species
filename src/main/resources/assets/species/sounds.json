@@ -833,5 +833,23 @@
 			"species:entity/mammutilation/death"
 		],
 		"subtitle": "subtitles.entity.species.mammutilation.death"
+	},
+	"item.ichor_bottle.applied": {
+		"sounds": [
+			"species:item/ichor_bottle/applied"
+		],
+		"subtitle": "subtitles.item.species.ichor_bottle.applied"
+	},
+	"item.youth_potion.baby": {
+		"sounds": [
+			"species:item/youth_potion/baby"
+		],
+		"subtitle": "subtitles.item.species.youth_potion.baby"
+	},
+	"item.youth_potion.stumped": {
+		"sounds": [
+			"species:item/youth_potion/stumped"
+		],
+		"subtitle": "subtitles.item.species.youth_potion.stumped"
 	}
 }

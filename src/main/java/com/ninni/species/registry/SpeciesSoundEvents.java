@@ -130,6 +130,9 @@ public class SpeciesSoundEvents {
     public static final SoundEvent MAMMUTILATION_COUGH = register("entity.mammutilation.cough");
     public static final SoundEvent MAMMUTIFUL_IDLE = register("entity.mammutilation.mammutiful_idle");
     public static final SoundEvent MAMMUTIFUL_HOWL = register("entity.mammutilation.mammutiful_howl");
+    public static final SoundEvent ICHOR_BOTTLE = register("item.ichor_bottle.applied");
+    public static final SoundEvent YOUTH_POTION_BABY = register("item.youth_potion.baby");
+    public static final SoundEvent YOUTH_POTION_STUMPED = register("item.youth_potion.stumped");
 
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);

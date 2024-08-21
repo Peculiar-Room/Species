@@ -1,5 +1,6 @@
 package com.ninni.species.item;
 
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -29,6 +30,7 @@ public class IchorBottle extends Item {
                     }
                 }
                 mob.heal(mob.getMaxHealth()/4);
+                mob.playSound(SpeciesSoundEvents.ICHOR_BOTTLE, 1,1 );
                 if (livingEntity.level() instanceof ServerLevel serverLevel) {
                     for (int i = 0; i < 7; ++i) {
                         double d = livingEntity.getRandom().nextGaussian() * 0.02;
