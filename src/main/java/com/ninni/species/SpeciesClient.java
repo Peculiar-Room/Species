@@ -66,6 +66,8 @@ public class SpeciesClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.FOOD, RotatingParticle.FoodFactory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.ASCENDING_DUST, AscendingDustParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.TREEPER_LEAF, TreeperLeafParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.YOUTH_POTION, IchorBottleParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpeciesParticles.ICHOR, IchorParticle.Factory::new);
 
         ParticleFactoryRegistry.getInstance().register(SpeciesParticles.DRIPPING_PELLET_DRIP, provider -> (particleOptions, clientLevel, d, e, f, g, h, i) -> {
             return PelletDripParticle.createPelletDripHangParticle(particleOptions, clientLevel, d, e, f, g, h, i, provider);

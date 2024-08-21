@@ -275,7 +275,7 @@ public class Goober extends Animal {
         this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
         this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
         this.entityData.define(SNEEZE_TIMER, 0);
-        this.entityData.define(SNEEZE_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
+        this.entityData.define(SNEEZE_COOLDOWN, 0);
     }
 
     @Override
