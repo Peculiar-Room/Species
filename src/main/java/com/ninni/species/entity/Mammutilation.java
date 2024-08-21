@@ -174,6 +174,10 @@ public class Mammutilation extends PathfinderMob {
         compoundTag.putInt("CoughCooldown", this.getCoughCooldown());
     }
 
+    @Override
+    public int getAmbientSoundInterval() {
+        return 20 * 10;
+    }
 
     public int getCoughCooldown() {
         return this.entityData.get(COUGH_COOLDOWN);

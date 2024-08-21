@@ -23,6 +23,8 @@ import static com.ninni.species.Species.MOD_ID;
 @SuppressWarnings("unused")
 public class SpeciesItems {
 
+    public static final Item LOGO = register("logo", new Item(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).fireResistant()));
+
     //UPDATE 1
     public static final Item WRAPTOR_SPAWN_EGG = register("wraptor_spawn_egg", new SpeciesSpawnEgg(SpeciesEntities.WRAPTOR, 0xAF3A5F, 0x55C1A9, SpeciesDevelopers.NOON, new Item.Properties().stacksTo(64)));
     public static final Item WRAPTOR_EGG = register("wraptor_egg", new BlockItem(SpeciesBlocks.WRAPTOR_EGG, new Item.Properties()));

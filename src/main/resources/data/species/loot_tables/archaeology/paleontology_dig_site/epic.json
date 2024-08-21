@@ -7,19 +7,28 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "species:springling_egg"
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "minecraft:sniffer_egg"
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "species:cruncher_egg"
         },
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "species:petrified_egg"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "name": "species:music_disc_lapidarian"
         }
       ]
     }

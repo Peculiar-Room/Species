@@ -28,7 +28,7 @@ public class IchorBottle extends Item {
                         player.drop(glassBottle, false);
                     }
                 }
-                mob.heal(5.0F);
+                mob.heal(mob.getMaxHealth()/4);
                 if (livingEntity.level() instanceof ServerLevel serverLevel) {
                     for (int i = 0; i < 7; ++i) {
                         double d = livingEntity.getRandom().nextGaussian() * 0.02;

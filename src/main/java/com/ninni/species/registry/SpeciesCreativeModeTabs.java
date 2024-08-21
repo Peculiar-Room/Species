@@ -13,7 +13,7 @@ import net.minecraft.world.item.Items;
 
 public class SpeciesCreativeModeTabs {
 
-    public static final CreativeModeTab SPECIES = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(Species.MOD_ID, "species"), FabricItemGroup.builder().title(Component.translatable("itemGroup.species.species")).icon(SpeciesItems.BIRT_EGG::getDefaultInstance).displayItems((itemDisplayParameters, output) -> {
+    public static final CreativeModeTab SPECIES = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(Species.MOD_ID, "species"), FabricItemGroup.builder().title(Component.translatable("itemGroup.species.species")).icon(SpeciesItems.LOGO::getDefaultInstance).displayItems((itemDisplayParameters, output) -> {
 
         output.accept(SpeciesItems.WRAPTOR_SPAWN_EGG);
         output.accept(SpeciesItems.WRAPTOR_EGG);
