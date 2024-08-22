@@ -150,6 +150,12 @@ public class Mammutilation extends PathfinderMob {
             //}
         }
     }
+
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -261,6 +267,11 @@ public class Mammutilation extends PathfinderMob {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         this.hatchCooldown = UniformInt.of(6000, 12000).sample(this.getRandom());
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 
     @Nullable

@@ -6,9 +6,9 @@
   "mixins": [
     "AgeableMobMixin",
     "BlockEntityTypeMixin",
-    "CarvedPumpkinBlockMixin",
     "FallingBlockEntityAccessor",
     "FlowerPotBlockMixin",
+    "LightningRodMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
     "PlayerMixin",
