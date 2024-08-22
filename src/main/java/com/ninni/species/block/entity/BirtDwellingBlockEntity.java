@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,28 +17,36 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ninni.species.block.BirtDwellingBlock.BIRTS;
 import static com.ninni.species.block.BirtDwellingBlock.EGGS;
 
-public class BirtDwellingBlockEntity extends BlockEntity {
+public class BirtDwellingBlockEntity extends BlockEntity implements GameEventListener.Holder<BirtDwellingBlockEntity.BirtDwellingListener> {
     public static final String MIN_OCCUPATION_TICKS_KEY = "MinOccupationTicks";
     public static final String ENTITY_DATA_KEY = "EntityData";
     public static final String TICKS_IN_DWELLING_KEY = "TicksInDwelling";
     public static final String BIRTS_KEY = "Birts";
     private static final List<String> IRRELEVANT_BIRT_NBT_KEYS = Arrays.asList("Air", "Bees", "ArmorDropChances", "ArmorItems", "Brain", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "CannotEnterDwellingTicks", "CannotEnterHiveTicks", "TicksSincePollination", "CropsGrownSincePollination", "DwellingPos", "HivePos", "Passengers", "Leash", "UUID");
     private final List<Birt> birts = Lists.newArrayList();
+    private final BirtDwellingListener birtDwellingListener;
     private int day = -1;
+    private int pacifyTicks = 0;
 
     public BirtDwellingBlockEntity(BlockPos pos, BlockState state) {
         super(SpeciesBlockEntities.BIRT_DWELLING, pos, state);
+        this.birtDwellingListener = new BirtDwellingListener(state, new BlockPositionSource(pos));
     }
 
     public boolean hasNoBirts() {
@@ -50,7 +59,10 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     }
 
     public void angerBirts(@Nullable Player player, BlockState state, BirtState birtState) {
+        if (this.pacifyTicks > 0) return;
+
         List<Entity> list = this.tryReleaseBirt(state, birtState);
+
         if (player != null) {
             for (Entity entity : list) {
                 if (!(entity instanceof com.ninni.species.entity.Birt birt)) continue;
@@ -175,6 +187,9 @@ public class BirtDwellingBlockEntity extends BlockEntity {
     public static void serverTick(Level world, BlockPos pos, BlockState state, BirtDwellingBlockEntity blockEntity) {
         BirtDwellingBlockEntity.tickBirts(world, pos, state, blockEntity.birts);
         BirtDwellingBlockEntity.tickLayEgg(blockEntity, world, pos, state);
+
+        if (blockEntity.pacifyTicks > 0) blockEntity.pacifyTicks--;
+
         if (!blockEntity.birts.isEmpty() && world.getRandom().nextDouble() < 0.005) {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
@@ -194,6 +209,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             this.birts.add(birt);
         }
         this.day = nbt.getInt("Day");
+        this.pacifyTicks = nbt.getInt("PacifyTicks");
     }
 
     @Override
@@ -201,6 +217,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         super.saveAdditional(nbt);
         nbt.put(BIRTS_KEY, this.getBirts());
         nbt.putInt("Day", this.day);
+        nbt.putInt("PacifyTicks", this.pacifyTicks);
     }
 
     public ListTag getBirts() {
@@ -215,6 +232,11 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             nbtList.add(nbtCompound2);
         }
         return nbtList;
+    }
+
+    @Override
+    public BirtDwellingListener getListener() {
+        return this.birtDwellingListener;
     }
 
     public enum BirtState {
@@ -232,6 +254,46 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             this.entityData = entityData;
             BirtDwellingBlockEntity.Birt.ticksInDwelling = ticksInDwelling;
             this.minOccupationTicks = minOccupationTicks;
+        }
+    }
+
+    public static class BirtDwellingListener implements GameEventListener {
+        private final BlockState blockState;
+        private final PositionSource positionSource;
+
+        public BirtDwellingListener(BlockState blockState, PositionSource positionSource) {
+            this.blockState = blockState;
+            this.positionSource = positionSource;
+        }
+
+        @Override
+        public PositionSource getListenerSource() {
+            return this.positionSource;
+        }
+
+        @Override
+        public int getListenerRadius() {
+            return 8;
+        }
+
+        @Override
+        public GameEventListener.DeliveryMode getDeliveryMode() {
+            return GameEventListener.DeliveryMode.BY_DISTANCE;
+        }
+
+        @Override
+        public boolean handleGameEvent(ServerLevel serverLevel, GameEvent gameEvent, GameEvent.Context context, Vec3 vec32) {
+            Optional<Vec3> position = this.positionSource.getPosition(serverLevel);
+            if (position.isEmpty()) return false;
+            BlockPos blockPos = BlockPos.containing(position.get());
+            if (com.ninni.species.entity.Birt.isLoudNoise(gameEvent, serverLevel, BlockPos.containing(vec32))) {
+                BlockEntity blockEntity = serverLevel.getBlockEntity(blockPos);
+                if (blockEntity instanceof BirtDwellingBlockEntity birtDwellingBlockEntity && birtDwellingBlockEntity.pacifyTicks == 0) {
+                    birtDwellingBlockEntity.pacifyTicks = 100;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -1,11 +1,11 @@
 package com.ninni.species.entity;
 
 import com.google.common.collect.Lists;
-import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.block.entity.BirtDwellingBlockEntity;
-import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.entity.ai.goal.BirtCommunicatingGoal;
 import com.ninni.species.entity.ai.goal.SendMessageTicksGoal;
+import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
@@ -18,18 +18,31 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.VisibleForDebug;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -44,18 +57,30 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.DynamicGameEventListener;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Birt extends Animal implements NeutralMob, FlyingAnimal {
+public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationSystem {
     public final AnimationState flyingAnimationState = new AnimationState();
     public float flapProgress;
     public float maxWingDeviation;
@@ -76,10 +101,16 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
     @Nullable
     BlockPos dwellingPos;
     Birt.MoveToDwellingGoal moveToDwellingGoal;
+    private final VibrationUser vibrationUser;
+    private final DynamicGameEventListener<LoudVibrationListener> loudVibrationListener;
+    private VibrationSystem.Data vibrationData;
 
     public Birt(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new FlyingMoveControl(this, 20, false);
+        this.vibrationUser = new VibrationUser();
+        this.vibrationData = new VibrationSystem.Data();
+        this.loudVibrationListener = new DynamicGameEventListener<>(new LoudVibrationListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.getNotificationRadius()));
     }
 
     @Override
@@ -95,6 +126,13 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
         this.goalSelector.addGoal(5, new BirtCommunicatingGoal(this));
         this.goalSelector.addGoal(8, new BirtWanderAroundGoal());
         this.goalSelector.addGoal(9, new BirtLookAroundGoal());
+    }
+
+    @Override
+    public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> biConsumer) {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            biConsumer.accept(this.loudVibrationListener, serverLevel);
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -179,6 +217,14 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
 
         if (messageTicks > 0) this.messageTicks--;
         this.flapWings();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide) {
+            VibrationSystem.Ticker.tick(this.level(), this.vibrationData, this.vibrationUser);
+        }
     }
 
     void startMovingTo(BlockPos pos) {
@@ -426,6 +472,16 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
     @Override
     protected SoundEvent getDeathSound() {
         return SpeciesSoundEvents.ENTITY_BIRT_DEATH;
+    }
+
+    @Override
+    public Data getVibrationData() {
+        return this.vibrationData;
+    }
+
+    @Override
+    public User getVibrationUser() {
+        return this.vibrationUser;
     }
 
     class BirtWanderAroundGoal extends Goal {
@@ -706,6 +762,76 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal {
         public boolean canContinueToUse() {
             return this.canBirtContinue() && !Birt.this.isAngry();
         }
+    }
+
+    public class VibrationUser implements VibrationSystem.User {
+        private static final int VIBRATION_EVENT_LISTENER_RANGE = 16;
+        private final PositionSource positionSource;
+
+        VibrationUser() {
+            this.positionSource = new EntityPositionSource(Birt.this, Birt.this.getEyeHeight());
+        }
+
+        @Override
+        public int getListenerRadius() {
+            return 16;
+        }
+
+        @Override
+        public PositionSource getPositionSource() {
+            return this.positionSource;
+        }
+
+        @Override
+        public boolean canReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, GameEvent.Context context) {
+            if (Birt.this.isNoAi()) {
+                return false;
+            }
+            return Birt.this.getTarget() != null;
+        }
+
+        @Override
+        public void onReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, @Nullable Entity entity, @Nullable Entity entity2, float f) {
+        }
+
+        @Override
+        public TagKey<GameEvent> getListenableEvents() {
+            return GameEventTags.ALLAY_CAN_LISTEN;
+        }
+    }
+
+    public class LoudVibrationListener implements GameEventListener {
+        private final PositionSource listenerSource;
+        private final int listenerRadius;
+
+        public LoudVibrationListener(PositionSource positionSource, int i) {
+            this.listenerSource = positionSource;
+            this.listenerRadius = i;
+        }
+
+        @Override
+        public PositionSource getListenerSource() {
+            return this.listenerSource;
+        }
+
+        @Override
+        public int getListenerRadius() {
+            return this.listenerRadius;
+        }
+
+        @Override
+        public boolean handleGameEvent(ServerLevel serverLevel, GameEvent gameEvent, GameEvent.Context context, Vec3 vec3) {
+            BlockPos blockPos = BlockPos.containing(vec3);
+            if (Birt.isLoudNoise(gameEvent, serverLevel, blockPos)) {
+                Birt.this.setTarget(null);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static boolean isLoudNoise(GameEvent gameEvent, ServerLevel serverLevel, BlockPos blockPos) {
+        return gameEvent == GameEvent.EXPLODE || gameEvent == GameEvent.INSTRUMENT_PLAY || gameEvent == GameEvent.JUKEBOX_PLAY || (gameEvent == GameEvent.BLOCK_CHANGE && serverLevel.getBlockState(blockPos).is(Blocks.BELL));
     }
     
 }
