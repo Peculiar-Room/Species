@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.SoundType;
 
 import static com.ninni.species.Species.MOD_ID;
 
@@ -133,6 +134,13 @@ public class SpeciesSoundEvents {
     public static final SoundEvent ICHOR_BOTTLE = register("item.ichor_bottle.applied");
     public static final SoundEvent YOUTH_POTION_BABY = register("item.youth_potion.baby");
     public static final SoundEvent YOUTH_POTION_STUMPED = register("item.youth_potion.stumped");
+
+    public static final SoundType FROZEN_HAIR = register("frozen_hair", 0.8F, 1);
+    public static final SoundType FROZEN_MEAT = register("frozen_meat", 0.8F, 1);
+
+    private static SoundType register(String name, float volume, float pitch) {
+        return new SoundType(volume, pitch, register("block." + name + ".break"), register("block." + name + ".step"), register("block." + name + ".place"), register("block." + name + ".hit"), register("block." + name + ".fall"));
+    }
 
     private static SoundEvent register(String name) {
         ResourceLocation id = new ResourceLocation(MOD_ID, name);

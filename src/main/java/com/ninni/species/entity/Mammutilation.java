@@ -145,9 +145,9 @@ public class Mammutilation extends PathfinderMob {
             } else {
                 if (this.getPose() == SpeciesPose.HOWLING.get()) this.setPose(Pose.STANDING);
             }
-            if (this.hatchCooldown == 0) {
-                this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
-            }
+            //if (this.hatchCooldown == 0) {
+            //    this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
+            //}
         }
     }
     @Override

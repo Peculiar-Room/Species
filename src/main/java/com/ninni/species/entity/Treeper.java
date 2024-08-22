@@ -255,7 +255,7 @@ public class Treeper extends AgeableMob {
 
 
         this.shakingFailAnimationState.start(this.tickCount);
-        if (this.level() instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel serverLevel && source.getEntity() instanceof Player) {
             for (int i = 0; i < this.random.nextInt(15) + 5; i++) {
                 serverLevel.sendParticles(SpeciesParticles.TREEPER_LEAF, this.getRandomX(1.8), this.getY() + 7, this.getRandomZ(1.8), 1,0, 0, 0, 0);
             }

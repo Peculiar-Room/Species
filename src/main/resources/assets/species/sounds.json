@@ -675,11 +675,11 @@
 		],
 		"subtitle": "subtitles.entity.species.cruncher.stun"
 	},
-	"effect.gut_feeling.spawn": {
+	"effect.gut_feeling.species": {
 		"sounds": [
-			"species:effect/gut_feeling/spawn"
+			"species:effect/gut_feeling/species"
 		],
-		"subtitle": "subtitles.effect.species.gut_feeling.spawn"
+		"subtitle": "subtitles.effect.species.gut_feeling.species"
 	},
 	"effect.gut_feeling.applied": {
 		"sounds": [
@@ -851,5 +851,91 @@
 			"species:item/youth_potion/stumped"
 		],
 		"subtitle": "subtitles.item.species.youth_potion.stumped"
+	},
+	"block.frozen_hair.break": {
+		"sounds": [
+			"species:block/frozen_hair/heavy1",
+			"species:block/frozen_hair/heavy2",
+			"species:block/frozen_hair/heavy3",
+			"species:block/frozen_hair/heavy4"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.frozen_hair.fall": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_hair.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.frozen_hair.hit": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_hair.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.frozen_hair.place": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_hair.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.frozen_hair.step": {
+		"sounds": [
+			"species:block/frozen_hair/light1",
+			"species:block/frozen_hair/light2",
+			"species:block/frozen_hair/light3"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"block.frozen_meat.break": {
+		"sounds": [
+			"species:block/frozen_meat/heavy1",
+			"species:block/frozen_meat/heavy2",
+			"species:block/frozen_meat/heavy3",
+			"species:block/frozen_meat/heavy4"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.frozen_meat.fall": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_meat.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.frozen_meat.hit": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_meat.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.frozen_meat.place": {
+		"sounds": [
+			{
+				"name": "species:block.frozen_meat.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.frozen_meat.step": {
+		"sounds": [
+			"species:block/frozen_meat/light1",
+			"species:block/frozen_meat/light2",
+			"species:block/frozen_meat/light3"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
 	}
 }
