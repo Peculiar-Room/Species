@@ -1,7 +1,8 @@
 {
   "itemGroup.species.species": "Species",
+  "item.species.logo": "Species",
 
-  "species.developer.made_by": "Sviluppato da:",
+  "species.developer.made_by": "Creato da:",
   "key.categories.species": "Species",
   "key.extend": "Estendi springling",
   "key.retract": "Retrai springling",
@@ -100,6 +101,8 @@
   "block.species.bone_bark": "Corteccia d'ossa",
   "block.species.bone_vertebra": "Vertebre",
   "block.species.bone_spike": "Spuntone d'ossa",
+  "item.species.music_disc_lapidarian": "Disco musicale",
+  "item.species.music_disc_lapidarian.desc": "Exclaim! - Lapidarian",
 
   "advancements.species.ancient_eggs.title": "4 dinosauri a New York",
   "advancements.species.ancient_eggs.description": "Ottieni tutte le uova antiche",
@@ -108,6 +111,7 @@
   "item.species.treeper_spawn_egg": "Uovo generatore di Treeper",
   "item.species.ancient_pinecone": "Pigna Antica",
   "block.species.trooper": "Arboscello di Treeper",
+  "block.species.potted_trooper": "Vaso con Arboscello di Treeper",
   "entity.species.trooper": "Arboscello di Treeper",
   "item.species.trooper_spawn_egg": "Uovo generatore di Arboscello di Treeper",
 
@@ -120,6 +124,11 @@
   "subtitles.entity.species.treeper.step": "Treeper cammina?",
   "subtitles.entity.species.treeper.shake_fail": "Treeper si agita",
   "subtitles.entity.species.treeper.shake_success": "Arboscelli di Treeper cadono",
+  "subtitles.entity.species.trooper.death": "Arboscello di Treeper muore",
+  "subtitles.entity.species.trooper.hurt": "Arboscello di Treeper ferito",
+  "subtitles.entity.species.trooper.step": "Arboscello di Treeper cammina",
+  "subtitles.entity.species.trooper.uproot": "Arboscello di Treeper si travasa",
+  "subtitles.entity.species.trooper.plant": "Arboscello di Treeper si pianta",
 
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Muco di goober",
@@ -180,12 +189,23 @@
 
   "entity.species.mammutilation": "Mammutilazione",
   "item.species.mammutilation_spawn_egg": "Uovo generatore di mammutilazione",
+  "entity.species.mammutilation_ichor": "Icore di mammutilazione",
+  "item.species.ichor_bottle": "Ampolla di icore",
+  "item.species.youth_potion": "Pozione della giovinezza",
+  "block.species.ichor": "Icore",
   "block.species.frozen_meat": "Carne congelata",
   "block.species.frozen_hair": "Pelliccia congelata",
 
   "subtitles.entity.species.mammutilation.death": "Mammutilazione muore di nuovo",
   "subtitles.entity.species.mammutilation.hurt": "Mammutilazione soffre ancora di più",
   "subtitles.entity.species.mammutilation.idle": "Mammutilazione prova a respirare",
+  "subtitles.entity.species.mammutilation.cough": "Mammutilazione tossisce",
+  "subtitles.entity.species.mammutilation.howl": "Mammutilazione ulula",
+  "subtitles.entity.species.mammutilation.mammutiful_idle": "Mammutilazione blatera",
+
+  "subtitles.item.species.ichor_bottle.applied": "Icore cura",
+  "subtitles.item.species.youth_potion.baby": "Ringiovanimento",
+  "subtitles.item.species.youth_potion.stumped": "Crescita viene bloccata",
 
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Uovo generatore di springling",

@@ -199,6 +199,13 @@
   "subtitles.entity.species.mammutilation.death": "Mammutilation dies again",
   "subtitles.entity.species.mammutilation.hurt": "Mammutilation hurts even more",
   "subtitles.entity.species.mammutilation.idle": "Mammutilation tries to breathe",
+  "subtitles.entity.species.mammutilation.cough": "Mammutilation coughs",
+  "subtitles.entity.species.mammutilation.howl": "Mammutilation howl",
+  "subtitles.entity.species.mammutilation.mammutiful_idle": "Mammutilation rambles",
+
+  "subtitles.item.species.ichor_bottle.applied": "Ichor cures",
+  "subtitles.item.species.youth_potion.baby": "Rejuvenation",
+  "subtitles.item.species.youth_potion.stumped": "Baby's growth gets stumped",
 
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Springling Spawn Egg",

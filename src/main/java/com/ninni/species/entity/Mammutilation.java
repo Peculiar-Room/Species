@@ -89,19 +89,6 @@ public class Mammutilation extends PathfinderMob {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        ItemStack stack = player.getItemInHand(interactionHand);
-        ItemStack mutatedJellyBottle = new ItemStack(SpeciesItems.ICHOR_BOTTLE);
-        if (stack.is(Items.GLASS_BOTTLE)) {
-            stack.shrink(1);
-            this.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0f, 1.0f);
-            if (stack.isEmpty()) {
-                player.setItemInHand(interactionHand, mutatedJellyBottle);
-            } else if (!player.getInventory().add(mutatedJellyBottle)) {
-                player.drop(mutatedJellyBottle, false);
-            }
-            this.level().gameEvent(player, GameEvent.FLUID_PICKUP, this.blockPosition());
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
-        }
         return super.mobInteract(player, interactionHand);
     }
 
@@ -149,6 +136,11 @@ public class Mammutilation extends PathfinderMob {
             //    this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
             //}
         }
+    }
+
+    @Override
+    public int getMaxHeadXRot() {
+        return 20;
     }
 
     @Override
@@ -308,11 +300,10 @@ public class Mammutilation extends PathfinderMob {
 
         @Override
         public void start() {
-            this.mammutilation.playSound(SpeciesSoundEvents.GOOBER_SNEEZE, 1.0F, 0.1F);
             this.mammutilation.coughCooldown();
             this.mammutilation.coughTimer = 25;
             this.mammutilation.setPose(SpeciesPose.COUGHING.get());
-            this.mammutilation.playSound(SpeciesSoundEvents.MAMMUTILATION_COUGH);
+            this.mammutilation.playSound(SpeciesSoundEvents.MAMMUTILATION_COUGH, 1,1);
         }
 
         @Override
