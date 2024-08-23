@@ -58,9 +58,9 @@ public class Mammutilation extends PathfinderMob {
     private static final Map<Block, SoundEvent> SOUNDS_BY_EGG = Util.make(Maps.newHashMap(), map -> {
         map.put(Blocks.TURTLE_EGG, SoundEvents.TURTLE_EGG_CRACK);
         map.put(Blocks.SNIFFER_EGG, SoundEvents.SNIFFER_EGG_CRACK);
+        map.put(SpeciesBlocks.WRAPTOR_EGG, SpeciesSoundEvents.WRAPTOR_EGG_CRACK);
         map.put(SpeciesBlocks.PETRIFIED_EGG, SpeciesSoundEvents.PETRIFIED_EGG_CRACK);
-        map.put(SpeciesBlocks.SPRINGLING_EGG, SpeciesSoundEvents.PETRIFIED_EGG_CRACK);
-        map.put(SpeciesBlocks.CRUNCHER_EGG, SpeciesSoundEvents.PETRIFIED_EGG_CRACK);
+        map.put(SpeciesBlocks.SPRINGLING_EGG, SpeciesSoundEvents.SPRINGLING_EGG_CRACK);
     });
     private int coughTimer;
     private int hatchCooldown;
@@ -132,9 +132,9 @@ public class Mammutilation extends PathfinderMob {
             } else {
                 if (this.getPose() == SpeciesPose.HOWLING.get()) this.setPose(Pose.STANDING);
             }
-            //if (this.hatchCooldown == 0) {
-            //    this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
-            //}
+            if (this.hatchCooldown == 0) {
+                this.getAllEggPositions().stream().filter(blockPos -> this.level().getBlockState(blockPos).hasProperty(BlockStateProperties.HATCH)).forEach(this::handleEggHatching);
+            }
         }
     }
 
@@ -218,7 +218,9 @@ public class Mammutilation extends PathfinderMob {
         BlockState blockState = this.level().getBlockState(blockPos);
         int hatch = blockState.getValue(BlockStateProperties.HATCH);
         this.level().setBlock(blockPos, blockState.setValue(BlockStateProperties.HATCH, hatch + 1), 2);
-        this.level().playSound(null, blockPos, SOUNDS_BY_EGG.get(blockState.getBlock()), SoundSource.BLOCKS, 0.7f, 0.9f + this.getRandom().nextFloat() * 0.2f);
+        if (SOUNDS_BY_EGG.containsKey(blockState.getBlock())) {
+            this.level().playSound(null, blockPos, SOUNDS_BY_EGG.get(blockState.getBlock()), SoundSource.BLOCKS, 0.7f, 0.9f + this.getRandom().nextFloat() * 0.2f);
+        }
         this.level().levelEvent(3009, blockPos, 0);
         this.hatchCooldown = UniformInt.of(6000, 12000).sample(this.getRandom());
     }
