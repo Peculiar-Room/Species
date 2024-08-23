@@ -197,6 +197,10 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
             ).resultOrPartial(LOGGER::error).ifPresent(this::setPelletData);
         }
 
+        if (compoundTag.contains("PelletFuel", 10)) {
+            this.inventory.setItem(0, ItemStack.of(compoundTag.getCompound("PelletFuel")));
+        }
+
         this.setHunger(compoundTag.getInt("Hunger"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
         this.setDay(compoundTag.getLong("Day"));
@@ -216,6 +220,9 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                     .ifPresent(tag -> compoundTag.put("PelletData", tag));
         }
 
+        if (!this.inventory.getItem(0).isEmpty()) {
+            compoundTag.put("PelletFuel", this.inventory.getItem(0).save(new CompoundTag()));
+        }
 
         compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
@@ -275,9 +282,9 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         ItemStack itemStack = player.getItemInHand(interactionHand);
         InteractionResult interactionResult = super.mobInteract(player, interactionHand);
 
-        if (this.getHunger() == 0 && !this.level().isClientSide) {
+        if (this.getHunger() == 0) {
             this.openCustomInventoryScreen(player);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (itemStack.is(SpeciesTags.CRUNCHER_EATS) && this.getStunnedTicks() > 0) {
 
