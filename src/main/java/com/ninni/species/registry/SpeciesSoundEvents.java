@@ -137,6 +137,9 @@ public class SpeciesSoundEvents {
 
     public static final SoundType FROZEN_HAIR = register("frozen_hair", 0.8F, 1);
     public static final SoundType FROZEN_MEAT = register("frozen_meat", 0.8F, 1);
+    public static final SoundType ALPHACENE_GRASS = register("alphacene_grass", 0.8F, 1);
+    public static final SoundType ALPHACENE_MOSS = register("alphacene_moss", 0.8F, 1.2F);
+    public static final SoundType ALPHACENE_FOLIAGE = register("alphacene_foliage", 0.8F, 1.6F);
 
     private static SoundType register(String name, float volume, float pitch) {
         return new SoundType(volume, pitch, register("block." + name + ".break"), register("block." + name + ".step"), register("block." + name + ".place"), register("block." + name + ".hit"), register("block." + name + ".fall"));

@@ -88,11 +88,6 @@ public class Mammutilation extends PathfinderMob {
     }
 
     @Override
-    protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
-        return super.mobInteract(player, interactionHand);
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
         if (!this.level().isClientSide) {

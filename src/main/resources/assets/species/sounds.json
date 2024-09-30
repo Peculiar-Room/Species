@@ -937,5 +937,133 @@
 			"species:block/frozen_meat/light3"
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"block.alphacene_foliage.break": {
+		"sounds": [
+			"species:block/alphacene_foliage/heavy1",
+			"species:block/alphacene_foliage/heavy2",
+			"species:block/alphacene_foliage/heavy3"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.alphacene_foliage.fall": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.alphacene_foliage.hit": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.alphacene_foliage.place": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.alphacene_foliage.step": {
+		"sounds": [
+			"species:block/alphacene_foliage/light1",
+			"species:block/alphacene_foliage/light2",
+			"species:block/alphacene_foliage/light3"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"block.alphacene_grass.break": {
+		"sounds": [
+			"species:block/alphacene_grass/heavy1",
+			"species:block/alphacene_grass/heavy2",
+			"species:block/alphacene_grass/heavy3",
+			"species:block/alphacene_grass/heavy4"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.alphacene_grass.fall": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_grass.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.alphacene_grass.hit": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_grass.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.alphacene_grass.place": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_grass.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.alphacene_grass.step": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"block.alphacene_moss.break": {
+		"sounds": [
+			"species:block/alphacene_foliage/heavy1",
+			"species:block/alphacene_foliage/heavy2",
+			"species:block/alphacene_foliage/heavy3"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.alphacene_moss.fall": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.alphacene_moss.hit": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.alphacene_moss.place": {
+		"sounds": [
+			{
+				"name": "species:block.alphacene_foliage.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.alphacene_moss.step": {
+		"sounds": [
+			"species:block/alphacene_foliage/light1",
+			"species:block/alphacene_foliage/light2",
+			"species:block/alphacene_foliage/light3"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
 	}
 }
