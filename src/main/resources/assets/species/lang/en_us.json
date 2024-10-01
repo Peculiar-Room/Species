@@ -130,6 +130,11 @@
   "subtitles.entity.species.trooper.uproot": "Trooper uproots",
   "subtitles.entity.species.trooper.plant": "Trooper plants",
 
+  "advancements.species.burn_treeper_into_place.title": "Nerve Damage",
+  "advancements.species.burn_treeper_into_place.description": "Burn a Treeper into place to prevent it from moving",
+  "advancements.species.tame_trooper.title": "I Speak for The Treepers",
+  "advancements.species.tame_trooper.description": "Plant down an Ancient Pinecone and Tame the Trooper that grows from it",
+
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Goober Goo",
   "item.species.goober_spawn_egg": "Goober Spawn Egg",
@@ -159,6 +164,8 @@
 
   "advancements.species.obtain_petrified_egg.title": "Feels Interesting",
   "advancements.species.obtain_petrified_egg.description": "Obtain a Petrified Egg",
+  "advancements.species.tickle_goober.title": "Allergy Season",
+  "advancements.species.tickle_goober.description": "Make a Goober sneeze Goober Goo and prehistorify the world around you",
 
   "entity.species.cruncher": "Cruncher",
   "bar.species.cruncher": "%s's Appetite",
@@ -186,6 +193,8 @@
 
   "advancements.species.obtain_cruncher_egg.title": "Tastes Interesting",
   "advancements.species.obtain_cruncher_egg.description": "Obtain a Cruncher Egg",
+  "advancements.species.feed_cruncher.title": "Feed the Beast",
+  "advancements.species.feed_cruncher.description": "Attempt to satiate the Cruncher's appetite",
 
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
@@ -207,6 +216,11 @@
   "subtitles.item.species.youth_potion.baby": "Rejuvenation",
   "subtitles.item.species.youth_potion.stumped": "Baby's growth gets stumped",
 
+  "advancements.species.look_at_mammutilation.title": "It's... Alive?",
+  "advancements.species.look_at_mammutilation.description": "Use the power of lightning to bring back the Mammutilation",
+  "advancements.species.turn_mob_into_baby.title": "Is this even ethical?",
+  "advancements.species.turn_mob_into_baby.description": "Turn back time and turn a mob into its baby form with a Youth Potion",
+
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Springling Spawn Egg",
   "block.species.springling_egg": "Springling Egg",
@@ -224,5 +238,8 @@
   "subtitles.block.species.springling_egg.plop": "Springling plops",
 
   "advancements.species.obtain_springling_egg.title": "Looks Interesting",
-  "advancements.species.obtain_springling_egg.description": "Obtain a Springling Egg"
+  "advancements.species.obtain_springling_egg.description": "Obtain a Springling Egg",
+
+  "advancements.species.extend_springling_fully.title": "Ding!",
+  "advancements.species.extend_springling_fully.description": "Tame a Springling and extend its neck to the max"
 }

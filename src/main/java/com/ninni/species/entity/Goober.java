@@ -1,6 +1,7 @@
 package com.ninni.species.entity;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.goal.GooberLayDownGoal;
 import com.ninni.species.entity.ai.goal.GooberRearUpGoal;
 import com.ninni.species.entity.ai.goal.GooberYawnGoal;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -108,6 +110,7 @@ public class Goober extends Animal {
 
         if ((itemStack.is(Items.FEATHER) || itemStack.is(Items.BRUSH)) && this.getSneezeCooldown() == 0 && this.getBehavior().equals(GooberBehavior.IDLE.getName())) {
             this.setSneezeTimer(GooberBehavior.SNEEZING.getLength());
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TICKLE_GOOBER.trigger(serverPlayer);
             this.setPose(this.isGooberLayingDown() ? SpeciesPose.SNEEZING_LAYING_DOWN.get() : SpeciesPose.SNEEZING.get());
             this.sneezeCooldown();
             this.playSound(SpeciesSoundEvents.GOOBER_SNEEZE, 2, 1);

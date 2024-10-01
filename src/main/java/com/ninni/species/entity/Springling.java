@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.registry.*;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -75,6 +76,10 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     public void tick() {
         super.tick();
         this.refreshDimensions();
+
+        if (this.isVehicle() && this.getControllingPassenger() instanceof  Player player && this.getExtendedAmount() == this.getMaxExtendedAmount()) {
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.EXTEND_SPRINGLING_FULLY.trigger(serverPlayer);
+        }
 
         if (getExtendedAmount() > this.getMaxExtendedAmount()) this.setExtendedAmount(this.getMaxExtendedAmount());
 

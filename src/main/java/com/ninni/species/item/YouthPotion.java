@@ -1,10 +1,12 @@
 package com.ninni.species.item;
 
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.Springling;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
@@ -33,6 +35,7 @@ public class YouthPotion extends Item {
             }
             if (!mob.isBaby()) {
                 mob.setBaby(true);
+                if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TURN_MOB_INTO_BABY.trigger(serverPlayer);
                 mob.playSound(SpeciesSoundEvents.YOUTH_POTION_BABY, 1, 1);
                 if (livingEntity.level() instanceof ServerLevel serverLevel) {
                     double d = livingEntity.getRandom().nextGaussian() * 0.02;

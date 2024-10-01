@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:feather"
+    },
+    "title": {
+      "translate": "advancements.species.tickle_goober.title"
+    },
+    "description": {
+      "translate": "advancements.species.tickle_goober.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "tickle_goober": {
+      "trigger": "species:tickle_goober"
+    }
+  },
+  "requirements": [
+    [
+      "tickle_goober"
+    ]
+  ]
+}

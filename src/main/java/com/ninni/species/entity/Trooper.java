@@ -1,5 +1,6 @@
 package com.ninni.species.entity;
 
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesParticles;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
@@ -114,8 +116,8 @@ public class Trooper extends TamableAnimal {
                 this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, e, f);
                 this.playSound(SoundEvents.BONE_MEAL_USE);
             }
-            this.setOwnerUUID(player.getUUID());
-            this.setTame(true);
+            this.tame(player);
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TAME_TROOPER.trigger(serverPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else if (this.isTame() && this.getOwner() == player) {
             if (this.getTarget() != null) this.setTarget(null);

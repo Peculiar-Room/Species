@@ -3,6 +3,7 @@ package com.ninni.species.entity;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.client.inventory.CruncherInventoryMenu;
+import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
 import com.ninni.species.mixin.ServerPlayerAccessor;
@@ -290,6 +291,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
             itemStack.shrink(1);
 
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.FEED_CRUNCHER.trigger(serverPlayer);
             this.setHunger(this.getHunger() - 1);
             this.bossEvent.setColor(this.getBarColor());
 
