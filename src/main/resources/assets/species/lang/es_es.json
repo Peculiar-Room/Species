@@ -130,10 +130,10 @@
   "subtitles.entity.species.trooper.uproot": "Retoño de Treeper se levanta",
   "subtitles.entity.species.trooper.plant": "Retoño de Treeper se planta",
 
-  "advancements.species.burn_treeper_into_place.title": "Nerve Damage",
-  "advancements.species.burn_treeper_into_place.description": "Burn a Treeper into place to prevent it from moving",
-  "advancements.species.tame_trooper.title": "I Speak for The Treepers",
-  "advancements.species.tame_trooper.description": "Plant down an Ancient Pinecone and Tame the Trooper that grows from it",
+  "advancements.species.burn_treeper_into_place.title": "Daño Neuronal",
+  "advancements.species.burn_treeper_into_place.description": "Quema a un Treeper directamente con un endendedor para que se quede en su lugar, evitando que se mueva",
+  "advancements.species.tame_trooper.title": "Soy el Lorax y hablo por los Treepers",
+  "advancements.species.tame_trooper.description": "Planta un Piñón Antiguo y domestica al Retoño de Treeper que crezca de él",
 
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Moco de Goober",
@@ -164,8 +164,8 @@
 
   "advancements.species.obtain_petrified_egg.title": "Se siente interesante",
   "advancements.species.obtain_petrified_egg.description": "Obtén un Huevo Petrificado",
-  "advancements.species.tickle_goober.title": "Allergy Season",
-  "advancements.species.tickle_goober.description": "Make a Goober sneeze Goober Goo and prehistorify the world around you",
+  "advancements.species.tickle_goober.title": "Temporada de Alergias",
+  "advancements.species.tickle_goober.description": "Haz que un Goober estornude Moco de Goober y haz que el mundo a tu alrededor se prehistorifique",
 
   "entity.species.cruncher": "Triturador",
   "bar.species.cruncher": "Apetito de %s",
@@ -193,8 +193,8 @@
 
   "advancements.species.obtain_cruncher_egg.title": "Sabe interesante",
   "advancements.species.obtain_cruncher_egg.description": "Obtén un Huevo de Triturador",
-  "advancements.species.feed_cruncher.title": "Feed the Beast",
-  "advancements.species.feed_cruncher.description": "Attempt to satiate the Cruncher's appetite",
+  "advancements.species.feed_cruncher.title": "No eres tú cuando tienes hambre",
+  "advancements.species.feed_cruncher.description": "Intenta saciar el apetito del Triturador",
 
   "entity.species.mammutilation": "Mamutilación",
   "item.species.mammutilation_spawn_egg": "Generar Mamutilación",
@@ -216,10 +216,10 @@
   "subtitles.item.species.youth_potion.baby": "Rejuvenecimiento",
   "subtitles.item.species.youth_potion.stumped": "Crecimiento de del bebé se detiene",
 
-  "advancements.species.look_at_mammutilation.title": "It's... Alive?",
-  "advancements.species.look_at_mammutilation.description": "Use the power of lightning to bring back the Mammutilation",
-  "advancements.species.turn_mob_into_baby.title": "Is this even ethical?",
-  "advancements.species.turn_mob_into_baby.description": "Turn back time and turn a mob into its baby form with a Youth Potion",
+  "advancements.species.look_at_mammutilation.title": "Está... Vivo?",
+  "advancements.species.look_at_mammutilation.description": "Usa el poder del rayo para traer de vuelta a la vida a la Mamutilación",
+  "advancements.species.turn_mob_into_baby.title": "¿Es esto siquiera ético?",
+  "advancements.species.turn_mob_into_baby.description": "Retrocede el tiempo y haz que una criatura vuelva a ser bebé con una Poción de Rejuvenecimiento",
 
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Generar Springling",
@@ -241,5 +241,5 @@
   "advancements.species.obtain_springling_egg.description": "Obtén un huevo de Springling",
 
   "advancements.species.extend_springling_fully.title": "Ding!",
-  "advancements.species.extend_springling_fully.description": "Tame a Springling and extend its neck to the max"
+  "advancements.species.extend_springling_fully.description": "Domestica a un Springling y extiende su cuello hasta el límite"
 }
