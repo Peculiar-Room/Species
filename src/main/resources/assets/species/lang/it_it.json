@@ -130,6 +130,11 @@
   "subtitles.entity.species.trooper.uproot": "Arboscello di Treeper si travasa",
   "subtitles.entity.species.trooper.plant": "Arboscello di Treeper si pianta",
 
+  "advancements.species.burn_treeper_into_place.title": "Danno ai nervi",
+  "advancements.species.burn_treeper_into_place.description": "Impedisci a un treeper di muoversi bruciandolo",
+  "advancements.species.tame_trooper.title": "Parlo per conto degli alberi",
+  "advancements.species.tame_trooper.description": "Pianta una pigna antica e fatti amico il trooper in cui cresce",
+
   "entity.species.goober": "Goober",
   "entity.species.goober_goo": "Muco di goober",
   "item.species.goober_spawn_egg": "Uovo generatore di Goober",
@@ -159,6 +164,8 @@
 
   "advancements.species.obtain_petrified_egg.title": "Interessante al tatto",
   "advancements.species.obtain_petrified_egg.description": "Ottieni un uovo pietrificato",
+  "advancements.species.tickle_goober.title": "Stagione di allergie",
+  "advancements.species.tickle_goober.description": "Fai starnutire un goober e invecchia il mondo che ti circonda",
 
   "entity.species.cruncher": "Sgranocchiatore",
   "bar.species.cruncher": "Appetito di %s",
@@ -186,6 +193,8 @@
 
   "advancements.species.obtain_cruncher_egg.title": "Gusto interessante",
   "advancements.species.obtain_cruncher_egg.description": "Ottieni un uovo di sgranocchiatore",
+  "advancements.species.feed_cruncher.title": "Nutri la Bestia",
+  "advancements.species.feed_cruncher.description": "Tenta di sfamare l'appetito di uno sgranocchiatore",
 
   "entity.species.mammutilation": "Mammutilazione",
   "item.species.mammutilation_spawn_egg": "Uovo generatore di mammutilazione",
@@ -207,6 +216,11 @@
   "subtitles.item.species.youth_potion.baby": "Ringiovanimento",
   "subtitles.item.species.youth_potion.stumped": "Crescita viene bloccata",
 
+  "advancements.species.look_at_mammutilation.title": "È... Vivo?",
+  "advancements.species.look_at_mammutilation.description": "Utilizza il potere del tuono per dare vita ad una mammutilazione",
+  "advancements.species.turn_mob_into_baby.title": "Ma è almeno etico?",
+  "advancements.species.turn_mob_into_baby.description": "Ringiovanisci una creatura con una pozione della giovinezza",
+
   "entity.species.springling": "Springling",
   "item.species.springling_spawn_egg": "Uovo generatore di springling",
   "block.species.springling_egg": "Uovo di springling",
@@ -224,5 +238,8 @@
   "subtitles.block.species.springling_egg.plop": "Springling depone un uovo",
 
   "advancements.species.obtain_springling_egg.title": "Aspetto interessante",
-  "advancements.species.obtain_springling_egg.description": "Ottieni un uovo di springling"
+  "advancements.species.obtain_springling_egg.description": "Ottieni un uovo di springling",
+
+  "advancements.species.extend_springling_fully.title": "Ding!",
+  "advancements.species.extend_springling_fully.description": "Addomestica uno springling e estendi il suo collo fino al limite"
 }
