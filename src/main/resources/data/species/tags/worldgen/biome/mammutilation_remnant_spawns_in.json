@@ -1,6 +1,9 @@
 {
   "values": [
-    "#c:icy",
-    "#c:aquatic_icy"
+    "minecraft:frozen_peaks",
+    "minecraft:ice_spikes",
+    "minecraft:frozen_river",
+    "minecraft:deep_frozen_ocean",
+    "minecraft:frozen_ocean"
   ]
 }
