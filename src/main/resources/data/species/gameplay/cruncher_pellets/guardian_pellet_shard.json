@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:guardian",
+  "item": {
+    "id": "minecraft:prismarine_shard",
+    "Count": 1
+  },
+  "minTries": 8,
+  "maxTries": 18
+}

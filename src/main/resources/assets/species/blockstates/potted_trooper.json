@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "species:block/potted_trooper",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "species:block/potted_trooper"
+    },
+    "facing=south": {
+      "model": "species:block/potted_trooper",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "species:block/potted_trooper",
+      "y": 270
+    }
+  }
+}

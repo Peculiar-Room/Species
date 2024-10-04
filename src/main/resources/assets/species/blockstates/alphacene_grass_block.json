@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "snowy=false": [
+      {
+        "model": "species:block/alphacene_grass_block"
+      },
+      {
+        "model": "species:block/alphacene_grass_block",
+        "y": 90
+      },
+      {
+        "model": "species:block/alphacene_grass_block",
+        "y": 180
+      },
+      {
+        "model": "species:block/alphacene_grass_block",
+        "y": 270
+      }
+    ],
+    "snowy=true": [
+      {
+        "model": "species:block/alphacene_grass_block_snowy"
+      }
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:archaeology",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "species:bone_vertebra"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "species:bone_bark"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:flint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:hanging_roots"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "name": "minecraft:bone_block"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dead_bush"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:raw_copper",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "minecraft:clay_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 2,
+          "name": "species:bone_spike"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "species:archaeology/paleontology_dig_site/common"
+}

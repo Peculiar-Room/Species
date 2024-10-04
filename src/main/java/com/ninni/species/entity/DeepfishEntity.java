@@ -1,7 +1,7 @@
 package com.ninni.species.entity;
 
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.init.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;

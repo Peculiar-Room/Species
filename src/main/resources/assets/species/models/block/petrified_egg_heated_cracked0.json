@@ -1,0 +1,21 @@
+{
+	"texture_size": [64, 64],
+	"textures": {
+		"all": "species:block/petrified_egg_cracked_heated",
+		"particle": "species:block/petrified_egg_heated_particle"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [15, 14, 15],
+			"faces": {
+				"north": {"uv": [3.5, 4.5, 7, 8], "texture": "#all"},
+				"east": {"uv": [0, 4.5, 3.5, 8], "texture": "#all"},
+				"south": {"uv": [10.5, 4.5, 14, 8], "texture": "#all"},
+				"west": {"uv": [7, 4.5, 10.5, 8], "texture": "#all"},
+				"up": {"uv": [7, 4.5, 3.5, 1], "texture": "#all"},
+				"down": {"uv": [10.5, 1, 7, 4.5], "texture": "#all"}
+			}
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "species:alphacene_mushroom",
+    "species:alphacene_mushroom_block",
+    "species:alphacene_mushroom_growth",
+    "species:alphacene_grass",
+    "species:alphacene_tall_grass",
+    "species:birt_dwelling",
+    "species:frozen_meat"
+  ]
+}

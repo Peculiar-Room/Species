@@ -3,7 +3,7 @@ package com.ninni.species.entity;
 import com.google.common.collect.Sets;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.entity.ai.goal.RoombugFollowOwnerGoal;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +54,7 @@ public class RoombugEntity extends TamableAnimal {
     private static final Set<Item> TAMING_INGREDIENTS = Sets.newHashSet(Items.HONEYCOMB);
     int snoringTicks = 0;
 
-    protected RoombugEntity(EntityType<? extends TamableAnimal> entityType, Level world) {
+    public RoombugEntity(EntityType<? extends TamableAnimal> entityType, Level world) {
         super(entityType, world);
     }
 

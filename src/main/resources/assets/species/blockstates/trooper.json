@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "species:block/trooper_stage0"
+    },
+    "age=1": {
+      "model": "species:block/trooper_stage1"
+    },
+    "age=2": {
+      "model": "species:block/trooper_stage2"
+    }
+  }
+}

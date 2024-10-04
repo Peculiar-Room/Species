@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:slime",
+  "item": {
+    "id": "minecraft:slime_ball",
+    "Count": 1
+  },
+  "minTries": 16,
+  "maxTries": 32
+}

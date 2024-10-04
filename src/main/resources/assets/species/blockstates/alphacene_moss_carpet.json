@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "species:block/alphacene_moss_carpet"
+      },
+      {
+        "model": "species:block/alphacene_moss_carpet",
+        "y": 90
+      },
+      {
+        "model": "species:block/alphacene_moss_carpet",
+        "y": 180
+      },
+      {
+        "model": "species:block/alphacene_moss_carpet",
+        "y": 270
+      }
+    ]
+  }
+}

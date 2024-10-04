@@ -1,18 +1,23 @@
 package com.ninni.species;
 
-import com.ninni.species.block.SpeciesBlocks;
-import com.ninni.species.block.entity.SpeciesBlockEntities;
+import com.ninni.species.init.SpeciesBlocks;
+import com.ninni.species.init.SpeciesBlockEntities;
 import com.ninni.species.client.particles.SpeciesParticles;
-import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.init.SpeciesEntities;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.events.MiscEvents;
 import com.ninni.species.events.MobEvents;
 import com.ninni.species.init.SpeciesCreativeModeTabs;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
-import com.ninni.species.structure.SpeciesStructurePieceTypes;
-import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
-import com.ninni.species.world.gen.structure.SpeciesStructureTypes;
+import com.ninni.species.init.SpeciesEntityDataSerializers;
+import com.ninni.species.init.SpeciesFeatures;
+import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.init.SpeciesMemoryModuleTypes;
+import com.ninni.species.init.SpeciesNetwork;
+import com.ninni.species.init.SpeciesSensorTypes;
+import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesStructurePieceTypes;
+import com.ninni.species.init.SpeciesTreeDecorators;
+import com.ninni.species.init.SpeciesStructureTypes;
 import com.ninni.species.world.poi.SpeciesPointOfInterestTypes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,11 +38,15 @@ public class Species {
 		SpeciesBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
 		SpeciesCreativeModeTabs.CREATIVE_MODE_TABAS.register(modEventBus);
 		SpeciesStatusEffects.MOB_EFFECTS.register(modEventBus);
+		SpeciesEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);
 		SpeciesEntities.ENTITY_TYPES.register(modEventBus);
+		SpeciesFeatures.FEATURES.register(modEventBus);
 		SpeciesItems.ITEMS.register(modEventBus);
 		SpeciesSoundEvents.SOUND_EVENTS.register(modEventBus);
 		SpeciesStructureTypes.STRUCTURES.register(modEventBus);
 		SpeciesStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
+		SpeciesMemoryModuleTypes.MEMORY_MODULE_TYPES.register(modEventBus);
+		SpeciesSensorTypes.SENSOR_TYPES.register(modEventBus);
 		SpeciesParticles.PARTICLE_TYPES.register(modEventBus);
 		SpeciesPointOfInterestTypes.POI_TYPES.register(modEventBus);
 		SpeciesTreeDecorators.TREE_DECORATOR_TYPE.register(modEventBus);
@@ -48,6 +57,7 @@ public class Species {
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
+		event.enqueueWork(SpeciesNetwork::init);
 	}
 
 }

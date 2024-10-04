@@ -1,0 +1,21 @@
+{
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "species:block/springling_egg",
+		"particle": "species:block/springling_egg_particle"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 15, 8]},
+			"faces": {
+				"north": {"uv": [0, 3.5, 2, 7.5], "texture": "#0"},
+				"east": {"uv": [2, 3.5, 4, 7.5], "texture": "#0"},
+				"south": {"uv": [4, 3.5, 6, 7.5], "texture": "#0"},
+				"west": {"uv": [6, 3.5, 8, 7.5], "texture": "#0"},
+				"down": {"uv": [4, 7.5, 2, 9.5], "texture": "#0"}
+			}
+		}
+	]
+}

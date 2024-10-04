@@ -2,23 +2,50 @@ package com.ninni.species.events;
 
 import com.ninni.species.Species;
 import com.ninni.species.client.model.entity.BirtEntityModel;
+import com.ninni.species.client.model.entity.CruncherModel;
 import com.ninni.species.client.model.entity.DeepfishEntityModel;
+import com.ninni.species.client.model.entity.GooberGooModel;
+import com.ninni.species.client.model.entity.GooberModel;
 import com.ninni.species.client.model.entity.LimpetEntityModel;
+import com.ninni.species.client.model.entity.MammutilationModel;
 import com.ninni.species.client.model.entity.RoombugEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.model.entity.SpringlingModel;
+import com.ninni.species.client.model.entity.TreeperModel;
+import com.ninni.species.client.model.entity.TrooperModel;
 import com.ninni.species.client.model.entity.WraptorEntityModel;
-import com.ninni.species.client.particles.BirtdParticle;
+import com.ninni.species.client.particles.AscendingDustParticle;
+import com.ninni.species.client.particles.IchorBottleParticle;
+import com.ninni.species.client.particles.IchorParticle;
+import com.ninni.species.client.particles.PelletDripParticle;
+import com.ninni.species.client.particles.RotatingParticle;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.particles.SpeciesParticles;
+import com.ninni.species.client.particles.TreeperLeafParticle;
 import com.ninni.species.client.renderer.BirtEntityRenderer;
+import com.ninni.species.client.renderer.CruncherRenderer;
 import com.ninni.species.client.renderer.DeepfishEntityRenderer;
+import com.ninni.species.client.renderer.GooberRenderer;
 import com.ninni.species.client.renderer.LimpetEntityRenderer;
+import com.ninni.species.client.renderer.MammutilationRenderer;
 import com.ninni.species.client.renderer.RoombugEntityRenderer;
+import com.ninni.species.client.renderer.SpringlingRenderer;
+import com.ninni.species.client.renderer.TreeperRenderer;
+import com.ninni.species.client.renderer.TrooperRenderer;
 import com.ninni.species.client.renderer.WraptorEntityRenderer;
-import com.ninni.species.entity.SpeciesEntities;
-import com.ninni.species.item.SpeciesItems;
+import com.ninni.species.client.renderer.entity.GooberGooRenderer;
+import com.ninni.species.entity.Springling;
+import com.ninni.species.init.SpeciesEntities;
+import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.init.SpeciesKeyMappings;
+import com.ninni.species.init.SpeciesNetwork;
+import com.ninni.species.network.UpdateSpringlingDataPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.FallingBlockRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
@@ -26,16 +53,40 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.MutableHashedLinkedMap;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.antlr.v4.runtime.atn.SemanticContext;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
+
+    @SubscribeEvent
+    public static void onClientSetup(final FMLClientSetupEvent event) {
+        IEventBus eventBus = MinecraftForge.EVENT_BUS;
+        eventBus.addListener((TickEvent.ClientTickEvent clientTickEvent) -> {
+            Minecraft client = Minecraft.getInstance();
+            Player player = client.player;
+            if (player != null && player.getVehicle() instanceof Springling springling) {
+                float extendedAmount = springling.getExtendedAmount();
+                if (!SpeciesKeyMappings.RETRACT_KEY.isDown() && !springling.level().getBlockState(player.blockPosition().above(2)).isSolid() && SpeciesKeyMappings.EXTEND_KEY.isDown()) {
+                    SpeciesNetwork.INSTANCE.sendToServer(new UpdateSpringlingDataPacket(0.1F, extendedAmount < springling.getMaxExtendedAmount()));
+                }
+                if (SpeciesKeyMappings.RETRACT_KEY.isDown() && !SpeciesKeyMappings.EXTEND_KEY.isDown()) {
+                    SpeciesNetwork.INSTANCE.sendToServer(new UpdateSpringlingDataPacket(-0.25F, extendedAmount > 0));
+                }
+            }
+        });
+    }
 
     @SubscribeEvent
     public static void registerCreativeModeTab(BuildCreativeModeTabContentsEvent event) {
@@ -74,7 +125,15 @@ public class ClientEvents {
     @SubscribeEvent
     public static void registerParticleTypes(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(SpeciesParticles.SNORING.get(), SnoringParticle.Factory::new);
-        event.registerSpriteSet(SpeciesParticles.BIRTD.get(), BirtdParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.BIRTD.get(), RotatingParticle.BirtdFactory::new);
+        event.registerSpriteSet(SpeciesParticles.FOOD.get(), RotatingParticle.FoodFactory::new);
+        event.registerSpriteSet(SpeciesParticles.ASCENDING_DUST.get(), AscendingDustParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.TREEPER_LEAF.get(), TreeperLeafParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.YOUTH_POTION.get(), IchorBottleParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.ICHOR.get(), IchorParticle.Factory::new);
+        event.registerSpriteSet(SpeciesParticles.DRIPPING_PELLET_DRIP.get(), PelletDripParticle.PelletDripHangProvider::new);
+        event.registerSpriteSet(SpeciesParticles.FALLING_PELLET_DRIP.get(), PelletDripParticle.PelletDripFallProvider::new);
+        event.registerSpriteSet(SpeciesParticles.LANDING_PELLET_DRIP.get(), PelletDripParticle.PelletDripLandProvider::new);
     }
 
     @SubscribeEvent
@@ -85,6 +144,15 @@ public class ClientEvents {
         event.registerEntityRenderer(SpeciesEntities.BIRT.get(), BirtEntityRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.BIRT_EGG.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.LIMPET.get(), LimpetEntityRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.TREEPER.get(), TreeperRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.TROOPER.get(), TrooperRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.GOOBER.get(), GooberRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.GOOBER_GOO.get(), GooberGooRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.CRUNCHER.get(), CruncherRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.MAMMUTILATION.get(), MammutilationRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.SPRINGLING.get(), SpringlingRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.MAMMUTILATION_ICHOR.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.CRUNCHER_PELLET.get(), FallingBlockRenderer::new);
     }
 
     @SubscribeEvent
@@ -94,6 +162,19 @@ public class ClientEvents {
         event.registerLayerDefinition(SpeciesEntityModelLayers.ROOMBUG, RoombugEntityModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.BIRT, BirtEntityModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.WRAPTOR, WraptorEntityModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.TREEPER, TreeperModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.TROOPER, TrooperModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.GOOBER, GooberModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.GOOBER_GOO, GooberGooModel::createLayer);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.CRUNCHER, CruncherModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.MAMMUTILATION, MammutilationModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.SPRINGLING, SpringlingModel::getLayerDefinition);
+    }
+
+    @SubscribeEvent
+    public static void registerKeys(RegisterKeyMappingsEvent event) {
+        event.register(SpeciesKeyMappings.EXTEND_KEY);
+        event.register(SpeciesKeyMappings.RETRACT_KEY);
     }
 
 }

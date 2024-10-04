@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.species.feed_cruncher.title"
+    },
+    "description": {
+      "translate": "advancements.species.feed_cruncher.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "feed_cruncher": {
+      "trigger": "species:feed_cruncher"
+    }
+  },
+  "requirements": [
+    [
+      "feed_cruncher"
+    ]
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:phantom",
+  "item": {
+    "id": "minecraft:phantom_membrane",
+    "Count": 1
+  },
+  "minTries": 4,
+  "maxTries": 8
+}

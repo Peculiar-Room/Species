@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:skeleton",
+  "item": {
+    "id": "minecraft:bone",
+    "Count": 1
+  },
+  "minTries": 16,
+  "maxTries": 32
+}

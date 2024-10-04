@@ -2,8 +2,9 @@ package com.ninni.species.entity;
 
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesEntities;
+import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.init.SpeciesSoundEvents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;

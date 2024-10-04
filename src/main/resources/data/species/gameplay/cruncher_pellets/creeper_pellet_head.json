@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:creeper",
+  "item": {
+    "id": "minecraft:creeper_head",
+    "Count": 1
+  },
+  "minTries": 24,
+  "maxTries": 32
+}

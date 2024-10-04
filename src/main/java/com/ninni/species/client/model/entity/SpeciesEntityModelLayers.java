@@ -15,6 +15,13 @@ public interface SpeciesEntityModelLayers {
     ModelLayerLocation ROOMBUG = main("roombug");
     ModelLayerLocation BIRT = main("birt");
     ModelLayerLocation LIMPET = main("limpet");
+    ModelLayerLocation TREEPER = main("treeper");
+    ModelLayerLocation TROOPER = main("trooper");
+    ModelLayerLocation GOOBER = main("goober");
+    ModelLayerLocation GOOBER_GOO = main("goober_goo");
+    ModelLayerLocation CRUNCHER = main("cruncher");
+    ModelLayerLocation MAMMUTILATION = main("mammutilation");
+    ModelLayerLocation SPRINGLING = main("springling");
 
     private static ModelLayerLocation register(String id, String name) {
         return new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

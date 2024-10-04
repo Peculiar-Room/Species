@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:bone_block"
+    }
+  },
+  "result": {
+    "item": "species:bone_vertebra",
+    "count": 4
+  }
+}

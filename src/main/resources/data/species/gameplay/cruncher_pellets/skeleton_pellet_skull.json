@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:skeleton",
+  "item": {
+    "id": "minecraft:skeleton_skull",
+    "Count": 1
+  },
+  "minTries": 24,
+  "maxTries": 32
+}

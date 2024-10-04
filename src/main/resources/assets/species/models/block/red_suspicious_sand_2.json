@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "species:block/red_suspicious_sand_2"
+  }
+}

@@ -1,7 +1,6 @@
 package com.ninni.species.init;
 
 import com.ninni.species.Species;
-import com.ninni.species.item.SpeciesItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

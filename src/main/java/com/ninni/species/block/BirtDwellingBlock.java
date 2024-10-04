@@ -1,11 +1,11 @@
 package com.ninni.species.block;
 
 import com.ninni.species.block.entity.BirtDwellingBlockEntity;
-import com.ninni.species.block.entity.SpeciesBlockEntities;
+import com.ninni.species.init.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.entity.BirtEntity;
-import com.ninni.species.item.SpeciesItems;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.init.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +37,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "species:bone_bark",
+    "species:bone_vertebra",
+    "species:bone_spike"
+  ]
+}

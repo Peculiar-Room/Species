@@ -5,8 +5,14 @@
   "refmap": "species.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AgeableMobMixin",
+    "BlockEntityTypeMixin",
+    "FlowerPotBlockMixin",
+    "LightningRodMixin",
     "LivingEntityMixin",
     "MobEntityMixin",
+    "PlayerMixin",
+    "PoseMixin",
     "WitherSkeletonEntityMixin"
   ],
   "client": [],

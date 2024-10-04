@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:spider",
+  "item": {
+    "id": "minecraft:string",
+    "Count": 1
+  },
+  "minTries": 16,
+  "maxTries": 32
+}

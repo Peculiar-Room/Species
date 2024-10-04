@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "species:wraptor_egg"
+    "species:alphacene_moss_block",
+    "species:frozen_meat",
+    "species:frozen_hair",
+    "species:wraptor_egg",
+    "species:cruncher_pellet"
   ]
 }

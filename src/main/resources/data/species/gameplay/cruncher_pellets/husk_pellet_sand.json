@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:husk",
+  "item": {
+    "id": "minecraft:sand",
+    "Count": 1
+  },
+  "minTries": 16,
+  "maxTries": 32
+}

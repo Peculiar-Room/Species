@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "hatch=0,heated=false": {
+      "model": "species:block/petrified_egg"
+    },
+    "hatch=1,heated=false": {
+      "model": "species:block/petrified_egg_cracked0"
+    },
+    "hatch=2,heated=false": {
+      "model": "species:block/petrified_egg_cracked1"
+    },
+    "hatch=0,heated=true": {
+      "model": "species:block/petrified_egg_heated"
+    },
+    "hatch=1,heated=true": {
+      "model": "species:block/petrified_egg_heated_cracked0"
+    },
+    "hatch=2,heated=true": {
+      "model": "species:block/petrified_egg_heated_cracked1"
+    }
+  }
+}

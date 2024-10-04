@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:zombie",
+  "item": {
+    "id": "minecraft:zombie_head",
+    "Count": 1
+  },
+  "minTries": 24,
+  "maxTries": 32
+}

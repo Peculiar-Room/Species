@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "species:block/cruncher_pellet_bottom",
+    "side": "species:block/cruncher_pellet_side",
+    "top": "species:block/cruncher_pellet"
+  }
+}

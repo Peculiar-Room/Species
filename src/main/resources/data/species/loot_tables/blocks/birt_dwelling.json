@@ -1,0 +1,60 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "Birts",
+                      "target": "BlockEntityTag.Birts"
+                    }
+                  ],
+                  "source": "block_entity"
+                },
+                {
+                  "block": "species:birt_dwelling",
+                  "function": "minecraft:copy_state",
+                  "properties": [
+                    "eggs"
+                  ]
+                }
+              ],
+              "name": "species:birt_dwelling"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "species:birt_dwelling"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "species:blocks/birt_dwelling"
+}

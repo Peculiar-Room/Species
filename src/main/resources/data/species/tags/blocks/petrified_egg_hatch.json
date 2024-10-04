@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#species:petrified_egg_hatch_boost",
+    "minecraft:lava",
+    "minecraft:magma_block",
+    "minecraft:fire",
+    "minecraft:campfire"
+  ]
+}

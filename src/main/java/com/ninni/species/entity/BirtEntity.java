@@ -1,13 +1,13 @@
 package com.ninni.species.entity;
 
 import com.google.common.collect.Lists;
-import com.ninni.species.block.SpeciesBlocks;
+import com.ninni.species.init.SpeciesBlocks;
 import com.ninni.species.block.entity.BirtDwellingBlockEntity;
-import com.ninni.species.block.entity.SpeciesBlockEntities;
+import com.ninni.species.init.SpeciesBlockEntities;
 import com.ninni.species.entity.ai.goal.BirtCommunicatingGoal;
 import com.ninni.species.entity.ai.goal.SendMessageTicksGoal;
-import com.ninni.species.sound.SpeciesSoundEvents;
-import com.ninni.species.tag.SpeciesTags;
+import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.nbt.CompoundTag;

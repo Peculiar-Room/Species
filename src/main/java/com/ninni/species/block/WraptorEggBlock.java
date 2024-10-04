@@ -1,9 +1,9 @@
 package com.ninni.species.block;
 
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.entity.SpeciesEntities;
+import com.ninni.species.init.SpeciesEntities;
 import com.ninni.species.entity.WraptorEntity;
-import com.ninni.species.sound.SpeciesSoundEvents;
+import com.ninni.species.init.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,11 +51,11 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
     private void breakEgg(Level world, BlockPos pos, BlockState state) {
         int i = state.getValue(HATCH);
         if (i < 2) {
-            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_CRACK.get(), SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.WRAPTOR_EGG_CRACK.get(), SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.setBlock(pos, this.defaultBlockState().setValue(HATCH, i + 1), 2);
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         } else {
-            world.playSound(null, pos, SpeciesSoundEvents.BLOCK_WRAPTOR_EGG_HATCH.get(), SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
+            world.playSound(null, pos, SpeciesSoundEvents.WRAPTOR_EGG_HATCH.get(), SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.removeBlock(pos, false);
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
             WraptorEntity wraptor = SpeciesEntities.WRAPTOR.get().create(world);

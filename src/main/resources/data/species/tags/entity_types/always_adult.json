@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "species:treeper",
+    "species:trooper",
+    "species:cruncher",
+    "species:roombug",
+    "minecraft:frog",
+    "minecraft:wandering_trader"
+  ]
+}

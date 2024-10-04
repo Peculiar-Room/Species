@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "species:cruncher_egg",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "species:cruncher_egg",
+              "properties": {
+                "half": "lower",
+                "cracked": "false"
+              }
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "species:blocks/cruncher_egg"
+}

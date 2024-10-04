@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "species:frozen_hair"
+    }
+  ],
+  "result": {
+    "item": "minecraft:brown_wool",
+    "count": 2
+  }
+}

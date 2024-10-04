@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 867700449,
+    "separation": 5,
+    "spacing": 10
+  },
+  "structures": [
+    {
+      "structure": "species:paleontology_dig_site",
+      "weight": 1
+    }
+  ]
+}

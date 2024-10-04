@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "thickness=base,vertical_direction=down": {
+      "model": "species:block/bone_spike_down_base"
+    },
+    "thickness=base,vertical_direction=up": {
+      "model": "species:block/bone_spike_up_base"
+    },
+    "thickness=middle,vertical_direction=down": {
+      "model": "species:block/bone_spike_down"
+    },
+    "thickness=middle,vertical_direction=up": {
+      "model": "species:block/bone_spike_up"
+    },
+    "thickness=tip,vertical_direction=down": {
+      "model": "species:block/bone_spike_down_tip"
+    },
+    "thickness=tip,vertical_direction=up": {
+      "model": "species:block/bone_spike_up_tip"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#B#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "species:birt_egg"
+    },
+    "B": {
+      "item": "minecraft:birch_log"
+    }
+  },
+  "result": {
+    "item": "species:birt_dwelling",
+    "count": 1
+  }
+}
