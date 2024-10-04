@@ -90,6 +90,10 @@ public class Mammutilation extends PathfinderMob {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 0.15).add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.ATTACK_DAMAGE, 0.0);
     }
 
+    public boolean removeWhenFarAway(double d) {
+        return false;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
