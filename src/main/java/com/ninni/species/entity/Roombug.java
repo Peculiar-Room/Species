@@ -134,11 +134,6 @@ public class Roombug extends TamableAnimal {
     }
 
     @Override
-    public boolean isSensitiveToWater() {
-        return true;
-    }
-
-    @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
     }
