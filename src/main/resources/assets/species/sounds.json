@@ -675,11 +675,11 @@
 		],
 		"subtitle": "subtitles.entity.species.cruncher.stun"
 	},
-	"effect.gut_feeling.species": {
+	"effect.gut_feeling.spawn": {
 		"sounds": [
-			"species:effect/gut_feeling/species"
+			"species:effect/gut_feeling/spawn"
 		],
-		"subtitle": "subtitles.effect.species.gut_feeling.species"
+		"subtitle": "subtitles.effect.species.gut_feeling.spawn"
 	},
 	"effect.gut_feeling.applied": {
 		"sounds": [
