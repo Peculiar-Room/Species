@@ -198,7 +198,6 @@
 
   "entity.species.mammutilation": "Mamutilación",
   "item.species.mammutilation_spawn_egg": "Generar Mamutilación",
-  "entity.species.mammutilation_ichor": "Icor de Mamutilación",
   "item.species.ichor_bottle": "Botella de Icor",
   "item.species.youth_potion": "Poción de Rejuvenación",
   "block.species.ichor": "Icor",
@@ -210,6 +209,7 @@
   "subtitles.entity.species.mammutilation.idle": "Mamutilación intenta respirar",
   "subtitles.entity.species.mammutilation.cough": "Mamutilación tose",
   "subtitles.entity.species.mammutilation.howl": "Mamutilación ahulla",
+  "subtitles.entity.species.mammutilation.bleed": "Mamutilación sangra",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Mamutilación divagando",
 
   "subtitles.item.species.ichor_bottle.applied": "Icor cura",

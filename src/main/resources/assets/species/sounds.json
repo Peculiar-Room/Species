@@ -834,6 +834,15 @@
 		],
 		"subtitle": "subtitles.entity.species.mammutilation.death"
 	},
+	"entity.mammutilation.bleed": {
+		"sounds": [
+			"species:entity/mammutilation/bleed1",
+			"species:entity/mammutilation/bleed2",
+			"species:entity/mammutilation/bleed3",
+			"species:entity/mammutilation/bleed4"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.bleed"
+	},
 	"item.ichor_bottle.applied": {
 		"sounds": [
 			"species:item/ichor_bottle/applied"

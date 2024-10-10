@@ -129,6 +129,7 @@ public class SpeciesSoundEvents {
     public static final SoundEvent MAMMUTILATION_IDLE = register("entity.mammutilation.idle");
     public static final SoundEvent MAMMUTILATION_HOWL = register("entity.mammutilation.howl");
     public static final SoundEvent MAMMUTILATION_COUGH = register("entity.mammutilation.cough");
+    public static final SoundEvent MAMMUTILATION_BLEED = register("entity.mammutilation.bleed");
     public static final SoundEvent MAMMUTIFUL_IDLE = register("entity.mammutilation.mammutiful_idle");
     public static final SoundEvent MAMMUTIFUL_HOWL = register("entity.mammutilation.mammutiful_howl");
     public static final SoundEvent ICHOR_BOTTLE = register("item.ichor_bottle.applied");

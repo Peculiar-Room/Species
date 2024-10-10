@@ -198,7 +198,6 @@
 
   "entity.species.mammutilation": "Mammutilazione",
   "item.species.mammutilation_spawn_egg": "Uovo generatore di mammutilazione",
-  "entity.species.mammutilation_ichor": "Icore di mammutilazione",
   "item.species.ichor_bottle": "Ampolla di icore",
   "item.species.youth_potion": "Pozione della giovinezza",
   "block.species.ichor": "Icore",
@@ -210,6 +209,7 @@
   "subtitles.entity.species.mammutilation.idle": "Mammutilazione prova a respirare",
   "subtitles.entity.species.mammutilation.cough": "Mammutilazione tossisce",
   "subtitles.entity.species.mammutilation.howl": "Mammutilazione ulula",
+  "subtitles.entity.species.mammutilation.bleed": "Mammutilazione sanguina",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Mammutilazione blatera",
 
   "subtitles.item.species.ichor_bottle.applied": "Icore cura",

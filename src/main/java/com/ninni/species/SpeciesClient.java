@@ -57,7 +57,6 @@ public class SpeciesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SpeciesEntities.GOOBER_GOO, GooberGooRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.CRUNCHER, CruncherRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.MAMMUTILATION, MammutilationRenderer::new);
-        EntityRendererRegistry.register(SpeciesEntities.MAMMUTILATION_ICHOR, ThrownItemRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.SPRINGLING, SpringlingRenderer::new);
         EntityRendererRegistry.register(SpeciesEntities.CRUNCHER_PELLET, FallingBlockRenderer::new);
 
