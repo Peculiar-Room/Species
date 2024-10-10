@@ -64,7 +64,7 @@ public class CruncherEggBlockEntity extends BlockEntity {
 
         blockEntity.timer++;
 
-        if ((blockEntity.timer > 20 * 15 && level.random.nextInt(30) == 1) || (blockEntity.timer > 20 * 45)) {
+        if ((blockEntity.timer > 20 * 15 * 60 && level.random.nextInt(30) == 1) || (blockEntity.timer > 20 * 16 * 60)) {
             if (target == null) {
                 Player nearestPlayer = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 10.0, false);
 
