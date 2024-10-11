@@ -22,17 +22,17 @@ import com.ninni.species.client.particles.RotatingParticle;
 import com.ninni.species.client.particles.SnoringParticle;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.client.particles.TreeperLeafParticle;
-import com.ninni.species.client.renderer.BirtEntityRenderer;
+import com.ninni.species.client.renderer.BirtRenderer;
 import com.ninni.species.client.renderer.CruncherRenderer;
-import com.ninni.species.client.renderer.DeepfishEntityRenderer;
+import com.ninni.species.client.renderer.DeepfishRenderer;
 import com.ninni.species.client.renderer.GooberRenderer;
-import com.ninni.species.client.renderer.LimpetEntityRenderer;
+import com.ninni.species.client.renderer.LimpetRenderer;
 import com.ninni.species.client.renderer.MammutilationRenderer;
-import com.ninni.species.client.renderer.RoombugEntityRenderer;
+import com.ninni.species.client.renderer.RoombugRenderer;
 import com.ninni.species.client.renderer.SpringlingRenderer;
 import com.ninni.species.client.renderer.TreeperRenderer;
 import com.ninni.species.client.renderer.TrooperRenderer;
-import com.ninni.species.client.renderer.WraptorEntityRenderer;
+import com.ninni.species.client.renderer.WraptorRenderer;
 import com.ninni.species.client.renderer.entity.GooberGooRenderer;
 import com.ninni.species.entity.Springling;
 import com.ninni.species.registry.SpeciesEntities;
@@ -135,12 +135,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(SpeciesEntities.WRAPTOR.get(), WraptorEntityRenderer::new);
-        event.registerEntityRenderer(SpeciesEntities.ROOMBUG.get(), RoombugEntityRenderer::new);
-        event.registerEntityRenderer(SpeciesEntities.DEEPFISH.get(), DeepfishEntityRenderer::new);
-        event.registerEntityRenderer(SpeciesEntities.BIRT.get(), BirtEntityRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.WRAPTOR.get(), WraptorRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.ROOMBUG.get(), RoombugRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.DEEPFISH.get(), DeepfishRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.BIRT.get(), BirtRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.BIRT_EGG.get(), ThrownItemRenderer::new);
-        event.registerEntityRenderer(SpeciesEntities.LIMPET.get(), LimpetEntityRenderer::new);
+        event.registerEntityRenderer(SpeciesEntities.LIMPET.get(), LimpetRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.TREEPER.get(), TreeperRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.TROOPER.get(), TrooperRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.GOOBER.get(), GooberRenderer::new);

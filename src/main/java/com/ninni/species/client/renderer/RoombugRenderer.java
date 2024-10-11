@@ -13,11 +13,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class RoombugEntityRenderer<T extends LivingEntity> extends MobRenderer<Roombug, RoombugEntityModel<Roombug>> {
+public class RoombugRenderer<T extends LivingEntity> extends MobRenderer<Roombug, RoombugEntityModel<Roombug>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/roombug/roombug.png");
     public static final ResourceLocation SITTING_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/roombug/roombug_sleeping.png");
 
-    public RoombugEntityRenderer(EntityRendererProvider.Context ctx) {
+    public RoombugRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new RoombugEntityModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.ROOMBUG)), 0.8F);
     }
 

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class LimpetEntityRenderer extends MobRenderer<Limpet, LimpetEntityModel<Limpet>> {
+public class LimpetRenderer extends MobRenderer<Limpet, LimpetEntityModel<Limpet>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
     public static final ResourceLocation TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal.png");
     public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst.png");
@@ -29,7 +29,7 @@ public class LimpetEntityRenderer extends MobRenderer<Limpet, LimpetEntityModel<
     public static final ResourceLocation GARY_TEXTURE_EMERALD = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/emerald_gary.png");
     public static final ResourceLocation GARY_TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond_gary.png");
 
-    public LimpetEntityRenderer(EntityRendererProvider.Context context) {
+    public LimpetRenderer(EntityRendererProvider.Context context) {
         super(context, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET)), 0.5f);
         this.addLayer(new LimpetBreakingLayer(this, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET))));
     }
@@ -41,9 +41,9 @@ public class LimpetEntityRenderer extends MobRenderer<Limpet, LimpetEntityModel<
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Limpet limpet) {
-        if ("Gary".equals(ChatFormatting.stripFormatting(limpet.getName().getString()))) {
-            return switch (limpet.getLimpetType()) {
+    public ResourceLocation getTextureLocation(Limpet entity) {
+        if (entity.getName().getString().equalsIgnoreCase("gary")) {
+            return switch (entity.getLimpetType()) {
                 case COAL -> GARY_TEXTURE_COAL;
                 case AMETHYST -> GARY_TEXTURE_AMETHYST;
                 case LAPIS -> GARY_TEXTURE_LAPIS;
@@ -52,7 +52,7 @@ public class LimpetEntityRenderer extends MobRenderer<Limpet, LimpetEntityModel<
                 case SHELL, NO_SHELL -> GARY_TEXTURE;
             };
         } else
-            return switch (limpet.getLimpetType()) {
+            return switch (entity.getLimpetType()) {
                 case COAL -> TEXTURE_COAL;
                 case AMETHYST -> TEXTURE_AMETHYST;
                 case LAPIS -> TEXTURE_LAPIS;

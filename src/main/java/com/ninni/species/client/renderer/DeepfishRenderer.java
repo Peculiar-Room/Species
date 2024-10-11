@@ -15,11 +15,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class DeepfishEntityRenderer extends MobRenderer<Deepfish, DeepfishEntityModel<Deepfish>> {
+public class DeepfishRenderer extends MobRenderer<Deepfish, DeepfishEntityModel<Deepfish>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/deepfish/deepfish.png");
     private static final ResourceLocation TEXTURE_GLOW = new ResourceLocation(MOD_ID, "textures/entity/deepfish/deepfish_glow.png");
 
-    public DeepfishEntityRenderer(EntityRendererProvider.Context context) {
+    public DeepfishRenderer(EntityRendererProvider.Context context) {
         super(context, new DeepfishEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.DEEPFISH)), 0.3f);
         this.addLayer(new DeepfishFeatureRenderer<>(this, TEXTURE_GLOW, (deepfish, tickDelta, animationProgress) -> (float)Math.max(0, Math.cos(animationProgress * 0.15F) * 3F * 0.25F), DeepfishEntityModel::getAllParts));
     }

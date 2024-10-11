@@ -15,11 +15,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class BirtEntityRenderer extends MobRenderer<Birt, BirtEntityModel<Birt>> {
+public class BirtRenderer extends MobRenderer<Birt, BirtEntityModel<Birt>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/birt/birt.png");
     public static final ResourceLocation TEXTURE_COMMUNICATING = new ResourceLocation(MOD_ID, "textures/entity/birt/birt_communicating.png");
 
-    public BirtEntityRenderer(EntityRendererProvider.Context context) {
+    public BirtRenderer(EntityRendererProvider.Context context) {
         super(context, new BirtEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.BIRT)), 0.3f);
         this.addLayer(new BirtFeatureRenderer<>(this, TEXTURE_COMMUNICATING, (birt, tickDelta, animationProgress) -> Math.max(0, Mth.cos(animationProgress * 0.5f) * 0.75F), BirtEntityModel::getAllParts));
     }

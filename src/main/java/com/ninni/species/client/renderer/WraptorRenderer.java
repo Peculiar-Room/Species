@@ -14,16 +14,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class WraptorEntityRenderer<T extends LivingEntity> extends MobRenderer<Wraptor, WraptorEntityModel<Wraptor>> {
+public class WraptorRenderer<T extends LivingEntity> extends MobRenderer<Wraptor, WraptorEntityModel<Wraptor>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/wraptor/wraptor.png");
     public static final ResourceLocation TEXTURE_GOTH = new ResourceLocation(MOD_ID, "textures/entity/wraptor/wraptor_goth.png");
 
-    public WraptorEntityRenderer(EntityRendererProvider.Context ctx) {
+    public WraptorRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new WraptorEntityModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.WRAPTOR)), 0.6F);
     }
 
     @Override public ResourceLocation getTextureLocation(Wraptor entity) {
-        if ("Goth".equals(ChatFormatting.stripFormatting(entity.getName().getString()))) {
+        if (entity.getName().getString().equalsIgnoreCase("goth") || entity.getName().getString().equalsIgnoreCase("suzie")) {
             return TEXTURE_GOTH;
         } else return TEXTURE;
     }
