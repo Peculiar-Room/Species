@@ -40,13 +40,13 @@ public class SpeciesItems {
     public static final RegistryObject<Item> BIRT_SPAWN_EGG = ITEMS.register("birt_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.BIRT, 0x53C7BE, 0xD95B4D, SpeciesDevelopers.REDA, new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> BIRT_EGG = ITEMS.register("birt_egg", () -> new BirtEggItem(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> BIRT_DWELLING = ITEMS.register("birt_dwelling", () -> new BlockItem(SpeciesBlocks.BIRT_DWELLING.get(), new Item.Properties()));
-    public static final RegistryObject<Item> MUSIC_DISC_DIAL = ITEMS.register("music_disc_dial", () -> new RecordItem(11, SpeciesSoundEvents.MUSIC_DISC_DIAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 193));
+    public static final RegistryObject<Item> MUSIC_DISC_DIAL = ITEMS.register("music_disc_dial", () -> new RecordItem(11, SpeciesSoundEvents.MUSIC_DISC_DIAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 193 * 20));
 
     public static final RegistryObject<Item> LIMPET_SPAWN_EGG = ITEMS.register("limpet_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.LIMPET, 0xA5C1D2, 0xFBF236, SpeciesDevelopers.GLADOS, new Item.Properties().stacksTo(64)));
 
     //UPDATE 2
     public static final RegistryObject<Item> RED_SUSPICIOUS_SAND = ITEMS.register("red_suspicious_sand", () -> new BlockItem(SpeciesBlocks.RED_SUSPICIOUS_SAND.get(), new Item.Properties()));
-    public static final RegistryObject<Item> MUSIC_DISC_LAPIDARIAN = ITEMS.register("music_disc_lapidarian", () -> new RecordItem(14, SpeciesSoundEvents.MUSIC_DISC_LAPIDARIAN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 200));
+    public static final RegistryObject<Item> MUSIC_DISC_LAPIDARIAN = ITEMS.register("music_disc_lapidarian", () -> new RecordItem(14, SpeciesSoundEvents.MUSIC_DISC_LAPIDARIAN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 200 * 20));
 
     public static final RegistryObject<Item> BONE_BARK = ITEMS.register("bone_bark", () -> new BlockItem(SpeciesBlocks.BONE_BARK.get(), new Item.Properties()));
     public static final RegistryObject<Item> BONE_VERTEBRA = ITEMS.register("bone_vertebra", () -> new BlockItem(SpeciesBlocks.BONE_VERTEBRA.get(), new Item.Properties()));
