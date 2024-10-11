@@ -135,7 +135,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
             return super.mobInteract(player, interactionHand);
         }
 
-        if (!this.isTame() && itemStack.is(SpeciesTags.SPRINGLING_TAMING_ITEMS)) {
+        if (!this.isTame() && itemStack.is(SpeciesTags.SPRINGLING_TAMING_ITEMS) && !this.isBaby()) {
 
             if (!player.getAbilities().instabuild) itemStack.shrink(1);
             if (!this.isSilent()) {
