@@ -1,6 +1,6 @@
 package com.ninni.species.entity.ai.goal;
 
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
@@ -9,18 +9,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class BirtCommunicatingGoal extends Goal {
-    protected final BirtEntity sender;
-    private final Class<? extends BirtEntity> entityClass;
+    protected final Birt sender;
+    private final Class<? extends Birt> entityClass;
     protected final Level world;
     private int timer;
     @Nullable
-    protected BirtEntity reciever;
+    protected Birt reciever;
 
-    public BirtCommunicatingGoal(BirtEntity birt) {
+    public BirtCommunicatingGoal(Birt birt) {
         this(birt, birt.getClass());
     }
 
-    public BirtCommunicatingGoal(BirtEntity birt, Class<? extends BirtEntity> entityClass) {
+    public BirtCommunicatingGoal(Birt birt, Class<? extends Birt> entityClass) {
         this.sender = birt;
         this.world = birt.level();
         this.entityClass = entityClass;

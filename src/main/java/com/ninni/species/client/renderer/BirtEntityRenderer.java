@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.species.client.model.entity.BirtEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.BirtFeatureRenderer;
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class BirtEntityRenderer extends MobRenderer<BirtEntity, BirtEntityModel<BirtEntity>> {
+public class BirtEntityRenderer extends MobRenderer<Birt, BirtEntityModel<Birt>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/birt/birt.png");
     public static final ResourceLocation TEXTURE_COMMUNICATING = new ResourceLocation(MOD_ID, "textures/entity/birt/birt_communicating.png");
 
@@ -25,13 +25,13 @@ public class BirtEntityRenderer extends MobRenderer<BirtEntity, BirtEntityModel<
     }
 
     @Override
-    protected void scale(BirtEntity entity, PoseStack matrices, float amount) {
+    protected void scale(Birt entity, PoseStack matrices, float amount) {
         if (entity.isBaby()) matrices.scale(0.5F, 0.5F, 0.5F);
         else super.scale(entity, matrices, amount);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BirtEntity fish) {
+    public ResourceLocation getTextureLocation(Birt fish) {
         return TEXTURE;
     }
 }

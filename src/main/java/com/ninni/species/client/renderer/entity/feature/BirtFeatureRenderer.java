@@ -3,7 +3,7 @@ package com.ninni.species.client.renderer.entity.feature;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.model.entity.BirtEntityModel;
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BirtFeatureRenderer<T extends BirtEntity, M extends BirtEntityModel<T>> extends RenderLayer<T, M> {
+public class BirtFeatureRenderer<T extends Birt, M extends BirtEntityModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final ModelPartVisibility<T, M> modelPartVisibility;
@@ -59,12 +59,12 @@ public class BirtFeatureRenderer<T extends BirtEntity, M extends BirtEntityModel
     }
 
     @OnlyIn(Dist.CLIENT)
-    public interface AnimationAngleAdjuster<T extends BirtEntity> {
+    public interface AnimationAngleAdjuster<T extends Birt> {
         float apply(T var1, float var2, float var3);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public interface ModelPartVisibility<T extends BirtEntity, M extends EntityModel<T>> {
+    public interface ModelPartVisibility<T extends Birt, M extends EntityModel<T>> {
         List<ModelPart> getPartsToDraw(M var1);
     }
 }

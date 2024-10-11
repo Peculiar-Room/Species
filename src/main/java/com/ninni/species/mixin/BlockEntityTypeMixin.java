@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.init.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;

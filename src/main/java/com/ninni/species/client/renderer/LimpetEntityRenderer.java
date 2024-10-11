@@ -3,7 +3,7 @@ package com.ninni.species.client.renderer;
 import com.ninni.species.client.model.entity.LimpetEntityModel;
 import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.entity.Limpet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntityModel<LimpetEntity>> {
+public class LimpetEntityRenderer extends MobRenderer<Limpet, LimpetEntityModel<Limpet>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
     public static final ResourceLocation TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal.png");
     public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst.png");
@@ -35,13 +35,13 @@ public class LimpetEntityRenderer extends MobRenderer<LimpetEntity, LimpetEntity
     }
 
     @Override
-    protected boolean isShaking(LimpetEntity entity) {
+    protected boolean isShaking(Limpet entity) {
         if (!entity.level().getEntitiesOfClass(Player.class, entity.getBoundingBox().inflate(4D), entity::isValidEntityHoldingPickaxe).isEmpty()) return true;
         return super.isShaking(entity);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(LimpetEntity limpet) {
+    public ResourceLocation getTextureLocation(Limpet limpet) {
         if ("Gary".equals(ChatFormatting.stripFormatting(limpet.getName().getString()))) {
             return switch (limpet.getLimpetType()) {
                 case COAL -> GARY_TEXTURE_COAL;

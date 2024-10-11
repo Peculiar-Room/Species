@@ -3,7 +3,7 @@ package com.ninni.species.entity;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.entity.ai.goal.TrooperSwellGoal;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;

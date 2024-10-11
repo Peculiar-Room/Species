@@ -1,10 +1,10 @@
 package com.ninni.species.world.gen.features;
 
 import com.mojang.serialization.Codec;
-import com.ninni.species.init.SpeciesBlocks;
-import com.ninni.species.init.SpeciesBlockEntities;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesTreeDecorators;
+import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesTreeDecorators;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;

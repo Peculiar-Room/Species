@@ -1,6 +1,6 @@
 package com.ninni.species.entity.ai.goal;
 
-import com.ninni.species.entity.WraptorEntity;
+import com.ninni.species.entity.Wraptor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
@@ -9,11 +9,11 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 public class WraptorSwoopAtTargetGoal extends Goal {
-    private final WraptorEntity mob;
+    private final Wraptor mob;
     private LivingEntity target;
     private final float velocity;
 
-    public WraptorSwoopAtTargetGoal(WraptorEntity mob, float velocity) {
+    public WraptorSwoopAtTargetGoal(Wraptor mob, float velocity) {
         this.mob = mob;
         this.velocity = velocity;
         this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE, Flag.LOOK));

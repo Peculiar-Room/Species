@@ -3,7 +3,7 @@ package com.ninni.species.block.entity;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.data.CruncherPelletManager;
-import com.ninni.species.init.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlockEntities;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;

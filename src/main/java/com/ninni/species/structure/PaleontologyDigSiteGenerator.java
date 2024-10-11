@@ -2,9 +2,9 @@ package com.ninni.species.structure;
 
 import com.google.common.collect.Maps;
 import com.ninni.species.Species;
-import com.ninni.species.init.SpeciesBlocks;
-import com.ninni.species.init.SpeciesLootTables;
-import com.ninni.species.init.SpeciesStructurePieceTypes;
+import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesLootTables;
+import com.ninni.species.registry.SpeciesStructurePieceTypes;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

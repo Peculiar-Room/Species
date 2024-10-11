@@ -1,8 +1,8 @@
 package com.ninni.species.entity.effect;
 
 import com.ninni.species.entity.Cruncher;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;

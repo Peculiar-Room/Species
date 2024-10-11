@@ -1,8 +1,8 @@
 package com.ninni.species.block;
 
 import com.ninni.species.entity.Springling;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

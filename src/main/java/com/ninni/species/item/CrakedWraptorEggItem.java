@@ -1,6 +1,6 @@
 package com.ninni.species.item;
 
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -44,12 +44,12 @@ public class CrakedWraptorEggItem extends Item {
 
     @Override
     public SoundEvent getEatingSound() {
-        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP.get();
+        return SpeciesSoundEvents.CRACKED_WRAPTOR_EGG_SLURP.get();
     }
 
     @Override
     public SoundEvent getDrinkingSound() {
-        return SpeciesSoundEvents.ITEM_CRACKED_WRAPTOR_EGG_SLURP.get();
+        return SpeciesSoundEvents.CRACKED_WRAPTOR_EGG_SLURP.get();
     }
 
     @Override

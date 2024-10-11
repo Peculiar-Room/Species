@@ -1,7 +1,7 @@
 package com.ninni.species.network;
 
 import com.ninni.species.entity.Springling;
-import com.ninni.species.init.SpeciesKeyMappings;
+import com.ninni.species.registry.SpeciesKeyMappings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;

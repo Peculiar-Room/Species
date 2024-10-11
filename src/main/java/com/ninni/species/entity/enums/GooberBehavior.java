@@ -1,6 +1,6 @@
 package com.ninni.species.entity.enums;
 
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 

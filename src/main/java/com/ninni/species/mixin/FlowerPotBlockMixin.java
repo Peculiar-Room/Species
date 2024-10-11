@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
 import com.ninni.species.block.PottedTrooperBlock;
-import com.ninni.species.init.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;

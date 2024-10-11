@@ -2,7 +2,7 @@ package com.ninni.species.block;
 
 import com.ninni.species.block.property.BoneSpikeThickness;
 import com.ninni.species.block.property.SpeciesProperties;
-import com.ninni.species.init.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

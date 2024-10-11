@@ -1,9 +1,9 @@
 package com.ninni.species.world.gen.features;
 
 import com.ninni.species.Species;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesPlacedFeatures;
-import com.ninni.species.init.SpeciesTags;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesPlacedFeatures;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;

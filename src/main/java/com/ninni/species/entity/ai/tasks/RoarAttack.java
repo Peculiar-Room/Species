@@ -2,8 +2,8 @@ package com.ninni.species.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.ninni.species.entity.Cruncher;
-import com.ninni.species.init.SpeciesMemoryModuleTypes;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesMemoryModuleTypes;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Unit;

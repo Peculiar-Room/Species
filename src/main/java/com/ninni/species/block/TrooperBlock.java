@@ -1,8 +1,8 @@
 package com.ninni.species.block;
 
 import com.ninni.species.entity.Trooper;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

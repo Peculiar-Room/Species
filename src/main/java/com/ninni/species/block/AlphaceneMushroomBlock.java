@@ -1,6 +1,6 @@
 package com.ninni.species.block;
 
-import com.ninni.species.init.SpeciesConfiguredFeatures;
+import com.ninni.species.registry.SpeciesConfiguredFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;

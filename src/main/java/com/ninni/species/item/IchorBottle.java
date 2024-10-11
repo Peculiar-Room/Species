@@ -1,6 +1,6 @@
 package com.ninni.species.item;
 
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;

@@ -2,8 +2,8 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.Maps;
 import com.ninni.species.data.GooberGooManager;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;

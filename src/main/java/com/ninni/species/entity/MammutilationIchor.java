@@ -1,8 +1,8 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.client.particles.SpeciesParticles;
-import com.ninni.species.init.SpeciesBlocks;
-import com.ninni.species.init.SpeciesEntities;
+import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;

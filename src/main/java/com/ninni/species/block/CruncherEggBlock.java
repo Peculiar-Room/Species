@@ -1,7 +1,7 @@
 package com.ninni.species.block;
 
 import com.ninni.species.block.entity.CruncherEggBlockEntity;
-import com.ninni.species.init.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.block.property.SpeciesProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

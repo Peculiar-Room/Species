@@ -1,7 +1,7 @@
 package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.ninni.species.entity.RoombugEntity;
+import com.ninni.species.entity.Roombug;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class RoombugEntityModel<E extends RoombugEntity> extends AgeableListModel<E> {
+public class RoombugEntityModel<E extends Roombug> extends AgeableListModel<E> {
     public static final String LEFT_ANTENNA = "left_antenna";
     public static final String RIGHT_ANTENNA = "right_antenna";
     public static final String LEFT_FORE_LEG = "left_fore_leg";

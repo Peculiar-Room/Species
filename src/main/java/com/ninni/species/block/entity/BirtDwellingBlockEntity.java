@@ -2,9 +2,8 @@ package com.ninni.species.block.entity;
 
 import com.google.common.collect.Lists;
 import com.ninni.species.block.BirtDwellingBlock;
-import com.ninni.species.entity.BirtEntity;
-import com.ninni.species.init.SpeciesBlockEntities;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +53,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         List<Entity> list = this.tryReleaseBirt(state, birtState);
         if (player != null) {
             for (Entity entity : list) {
-                if (!(entity instanceof BirtEntity birt)) continue;
+                if (!(entity instanceof com.ninni.species.entity.Birt birt)) continue;
                 if (!(player.position().distanceToSqr(entity.position()) <= 16.0)) continue;
                 birt.setTarget(player);
                 birt.setCannotEnterDwellingTicks(400);
@@ -126,8 +125,8 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         if (bl && birtState != BirtState.EMERGENCY) return false;
         Entity newBirt = EntityType.loadEntityRecursive(nbtCompound, world, entity -> entity);
         if (newBirt != null) {
-            if (newBirt instanceof BirtEntity birtEntity) {
-                BirtDwellingBlockEntity.ageBirt(Birt.ticksInDwelling, birtEntity);
+            if (newBirt instanceof com.ninni.species.entity.Birt birtEntity) {
+                BirtDwellingBlockEntity.ageBirt(BirtDwellingBlockEntity.Birt.ticksInDwelling, birtEntity);
                 if (entities != null) entities.add(birtEntity);
                 float f = newBirt.getBbWidth();
                 double d = bl ? 0.0 : 0.55 + (double)(f / 2.0f);
@@ -149,7 +148,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         for (String string : IRRELEVANT_BIRT_NBT_KEYS) compound.remove(string);
     }
 
-    private static void ageBirt(int ticks, BirtEntity birt) {
+    private static void ageBirt(int ticks, com.ninni.species.entity.Birt birt) {
         int i = birt.getAge();
         if (i < 0) birt.setAge(Math.min(0, i + ticks));
         else if (i > 0) birt.setAge(Math.max(0, i - ticks));
@@ -161,13 +160,13 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         world.setBlockAndUpdate(pos, state.setValue(BIRTS, birts.size()));
         while (iterator.hasNext()) {
             Birt birt = iterator.next();
-            if (Birt.ticksInDwelling > birt.minOccupationTicks) {
+            if (BirtDwellingBlockEntity.Birt.ticksInDwelling > birt.minOccupationTicks) {
                 if (BirtDwellingBlockEntity.releaseBirt(world, pos, state, birt, null, BirtState.BIRT_RELEASED)) {
                     bl = true;
                     iterator.remove();
                 }
             }
-            ++Birt.ticksInDwelling;
+            ++BirtDwellingBlockEntity.Birt.ticksInDwelling;
         }
         if (bl) BirtDwellingBlockEntity.setChanged(world, pos, state);
     }
@@ -210,7 +209,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
             nbtCompound.remove("UUID");
             CompoundTag nbtCompound2 = new CompoundTag();
             nbtCompound2.put(ENTITY_DATA_KEY, nbtCompound);
-            nbtCompound2.putInt(IRRELEVANT_BIRT_NBT_KEYS.toString(), Birt.ticksInDwelling);
+            nbtCompound2.putInt(IRRELEVANT_BIRT_NBT_KEYS.toString(), BirtDwellingBlockEntity.Birt.ticksInDwelling);
             nbtCompound2.putInt(MIN_OCCUPATION_TICKS_KEY, birt.minOccupationTicks);
             nbtList.add(nbtCompound2);
         }
@@ -230,7 +229,7 @@ public class BirtDwellingBlockEntity extends BlockEntity {
         Birt(CompoundTag entityData, int ticksInDwelling, int minOccupationTicks) {
             BirtDwellingBlockEntity.removeIrrelevantNbtKeys(entityData);
             this.entityData = entityData;
-            Birt.ticksInDwelling = ticksInDwelling;
+            BirtDwellingBlockEntity.Birt.ticksInDwelling = ticksInDwelling;
             this.minOccupationTicks = minOccupationTicks;
         }
     }

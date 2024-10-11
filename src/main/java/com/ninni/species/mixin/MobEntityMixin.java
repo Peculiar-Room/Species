@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.entity.RoombugEntity;
-import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.entity.Roombug;
+import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -34,7 +34,7 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
     private void updatePassengerDismounting(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (this.getVehicle() instanceof RoombugEntity && player.isSecondaryUseActive()) {
+        if (this.getVehicle() instanceof Roombug && player.isSecondaryUseActive()) {
             this.stopRiding();
             cir.setReturnValue(InteractionResult.SUCCESS);
         }

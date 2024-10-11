@@ -1,18 +1,18 @@
 package com.ninni.species.events;
 
 import com.ninni.species.Species;
-import com.ninni.species.entity.BirtEntity;
+import com.ninni.species.entity.Birt;
 import com.ninni.species.entity.Cruncher;
-import com.ninni.species.entity.DeepfishEntity;
+import com.ninni.species.entity.Deepfish;
 import com.ninni.species.entity.Goober;
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.entity.Limpet;
 import com.ninni.species.entity.Mammutilation;
-import com.ninni.species.entity.RoombugEntity;
+import com.ninni.species.entity.Roombug;
 import com.ninni.species.entity.Springling;
 import com.ninni.species.entity.Treeper;
 import com.ninni.species.entity.Trooper;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.entity.WraptorEntity;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.entity.Wraptor;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -25,11 +25,11 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
-        event.register(SpeciesEntities.WRAPTOR.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WraptorEntity::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
-        event.register(SpeciesEntities.DEEPFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, DeepfishEntity::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
-        event.register(SpeciesEntities.ROOMBUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, RoombugEntity::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
-        event.register(SpeciesEntities.BIRT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, BirtEntity::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
-        event.register(SpeciesEntities.LIMPET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, LimpetEntity::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(SpeciesEntities.WRAPTOR.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Wraptor::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(SpeciesEntities.DEEPFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Deepfish::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(SpeciesEntities.ROOMBUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Roombug::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(SpeciesEntities.BIRT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Birt::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+        event.register(SpeciesEntities.LIMPET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Limpet::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.TREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Treeper::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.TROOPER.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Trooper::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.GOOBER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Goober::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
@@ -40,11 +40,11 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-        event.put(SpeciesEntities.WRAPTOR.get(), WraptorEntity.createWraptorAttributes().build());
-        event.put(SpeciesEntities.DEEPFISH.get(), DeepfishEntity.createDeepfishAttributes().build());
-        event.put(SpeciesEntities.ROOMBUG.get(), RoombugEntity.createRoombugAttributes().build());
-        event.put(SpeciesEntities.BIRT.get(), BirtEntity.createBirtAttributes().build());
-        event.put(SpeciesEntities.LIMPET.get(), LimpetEntity.createLimpetAttributes().build());
+        event.put(SpeciesEntities.WRAPTOR.get(), Wraptor.createWraptorAttributes().build());
+        event.put(SpeciesEntities.DEEPFISH.get(), Deepfish.createDeepfishAttributes().build());
+        event.put(SpeciesEntities.ROOMBUG.get(), Roombug.createRoombugAttributes().build());
+        event.put(SpeciesEntities.BIRT.get(), Birt.createBirtAttributes().build());
+        event.put(SpeciesEntities.LIMPET.get(), Limpet.createLimpetAttributes().build());
         event.put(SpeciesEntities.TREEPER.get(), Treeper.createAttributes().build());
         event.put(SpeciesEntities.TROOPER.get(), Trooper.createAttributes().build());
         event.put(SpeciesEntities.GOOBER.get(), Goober.createAttributes().build());

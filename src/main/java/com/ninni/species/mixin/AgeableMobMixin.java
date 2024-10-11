@@ -1,9 +1,9 @@
 package com.ninni.species.mixin;
 
 import com.ninni.species.client.particles.SpeciesParticles;
-import com.ninni.species.init.SpeciesItems;
-import com.ninni.species.init.SpeciesSoundEvents;
-import com.ninni.species.init.SpeciesTags;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

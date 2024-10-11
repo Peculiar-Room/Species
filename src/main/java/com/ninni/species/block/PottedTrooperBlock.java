@@ -1,6 +1,6 @@
 package com.ninni.species.block;
 
-import com.ninni.species.init.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;

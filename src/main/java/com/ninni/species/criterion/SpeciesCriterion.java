@@ -1,7 +1,7 @@
 package com.ninni.species.criterion;
 
 import com.ninni.species.Species;
-import com.ninni.species.init.SpeciesCriteriaTriggers;
+import com.ninni.species.registry.SpeciesCriteriaTriggers;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraftforge.fml.common.Mod;
 

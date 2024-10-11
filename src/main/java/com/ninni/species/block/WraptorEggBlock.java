@@ -1,9 +1,9 @@
 package com.ninni.species.block;
 
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.entity.WraptorEntity;
-import com.ninni.species.init.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.entity.Wraptor;
+import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,7 +58,7 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
             world.playSound(null, pos, SpeciesSoundEvents.WRAPTOR_EGG_HATCH.get(), SoundSource.BLOCKS, 1.5f, 1.5F + world.random.nextFloat() * 0.2f);
             world.removeBlock(pos, false);
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-            WraptorEntity wraptor = SpeciesEntities.WRAPTOR.get().create(world);
+            Wraptor wraptor = SpeciesEntities.WRAPTOR.get().create(world);
             assert wraptor != null;
             wraptor.setAge(-24000);
             wraptor.setBormFromEgg(true);

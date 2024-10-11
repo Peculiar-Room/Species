@@ -1,11 +1,11 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesItems;
-import com.ninni.species.init.SpeciesNetwork;
-import com.ninni.species.init.SpeciesSoundEvents;
-import com.ninni.species.init.SpeciesTags;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesNetwork;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import com.ninni.species.network.SendSpringlingPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

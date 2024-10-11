@@ -1,6 +1,6 @@
 package com.ninni.species.client.model.entity;
 
-import com.ninni.species.entity.LimpetEntity;
+import com.ninni.species.entity.Limpet;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class LimpetEntityModel<T extends LimpetEntity> extends HierarchicalModel<T> {
+public class LimpetEntityModel<T extends Limpet> extends HierarchicalModel<T> {
     public static final String SHELL = "shell";
     public static final String SHELL_TOP = "shell_top";
     public static final String SHELL_BOTTOM = "shell_bottom";

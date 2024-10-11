@@ -2,9 +2,9 @@ package com.ninni.species.block;
 
 import com.ninni.species.block.property.SpeciesProperties;
 import com.ninni.species.entity.Goober;
-import com.ninni.species.init.SpeciesEntities;
-import com.ninni.species.init.SpeciesSoundEvents;
-import com.ninni.species.init.SpeciesTags;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

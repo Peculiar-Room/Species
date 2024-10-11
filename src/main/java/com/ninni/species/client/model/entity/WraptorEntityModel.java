@@ -1,7 +1,7 @@
 package com.ninni.species.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-import com.ninni.species.entity.WraptorEntity;
+import com.ninni.species.entity.Wraptor;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class WraptorEntityModel<E extends WraptorEntity> extends AgeableListModel<E> {
+public class WraptorEntityModel<E extends Wraptor> extends AgeableListModel<E> {
     public static final String TAIL_BASE = "tail_base";
     public static final String TAIL_TIP = "tail_tip";
     public static final String BODY_FEATHERS = "body_feathers";

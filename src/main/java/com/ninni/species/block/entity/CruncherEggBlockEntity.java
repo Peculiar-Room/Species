@@ -2,8 +2,8 @@ package com.ninni.species.block.entity;
 
 import com.ninni.species.block.CruncherEggBlock;
 import com.ninni.species.entity.effect.SpeciesStatusEffects;
-import com.ninni.species.init.SpeciesBlockEntities;
-import com.ninni.species.init.SpeciesNetwork;
+import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.network.PlayGutFeelingSoundPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

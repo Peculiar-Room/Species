@@ -1,6 +1,6 @@
 package com.ninni.species.block;
 
-import com.ninni.species.init.SpeciesItems;
+import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

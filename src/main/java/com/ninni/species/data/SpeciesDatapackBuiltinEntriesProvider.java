@@ -1,11 +1,11 @@
 package com.ninni.species.data;
 
 import com.ninni.species.Species;
-import com.ninni.species.init.SpeciesStructureSets;
+import com.ninni.species.registry.SpeciesStructureSets;
 import com.ninni.species.world.gen.features.SpeciesBiomeModifier;
-import com.ninni.species.init.SpeciesConfiguredFeatures;
-import com.ninni.species.init.SpeciesPlacedFeatures;
-import com.ninni.species.init.SpeciesStructures;
+import com.ninni.species.registry.SpeciesConfiguredFeatures;
+import com.ninni.species.registry.SpeciesPlacedFeatures;
+import com.ninni.species.registry.SpeciesStructures;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
