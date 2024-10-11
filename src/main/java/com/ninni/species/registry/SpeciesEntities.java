@@ -71,7 +71,7 @@ public class SpeciesEntities {
 
     public static final RegistryObject<EntityType<Limpet>> LIMPET = ENTITY_TYPES.register(
             "limpet", () ->
-            EntityType.Builder.of(Limpet::new, MobCategory.CREATURE)
+            EntityType.Builder.of(Limpet::new, MobCategory.MONSTER)
                     .sized(0.75F, 1.25F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Species.MOD_ID, "limpet").toString())

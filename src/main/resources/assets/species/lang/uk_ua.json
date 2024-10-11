@@ -198,7 +198,6 @@
 
   "entity.species.mammutilation": "Маммутиляція",
   "item.species.mammutilation_spawn_egg": "Яйце виклику маммутиляції",
-  "entity.species.mammutilation_ichor": "Іхор маммутиляції",
   "item.species.ichor_bottle": "Пляшка іхору",
   "item.species.youth_potion": "Зілля молодості",
   "block.species.ichor": "Іхор",
@@ -210,6 +209,7 @@
   "subtitles.entity.species.mammutilation.idle": "Маммутиляція намагається дихати",
   "subtitles.entity.species.mammutilation.cough": "Маммутиляція кашляє",
   "subtitles.entity.species.mammutilation.howl": "Маммутиляція завиває",
+  "subtitles.entity.species.mammutilation.bleed": "Маммутиляція кровоточить",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Маммутиляція блукає",
 
   "subtitles.item.species.ichor_bottle.applied": "Іхор зціляє",

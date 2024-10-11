@@ -4,7 +4,7 @@ import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.registry.SpeciesStatusEffects;
 import com.ninni.species.events.MiscEvents;
 import com.ninni.species.events.MobEvents;
 import com.ninni.species.registry.SpeciesCreativeModeTabs;

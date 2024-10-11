@@ -1,7 +1,7 @@
 package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.GooberModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.entity.Goober;
 import com.ninni.species.entity.enums.GooberBehavior;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

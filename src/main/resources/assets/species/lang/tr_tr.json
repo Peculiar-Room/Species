@@ -93,7 +93,7 @@
   "subtitles.entity.species.limpet.break": "Limpet'in kabuğu kırıldı",
 
   "advancements.species.silk_touch_break_limpet.title": "Saklanmanın Solungaçları",
-  "advancements.species.silk_touch_break_limpet.description": "İpeksi Dokunuş kullanarak bir Limpet'in kabuğunu kır"
+  "advancements.species.silk_touch_break_limpet.description": "İpeksi Dokunuş kullanarak bir Limpet'in kabuğunu kır",
 
   "block.species.red_suspicious_sand": "Kırmızı Şüpheli Kum",
 
@@ -197,7 +197,6 @@
 
   "entity.species.mammutilation": "Mamutilasyon",
   "item.species.mammutilation_spawn_egg": "Mamutilasyon Çağırma Yumurtası",
-  "entity.species.mammutilation_ichor": "Mamutilasyon İrini",
   "item.species.ichor_bottle": "İrin Şişesi",
   "item.species.youth_potion": "Gençlik İksiri",
   "block.species.ichor": "İrin",
@@ -209,6 +208,7 @@
   "subtitles.entity.species.mammutilation.idle": "Mamutilasyon nefes almayı deniyor",
   "subtitles.entity.species.mammutilation.cough": "Mamutilasyon öksürdü",
   "subtitles.entity.species.mammutilation.howl": "Mamutilasyon uğuladı",
+  "subtitles.entity.species.mammutilation.bleed": "Mamutilasyon kanıyor",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Mamutilasyon konuştu",
 
   "subtitles.item.species.ichor_bottle.applied": "İrin şifa etti",

@@ -1,7 +1,7 @@
 package com.ninni.species.client.renderer;
 
 import com.ninni.species.client.model.entity.MammutilationModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.entity.Mammutilation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

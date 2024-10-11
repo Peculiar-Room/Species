@@ -2,7 +2,7 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.LimpetEntityModel;
+import com.ninni.species.client.model.entity.LimpetModel;
 import com.ninni.species.entity.Limpet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,13 +13,13 @@ import net.minecraft.resources.ResourceLocation;
 
 import static com.ninni.species.Species.MOD_ID;
 
-public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetEntityModel<Limpet>> {
-    private final LimpetEntityModel<Limpet> model;
+public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetModel<Limpet>> {
+    private final LimpetModel<Limpet> model;
     public static final ResourceLocation TEXTURE_0 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/0.png");
     public static final ResourceLocation TEXTURE_1 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/1.png");
     public static final ResourceLocation TEXTURE_2 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/2.png");
 
-    public LimpetBreakingLayer(RenderLayerParent<Limpet, LimpetEntityModel<Limpet>> renderLayerParent, LimpetEntityModel<Limpet> entityModel) {
+    public LimpetBreakingLayer(RenderLayerParent<Limpet, LimpetModel<Limpet>> renderLayerParent, LimpetModel<Limpet> entityModel) {
         super(renderLayerParent);
         this.model = entityModel;
     }

@@ -1,6 +1,8 @@
-package com.ninni.species.entity.effect;
+package com.ninni.species.registry;
 
 import com.ninni.species.Species;
+import com.ninni.species.entity.effect.GutFeelingEffect;
+import com.ninni.species.entity.effect.PublicStatusEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

@@ -1,7 +1,7 @@
 package com.ninni.species.entity;
 
 import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
+import com.ninni.species.registry.SpeciesStatusEffects;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;

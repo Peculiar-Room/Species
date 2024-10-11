@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.ninni.species.Species;
 import com.ninni.species.client.model.entity.GooberGooModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.entity.GooberGoo;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

@@ -675,11 +675,11 @@
 		],
 		"subtitle": "subtitles.entity.species.cruncher.stun"
 	},
-	"effect.gut_feeling.species": {
+	"effect.gut_feeling.spawn": {
 		"sounds": [
-			"species:effect/gut_feeling/species"
+			"species:effect/gut_feeling/spawn"
 		],
-		"subtitle": "subtitles.effect.species.gut_feeling.species"
+		"subtitle": "subtitles.effect.species.gut_feeling.spawn"
 	},
 	"effect.gut_feeling.applied": {
 		"sounds": [
@@ -833,6 +833,15 @@
 			"species:entity/mammutilation/death"
 		],
 		"subtitle": "subtitles.entity.species.mammutilation.death"
+	},
+	"entity.mammutilation.bleed": {
+		"sounds": [
+			"species:entity/mammutilation/bleed1",
+			"species:entity/mammutilation/bleed2",
+			"species:entity/mammutilation/bleed3",
+			"species:entity/mammutilation/bleed4"
+		],
+		"subtitle": "subtitles.entity.species.mammutilation.bleed"
 	},
 	"item.ichor_bottle.applied": {
 		"sounds": [

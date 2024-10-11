@@ -2,7 +2,6 @@ package com.ninni.species.registry;
 
 import com.ninni.species.Species;
 import com.ninni.species.SpeciesDevelopers;
-import com.ninni.species.entity.effect.SpeciesStatusEffects;
 import com.ninni.species.item.BirtEggItem;
 import com.ninni.species.item.CrakedWraptorEggItem;
 import com.ninni.species.item.IchorBottle;

@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class LimpetEntityModel<T extends Limpet> extends HierarchicalModel<T> {
+public class LimpetModel<T extends Limpet> extends HierarchicalModel<T> {
     public static final String SHELL = "shell";
     public static final String SHELL_TOP = "shell_top";
     public static final String SHELL_BOTTOM = "shell_bottom";
@@ -36,7 +36,7 @@ public class LimpetEntityModel<T extends Limpet> extends HierarchicalModel<T> {
     private final ModelPart leftLeg;
     private final ModelPart rightLeg;
 
-    public LimpetEntityModel(ModelPart root) {
+    public LimpetModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);
@@ -160,9 +160,7 @@ public class LimpetEntityModel<T extends Limpet> extends HierarchicalModel<T> {
             this.rightLeg.visible = false;
             this.leftLeg.visible = false;
             this.root.y = 8.0F;
-            this.shell.zRot = 0.0F;
         } else {
-            shell.zRot = Mth.sin(limbAngle * speed * 0.6F) * degree * 0.25F * limbDistance;
             this.rightLeg.visible = true;
             this.leftLeg.visible = true;
             this.root.y = 0.0F;

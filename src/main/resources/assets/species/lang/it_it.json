@@ -164,7 +164,6 @@
 
   "advancements.species.obtain_petrified_egg.title": "Interessante al tatto",
   "advancements.species.obtain_petrified_egg.description": "Ottieni un uovo pietrificato",
-
   "advancements.species.tickle_goober.title": "Stagione di allergie",
   "advancements.species.tickle_goober.description": "Fai starnutire un goober e invecchia il mondo che ti circonda",
 
@@ -194,13 +193,11 @@
 
   "advancements.species.obtain_cruncher_egg.title": "Gusto interessante",
   "advancements.species.obtain_cruncher_egg.description": "Ottieni un uovo di sgranocchiatore",
-
   "advancements.species.feed_cruncher.title": "Nutri la Bestia",
   "advancements.species.feed_cruncher.description": "Tenta di sfamare l'appetito di uno sgranocchiatore",
 
   "entity.species.mammutilation": "Mammutilazione",
   "item.species.mammutilation_spawn_egg": "Uovo generatore di mammutilazione",
-  "entity.species.mammutilation_ichor": "Icore di mammutilazione",
   "item.species.ichor_bottle": "Ampolla di icore",
   "item.species.youth_potion": "Pozione della giovinezza",
   "block.species.ichor": "Icore",
@@ -212,6 +209,7 @@
   "subtitles.entity.species.mammutilation.idle": "Mammutilazione prova a respirare",
   "subtitles.entity.species.mammutilation.cough": "Mammutilazione tossisce",
   "subtitles.entity.species.mammutilation.howl": "Mammutilazione ulula",
+  "subtitles.entity.species.mammutilation.bleed": "Mammutilazione sanguina",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Mammutilazione blatera",
 
   "subtitles.item.species.ichor_bottle.applied": "Icore cura",
@@ -241,6 +239,7 @@
 
   "advancements.species.obtain_springling_egg.title": "Aspetto interessante",
   "advancements.species.obtain_springling_egg.description": "Ottieni un uovo di springling",
+
   "advancements.species.extend_springling_fully.title": "Ding!",
   "advancements.species.extend_springling_fully.description": "Addomestica uno springling e estendi il suo collo fino al limite"
 }

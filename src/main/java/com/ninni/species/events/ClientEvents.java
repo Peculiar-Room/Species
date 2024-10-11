@@ -1,19 +1,19 @@
 package com.ninni.species.events;
 
 import com.ninni.species.Species;
-import com.ninni.species.client.model.entity.BirtEntityModel;
+import com.ninni.species.client.model.entity.BirtModel;
 import com.ninni.species.client.model.entity.CruncherModel;
-import com.ninni.species.client.model.entity.DeepfishEntityModel;
+import com.ninni.species.client.model.entity.DeepfishModel;
 import com.ninni.species.client.model.entity.GooberGooModel;
 import com.ninni.species.client.model.entity.GooberModel;
-import com.ninni.species.client.model.entity.LimpetEntityModel;
+import com.ninni.species.client.model.entity.LimpetModel;
 import com.ninni.species.client.model.entity.MammutilationModel;
-import com.ninni.species.client.model.entity.RoombugEntityModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.model.entity.RoombugModel;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.entity.SpringlingModel;
 import com.ninni.species.client.model.entity.TreeperModel;
 import com.ninni.species.client.model.entity.TrooperModel;
-import com.ninni.species.client.model.entity.WraptorEntityModel;
+import com.ninni.species.client.model.entity.WraptorModel;
 import com.ninni.species.client.particles.AscendingDustParticle;
 import com.ninni.species.client.particles.IchorBottleParticle;
 import com.ninni.species.client.particles.IchorParticle;
@@ -154,11 +154,11 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(SpeciesEntityModelLayers.LIMPET, LimpetEntityModel::getLayerDefinition);
-        event.registerLayerDefinition(SpeciesEntityModelLayers.DEEPFISH, DeepfishEntityModel::getLayerDefinition);
-        event.registerLayerDefinition(SpeciesEntityModelLayers.ROOMBUG, RoombugEntityModel::getLayerDefinition);
-        event.registerLayerDefinition(SpeciesEntityModelLayers.BIRT, BirtEntityModel::getLayerDefinition);
-        event.registerLayerDefinition(SpeciesEntityModelLayers.WRAPTOR, WraptorEntityModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.LIMPET, LimpetModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.DEEPFISH, DeepfishModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.ROOMBUG, RoombugModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.BIRT, BirtModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.WRAPTOR, WraptorModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.TREEPER, TreeperModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.TROOPER, TrooperModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.GOOBER, GooberModel::getLayerDefinition);

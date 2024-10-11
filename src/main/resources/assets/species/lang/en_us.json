@@ -198,7 +198,6 @@
 
   "entity.species.mammutilation": "Mammutilation",
   "item.species.mammutilation_spawn_egg": "Mammutilation Spawn Egg",
-  "entity.species.mammutilation_ichor": "Mammutilation Ichor",
   "item.species.ichor_bottle": "Ichor Bottle",
   "item.species.youth_potion": "Youth Potion",
   "block.species.ichor": "Ichor",
@@ -210,6 +209,7 @@
   "subtitles.entity.species.mammutilation.idle": "Mammutilation tries to breathe",
   "subtitles.entity.species.mammutilation.cough": "Mammutilation coughs",
   "subtitles.entity.species.mammutilation.howl": "Mammutilation howl",
+  "subtitles.entity.species.mammutilation.bleed": "Mammutilation bleeds",
   "subtitles.entity.species.mammutilation.mammutiful_idle": "Mammutilation rambles",
 
   "subtitles.item.species.ichor_bottle.applied": "Ichor cures",
@@ -239,6 +239,7 @@
 
   "advancements.species.obtain_springling_egg.title": "Looks Interesting",
   "advancements.species.obtain_springling_egg.description": "Obtain a Springling Egg",
+
   "advancements.species.extend_springling_fully.title": "Ding!",
   "advancements.species.extend_springling_fully.description": "Tame a Springling and extend its neck to the max"
 }

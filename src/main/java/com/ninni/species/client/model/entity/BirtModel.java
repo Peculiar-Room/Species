@@ -19,7 +19,7 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class BirtEntityModel<T extends Birt> extends HierarchicalModel<T> {
+public class BirtModel<T extends Birt> extends HierarchicalModel<T> {
     public static final String ANTENNA = "antenna";
 
     private final ModelPart root;
@@ -32,7 +32,7 @@ public class BirtEntityModel<T extends Birt> extends HierarchicalModel<T> {
     private final ModelPart leftWing;
     private final ModelPart rightWing;
 
-    public BirtEntityModel(ModelPart root) {
+    public BirtModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);

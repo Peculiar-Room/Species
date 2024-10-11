@@ -1,6 +1,6 @@
 package com.ninni.species.client.renderer;
 
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.entity.TreeperModel;
 import com.ninni.species.client.renderer.entity.feature.TreeperFeatureRenderer;
 import com.ninni.species.entity.Treeper;

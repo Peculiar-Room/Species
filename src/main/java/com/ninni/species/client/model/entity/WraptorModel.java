@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class WraptorEntityModel<E extends Wraptor> extends AgeableListModel<E> {
+public class WraptorModel<E extends Wraptor> extends AgeableListModel<E> {
     public static final String TAIL_BASE = "tail_base";
     public static final String TAIL_TIP = "tail_tip";
     public static final String BODY_FEATHERS = "body_feathers";
@@ -51,7 +51,7 @@ public class WraptorEntityModel<E extends Wraptor> extends AgeableListModel<E> {
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
 
-    public WraptorEntityModel(ModelPart root) {
+    public WraptorModel(ModelPart root) {
         this.root = root;
 
         this.body             = this.root.getChild(PartNames.BODY);

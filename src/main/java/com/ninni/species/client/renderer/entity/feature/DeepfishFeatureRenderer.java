@@ -2,7 +2,7 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.DeepfishEntityModel;
+import com.ninni.species.client.model.entity.DeepfishModel;
 import com.ninni.species.entity.Deepfish;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishEntityModel<T>> extends RenderLayer<T, M> {
+public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
     private final ModelPartVisibility<T, M> modelPartVisibility;

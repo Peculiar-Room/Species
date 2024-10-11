@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
-public class RoombugEntityModel<E extends Roombug> extends AgeableListModel<E> {
+public class RoombugModel<E extends Roombug> extends AgeableListModel<E> {
     public static final String LEFT_ANTENNA = "left_antenna";
     public static final String RIGHT_ANTENNA = "right_antenna";
     public static final String LEFT_FORE_LEG = "left_fore_leg";
@@ -41,7 +41,7 @@ public class RoombugEntityModel<E extends Roombug> extends AgeableListModel<E> {
 
     private final ModelPart root;
 
-    public RoombugEntityModel(ModelPart root) {
+    public RoombugModel(ModelPart root) {
         this.root = root;
 
         this.body = root.getChild(PartNames.BODY);

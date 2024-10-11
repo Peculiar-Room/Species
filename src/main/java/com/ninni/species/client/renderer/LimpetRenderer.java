@@ -1,10 +1,9 @@
 package com.ninni.species.client.renderer;
 
-import com.ninni.species.client.model.entity.LimpetEntityModel;
-import com.ninni.species.client.model.entity.SpeciesEntityModelLayers;
+import com.ninni.species.client.model.entity.LimpetModel;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.renderer.entity.feature.LimpetBreakingLayer;
 import com.ninni.species.entity.Limpet;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
-public class LimpetRenderer extends MobRenderer<Limpet, LimpetEntityModel<Limpet>> {
+public class LimpetRenderer extends MobRenderer<Limpet, LimpetModel<Limpet>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/limpet/limpet.png");
     public static final ResourceLocation TEXTURE_COAL = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/coal.png");
     public static final ResourceLocation TEXTURE_AMETHYST = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/amethyst.png");
@@ -30,8 +29,8 @@ public class LimpetRenderer extends MobRenderer<Limpet, LimpetEntityModel<Limpet
     public static final ResourceLocation GARY_TEXTURE_DIAMOND = new ResourceLocation(MOD_ID, "textures/entity/limpet/minerals/diamond_gary.png");
 
     public LimpetRenderer(EntityRendererProvider.Context context) {
-        super(context, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET)), 0.5f);
-        this.addLayer(new LimpetBreakingLayer(this, new LimpetEntityModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET))));
+        super(context, new LimpetModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET)), 0.5f);
+        this.addLayer(new LimpetBreakingLayer(this, new LimpetModel<>(context.bakeLayer(SpeciesEntityModelLayers.LIMPET))));
     }
 
     @Override

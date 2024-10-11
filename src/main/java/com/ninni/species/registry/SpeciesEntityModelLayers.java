@@ -1,4 +1,4 @@
-package com.ninni.species.client.model.entity;
+package com.ninni.species.registry;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;

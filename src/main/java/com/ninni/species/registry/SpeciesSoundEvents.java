@@ -66,6 +66,7 @@ public class SpeciesSoundEvents {
     public static final RegistryObject<SoundEvent> LIMPET_DEATH = register("entity.limpet.death");
     public static final RegistryObject<SoundEvent> LIMPET_HURT = register("entity.limpet.hurt");
     public static final RegistryObject<SoundEvent> LIMPET_IDLE = register("entity.limpet.idle");
+    public static final RegistryObject<SoundEvent> LIMPET_BREAK = register("entity.limpet.break");
     public static final RegistryObject<SoundEvent> LIMPET_STEP = register("entity.limpet.step");
     public static final RegistryObject<SoundEvent> LIMPET_DEFLECT = register("entity.limpet.deflect");
 

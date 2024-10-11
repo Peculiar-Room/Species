@@ -29,7 +29,9 @@ public class MobEvents {
         event.register(SpeciesEntities.DEEPFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Deepfish::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.ROOMBUG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Roombug::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.BIRT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Birt::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
-        event.register(SpeciesEntities.LIMPET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE, Limpet::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+
+        event.register(SpeciesEntities.LIMPET.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Limpet::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
+
         event.register(SpeciesEntities.TREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Treeper::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.TROOPER.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Trooper::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
         event.register(SpeciesEntities.GOOBER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Goober::canSpawn, SpawnPlacementRegisterEvent.Operation.OR);
