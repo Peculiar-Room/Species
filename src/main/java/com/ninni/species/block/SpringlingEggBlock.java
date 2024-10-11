@@ -65,7 +65,7 @@ public class SpringlingEggBlock extends Block {
         return blockState.getValue(HATCH);
     }
     private boolean isReadyToHatch(BlockState blockState) {
-        return true;
+        return this.getHatchLevel(blockState) == MAX_HATCH_LEVEL;
     }
 
     @Override
