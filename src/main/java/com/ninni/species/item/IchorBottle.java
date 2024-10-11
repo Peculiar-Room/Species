@@ -18,7 +18,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class IchorBottle extends BlockItem implements DispensibleContainerItem {
+public class IchorBottle extends BlockItem {
 
     public IchorBottle(Block block, Properties properties) {
         super(block, properties);
@@ -71,18 +71,5 @@ public class IchorBottle extends BlockItem implements DispensibleContainerItem {
         }
 
         return interactionResult;
-    }
-    @Override
-    public boolean emptyContents(@Nullable Player player, Level level, BlockPos blockPos, @Nullable BlockHitResult blockHitResult) {
-        if (level.isInWorldBounds(blockPos) && level.isEmptyBlock(blockPos)) {
-            if (!level.isClientSide) {
-                level.setBlock(blockPos, this.getBlock().defaultBlockState(), 3);
-            }
-            level.gameEvent(player, GameEvent.BLOCK_PLACE, blockPos);
-            level.playSound(player, blockPos, this.getBlock().getSoundType(this.getBlock().defaultBlockState()).getPlaceSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-            return true;
-        } else {
-            return false;
-        }
     }
 }
