@@ -65,7 +65,7 @@ public class SpringlingEggBlock extends Block {
         return blockState.getValue(HATCH);
     }
     private boolean isReadyToHatch(BlockState blockState) {
-        return this.getHatchLevel(blockState) == MAX_HATCH_LEVEL;
+        return true;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SpringlingEggBlock extends Block {
             if (springling != null) {
                 Vec3 vec3 = blockPos.getCenter();
                 springling.setBaby(true);
-                springling.setMaxExtendedAmount(9 + randomSource.nextInt(9));
+                springling.setMaxExtendedAmount(springling.getRandom().nextInt(10000) == 0? 24 : springling.getRandom().nextInt(7, 12));
                 springling.moveTo(vec3.x(), vec3.y(), vec3.z(), Mth.wrapDegrees(serverLevel.random.nextFloat() * 360.0f), 0.0f);
                 serverLevel.addFreshEntity(springling);
             }
