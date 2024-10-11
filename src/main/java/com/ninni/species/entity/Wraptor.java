@@ -373,7 +373,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
         public void stop() {
             super.stop();
             Level world = this.wraptor.level();
-            world.playSound(null, this.wraptor.blockPosition(), SpeciesSoundEvents.WRAPTOR_EGG_BLOCK.get(), SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
+            world.playSound(null, this.wraptor.blockPosition(), SpeciesSoundEvents.WRAPTOR_EGG.get(), SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
         }
 
         @Override
