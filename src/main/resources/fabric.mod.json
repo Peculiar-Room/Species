@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "species",
-	"version": "2.1",
+	"version": "2.2",
 	"name": "Species",
 	"description": "A mod that adds fictional mobs to the game, with cool and unique functions",
 	"authors": [
