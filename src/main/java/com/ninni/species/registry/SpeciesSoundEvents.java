@@ -133,6 +133,7 @@ public class SpeciesSoundEvents {
     public static final RegistryObject<SoundEvent> MAMMUTILATION_HURT = register("entity.mammutilation.hurt");
     public static final RegistryObject<SoundEvent> MAMMUTILATION_IDLE = register("entity.mammutilation.idle");
     public static final RegistryObject<SoundEvent> MAMMUTILATION_HOWL = register("entity.mammutilation.howl");
+    public static final RegistryObject<SoundEvent> MAMMUTILATION_BLEED = register("entity.mammutilation.bleed");
     public static final RegistryObject<SoundEvent> MAMMUTILATION_COUGH = register("entity.mammutilation.cough");
     public static final RegistryObject<SoundEvent> MAMMUTIFUL_IDLE = register("entity.mammutilation.mammutiful_idle");
     public static final RegistryObject<SoundEvent> MAMMUTIFUL_HOWL = register("entity.mammutilation.mammutiful_howl");

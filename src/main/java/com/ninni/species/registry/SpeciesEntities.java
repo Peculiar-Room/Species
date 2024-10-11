@@ -10,7 +10,6 @@ import com.ninni.species.entity.Goober;
 import com.ninni.species.entity.GooberGoo;
 import com.ninni.species.entity.Limpet;
 import com.ninni.species.entity.Mammutilation;
-import com.ninni.species.entity.MammutilationIchor;
 import com.ninni.species.entity.Roombug;
 import com.ninni.species.entity.Springling;
 import com.ninni.species.entity.Treeper;
@@ -140,14 +139,6 @@ public class SpeciesEntities {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Species.MOD_ID, "goober_goo").toString())
-    );
-
-    public static final RegistryObject<EntityType<MammutilationIchor>> MAMMUTILATION_ICHOR = ENTITY_TYPES.register(
-            "mammutilation_ichor", () ->
-            EntityType.Builder.<MammutilationIchor>of(MammutilationIchor::new, MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
-                    .build(new ResourceLocation(Species.MOD_ID, "mammutilation_ichor").toString())
     );
 
 }

@@ -74,7 +74,7 @@ public class SpeciesItems {
     public static final RegistryObject<Item> MAMMUTILATION_SPAWN_EGG = ITEMS.register("mammutilation_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.MAMMUTILATION, 0x472418, 0xDE5D34, SpeciesDevelopers.REDA, new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> FROZEN_MEAT = ITEMS.register("frozen_meat", () -> new BlockItem(SpeciesBlocks.FROZEN_MEAT.get(), new Item.Properties()));
     public static final RegistryObject<Item> FROZEN_HAIR = ITEMS.register("frozen_hair", () -> new BlockItem(SpeciesBlocks.FROZEN_HAIR.get(), new Item.Properties()));
-    public static final RegistryObject<Item> ICHOR_BOTTLE = ITEMS.register("ichor_bottle", () -> new IchorBottle(new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> ICHOR_BOTTLE = ITEMS.register("ichor_bottle", () -> new IchorBottle(SpeciesBlocks.ICHOR.get(), new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> YOUTH_POTION = ITEMS.register("youth_potion", () -> new YouthPotion(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 
     public static final RegistryObject<Item> SPRINGLING_SPAWN_EGG = ITEMS.register("springling_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.SPRINGLING, 0xFF7600, 0x3D3FAD, SpeciesDevelopers.GLADOS, new Item.Properties().stacksTo(64)));

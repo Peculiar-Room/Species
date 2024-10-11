@@ -148,7 +148,6 @@ public class ClientEvents {
         event.registerEntityRenderer(SpeciesEntities.CRUNCHER.get(), CruncherRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.MAMMUTILATION.get(), MammutilationRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.SPRINGLING.get(), SpringlingRenderer::new);
-        event.registerEntityRenderer(SpeciesEntities.MAMMUTILATION_ICHOR.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(SpeciesEntities.CRUNCHER_PELLET.get(), FallingBlockRenderer::new);
     }
 

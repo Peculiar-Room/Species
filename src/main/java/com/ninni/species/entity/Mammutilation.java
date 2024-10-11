@@ -2,8 +2,10 @@ package com.ninni.species.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.entity.pose.SpeciesPose;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +22,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -37,6 +42,9 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -56,6 +64,8 @@ public class Mammutilation extends PathfinderMob {
     public final AnimationState coughAnimationState = new AnimationState();
     public final AnimationState howlAnimationState = new AnimationState();
     public static final EntityDataAccessor<Integer> COUGH_COOLDOWN = SynchedEntityData.defineId(Mammutilation.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> ICHOR_COUNT = SynchedEntityData.defineId(Mammutilation.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> ICHOR_COOLDOWN = SynchedEntityData.defineId(Mammutilation.class, EntityDataSerializers.INT);
     private static final Map<Block, SoundEvent> SOUNDS_BY_EGG = Util.make(Maps.newHashMap(), map -> {
         map.put(Blocks.TURTLE_EGG, SoundEvents.TURTLE_EGG_CRACK);
         map.put(Blocks.SNIFFER_EGG, SoundEvents.SNIFFER_EGG_CRACK);
@@ -107,17 +117,15 @@ public class Mammutilation extends PathfinderMob {
                     final float angle = (0.0174532925F * this.yBodyRot);
                     final double headX = 3F * this.getScale() * Mth.sin(Mth.PI + angle);
                     final double headZ = 3F * this.getScale() * Mth.cos(angle);
-
-                    Vec3 shootingVec = this.getLookAngle().scale(2).multiply(0.05D, 1.0D, 0.05D);
-
-                    MammutilationIchor ichor = new MammutilationIchor(this.level(), (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight() + 0.35f, (double) blockPos.getZ() + headZ);
+                    Vec3 shootingVec = this.getLookAngle().scale(2).multiply(0.5D, 1.0D, 0.5D);
                     double d = shootingVec.x();
                     double e = shootingVec.y();
                     double g = shootingVec.z();
                     double h = Math.sqrt(d * d + g * g);
-                    ichor.shoot(d, e + h * (double)0.1f, g, 0.8f, 14 - this.level().getDifficulty().getId() * 4);
-                    this.level().addFreshEntity(ichor);
                     this.addDeltaMovement(new Vec3(0, 0.25D, 0));
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(SpeciesParticles.ICHOR.get(), (double) blockPos.getX() + headX, blockPos.getY() + this.getEyeHeight(), (double) blockPos.getZ() + headZ, 20,d, e + h * (double)0.5f, g, 8f);
+                    }
                     this.addDeltaMovement(this.getLookAngle().scale(2.0D).multiply(-0.5D, 0, -0.5D));
 
                 }
@@ -126,6 +134,9 @@ public class Mammutilation extends PathfinderMob {
             }
             if (this.howlCooldown > 0) {
                 this.howlCooldown--;
+            }
+            if (this.getIchorCooldown() > 0) {
+                this.setIchorCooldown(this.getIchorCooldown()-1);
             }
             if (this.howlTimer > 0) {
                 this.howlTimer--;
@@ -137,6 +148,21 @@ public class Mammutilation extends PathfinderMob {
             }
         }
     }
+    @Override
+    protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+        if (itemStack.is(Items.GLASS_BOTTLE) && !this.isBaby() && this.getIchorCount() > 0 && this.getIchorCooldown() == 0) {
+            player.playSound(SpeciesSoundEvents.MAMMUTILATION_BLEED.get(), 1.0F, 1.0F);
+            ItemStack itemStack2 = ItemUtils.createFilledResult(itemStack, player, SpeciesItems.ICHOR_BOTTLE.get().getDefaultInstance());
+            this.setIchorCount(this.getIchorCount()-1);
+            this.ichorCooldown();
+            player.setItemInHand(interactionHand, itemStack2);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        } else {
+            return super.mobInteract(player, interactionHand);
+        }
+    }
+
 
     @Override
     public int getMaxHeadXRot() {
@@ -152,6 +178,8 @@ public class Mammutilation extends PathfinderMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(COUGH_COOLDOWN, 30 * 20 + random.nextInt(60 * 2 * 20));
+        this.entityData.define(ICHOR_COUNT, 5);
+        this.entityData.define(ICHOR_COOLDOWN, 0);
     }
 
     @Override
@@ -161,6 +189,8 @@ public class Mammutilation extends PathfinderMob {
         this.howlCooldown = compoundTag.getInt("HowlCooldown");
         this.coughTimer = compoundTag.getInt("CoughTimer");
         this.setCoughCooldown(compoundTag.getInt("CoughCooldown"));
+        this.setIchorCount(compoundTag.getInt("IchorCount"));
+        this.setIchorCooldown(compoundTag.getInt("IchorCooldown"));
     }
 
     @Override
@@ -170,6 +200,25 @@ public class Mammutilation extends PathfinderMob {
         compoundTag.putInt("HowlCooldown", this.howlCooldown);
         compoundTag.putInt("CoughTimer", this.coughTimer);
         compoundTag.putInt("CoughCooldown", this.getCoughCooldown());
+        compoundTag.putInt("IchorCount", this.getIchorCount());
+        compoundTag.putInt("IchorCooldown", this.getIchorCooldown());
+    }
+
+    public int getIchorCount() {
+        return this.entityData.get(ICHOR_COUNT);
+    }
+    public void setIchorCount(int count) {
+        this.entityData.set(ICHOR_COUNT, count);
+    }
+
+    public int getIchorCooldown() {
+        return this.entityData.get(ICHOR_COOLDOWN);
+    }
+    public void setIchorCooldown(int cooldown) {
+        this.entityData.set(ICHOR_COOLDOWN, cooldown);
+    }
+    public void ichorCooldown() {
+        this.entityData.set(ICHOR_COOLDOWN, 20);
     }
 
     @Override
@@ -330,6 +379,7 @@ public class Mammutilation extends PathfinderMob {
             this.mammutilation.howlCooldown = 1000;
             this.mammutilation.howlTimer = 20 * 4;
             this.mammutilation.setPose(SpeciesPose.HOWLING.get());
+            this.mammutilation.setIchorCount(5);
         }
 
         @Override
