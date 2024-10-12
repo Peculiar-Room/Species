@@ -256,10 +256,6 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         this.day = day;
     }
 
-    public boolean canDisableShield() {
-        return true;
-    }
-
     public DamageSource crunch(LivingEntity livingEntity) {
         return this.damageSources().source(SpeciesDamageTypes.CRUNCH, livingEntity);
     }

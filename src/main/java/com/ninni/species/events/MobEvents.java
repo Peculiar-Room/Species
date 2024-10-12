@@ -13,10 +13,21 @@ import com.ninni.species.entity.Treeper;
 import com.ninni.species.entity.Trooper;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.entity.Wraptor;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.entity.living.ShieldBlockEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -53,6 +64,48 @@ public class MobEvents {
         event.put(SpeciesEntities.CRUNCHER.get(), Cruncher.createAttributes().build());
         event.put(SpeciesEntities.MAMMUTILATION.get(), Mammutilation.createAttributes().build());
         event.put(SpeciesEntities.SPRINGLING.get(), Springling.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public void onPlayerBreak(PlayerEvent.BreakSpeed event) {
+        Player player = event.getEntity();
+        if (player.getVehicle() instanceof Springling) {
+            float f = event.getOriginalSpeed();
+            if (f > 1.0f) {
+                int i = EnchantmentHelper.getBlockEfficiency(player);
+                ItemStack itemStack = player.getMainHandItem();
+                if (i > 0 && !itemStack.isEmpty()) {
+                    f += (float) (i * i + 1);
+                }
+            }
+            if (MobEffectUtil.hasDigSpeed(player)) {
+                f *= 1.0f + (float) (MobEffectUtil.getDigSpeedAmplification(player) + 1) * 0.2f;
+            }
+            if (player.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                f *= (switch (player.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+                    case 0 -> 0.3f;
+                    case 1 -> 0.09f;
+                    case 2 -> 0.0027f;
+                    default -> 8.1E-4f;
+                });
+            }
+            if (player.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(player)) {
+                f /= 5.0f;
+            }
+            if (!player.getVehicle().onGround()) {
+                f /= 5.0f;
+            }
+            event.setNewSpeed(f);
+        }
+    }
+
+    @SubscribeEvent
+    public void onShieldBlock(ShieldBlockEvent event) {
+        LivingEntity livingEntity = event.getEntity();
+        DamageSource damageSource = event.getDamageSource();
+        if (livingEntity instanceof Player player && damageSource.getEntity() instanceof Cruncher) {
+            player.disableShield(true);
+        }
     }
 
 }
