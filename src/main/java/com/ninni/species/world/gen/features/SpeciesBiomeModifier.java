@@ -4,6 +4,8 @@ import com.ninni.species.Species;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesPlacedFeatures;
 import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.world.gen.biome_modifier.ConditionalSpawnBiomeModifier;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -38,7 +40,7 @@ public class SpeciesBiomeModifier {
         context.register(ADD_BIRTED_BIRCH_TREES, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(biomeTag(context, SpeciesTags.BIRT_TREE_SPAWNS_IN), getPlacedFeature(context, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES), GenerationStep.Decoration.VEGETAL_DECORATION));
         context.register(ADD_MAMMUTILATION_REMNANT, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(biomeTag(context, SpeciesTags.MAMMUTILATION_REMNANT_SPAWNS_IN), getPlacedFeature(context, SpeciesPlacedFeatures.MAMMUTILATION_REMNANT), GenerationStep.Decoration.UNDERGROUND_DECORATION));
         context.register(ADD_DEEPFISH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(biomeTag(context, BiomeTags.IS_OVERWORLD), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.DEEPFISH.get(), 80, 4, 6))));
-        context.register(ADD_LIMPET, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(biomeTag(context, BiomeTags.IS_OVERWORLD), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.LIMPET.get(), 80, 1, 1))));
+        context.register(ADD_LIMPET, new ConditionalSpawnBiomeModifier(biomeTag(context, BiomeTags.IS_OVERWORLD), biomeTag(context, SpeciesTags.WITHOUT_LIMPET_SPAWNS), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.LIMPET.get(), 80, 1, 1))));
         context.register(ADD_ROOMBUG, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(biomeTag(context, SpeciesTags.ROOMBUG_SPAWNS), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.ROOMBUG.get(), 10, 1, 3))));
         context.register(ADD_WRAPTOR, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(HolderSet.direct(context.lookup(Registries.BIOME).getOrThrow(Biomes.WARPED_FOREST)), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.WRAPTOR.get(), 100, 4, 6))));
         context.register(ADD_TREEPER, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(biomeTag(context, SpeciesTags.TREEPER_SPAWNS), List.of(new MobSpawnSettings.SpawnerData(SpeciesEntities.TREEPER.get(), 80, 1, 1))));

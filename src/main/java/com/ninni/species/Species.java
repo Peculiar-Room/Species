@@ -1,5 +1,6 @@
 package com.ninni.species;
 
+import com.ninni.species.registry.SpeciesBiomeModifiers;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.client.particles.SpeciesParticles;
@@ -36,6 +37,7 @@ public class Species {
 
 		SpeciesBlocks.BLOCKS.register(modEventBus);
 		SpeciesBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+		SpeciesBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
 		SpeciesCreativeModeTabs.CREATIVE_MODE_TABAS.register(modEventBus);
 		SpeciesStatusEffects.MOB_EFFECTS.register(modEventBus);
 		SpeciesEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);

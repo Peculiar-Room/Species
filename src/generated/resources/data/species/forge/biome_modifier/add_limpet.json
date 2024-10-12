@@ -1,10 +1,11 @@
 {
-  "type": "forge:add_spawns",
-  "biomes": "#species:limpet_spawns",
+  "type": "species:add_conditional_spawns",
+  "biomes": "#minecraft:is_overworld",
+  "filtered": "#species:without_limpet_spawns",
   "spawners": {
     "type": "species:limpet",
     "maxCount": 1,
     "minCount": 1,
-    "weight": 10
+    "weight": 80
   }
 }
