@@ -23,6 +23,8 @@ import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -75,9 +77,11 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
         if (!level.isClientSide && blockEntity instanceof BirtDwellingBlockEntity birtDwellingBlockEntity) {
-            birtDwellingBlockEntity.angerBirts(player, blockState, BirtDwellingBlockEntity.BirtState.EMERGENCY);
-            level.updateNeighbourForOutputSignal(blockPos, this);
-            this.angerNearbyBirts(level, blockPos);
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+                birtDwellingBlockEntity.angerBirts(player, blockState, BirtDwellingBlockEntity.BirtState.EMERGENCY);
+                level.updateNeighbourForOutputSignal(blockPos, this);
+                this.angerNearbyBirts(level, blockPos);
+            }
         }
     }
 
