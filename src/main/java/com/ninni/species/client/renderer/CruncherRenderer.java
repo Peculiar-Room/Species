@@ -3,6 +3,7 @@ package com.ninni.species.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.species.client.model.entity.CruncherModel;
 import com.ninni.species.entity.Cruncher;
+import com.ninni.species.entity.Wraptor;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -16,6 +17,7 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class CruncherRenderer<T extends LivingEntity> extends MobRenderer<Cruncher, CruncherModel<Cruncher>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/cruncher/cruncher.png");
+    public static final ResourceLocation REAL_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/cruncher/real_cruncher.png");
 
     public CruncherRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new CruncherModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.CRUNCHER)), 2.5F);
@@ -27,8 +29,9 @@ public class CruncherRenderer<T extends LivingEntity> extends MobRenderer<Crunch
         super.scale(livingEntity, poseStack, f);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(Cruncher entity) {
-        return TEXTURE;
+    @Override public ResourceLocation getTextureLocation(Cruncher entity) {
+        if (entity.getName().getString().equalsIgnoreCase("the cruncher")) {
+            return REAL_TEXTURE;
+        } else return TEXTURE;
     }
 }
