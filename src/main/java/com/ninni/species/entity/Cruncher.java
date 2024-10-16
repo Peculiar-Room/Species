@@ -87,6 +87,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     private CruncherPelletManager.CruncherPelletData pelletData = null;
     private int hunger;
     private int idleAnimationTimeout = 0;
+    private int spits;
     private long day = -1L;
     public final SimpleContainer inventory = new SimpleContainer(1);
 
@@ -202,6 +203,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
             this.inventory.setItem(0, ItemStack.of(compoundTag.getCompound("PelletFuel")));
         }
 
+        this.setSpits(compoundTag.getInt("Spit"));
         this.setHunger(compoundTag.getInt("Hunger"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
         this.setDay(compoundTag.getLong("Day"));
@@ -225,6 +227,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
             compoundTag.put("PelletFuel", this.inventory.getItem(0).save(new CompoundTag()));
         }
 
+        compoundTag.putInt("Spit", this.getSpits());
         compoundTag.putInt("Hunger", this.getHunger());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
         compoundTag.putLong("Day", this.getDay());
@@ -254,6 +257,13 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     public void setDay(long day) {
         this.day = day;
+    }
+
+    public int getSpits() {
+        return this.spits;
+    }
+    public void setSpits(int spits) {
+        this.spits = spits;
     }
 
     public boolean canDisableShield() {

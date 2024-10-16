@@ -42,8 +42,6 @@ public class SpitPellet extends Behavior<Cruncher> {
         }
 
         if (cruncherDay < day) {
-
-
             livingEntity.setDay(cruncherDay + 1);
             return livingEntity.getPelletData() != null && nearestPlayer.isPresent();
         }
@@ -53,7 +51,7 @@ public class SpitPellet extends Behavior<Cruncher> {
 
     @Override
     protected boolean canStillUse(ServerLevel serverLevel, Cruncher livingEntity, long l) {
-        return true;
+        return livingEntity.getSpits() <= 10;
     }
 
     @Override
@@ -85,7 +83,17 @@ public class SpitPellet extends Behavior<Cruncher> {
 
         serverLevel.addFreshEntity(pellet);
 
+        livingEntity.setSpits(livingEntity.getSpits() + 1);
+
         brain.setMemoryWithExpiry(SpeciesMemoryModuleTypes.SPIT_CHARGING, Unit.INSTANCE, 96);
     }
 
+    @Override
+    protected void stop(ServerLevel serverLevel, Cruncher livingEntity, long time) {
+        if (livingEntity.getSpits() > 10) {
+            long day = serverLevel.getDayTime() / 24000L;
+            livingEntity.setSpits(0);
+            livingEntity.setDay(day);
+        }
+    }
 }
