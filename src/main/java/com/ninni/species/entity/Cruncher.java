@@ -7,12 +7,12 @@ import com.ninni.species.client.particles.SpeciesParticles;
 import com.ninni.species.criterion.SpeciesCriterion;
 import com.ninni.species.data.CruncherPelletManager;
 import com.ninni.species.entity.ai.CruncherAi;
+import com.ninni.species.network.OpenCruncherScreenPacket;
 import com.ninni.species.registry.SpeciesDamageTypes;
 import com.ninni.species.registry.SpeciesEntityDataSerializers;
 import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
-import com.ninni.species.network.OpenCruncherScreenPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -87,6 +87,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     private CruncherPelletManager.CruncherPelletData pelletData = null;
     private int hunger;
     private int idleAnimationTimeout = 0;
+    private int spits;
     private long day = -1L;
     public final SimpleContainer inventory = new SimpleContainer(1);
 
@@ -203,6 +204,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         }
 
         this.setHunger(compoundTag.getInt("Hunger"));
+        this.setSpits(compoundTag.getInt("Spit"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
         this.setDay(compoundTag.getLong("Day"));
     }
@@ -226,6 +228,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         }
 
         compoundTag.putInt("Hunger", this.getHunger());
+        compoundTag.putInt("Spit", this.getSpits());
         compoundTag.putInt("StunnedTicks", this.getStunnedTicks());
         compoundTag.putLong("Day", this.getDay());
     }
@@ -404,6 +407,14 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
     public void setHunger(int hunger) {
         this.hunger = hunger;
+    }
+
+    public int getSpits() {
+        return this.spits;
+    }
+
+    public void setSpits(int spits) {
+        this.spits = spits;
     }
 
     private void setupAnimationStates() {
