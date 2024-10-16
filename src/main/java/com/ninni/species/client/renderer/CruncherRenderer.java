@@ -17,7 +17,6 @@ import static com.ninni.species.Species.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class CruncherRenderer<T extends LivingEntity> extends MobRenderer<Cruncher, CruncherModel<Cruncher>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/cruncher/cruncher.png");
-    public static final ResourceLocation REAL_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/cruncher/real_cruncher.png");
 
     public CruncherRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new CruncherModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.CRUNCHER)), 2.5F);
@@ -30,8 +29,6 @@ public class CruncherRenderer<T extends LivingEntity> extends MobRenderer<Crunch
     }
 
     @Override public ResourceLocation getTextureLocation(Cruncher entity) {
-        if (entity.getName().getString().equalsIgnoreCase("the cruncher")) {
-            return REAL_TEXTURE;
-        } else return TEXTURE;
+        return TEXTURE;
     }
 }
