@@ -89,9 +89,8 @@ public class CruncherAi {
     private static void initIdleActivity(Brain<Cruncher> brain) {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, StartAttacking.create(Predicate.not(CruncherAi::isPassive), cruncher -> cruncher.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE))),
-                Pair.of(1, StartAttacking.create(Predicate.not(CruncherAi::isPassive), Cruncher::getHurtBy)),
-                Pair.of(2, new SpitPellet()),
-                Pair.of(3, new RunOne<>(
+                Pair.of(1, new SpitPellet()),
+                Pair.of(2, new RunOne<>(
                         ImmutableList.of(
                                 Pair.of(RandomStroll.stroll(1.0F), 1),
                                 Pair.of(new DoNothing(30, 60), 1)

@@ -5,6 +5,8 @@ import com.google.common.collect.Iterables;
 import com.ninni.species.entity.Cruncher;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -38,8 +40,13 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
             return;
         }
 
-        if (attackTarget.isPresent() && attackTarget.get() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative() || serverPlayer.isSpectator())) {
-            cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+        if (attackTarget.isPresent()) {
+            if (attackTarget.get().isRemoved()) {
+                cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            }
+            if (attackTarget.get() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative() || serverPlayer.isSpectator())) {
+                cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            }
         }
 
         super.doTick(serverLevel, cruncher);

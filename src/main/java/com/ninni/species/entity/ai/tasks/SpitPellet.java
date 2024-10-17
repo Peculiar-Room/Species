@@ -41,8 +41,6 @@ public class SpitPellet extends Behavior<Cruncher> {
             livingEntity.setDay(day);
         }
 
-        System.out.println(livingEntity.getDay() + " " + livingEntity.getSpits());
-
         if (cruncherDay < day) {
             livingEntity.setDay(cruncherDay + 1);
             return livingEntity.getPelletData() != null && nearestPlayer.isPresent();
