@@ -371,6 +371,9 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     @Override
     protected void actuallyHurt(DamageSource damageSource, float f) {
         boolean flag = this.getHealth() / this.getMaxHealth() <= 0.75;
+        if (damageSource.getEntity() instanceof LivingEntity livingEntity) {
+            this.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity);
+        }
         if (this.getHunger() > 0 && flag) {
             if (this.getState() != CruncherState.STUNNED) {
                 this.playSound(SpeciesSoundEvents.CRUNCHER_STUN, 2.0F, 1.0F);
@@ -472,9 +475,11 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     public boolean isTargetClose() {
         LivingEntity entity = this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
 
-        if (!(entity instanceof ServerPlayer player)) return false;
+        if (entity.isRemoved()) this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
 
-        return player.gameMode.isSurvival() && player.distanceTo(this) <= 9;
+        if (entity instanceof ServerPlayer player) return player.gameMode.isSurvival() && player.distanceTo(this) <= 9;
+
+        return entity.distanceTo(this) <= 9;
     }
 
     public Optional<LivingEntity> getHurtBy() {

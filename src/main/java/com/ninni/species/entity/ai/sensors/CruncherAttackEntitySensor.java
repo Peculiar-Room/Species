@@ -39,8 +39,13 @@ public class CruncherAttackEntitySensor extends NearestLivingEntitySensor<Crunch
             return;
         }
 
-        if (attackTarget.isPresent() && attackTarget.get() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative() || serverPlayer.isSpectator())) {
-            cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+        if (attackTarget.isPresent()) {
+            if (attackTarget.get().isRemoved()) {
+                cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            }
+            if (attackTarget.get() instanceof ServerPlayer serverPlayer && (serverPlayer.isCreative() || serverPlayer.isSpectator())) {
+                cruncher.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            }
         }
 
         super.doTick(serverLevel, cruncher);
