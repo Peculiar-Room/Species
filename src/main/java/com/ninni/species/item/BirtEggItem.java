@@ -36,4 +36,13 @@ public class BirtEggItem extends Item {
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide);
     }
 
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+        list.add(Component.translatable("item.species.birt_egg.desc.birtd").withStyle(ChatFormatting.RED));
+        list.add(Component.literal(""));
+        list.add(Component.translatable("potion.whenDrank").withStyle(ChatFormatting.DARK_PURPLE));
+        list.add(Component.translatable("item.species.birt_egg.desc.effect").withStyle(ChatFormatting.RED));
+
+        super.appendHoverText(itemStack, level, list, tooltipFlag);
+    }
 }

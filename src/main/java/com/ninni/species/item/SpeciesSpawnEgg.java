@@ -23,7 +23,7 @@ public class SpeciesSpawnEgg extends SpawnEggItem {
 
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        list.add(Component.translatable(""));
+        list.add(Component.literal(""));
         list.add(Component.translatable("species.developer.made_by", developer.getName()).withStyle(ChatFormatting.GRAY));
         list.add(Component.translatable(developer.getName()).withStyle(developer.getFormatting()));
 
