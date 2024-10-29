@@ -57,9 +57,11 @@
   "subtitles.entity.species.roombug.step": "Roombug strides",
 
   "entity.species.birt": "Birt",
-  "entity.species.birt_egg": "Birt Egg",
   "item.species.birt_spawn_egg": "Birt Spawn Egg",
   "item.species.birt_egg": "Birt Egg",
+  "entity.species.birt_egg": "Birt Egg",
+  "item.species.birt_egg.desc.birtd": "Birt'd (0:03)",
+  "item.species.birt_egg.desc.effect": "Prevents Movement",
   "block.species.birt_dwelling": "Birt Dwelling",
 
   "item.species.music_disc_dial": "Music Disc",

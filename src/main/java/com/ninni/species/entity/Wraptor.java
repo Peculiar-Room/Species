@@ -201,7 +201,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
                     if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SHEAR_WRAPTOR_COMPLETELY.trigger(serverPlayer);
                     if (!player.isCreative() && !this.isBormFromEgg()) {
                         if (!this.isSilent())
-                            this.level().playSound(null, this, SpeciesSoundEvents.WRAPTOR_AGGRO.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                            this.level().playSound(null, this, SpeciesSoundEvents.WRAPTOR_AGGRO.get(), SoundSource.HOSTILE, 3.0f, 1.0f);
                         this.setTarget(player);
                     }
                 }

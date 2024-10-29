@@ -56,7 +56,7 @@ public class SpeciesSoundEvents {
     public static final RegistryObject<SoundEvent> BLOCK_BIRT_DWELLING_EXIT = register("block.birt_dwelling.exit");
     public static final RegistryObject<SoundEvent> BLOCK_BIRT_DWELLING_WORK = register("block.birt_dwelling.work");
 
-    public static final RegistryObject<SoundEvent> ENTITY_BIRTD = register("entity.birtd");
+    public static final RegistryObject<SoundEvent> ENTITY_BIRTD = register("effect.birtd.applied");
 
     public static final RegistryObject<SoundEvent> ITEM_BIRT_EGG_THROW = register("item.birt_egg.throw");
     public static final RegistryObject<SoundEvent> ITEM_BIRT_EGG_HIT = register("item.birt_egg.hit");
