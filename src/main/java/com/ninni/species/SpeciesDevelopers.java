@@ -26,9 +26,9 @@ public class SpeciesDevelopers {
         BORNHULU("Bornhulu", ContributionLevel.DEVELOPER, ChatFormatting.GREEN, BORNHULU_TEXTURE),
         GLADOS("GLaDOS edition", ContributionLevel.DEVELOPER, ChatFormatting.LIGHT_PURPLE, GLADOS_TEXTURE),
         ORCINUS("Orcinus", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
+        VAKY("VakyPanda", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
         BUNTEN("lunarbunten", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
         EXCLAIM("Exclaim!", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE);
-        //WADOO("Wadoo", ContributionLevel.GUEST_ARTIST, ChatFormatting.DARK_GRAY)
 
         private final String name;
         private final ContributionLevel contributionLevel;

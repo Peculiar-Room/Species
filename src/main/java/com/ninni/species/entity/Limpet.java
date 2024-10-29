@@ -357,7 +357,7 @@ public class Limpet extends PathfinderMob {
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<? extends PathfinderMob> entityType, ServerLevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource randomSource) {
-        return levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0  && levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON) && levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, entityType);
+        return levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0 && levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0 && levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON) && levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, entityType);
     }
 
     public static class LimpetGroupData implements SpawnGroupData {
