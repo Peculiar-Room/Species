@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class SpeciesSpawnEggItem extends ForgeSpawnEggItem {
-    public SpeciesDevelopers developer;
+    public SpeciesDevelopers.SpeciesDeveloperNames developer;
 
-    public SpeciesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, SpeciesDevelopers developer, Properties props) {
+    public SpeciesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, SpeciesDevelopers.SpeciesDeveloperNames developer, Properties props) {
         super(type, backgroundColor, highlightColor, props);
         this.developer = developer;
     }
@@ -26,7 +26,7 @@ public class SpeciesSpawnEggItem extends ForgeSpawnEggItem {
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.literal(""));
         list.add(Component.translatable("species.developer.made_by", developer.getName()).withStyle(ChatFormatting.GRAY));
-        list.add(Component.translatable(developer.getName()).withStyle(developer.getFormatting()));
+        list.add(Component.literal(developer.getContributionLevel().getContributionLevelName()).withStyle(ChatFormatting.GRAY).append(Component.translatable(developer.getName()).withStyle(developer.getFormatting())));
 
         super.appendHoverText(itemStack, level, list, tooltipFlag);
     }

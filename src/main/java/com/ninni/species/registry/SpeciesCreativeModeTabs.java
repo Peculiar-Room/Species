@@ -13,8 +13,12 @@ public class SpeciesCreativeModeTabs {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABAS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Species.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> SPECIES = CREATIVE_MODE_TABAS.register("species", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.species.species")).icon(SpeciesItems.BIRT_EGG.get()::getDefaultInstance).displayItems((itemDisplayParameters, output) -> {
-        SpeciesItems.ITEMS.getEntries().stream().map(RegistryObject::get).forEach(output::accept);
-    }).build());
+    public static final RegistryObject<CreativeModeTab> SPECIES = CREATIVE_MODE_TABAS.register("species", () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.species.species")).icon(SpeciesItems.LOGO.get()::getDefaultInstance)
+            .displayItems((itemDisplayParameters, output) -> {
+                SpeciesItems.ITEMS.getEntries().forEach(itemRegistryObject ->  {
+                    if (!itemRegistryObject.get().getDefaultInstance().is(SpeciesItems.LOGO.get())) output.accept(itemRegistryObject.get());
+                });
+            })
+            .build());
 
 }

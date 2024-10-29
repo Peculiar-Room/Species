@@ -15,7 +15,9 @@
     "PoseMixin",
     "WitherSkeletonEntityMixin"
   ],
-  "client": [],
+  "client": [
+    "client.AbstractClientPlayerMixin"
+  ],
   "injectors": {
     "defaultRequire": 1 }
 }
