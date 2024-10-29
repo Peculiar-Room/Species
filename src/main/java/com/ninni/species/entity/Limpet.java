@@ -39,11 +39,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class Limpet extends Monster {
+public class Limpet extends PathfinderMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super Limpet>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET);
     private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
@@ -60,7 +59,7 @@ public class Limpet extends Monster {
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
     private static final EntityDimensions SCARED_DIMENSIONS = EntityDimensions.scalable(0.75F, 0.75F);
 
-    public Limpet(EntityType<? extends Monster> entityType, Level world) {
+    public Limpet(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -330,16 +329,13 @@ public class Limpet extends Monster {
         this.playSound(SpeciesSoundEvents.LIMPET_STEP.get(), 0.15F, 1.0F);
     }
 
-    protected boolean shouldDespawnInPeaceful() {
-        return false;
-    }
-    public boolean isPreventingPlayerRest(Player p_33036_) {
-        return false;
+    public float getWalkTargetValue(BlockPos p_33013_, LevelReader p_33014_) {
+        return -p_33014_.getPathfindingCostFromLightLevels(p_33013_);
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<? extends Monster> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return world.getLightEmission(pos) == 0 && world.getBlockState(pos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON);
+    public static boolean canSpawn(EntityType<? extends PathfinderMob> entityType, ServerLevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource randomSource) {
+        return levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0  && levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON) && levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, entityType);
     }
 
     public static class LimpetGroupData implements SpawnGroupData {
