@@ -96,21 +96,43 @@ public class Limpet extends PathfinderMob {
     }
 
     public int chooseLimpetType(LevelAccessor world) {
-        Holder<Biome> holder = world.getBiome(this.blockPosition());
         int yLevel = this.blockPosition().getY();
-        if (yLevel > 20) {
-            if (holder.is(Tags.Biomes.IS_MOUNTAIN)) return LimpetType.EMERALD.getId();
-            else {
-                if (random.nextInt(5) == 0) return LimpetType.LAPIS.getId();
+        float random = this.random.nextFloat();
+        boolean isMountain = world.getBiome(this.blockPosition()).is(Tags.Biomes.IS_MOUNTAIN);
+
+        if (yLevel <= 16) {
+            if (random <= 0.25) return LimpetType.DIAMOND.getId();
+            else if (random <= 0.55 && random > 0.25) return LimpetType.LAPIS.getId();
+            else return LimpetType.COAL.getId();
+        }
+        else if (yLevel <= 30) {
+            if (!isMountain) {
+                if (random <= 0.05) return LimpetType.EMERALD.getId();
+                else if (random <= 0.15 && random > 0.05) return LimpetType.AMETHYST.getId();
+                else if (random <= 0.35 && random > 0.15) return LimpetType.LAPIS.getId();
+                else return LimpetType.COAL.getId();
+            } else {
+                if (random <= 0.10) return LimpetType.AMETHYST.getId();
+                else if (random <= 0.20 && random > 0.10) return LimpetType.LAPIS.getId();
+                else if (random <= 0.40 && random > 0.20) return LimpetType.EMERALD.getId();
                 else return LimpetType.COAL.getId();
             }
         }
-        if (yLevel < 20 && yLevel > -20) return LimpetType.AMETHYST.getId();
-        if (yLevel <= -20) {
-            if (random.nextInt(5) == 0) return LimpetType.DIAMOND.getId();
-            else return LimpetType.COAL.getId();
+        else {
+            if (!isMountain) {
+                if (random <= 0.20) return LimpetType.LAPIS.getId();
+                else return LimpetType.COAL.getId();
+            } else {
+                if (yLevel <= 64) {
+                    if (random <= 0.20) return LimpetType.LAPIS.getId();
+                    else if (random <= 0.50 && random > 0.20) return LimpetType.EMERALD.getId();
+                    else return LimpetType.COAL.getId();
+                } else {
+                    if (random <= 0.20) return LimpetType.COAL.getId();
+                    else return LimpetType.EMERALD.getId();
+                }
+            }
         }
-        return LimpetType.SHELL.getId();
     }
 
     @Override
