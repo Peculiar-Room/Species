@@ -13,7 +13,7 @@ public class SpeciesDevelopers {
     public static final ResourceLocation NINNI_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/ninni.png");
     public static final ResourceLocation REDA_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/floofhips.png");
     public static final ResourceLocation NOON_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/noonyeyz.png");
-    public static final ResourceLocation BORNHULU_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/bornhulu.png");
+    public static final ResourceLocation BORNULHU_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/bornulhu.png");
     public static final ResourceLocation GLADOS_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/glados_edition.png");
     public static final ResourceLocation CONTRIBUTOR_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/contributor.png");
     public static final ResourceLocation GUEST_ARTIST_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/guest_artist.png");
@@ -23,10 +23,11 @@ public class SpeciesDevelopers {
         NINNI("Ninni", ContributionLevel.DEVELOPER, ChatFormatting.DARK_AQUA, NINNI_TEXTURE),
         REDA("Floofhips", ContributionLevel.DEVELOPER, ChatFormatting.RED, REDA_TEXTURE),
         NOON("Noonyeyz", ContributionLevel.DEVELOPER, ChatFormatting.AQUA, NOON_TEXTURE),
-        BORNHULU("Bornhulu", ContributionLevel.DEVELOPER, ChatFormatting.GREEN, BORNHULU_TEXTURE),
+        BORNULHU("Bornulhu", ContributionLevel.DEVELOPER, ChatFormatting.GREEN, BORNULHU_TEXTURE),
         GLADOS("GLaDOS edition", ContributionLevel.DEVELOPER, ChatFormatting.LIGHT_PURPLE, GLADOS_TEXTURE),
         ORCINUS("Orcinus", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
         VAKY("VakyPanda", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
+        TAZZ("Tazz", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
         BUNTEN("lunarbunten", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
         EXCLAIM("Exclaim!", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE);
 

@@ -34,7 +34,7 @@ public class SpeciesItems {
     public static final RegistryObject<Item> WRAPTOR_EGG = ITEMS.register("wraptor_egg", () -> new BlockItem(SpeciesBlocks.WRAPTOR_EGG.get(), new Item.Properties()));
     public static final RegistryObject<Item> CRACKED_WRAPTOR_EGG = ITEMS.register("cracked_wraptor_egg", () -> new CrakedWraptorEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(5).saturationMod(0.7f).effect(new MobEffectInstance(SpeciesStatusEffects.WITHER_RESISTANCE.get(), 20 * 90, 0), 1).build())));
 
-    public static final RegistryObject<Item> DEEPFISH_SPAWN_EGG = ITEMS.register("deepfish_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.DEEPFISH, 0x5A5A5A, 0xED98BD, SpeciesDevelopers.SpeciesDeveloperNames.BORNHULU, new Item.Properties().stacksTo(64)));
+    public static final RegistryObject<Item> DEEPFISH_SPAWN_EGG = ITEMS.register("deepfish_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.DEEPFISH, 0x5A5A5A, 0xED98BD, SpeciesDevelopers.SpeciesDeveloperNames.BORNULHU, new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> DEEPFISH_BUCKET = ITEMS.register("deepfish_bucket", () -> new MobBucketItem(SpeciesEntities.DEEPFISH, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> ROOMBUG_SPAWN_EGG = ITEMS.register("roombug_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.ROOMBUG, 0x5A3C29, 0xB4584D, SpeciesDevelopers.SpeciesDeveloperNames.NINNI, new Item.Properties().stacksTo(64)));
@@ -58,7 +58,7 @@ public class SpeciesItems {
     public static final RegistryObject<Item> ANCIENT_PINECONE = ITEMS.register("ancient_pinecone", () -> new ItemNameBlockItem(SpeciesBlocks.TROOPER.get(), new Item.Properties()));
     public static final RegistryObject<Item> TROOPER_SPAWN_EGG = ITEMS.register("trooper_spawn_egg", () -> new ForgeSpawnEggItem(SpeciesEntities.TROOPER, 0x6f5535, 0x32992D, new Item.Properties().stacksTo(64)));
 
-    public static final RegistryObject<Item> GOOBER_SPAWN_EGG = ITEMS.register("goober_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.GOOBER, 0x49674E, 0x49674E, SpeciesDevelopers.SpeciesDeveloperNames.BORNHULU, new Item.Properties().stacksTo(64)));
+    public static final RegistryObject<Item> GOOBER_SPAWN_EGG = ITEMS.register("goober_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.GOOBER, 0x49674E, 0x49674E, SpeciesDevelopers.SpeciesDeveloperNames.BORNULHU, new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> PETRIFIED_EGG = ITEMS.register("petrified_egg", () -> new BlockItem(SpeciesBlocks.PETRIFIED_EGG.get(), new Item.Properties()));
     public static final RegistryObject<Item> ALPHACENE_MOSS_BLOCK = ITEMS.register("alphacene_moss_block", () -> new BlockItem(SpeciesBlocks.ALPHACENE_MOSS_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> ALPHACENE_MOSS_CARPET = ITEMS.register("alphacene_moss_carpet", () -> new BlockItem(SpeciesBlocks.ALPHACENE_MOSS_CARPET.get(), new Item.Properties()));
