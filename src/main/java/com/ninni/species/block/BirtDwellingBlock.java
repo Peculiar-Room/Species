@@ -86,9 +86,11 @@ public class BirtDwellingBlock extends BaseEntityBlock {
     }
 
     private void angerNearbyBirts(Level world, BlockPos pos) {
+        List<Player> playerList = world.getEntitiesOfClass(Player.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
+        if (playerList.isEmpty())
+            return;
         List<Birt> birtList = world.getEntitiesOfClass(Birt.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
         if (!birtList.isEmpty()) {
-            List<Player> playerList = world.getEntitiesOfClass(Player.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
             for (Birt birt : birtList) {
                 if (birt.getTarget() != null) continue;
                 birt.setTarget(playerList.get(world.random.nextInt(playerList.size())));
