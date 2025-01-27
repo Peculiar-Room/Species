@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="ARR"
 [[mods]]
 modId="species"
-version="1.20.1-2.2-forge"
+version="1.20.1-2.3-forge"
 displayName="Species"
 logoFile= "species.png"
 authors="Ninni, Noon, Bornulhu, FloofHips, GLaDOS edition"
@@ -11,7 +11,7 @@ description='''
 A mod that adds fictional mobs to the game, with cool and unique functions
 
 Contributors:
-- bunten
+- lunarbunten
 - Orcinus
 
 '''

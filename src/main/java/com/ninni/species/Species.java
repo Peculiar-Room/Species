@@ -67,7 +67,7 @@ public class Species {
 		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("f1fb25f4-60c4-4e21-b33c-59f0a2daf4b1"), SpeciesDevelopers.SpeciesDeveloperNames.REDA);
 		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("4a463319-625c-4b86-a4e7-8b700f023a60"), SpeciesDevelopers.SpeciesDeveloperNames.NOON);
 		//SpeciesDevelopers.developerUUIDS.put(UUID.fromString(""), SpeciesDevelopers.SpeciesDeveloperNames.BORNHULU);
-		//SpeciesDevelopers.developerUUIDS.put(UUID.fromString(""), SpeciesDevelopers.SpeciesDeveloperNames.GLADOS);
+		//SpeciesDevelopers.developerUUIDS.put(UUID.fromString(""), SpeciesDevelopers.SpeciesDeveloperNames.GLADOS); Glados does not own minecraft
 		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("81499a26-ba39-430e-8009-29ee87351c20"), SpeciesDevelopers.SpeciesDeveloperNames.ORCINUS);
 		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("0c22615f-a189-4f4e-85ae-79fd80c353c8"), SpeciesDevelopers.SpeciesDeveloperNames.VAKY);
 		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("aca529a2-1166-41aa-b304-209f06831998"), SpeciesDevelopers.SpeciesDeveloperNames.TAZZ);
