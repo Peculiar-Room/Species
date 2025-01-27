@@ -27,13 +27,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -47,9 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -58,7 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class Limpet extends Monster {
+public class Limpet extends PathfinderMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super Limpet>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.HURT_BY);
     protected static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.IS_PANICKING, MemoryModuleType.AVOID_TARGET);
     private static final EntityDataAccessor<Integer> SCARED_TICKS = SynchedEntityData.defineId(Limpet.class, EntityDataSerializers.INT);
@@ -67,7 +59,7 @@ public class Limpet extends Monster {
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
     private static final EntityDimensions SCARED_DIMENSIONS = EntityDimensions.scalable(0.75F, 0.75F);
 
-    public Limpet(EntityType<? extends Monster> entityType, Level world) {
+    public Limpet(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -104,21 +96,43 @@ public class Limpet extends Monster {
     }
 
     public int chooseLimpetType(LevelAccessor world) {
-        Holder<Biome> holder = world.getBiome(this.blockPosition());
         int yLevel = this.blockPosition().getY();
-        if (yLevel > 20) {
-            if (holder.is(ConventionalBiomeTags.MOUNTAIN)) return LimpetType.EMERALD.getId();
-            else {
-                if (random.nextInt(5) == 0) return LimpetType.LAPIS.getId();
+        float random = this.random.nextFloat();
+        boolean isMountain = world.getBiome(this.blockPosition()).is(ConventionalBiomeTags.MOUNTAIN);
+
+        if (yLevel <= 16) {
+            if (random <= 0.35) return LimpetType.DIAMOND.getId();
+            else if (random <= 0.55 && random > 0.35) return LimpetType.LAPIS.getId();
+            else return LimpetType.COAL.getId();
+        }
+        else if (yLevel <= 30) {
+            if (!isMountain) {
+                if (random <= 0.05) return LimpetType.EMERALD.getId();
+                else if (random <= 0.15 && random > 0.05) return LimpetType.AMETHYST.getId();
+                else if (random <= 0.35 && random > 0.15) return LimpetType.LAPIS.getId();
+                else return LimpetType.COAL.getId();
+            } else {
+                if (random <= 0.10) return LimpetType.AMETHYST.getId();
+                else if (random <= 0.20 && random > 0.10) return LimpetType.LAPIS.getId();
+                else if (random <= 0.40 && random > 0.20) return LimpetType.EMERALD.getId();
                 else return LimpetType.COAL.getId();
             }
         }
-        if (yLevel < 20 && yLevel > -20) return LimpetType.AMETHYST.getId();
-        if (yLevel <= -20) {
-            if (random.nextInt(5) == 0) return LimpetType.DIAMOND.getId();
-            else return LimpetType.COAL.getId();
+        else {
+            if (!isMountain) {
+                if (random <= 0.20) return LimpetType.LAPIS.getId();
+                else return LimpetType.COAL.getId();
+            } else {
+                if (yLevel <= 64) {
+                    if (random <= 0.20) return LimpetType.LAPIS.getId();
+                    else if (random <= 0.50 && random > 0.20) return LimpetType.EMERALD.getId();
+                    else return LimpetType.COAL.getId();
+                } else {
+                    if (random <= 0.20) return LimpetType.COAL.getId();
+                    else return LimpetType.EMERALD.getId();
+                }
+            }
         }
-        return LimpetType.SHELL.getId();
     }
 
     @Override
@@ -200,6 +214,10 @@ public class Limpet extends Monster {
 
     }
 
+    public float getWalkTargetValue(BlockPos p_33013_, LevelReader p_33014_) {
+        return -p_33014_.getPathfindingCostFromLightLevels(p_33013_);
+    }
+
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return pose == SpeciesPose.SCARED.get() ? SCARED_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
@@ -253,14 +271,14 @@ public class Limpet extends Monster {
         LimpetType type = this.getLimpetType();
         if (source.getEntity() instanceof Player player
                 && type.getId() > 0
-                && this.getStackInHand(player).isPresent()
-                && this.getStackInHand(player).get().getItem() instanceof PickaxeItem pickaxe
+                && !player.getMainHandItem().isEmpty()
+                && player.getMainHandItem().getItem() instanceof PickaxeItem pickaxe
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
             if (type.getId() > 1) spawnBreakingParticles();
 
-            ItemStack stack = this.getStackInHand(player).get();
+            ItemStack stack = player.getMainHandItem();
             if (this.getCrackedStage() < 3) {
                 this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level().random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
@@ -340,8 +358,8 @@ public class Limpet extends Monster {
     }
 
     @SuppressWarnings("unused")
-    public static boolean canSpawn(EntityType<? extends Monster> type, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return world.getLightEmission(pos) == 0 && world.getBlockState(pos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON);
+    public static boolean canSpawn(EntityType<? extends PathfinderMob> entityType, ServerLevelAccessor levelAccessor, MobSpawnType spawnType, BlockPos blockPos, RandomSource randomSource) {
+        return levelAccessor.getBrightness(LightLayer.BLOCK, blockPos) == 0 && levelAccessor.getBrightness(LightLayer.SKY, blockPos) == 0 && levelAccessor.getBlockState(blockPos.below()).is(SpeciesTags.LIMPET_SPAWNABLE_ON) && levelAccessor.getBlockState(blockPos.below()).isValidSpawn(levelAccessor, blockPos, entityType);
     }
 
     public static class LimpetGroupData implements SpawnGroupData {
