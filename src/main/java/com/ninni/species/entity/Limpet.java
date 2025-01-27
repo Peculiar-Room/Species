@@ -265,14 +265,14 @@ public class Limpet extends PathfinderMob {
         LimpetType type = this.getLimpetType();
         if (source.getEntity() instanceof Player player
                 && type.getId() > 0
-                && this.getStackInHand(player).isPresent()
-                && this.getStackInHand(player).get().getItem() instanceof PickaxeItem pickaxe
+                && !player.getMainHandItem().isEmpty()
+                && player.getMainHandItem().getItem() instanceof PickaxeItem pickaxe
                 && pickaxe.getTier().getLevel() >= type.getPickaxeLevel()
                 && !player.getCooldowns().isOnCooldown(pickaxe)) {
 
             if (type.getId() > 1) spawnBreakingParticles();
 
-            ItemStack stack = this.getStackInHand(player).get();
+            ItemStack stack = player.getMainHandItem();
             if (this.getCrackedStage() < 3) {
                 this.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, player, RETREAT_DURATION.sample(this.level().random));
                 this.setCrackedStage(this.getCrackedStage() + 1);
@@ -284,7 +284,6 @@ public class Limpet extends PathfinderMob {
                         player.getCooldowns().addCooldown(itemStack.getItem(), player.getAbilities().instabuild ? 0 : 80);
                     }
                 }
-
                 return false;
             } else {
                 int count = (int) ((type.getMaxCount()/2 + random.nextInt(type.getMaxCount()/2)) * ( 1 + (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack) * 0.15f)));
