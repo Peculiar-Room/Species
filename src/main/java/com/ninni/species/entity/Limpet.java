@@ -101,8 +101,8 @@ public class Limpet extends PathfinderMob {
         boolean isMountain = world.getBiome(this.blockPosition()).is(Tags.Biomes.IS_MOUNTAIN);
 
         if (yLevel <= 16) {
-            if (random <= 0.25) return LimpetType.DIAMOND.getId();
-            else if (random <= 0.55 && random > 0.25) return LimpetType.LAPIS.getId();
+            if (random <= 0.35) return LimpetType.DIAMOND.getId();
+            else if (random <= 0.55 && random > 0.35) return LimpetType.LAPIS.getId();
             else return LimpetType.COAL.getId();
         }
         else if (yLevel <= 30) {
