@@ -34,10 +34,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -109,7 +106,8 @@ public class Treeper extends AgeableMob {
             this.level().playSound(player, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_EXTINGUISH, this.getSoundSource(), 1.0f, this.random.nextFloat() * 0.4f + 0.8f);
             this.setBurned(false);
             if (itemStack.is(Items.WATER_BUCKET)) {
-                if (!player.getAbilities().instabuild) player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
+                ItemStack itemstack1 = ItemUtils.createFilledResult(itemStack, player, Items.BUCKET.getDefaultInstance());
+                if (!player.getAbilities().instabuild) player.setItemInHand(hand, itemstack1);
             }
             for (int l = 0; l < 30; ++l) {
                 this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(2), this.getY() + Math.random(), this.getRandomZ(2), 0.0, 0.0, 0.0);
