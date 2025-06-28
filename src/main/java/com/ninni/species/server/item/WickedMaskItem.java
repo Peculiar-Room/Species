@@ -68,23 +68,25 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.isAlive() && !entity.level().isClientSide && !stack.getTag().contains("id") && player.isSecondaryUseActive()) {
+        if (entity.isAlive() && !entity.level().isClientSide && (!stack.hasTag() || !stack.getTag().contains("id")) && player.isSecondaryUseActive()) {
             CompoundTag tag = stack.getOrCreateTag();
-
             String encodeId = entity.getEncodeId();
-            if (null != encodeId) {
+            if (encodeId != null) {
                 tag.putString("id", encodeId);
                 tag.putBoolean("OnGround", true);
-                if (entity.hasCustomName() && !"jeb_".equals(entity.getName().getString())) tag.putString("CustomName", Component.Serializer.toJson(entity.getCustomName()));
-                if (entity.isCustomNameVisible()) tag.putBoolean("CustomNameVisible", entity.isCustomNameVisible());
+                if (entity.hasCustomName() && !"jeb_".equals(entity.getName().getString())) {
+                    tag.putString("CustomName", Component.Serializer.toJson(entity.getCustomName()));
+                }
+                if (entity.isCustomNameVisible()) tag.putBoolean("CustomNameVisible", true);
                 if (!entity.getTags().isEmpty()) {
                     ListTag listtag = new ListTag();
-                    for(String s : entity.getTags()) listtag.add(StringTag.valueOf(s));
+                    for (String s : entity.getTags()) listtag.add(StringTag.valueOf(s));
                     tag.put("Tags", listtag);
                 }
                 entity.addAdditionalSaveData(tag);
-
-                if (entity instanceof WitherBoss && player instanceof ServerPlayer serverPlayer) SpeciesCriterion.WICKED_MASK_WITHER.trigger(serverPlayer);
+                if (entity instanceof WitherBoss && player instanceof ServerPlayer serverPlayer) {
+                    SpeciesCriterion.WICKED_MASK_WITHER.trigger(serverPlayer);
+                }
             }
 
             player.setItemInHand(hand, stack);

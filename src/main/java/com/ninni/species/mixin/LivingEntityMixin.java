@@ -5,6 +5,7 @@ import com.ninni.species.server.entity.util.LivingEntityAccess;
 import com.ninni.species.server.packet.SnatchedPacket;
 import com.ninni.species.server.packet.TankedPacket;
 import com.ninni.species.registry.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -78,26 +79,39 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
     @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo ci) {
         ItemStack headItem = this.getItemBySlot(EquipmentSlot.HEAD);
-        if (headItem.is(SpeciesItems.WICKED_MASK.get()) && ((this.getDisguisedEntity() == null || this.getDisguisedEntityType() == null) || (headItem.getTag() != this.getDisguisedEntity().serializeNBT()))) {
-            if (headItem.getTag().contains("id")) {
-                Optional<EntityType<?>> entityType = EntityType.byString(headItem.getTag().getString("id"));
-                if (entityType.isPresent()) {
-                    LivingEntity entity = (LivingEntity)entityType.get().create(this.level());
-                    entity.load(headItem.getTag());
-                    this.setDisguisedEntity(entity);
-                    this.setDisguisedEntityType(entityType.get());
+        CompoundTag tag = headItem.getTag();
+
+        if (headItem.is(SpeciesItems.WICKED_MASK.get())) {
+            if ((this.getDisguisedEntity() == null || this.getDisguisedEntityType() == null) ||
+                    tag == null ||
+                    !tag.contains("id") ||
+                    !this.getDisguisedEntityType().toShortString().equals(tag.getString("id"))) {
+
+                if (tag != null && tag.contains("id")) {
+                    Optional<EntityType<?>> entityType = EntityType.byString(tag.getString("id"));
+                    if (entityType.isPresent()) {
+                        Entity rawEntity = entityType.get().create(this.level());
+                        if (rawEntity instanceof LivingEntity living) {
+                            living.load(tag);
+                            this.setDisguisedEntity(living);
+                            this.setDisguisedEntityType(entityType.get());
+                        } else {
+                            this.setDisguisedEntity(null);
+                            this.setDisguisedEntityType(null);
+                        }
+                    }
+                } else {
+                    this.setDisguisedEntity(null);
+                    this.setDisguisedEntityType(null);
                 }
-            } else {
-                this.setDisguisedEntity(null);
-                this.setDisguisedEntityType(null);
             }
-        }
-        if (!headItem.is(SpeciesItems.WICKED_MASK.get()) && (this.getDisguisedEntity() != null || this.getDisguisedEntityType() != null)) {
+        } else if (this.getDisguisedEntity() != null || this.getDisguisedEntityType() != null) {
             this.setDisguisedEntity(null);
             this.setDisguisedEntityType(null);
         }
-        if (this.getDisguisedEntity() != null) {
-            if (this.getDisguisedEntity().getPose() != this.getPose()) this.getDisguisedEntity().setPose(this.getPose());
+
+        if (this.getDisguisedEntity() != null && this.getDisguisedEntity().getPose() != this.getPose()) {
+            this.getDisguisedEntity().setPose(this.getPose());
         }
     }
 
