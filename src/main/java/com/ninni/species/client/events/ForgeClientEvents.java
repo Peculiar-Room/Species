@@ -37,6 +37,28 @@ import static net.minecraft.client.renderer.entity.LivingEntityRenderer.isEntity
 public class ForgeClientEvents {
 
     @SubscribeEvent
+    public static void onRenderDisguisedInInventory(RenderLivingEvent.Pre<?, ?> event) {
+        LivingEntity entity = event.getEntity();
+
+        if (Minecraft.getInstance().screen != null) {
+            if (entity.getItemBySlot(EquipmentSlot.HEAD).is(SpeciesItems.WICKED_MASK.get())) {
+                LivingEntity disguise = ((LivingEntityAccess) entity).getDisguisedEntity();
+                if (disguise != null) {
+                    float maxDisguise = Math.max(disguise.getBbHeight(), disguise.getBbWidth());
+                    float maxPlayer = Math.max(1.8F, 0.6F);
+
+                    if (maxDisguise > maxPlayer) {
+                        float scale = Mth.clamp((maxPlayer / maxDisguise), 0.3F, 1.0F);
+                        event.getPoseStack().scale(scale, scale, scale);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    @SubscribeEvent
     public static void livingEntityRenderer(RenderLivingEvent<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entity = event.getEntity();
         ItemStack headItem = entity.getItemBySlot(EquipmentSlot.HEAD);

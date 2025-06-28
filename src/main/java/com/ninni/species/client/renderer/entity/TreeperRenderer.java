@@ -2,6 +2,7 @@ package com.ninni.species.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.ninni.species.client.renderer.entity.feature.TreeperCanopyLayer;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.mob.update_2.TreeperModel;
 import com.ninni.species.client.renderer.entity.feature.TreeperFeatureRenderer;
@@ -112,6 +113,7 @@ public class TreeperRenderer extends MobRenderer<Treeper, TreeperModel<Treeper>>
     public TreeperRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TreeperModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.TREEPER)), 0F);
         this.addLayer(new TreeperFeatureRenderer<>(this));
+        this.addLayer(new TreeperCanopyLayer(this));
     }
 
     @Override
