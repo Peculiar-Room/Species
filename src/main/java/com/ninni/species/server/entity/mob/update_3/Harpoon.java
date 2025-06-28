@@ -201,6 +201,7 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
         return false;
     }
 
+
     private void handleSwingMovement(Player player, boolean hasBlockAbove) {
         if (!hasBlockAbove) this.setAnchored(false);
 
@@ -283,7 +284,7 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
 
 
     private void handleRelease(Player player) {
-        if (!isZiplining) player.setDeltaMovement(player.getDeltaMovement().multiply(releaseFactor, 1, releaseFactor).add(0, 0.1 * releaseFactor, 0));
+        if (!isZiplining && this.isAnchored()) player.setDeltaMovement(player.getDeltaMovement().multiply(releaseFactor, 1, releaseFactor).add(0, 0.1 * releaseFactor, 0));
         stopZiplining();
         if (player instanceof PlayerAccess playerAccess) playerAccess.setHarpoonId(-1);
         removeHook(player, 5);
