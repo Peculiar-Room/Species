@@ -194,6 +194,7 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
             Vec3 motion = this.getDeltaMovement().add(0, -0.05, 0);
             this.setDeltaMovement(motion);
             this.move(MoverType.SELF, motion);
+            player.resetFallDistance();
 
             return true;
         }
