@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "BBB",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "species:werefang"
+    },
+    "B": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "species:cranktrap",
+    "count": 2
+  }
+}

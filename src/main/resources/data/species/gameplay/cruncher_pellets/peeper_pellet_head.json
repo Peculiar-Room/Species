@@ -1,0 +1,9 @@
+{
+  "type": "caverns_and_chasms:peeper",
+  "item": {
+    "id": "caverns_and_chasms:peeper_head",
+    "Count": 1
+  },
+  "minTries": 12,
+  "maxTries": 18
+}

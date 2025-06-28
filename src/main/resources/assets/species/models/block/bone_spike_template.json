@@ -1,4 +1,5 @@
 {
+	"render_type": "cutout",
 	"ambientocclusion": true,
 	"textures": {
 		"particle": "#cross"

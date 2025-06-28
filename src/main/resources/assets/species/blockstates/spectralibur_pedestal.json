@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "active=false,powered=false": {
+      "model": "species:block/spectralibur_pedestal"
+    },
+    "active=true,powered=false": {
+      "model": "species:block/spectralibur_pedestal_active"
+    },
+    "active=true,powered=true": {
+      "model": "species:block/spectralibur_pedestal_powered"
+    }
+  }
+}

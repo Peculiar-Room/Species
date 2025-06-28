@@ -1,12 +1,15 @@
 package com.ninni.species.client.animation;
 
-import com.ninni.species.client.model.entity.MammutilationModel;
+import com.ninni.species.client.model.mob.update_2.MammutilationModel;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.geom.PartNames;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class MammutilationAnimations {
 
     public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(8.0F).looping()

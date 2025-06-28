@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "species:music_disc_dial",
-    "species:music_disc_lapidarian"
+    "species:music_disc_lapidarian",
+    "species:music_disk_spawner"
   ]
 }

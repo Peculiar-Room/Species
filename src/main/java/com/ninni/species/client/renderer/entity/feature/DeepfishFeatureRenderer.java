@@ -2,10 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.DeepfishModel;
-import com.ninni.species.entity.Deepfish;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.ninni.species.client.model.mob.update_1.DeepfishModel;
+import com.ninni.species.server.entity.mob.update_1.Deepfish;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,10 +12,12 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-@Environment(value=EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishModel<T>> extends RenderLayer<T, M> {
     private final ResourceLocation texture;
     private final AnimationAngleAdjuster<T> animationAngleAdjuster;
@@ -34,9 +34,8 @@ public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishModel
     public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, T fish, float f, float g, float h, float j, float k, float l) {
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucentEmissive(this.texture));
 
-        if (fish.isInvisible()) {
-            return;
-        }
+        if (fish.isInvisible()) return;
+
         this.updateModelPartVisibility();
         this.getParentModel().renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(fish, 0.0f), 1.0f, 1.0f, 1.0f, this.animationAngleAdjuster.apply(fish, h, j));
         this.unhideAllModelParts();
@@ -58,12 +57,12 @@ public class DeepfishFeatureRenderer<T extends Deepfish, M extends DeepfishModel
         });
     }
 
-    @Environment(value= EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public interface AnimationAngleAdjuster<T extends Deepfish> {
         float apply(T var1, float var2, float var3);
     }
 
-    @Environment(value=EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public interface ModelPartVisibility<T extends Deepfish, M extends EntityModel<T>> {
         List<ModelPart> getPartsToDraw(M var1);
     }

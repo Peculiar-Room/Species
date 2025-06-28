@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    "###",
+    "CCC"
+  ],
+  "key": {
+    "#": {
+      "item": "species:broken_links"
+    },
+    "C": {
+      "item": "minecraft:candle"
+    },
+    "T": {
+      "item": "minecraft:chain"
+    }
+  },
+  "result": {
+    "item": "species:chaindelier",
+    "count": 1
+  }
+}

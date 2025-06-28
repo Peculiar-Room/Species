@@ -1,0 +1,29 @@
+{
+  "parent": "species:species/v3/start_spectre_challenge",
+  "display": {
+    "icon": {
+      "item": "species:spectralibur",
+      "nbt": "{Souls:5}"
+    },
+    "title": {
+      "translate": "advancements.species.summon_spectre.title"
+    },
+    "description": {
+      "translate": "advancements.species.summon_spectre.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "summon_spectre": {
+      "trigger": "species:summon_spectre"
+    }
+  },
+  "requirements": [
+    [
+      "summon_spectre"
+    ]
+  ]
+}

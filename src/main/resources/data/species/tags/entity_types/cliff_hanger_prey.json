@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:zombie",
+    "minecraft:husk",
+    "minecraft:drowned",
+    "species:ghoul",
+    "minecraft:villager",
+    "minecraft:wandering_trader",
+    "minecraft:pillager",
+    "minecraft:vindicator",
+    "minecraft:illusioner",
+    "minecraft:witch"
+  ]
+}

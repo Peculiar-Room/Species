@@ -1,83 +1,72 @@
 package com.ninni.species;
 
-import com.google.common.reflect.Reflection;
-import com.ninni.species.criterion.SpeciesCriterion;
-import com.ninni.species.data.CruncherPelletManager;
-import com.ninni.species.data.GooberGooManager;
-import com.ninni.species.entity.BirtEgg;
+import com.mojang.logging.LogUtils;
+import com.ninni.species.client.ClientProxy;
 import com.ninni.species.registry.*;
-import com.ninni.species.world.gen.features.SpeciesPlacedFeatures;
-import com.ninni.species.world.gen.features.SpeciesTreeDecorators;
-import com.ninni.species.world.poi.SpeciesPointsOfInterests;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.Util;
-import net.minecraft.core.Position;
-import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.levelgen.GenerationStep;
+import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.server.events.ForgeEvents;
+import com.ninni.species.server.events.ModEvents;
+import com.ninni.species.server.world.poi.SpeciesPointOfInterestTypes;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Species implements ModInitializer {
+@Mod(Species.MOD_ID)
+public class Species {
 	public static final String MOD_ID = "species";
+	public static final Logger LOGGER = LogUtils.getLogger();
+	public static final List<Runnable> CALLBACKS = new ArrayList<>();
+	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
-	@Override
-	public void onInitialize() {
-		SpeciesCriterion.init();
-		Reflection.initialize(
-				SpeciesBlocks.class,
-				SpeciesBlockEntities.class,
-				SpeciesCreativeModeTabs.class,
-				SpeciesPointsOfInterests.class,
-				SpeciesItems.class,
-				SpeciesSoundEvents.class,
-				SpeciesDamageTypes.class,
-				SpeciesStatusEffects.class,
-				SpeciesParticles.class,
-				SpeciesEntities.class,
-				SpeciesStructures.class,
-				SpeciesStructureTypes.class,
-				SpeciesStructureSets.class,
-				SpeciesStructurePieceTypes.class
-		);
-		SpeciesEntityDataSerializers.init();
-		SpeciesFeatures.init();
-		SpeciesSensorTypes.init();
-		SpeciesMemoryModuleTypes.init();
-		SpeciesTreeDecorators.init();
-		SpeciesNetwork.init();
+	public Species() {
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus eventBus = MinecraftForge.EVENT_BUS;
+		modEventBus.addListener(this::clientSetup);
+		modEventBus.addListener(this::commonSetup);
 
-		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.BIRT_TREE_SPAWNS_IN), GenerationStep.Decoration.VEGETAL_DECORATION, SpeciesPlacedFeatures.BIRTED_BIRCH_TREES);
-		BiomeModifications.addFeature(BiomeSelectors.tag(SpeciesTags.MAMMUTILATION_REMNANT_SPAWNS_IN), GenerationStep.Decoration.UNDERGROUND_DECORATION, SpeciesPlacedFeatures.MAMMUTILATION_REMNANT);
+		SpeciesBlocks.BLOCKS.register(modEventBus);
+		SpeciesBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+		SpeciesBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
+		SpeciesCreativeModeTabs.CREATIVE_MODE_TABAS.register(modEventBus);
+		SpeciesStatusEffects.MOB_EFFECTS.register(modEventBus);
+		SpeciesEntityDataSerializers.ENTITY_DATA_SERIALIZERS.register(modEventBus);
+		SpeciesEntities.ENTITY_TYPES.register(modEventBus);
+		SpeciesFeatures.FEATURES.register(modEventBus);
+		SpeciesItems.ITEMS.register(modEventBus);
+		SpeciesPotions.POTIONS.register(modEventBus);
+		SpeciesSoundEvents.SOUND_EVENTS.register(modEventBus);
+		SpeciesStructureTypes.STRUCTURES.register(modEventBus);
+		SpeciesStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modEventBus);
+		SpeciesMemoryModuleTypes.MEMORY_MODULE_TYPES.register(modEventBus);
+		SpeciesSensorTypes.SENSOR_TYPES.register(modEventBus);
+		SpeciesParticles.PARTICLE_TYPES.register(modEventBus);
+		SpeciesPointOfInterestTypes.POI_TYPES.register(modEventBus);
+		SpeciesTreeDecorators.TREE_DECORATOR_TYPE.register(modEventBus);
+		SpeciesBannerPatterns.BANNER_PATTERNS.register(modEventBus);
+		SpeciesVillagerTypes.VILLAGER_TYPES.register(modEventBus);
+		SpeciesEnchantments.ENCHANTMENTS.register(modEventBus);
+		SpeciesPaintingVariants.PAINTING_VARIANTS.register(modEventBus);
+		SpeciesRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+		PROXY.init();
+		eventBus.register(new ModEvents());
+		eventBus.register(new ForgeEvents());
+		eventBus.register(this);
+	}
 
-		DispenserBlock.registerBehavior(SpeciesItems.BIRT_EGG, new AbstractProjectileDispenseBehavior() {
-			@Override
-			protected Projectile getProjectile(Level world, Position position, ItemStack stack) {
-				return Util.make(new BirtEgg(world, position.x(), position.y(), position.z()), entity -> entity.setItem(stack));
-			}
-		});
+	private void commonSetup(final FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> PROXY.commonSetup());
+	}
 
-		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new CruncherPelletManager());
-		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new GooberGooManager());
-
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("2d173722-de6b-4bb8-b21b-b2843cfe395d"), SpeciesDevelopers.SpeciesDeveloperNames.NINNI);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("f1fb25f4-60c4-4e21-b33c-59f0a2daf4b1"), SpeciesDevelopers.SpeciesDeveloperNames.REDA);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("4a463319-625c-4b86-a4e7-8b700f023a60"), SpeciesDevelopers.SpeciesDeveloperNames.NOON);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("603d30f1-77a1-4b88-b8c5-624a02feabcc"), SpeciesDevelopers.SpeciesDeveloperNames.BORNULHU);
-		//SpeciesDevelopers.developerUUIDS.put(UUID.fromString(""), SpeciesDevelopers.SpeciesDeveloperNames.GLADOS); Glados does not own minecraft
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("81499a26-ba39-430e-8009-29ee87351c20"), SpeciesDevelopers.SpeciesDeveloperNames.ORCINUS);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("0c22615f-a189-4f4e-85ae-79fd80c353c8"), SpeciesDevelopers.SpeciesDeveloperNames.VAKY);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("aca529a2-1166-41aa-b304-209f06831998"), SpeciesDevelopers.SpeciesDeveloperNames.TAZZ);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("f6dffbc0-746a-41fe-b0c1-20f9a596795a"), SpeciesDevelopers.SpeciesDeveloperNames.BUNTEN);
-		SpeciesDevelopers.developerUUIDS.put(UUID.fromString("4f00e7fc-b325-4f16-88cf-80cd78733646"), SpeciesDevelopers.SpeciesDeveloperNames.EXCLAIM);
+	public void clientSetup(final FMLClientSetupEvent event) {
+		event.enqueueWork(() -> PROXY.clientSetup());
 	}
 
 }

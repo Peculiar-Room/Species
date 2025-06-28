@@ -1,0 +1,9 @@
+{
+  "type": "species:bewereager",
+  "item": {
+    "id": "species:bewereager_head",
+    "Count": 1
+  },
+  "minTries": 8,
+  "maxTries": 16
+}

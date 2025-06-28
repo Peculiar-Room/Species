@@ -1,0 +1,40 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "species:pull": -1
+      },
+      "model": "species:item/crankbow_standby"
+    },
+    {
+      "predicate": {
+        "species:pull": 0
+      },
+      "model": "species:item/crankbow_pulling_0"
+    },
+    {
+      "predicate": {
+        "species:pull": 0.15
+      },
+      "model": "species:item/crankbow_pulling_1"
+    },
+    {
+      "predicate": {
+        "species:pull": 0.3
+      },
+      "model": "species:item/crankbow_pulling_2"
+    },
+    {
+      "predicate": {
+        "species:pull": 0.4
+      },
+      "model": "species:item/crankbow_pulling_3"
+    },
+    {
+      "predicate": {
+        "species:pull": 0.6
+      },
+      "model": "species:item/crankbow_pulling_4"
+    }
+  ]
+}

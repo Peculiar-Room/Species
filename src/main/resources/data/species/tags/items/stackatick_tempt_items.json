@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#species:stackatick_tame_items",
+    "#species:stackatick_breed_items"
+  ]
+}

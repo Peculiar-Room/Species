@@ -1,0 +1,10 @@
+{
+  "id": "species:emerald",
+  "item": "minecraft:emerald",
+  "block": "minecraft:emerald_ore",
+  "maxCount": 8,
+  "location": "#minecraft:is_mountain",
+  "spawnWeight": 30,
+  "maxSpawnHeight": 64,
+  "minSpawnHeight": 30
+}

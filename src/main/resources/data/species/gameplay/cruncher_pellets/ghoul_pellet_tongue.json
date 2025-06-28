@@ -1,0 +1,9 @@
+{
+  "type": "species:ghoul",
+  "item": {
+    "id": "species:ghoul_tongue",
+    "Count": 1
+  },
+  "minTries": 2,
+  "maxTries": 8
+}

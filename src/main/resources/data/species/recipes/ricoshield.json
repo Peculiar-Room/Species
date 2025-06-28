@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#B#",
+    "#S#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "species:broken_links"
+    },
+    "B": {
+      "item": "species:kinetic_core"
+    },
+    "S": {
+      "item": "minecraft:shield"
+    }
+  },
+  "result": {
+    "item": "species:ricoshield",
+    "count": 1
+  }
+}

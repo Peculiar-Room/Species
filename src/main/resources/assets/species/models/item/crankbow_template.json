@@ -1,0 +1,25 @@
+{
+  "parent": "item/generated",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [-90, 0, -55],
+      "translation": [2.25, 0.1, -7.25],
+      "scale": [1.5, 1.5, 1.5]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [-90, 0, 35],
+      "translation": [2.25, 0.1, -7.25],
+      "scale": [1.5, 1.5, 1.5]
+    },
+    "firstperson_righthand": {
+      "rotation": [-90, 0, -55],
+      "translation": [1.13, 3.2, 0.13],
+      "scale": [1, 1, 0.68]
+    },
+    "firstperson_lefthand": {
+      "rotation": [-90, 0, 35],
+      "translation": [1.13, 3.2, 0.13],
+      "scale": [1, 1, 0.68]
+    }
+  }
+}

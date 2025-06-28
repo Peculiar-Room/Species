@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.entity.pose.SpeciesPose;
+import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.world.entity.Pose;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

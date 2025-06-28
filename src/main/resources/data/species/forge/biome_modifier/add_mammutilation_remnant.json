@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#species:mammutilation_remnant_spawns_in",
+  "features": "species:mammutilation_remnant",
+  "step": "underground_decoration"
+}

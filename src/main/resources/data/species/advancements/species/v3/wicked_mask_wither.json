@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v3/wicked_stop_haunting",
+  "display": {
+    "icon": {
+      "item": "species:wicked_mask"
+    },
+    "title": {
+      "translate": "advancements.species.wicked_mask_wither.title"
+    },
+    "description": {
+      "translate": "advancements.species.wicked_mask_wither.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "wicked_mask_wither": {
+      "trigger": "species:wicked_mask_wither"
+    }
+  },
+  "requirements": [
+    [
+      "wicked_mask_wither"
+    ]
+  ]
+}

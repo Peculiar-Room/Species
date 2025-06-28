@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "species:spectre",
+    "minecraft:slime",
+    "minecraft:magma_cube",
+    "minecraft:vex",
+    "minecraft:phantom",
+    "minecraft:allay"
+  ]
+}

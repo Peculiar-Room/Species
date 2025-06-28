@@ -1,15 +1,14 @@
 package com.ninni.species.client.inventory;
 
-import com.ninni.species.data.CruncherPelletManager;
-import com.ninni.species.entity.Cruncher;
+import com.ninni.species.Species;
+import com.ninni.species.server.data.CruncherPelletManager;
+import com.ninni.species.server.entity.mob.update_2.Cruncher;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 
 public class CruncherInventoryMenu extends AbstractContainerMenu {
     private final Container container;

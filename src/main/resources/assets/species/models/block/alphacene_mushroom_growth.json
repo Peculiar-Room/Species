@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "parent": "block/block",
   "textures": {
     "0": "species:block/alphacene_mushroom_growth",

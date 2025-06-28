@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.block.PottedTrooperBlock;
+import com.ninni.species.server.block.PottedTrooperBlock;
 import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,16 +22,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FlowerPotBlock.class)
 public abstract class FlowerPotBlockMixin {
-
-    @Shadow protected abstract boolean isEmpty();
+    @Shadow
+    protected abstract boolean isEmpty();
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void applyWitherResistance(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack stack = player.getItemInHand(interactionHand);
-        if (this.isEmpty() && stack.is(SpeciesBlocks.TROOPER.asItem())) {
+        if (this.isEmpty() && stack.is(SpeciesBlocks.TROOPER.get().asItem())) {
             cir.cancel();
             Direction direction = blockHitResult.getDirection().getAxis() == Direction.Axis.Y ? Direction.NORTH : blockHitResult.getDirection();
-            BlockState state = SpeciesBlocks.POTTED_TROOPER.defaultBlockState().setValue(PottedTrooperBlock.FACING, direction);
+            BlockState state = SpeciesBlocks.POTTED_TROOPER.get().defaultBlockState().setValue(PottedTrooperBlock.FACING, direction);
             level.setBlock(blockPos, state, 3);
             player.awardStat(Stats.POT_FLOWER);
             if (!player.getAbilities().instabuild) stack.shrink(1);

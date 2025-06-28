@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v2/look_at_mammutilation",
+  "display": {
+    "icon": {
+      "item": "species:youth_potion"
+    },
+    "title": {
+      "translate": "advancements.species.turn_mob_into_baby.title"
+    },
+    "description": {
+      "translate": "advancements.species.turn_mob_into_baby.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "turn_mob_into_baby": {
+      "trigger": "species:turn_mob_into_baby"
+    }
+  },
+  "requirements": [
+    [
+      "turn_mob_into_baby"
+    ]
+  ]
+}

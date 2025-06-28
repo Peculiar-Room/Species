@@ -1,0 +1,29 @@
+{
+  "parent": "species:species/v3/v3",
+  "display": {
+    "icon": {
+      "item": "minecraft:white_banner",
+      "nbt": "{BlockEntityTag:{Patterns:[{Pattern:'villager',Color:0}]},display:{Name:'{\"translate\":\"block.species.hopeful_banner\",\"color\":\"green\"}'},HideFlags:32}"
+    },
+    "title": {
+      "translate": "advancements.species.cure_bewereager.title"
+    },
+    "description": {
+      "translate": "advancements.species.cure_bewereager.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "cure_bewereager": {
+      "trigger": "species:cure_bewereager"
+    }
+  },
+  "requirements": [
+    [
+      "cure_bewereager"
+    ]
+  ]
+}

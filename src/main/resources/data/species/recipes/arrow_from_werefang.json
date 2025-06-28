@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "species:werefang"
+    }
+  },
+  "pattern": [
+    "X",
+    "#"
+  ],
+  "result": {
+    "count": 8,
+    "item": "minecraft:arrow"
+  },
+  "show_notification": true
+}

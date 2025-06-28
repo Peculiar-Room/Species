@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v1/v1",
+  "display": {
+    "icon": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.species.break_limpet.title"
+    },
+    "description": {
+      "translate": "advancements.species.break_limpet.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "break_limpet": {
+      "trigger": "species:break_limpet"
+    }
+  },
+  "requirements": [
+    [
+      "break_limpet"
+    ]
+  ]
+}

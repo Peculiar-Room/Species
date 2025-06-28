@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B# ",
+    "#Y#",
+    " #Y"
+  ],
+  "key": {
+    "#": {
+      "item": "species:coil"
+    },
+    "B": {
+      "item": "minecraft:tripwire_hook"
+    },
+    "Y": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "species:harpoon",
+    "count": 1
+  }
+}

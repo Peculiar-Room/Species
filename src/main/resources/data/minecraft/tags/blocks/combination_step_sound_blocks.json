@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "species:cranktrap",
     "species:alphacene_moss_carpet"
   ]
 }

@@ -1,0 +1,40 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "species:souls": 0
+      },
+      "model": "species:item/spectralibur_0"
+    },
+    {
+      "predicate": {
+        "species:souls": 1
+      },
+      "model": "species:item/spectralibur_1"
+    },
+    {
+      "predicate": {
+        "species:souls": 2
+      },
+      "model": "species:item/spectralibur_2"
+    },
+    {
+      "predicate": {
+        "species:souls": 3
+      },
+      "model": "species:item/spectralibur_3"
+    },
+    {
+      "predicate": {
+        "species:souls": 4
+      },
+      "model": "species:item/spectralibur_4"
+    },
+    {
+      "predicate": {
+        "species:souls": 5
+      },
+      "model": "species:item/spectralibur_5"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "parent": "species:species/root",
+  "criteria": {
+    "picked_up_any_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{}]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "species:v1"
+    },
+    "title": {
+      "translate": "advancements.species.v1.title"
+    },
+    "description": {
+      "translate": "advancements.species.v1.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "requirements": [
+    ["picked_up_any_item"]
+  ],
+  "sends_telemetry_event": true
+}

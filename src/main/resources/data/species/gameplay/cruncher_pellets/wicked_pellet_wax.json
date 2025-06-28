@@ -1,0 +1,9 @@
+{
+  "type": "species:wicked",
+  "item": {
+    "id": "species:wicked_wax",
+    "Count": 1
+  },
+  "minTries": 6,
+  "maxTries": 12
+}

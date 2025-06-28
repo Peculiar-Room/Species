@@ -1,25 +1,38 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.ninni.species.mixin",
   "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "target": "@env(DEFAULT)",
+  "refmap": "species.refmap.json",
   "mixins": [
+    "AbstractArrowMixin",
+    "AbstractSkeletonEntityMixin",
     "AgeableMobMixin",
     "BlockEntityTypeMixin",
-    "FallingBlockEntityAccessor",
+    "EmeraldsForVillagerTypeItemMixin",
     "FlowerPotBlockMixin",
+    "ItemMixin",
     "LightningRodMixin",
     "LivingEntityMixin",
-    "MobEntityMixin",
+    "MobMixin",
+    "NameTagMixin",
+    "NoteBlockInstrumentMixin",
+    "NoteBlockMixin",
     "PlayerMixin",
     "PoseMixin",
-    "ServerPlayerAccessor",
-    "TreeDecoratorTypeAccessor",
-    "WitherSkeletonEntityMixin"
+    "WitherSkeletonEntityMixin",
+    "WolfMixin"
   ],
   "client": [
-    "client.AbstractClientPlayerMixin"
+    "client.AbstractClientPlayerMixin",
+    "client.CustomHeadLayerMixin",
+    "client.ItemInHandRendererMixin",
+    "client.PlayerRendererMixin",
+    "client.VillagerProfessionLayerMixin",
+    "client.WolfRendererMixin"
   ],
   "injectors": {
-    "defaultRequire": 1 }
+    "defaultRequire": 1
+  }
 }

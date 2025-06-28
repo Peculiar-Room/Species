@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#C#",
+    "C C",
+    "#C#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "species:broken_links"
+    }
+  },
+  "result": {
+    "item": "species:hopelight",
+    "count": 2
+  }
+}

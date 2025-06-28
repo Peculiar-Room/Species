@@ -7,6 +7,6 @@
       "Potion": "minecraft:slowness"
     }
   },
-  "minTries": 16,
-  "maxTries": 32
+  "minTries": 10,
+  "maxTries": 20
 }

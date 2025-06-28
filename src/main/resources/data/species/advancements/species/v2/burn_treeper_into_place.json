@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v2/v2",
+  "display": {
+    "icon": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "title": {
+      "translate": "advancements.species.burn_treeper_into_place.title"
+    },
+    "description": {
+      "translate": "advancements.species.burn_treeper_into_place.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "burn_treeper_into_place": {
+      "trigger": "species:burn_treeper_into_place"
+    }
+  },
+  "requirements": [
+    [
+      "burn_treeper_into_place"
+    ]
+  ]
+}

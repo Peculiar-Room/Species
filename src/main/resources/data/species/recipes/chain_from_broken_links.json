@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "species:broken_links"
+    }
+  },
+  "result": {
+    "item": "minecraft:chain",
+    "count": 2
+  }
+}

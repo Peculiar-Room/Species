@@ -1,29 +1,19 @@
 package com.ninni.species.registry;
 
-import com.google.common.collect.Maps;
 import com.ninni.species.Species;
-import com.ninni.species.world.gen.features.AlphaceneMushroomFeature;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import com.ninni.species.server.world.gen.features.AlphaceneMushroomFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Map;
-
+@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesFeatures {
-    public static final Map<ResourceLocation, Feature<?>> FEATURES = Maps.newLinkedHashMap();
 
-    public static final Feature<NoneFeatureConfiguration> ALPHACENE_MUSHROOM = register("alphacene_mushroom", new AlphaceneMushroomFeature(NoneFeatureConfiguration.CODEC));
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Species.MOD_ID);
 
-    public static <FC extends FeatureConfiguration, F extends Feature<FC>> F register(String name, F feature) {
-        FEATURES.put(new ResourceLocation(Species.MOD_ID, name), feature);
-        return feature;
-    }
-
-    public static void init() {
-        FEATURES.forEach((resourceLocation, feature) -> Registry.register(BuiltInRegistries.FEATURE, resourceLocation, feature));
-    }
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> ALPHACENE_MUSHROOM = FEATURES.register("alphacene_mushroom", () -> new AlphaceneMushroomFeature(NoneFeatureConfiguration.CODEC));
 
 }

@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sniffer",
+    "species:springling",
+    "species:treeper",
+    "species:cruncher",
+    "species:goober",
+    {
+      "id": "wan_ancient_beasts:soarer",
+      "required" : false
+    },
+    {
+      "id": "wan_ancient_beasts:eater",
+      "required" : false
+    },
+    {
+      "id": "wan_ancient_beasts:walker",
+      "required" : false
+    },
+    {
+      "id": "wan_ancient_beasts:crusher",
+      "required" : false
+    },
+    {
+      "id": "wan_ancient_beasts:glider",
+      "required" : false
+    }
+  ]
+}

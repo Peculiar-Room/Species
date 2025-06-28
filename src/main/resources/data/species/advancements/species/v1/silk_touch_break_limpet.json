@@ -1,0 +1,29 @@
+{
+  "parent": "species:species/v1/break_limpet",
+  "display": {
+    "icon": {
+      "item": "minecraft:diamond_pickaxe",
+      "nbt": "{Enchantments:[{}]}"
+    },
+    "title": {
+      "translate": "advancements.species.silk_touch_break_limpet.title"
+    },
+    "description": {
+      "translate": "advancements.species.silk_touch_break_limpet.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "silk_touch_break_limpet": {
+      "trigger": "species:silk_touch_break_limpet"
+    }
+  },
+  "requirements": [
+    [
+      "silk_touch_break_limpet"
+    ]
+  ]
+}

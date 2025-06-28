@@ -5,5 +5,5 @@
     "Count": 1
   },
   "minTries": 16,
-  "maxTries": 32
+  "maxTries": 20
 }

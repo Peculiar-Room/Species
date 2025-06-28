@@ -1,15 +1,16 @@
 package com.ninni.species.client.particles;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AscendingDustParticle extends TextureSheetParticle {
     private final SpriteSet spriteProvider;
 
@@ -39,7 +40,7 @@ public class AscendingDustParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    @Environment(value = EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public record Factory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 
         @Override

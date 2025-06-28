@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.nbt.CompoundTag;
@@ -55,14 +55,14 @@ public abstract class AgeableMobMixin extends PathfinderMob {
     @Override
     public InteractionResult interactAt(Player player, Vec3 vec3, InteractionHand interactionHand) {
         if (!this.getType().is(SpeciesTags.ALWAYS_ADULT)) {
-            if (player.getItemInHand(interactionHand).is(SpeciesItems.YOUTH_POTION) && this.isBaby() && !this.potion) {
+            if (player.getItemInHand(interactionHand).is(SpeciesItems.YOUTH_POTION.get()) && this.isBaby() && !this.potion) {
                 this.potion = true;
-                this.playSound(SpeciesSoundEvents.YOUTH_POTION_STUMPED, 1, 1);
+                this.playSound(SpeciesSoundEvents.YOUTH_POTION_STUMPED.get(), 1, 1);
                 if (this.level() instanceof ServerLevel serverLevel) {
                     double d = this.getRandom().nextGaussian() * 0.02;
                     double e = this.getRandom().nextGaussian() * 0.02;
                     double f = this.getRandom().nextGaussian() * 0.02;
-                    serverLevel.sendParticles(SpeciesParticles.YOUTH_POTION, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), 0, d, e, f, 1);
+                    serverLevel.sendParticles(SpeciesParticles.YOUTH_POTION.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), 0, d, e, f, 1);
                 }
                 return InteractionResult.SUCCESS;
             }

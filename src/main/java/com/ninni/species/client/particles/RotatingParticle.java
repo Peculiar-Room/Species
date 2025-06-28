@@ -1,7 +1,5 @@
 package com.ninni.species.client.particles;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -12,8 +10,10 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RotatingParticle extends TextureSheetParticle {
     private final SpriteSet spriteProvider;
     private boolean birtd;
@@ -66,7 +66,7 @@ public class RotatingParticle extends TextureSheetParticle {
         return 0;
     }
 
-    @Environment(value = EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public record BirtdFactory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 
         @Override
@@ -75,7 +75,7 @@ public class RotatingParticle extends TextureSheetParticle {
         }
     }
 
-    @Environment(value = EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public record FoodFactory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 
         @Override

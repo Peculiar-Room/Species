@@ -1,0 +1,36 @@
+{
+  "parent": "species:species/v2/v2",
+  "display": {
+    "icon": {
+      "item": "minecraft:sniffer_egg"
+    },
+    "title": {
+      "translate": "advancements.species.ancient_eggs.title"
+    },
+    "description": {
+      "translate": "advancements.species.ancient_eggs.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_eggs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": ["minecraft:sniffer_egg"] },
+          { "items": ["species:cruncher_egg"] },
+          { "items": ["species:petrified_egg"] },
+          { "items": ["species:springling_egg"] }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_eggs"
+    ]
+  ]
+}

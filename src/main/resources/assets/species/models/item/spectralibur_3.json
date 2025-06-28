@@ -1,0 +1,30 @@
+{
+  "loader": "forge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "species:item/large_handheld",
+    "textures": {
+      "layer0": "species:item/spectralibur_3"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "species:item/spectralibur_small_3"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "species:item/spectralibur_small_3"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "species:item/spectralibur_small_3"
+      }
+    }
+  }
+}

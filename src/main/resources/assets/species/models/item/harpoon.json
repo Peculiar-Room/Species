@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "species:using": 0
+      },
+      "model": "species:item/harpoon_not_cast"
+    },
+    {
+      "predicate": {
+        "species:using": 1
+      },
+      "model": "species:item/harpoon_cast"
+    }
+  ]
+}

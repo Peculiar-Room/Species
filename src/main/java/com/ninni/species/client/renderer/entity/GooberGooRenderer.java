@@ -4,11 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.ninni.species.Species;
-import com.ninni.species.client.model.entity.GooberGooModel;
-import com.ninni.species.entity.GooberGoo;
+import com.ninni.species.client.model.mob.update_2.GooberGooModel;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.ninni.species.server.entity.mob.update_2.GooberGoo;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -16,8 +14,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GooberGooRenderer extends EntityRenderer<GooberGoo> {
     public static final ResourceLocation LOCATION = new ResourceLocation(Species.MOD_ID,"textures/entity/goober/goober_goo.png");
     private final GooberGooModel model;
@@ -46,4 +46,3 @@ public class GooberGooRenderer extends EntityRenderer<GooberGoo> {
         return LOCATION;
     }
 }
-

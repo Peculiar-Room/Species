@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "species:ghoul",
+    "species:quake",
+    "species:cliff_hanger",
+    "species:leaf_hanger",
+    "minecraft:wolf",
+    "minecraft:cat",
+    "minecraft:ocelot",
+    "minecraft:drowned",
+    "minecraft:vex",
+    "minecraft:warden",
+    "minecraft:wither",
+    "minecraft:ender_dragon"
+  ]
+}

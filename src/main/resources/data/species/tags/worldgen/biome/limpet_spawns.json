@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#minecraft:is_overworld",
+    {
+      "id": "alexscaves:toxic_caves",
+      "required" : false
+    }
+  ]
+}

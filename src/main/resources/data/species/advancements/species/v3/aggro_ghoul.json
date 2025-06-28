@@ -1,0 +1,29 @@
+{
+  "parent": "species:species/v3/survive_ghoul",
+  "display": {
+    "icon": {
+      "item": "minecraft:potion",
+      "nbt": "{Potion:\"species:bloodlust\"}"
+    },
+    "title": {
+      "translate": "advancements.species.aggro_ghoul.title"
+    },
+    "description": {
+      "translate": "advancements.species.aggro_ghoul.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "aggro_ghoul": {
+      "trigger": "species:aggro_ghoul"
+    }
+  },
+  "requirements": [
+    [
+      "aggro_ghoul"
+    ]
+  ]
+}

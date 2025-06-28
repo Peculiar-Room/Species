@@ -1,0 +1,9 @@
+{
+  "type": "species:quake",
+  "item": {
+    "id": "species:quake_head",
+    "Count": 1
+  },
+  "minTries": 8,
+  "maxTries": 12
+}

@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.entity.Wraptor;
+import com.ninni.species.server.entity.mob.update_1.Wraptor;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -19,7 +19,6 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeleton {
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void onInitGoals(CallbackInfo ci) {
-        WitherSkeleton that = (WitherSkeleton) (Object) this;
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(that, Wraptor.class, 10.0F, 1.D, 1.25D));
+        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Wraptor.class, 10.0F, 1.D, 1.25D));
     }
 }

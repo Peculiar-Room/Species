@@ -1,0 +1,9 @@
+{
+  "type": "species:wicked",
+  "item": {
+    "id": "species:wicked_candle",
+    "Count": 1
+  },
+  "minTries": 8,
+  "maxTries": 12
+}

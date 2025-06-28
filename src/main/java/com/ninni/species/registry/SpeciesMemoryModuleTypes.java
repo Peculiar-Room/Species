@@ -1,40 +1,24 @@
 package com.ninni.species.registry;
 
-import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.ninni.species.Species;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Map;
 import java.util.Optional;
 
+@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesMemoryModuleTypes {
 
-    public static final Map<ResourceLocation, MemoryModuleType<?>> MEMORY_MODULES = Maps.newLinkedHashMap();
+    public static final DeferredRegister<MemoryModuleType<?>> MEMORY_MODULE_TYPES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Species.MOD_ID);
 
-    public static final MemoryModuleType<Unit> ROAR_CHARGING = register("roar_charging", Codec.unit(Unit.INSTANCE));
-    public static final MemoryModuleType<Unit> ROAR_COOLDOWN = register("roar_cooldown", Codec.unit(Unit.INSTANCE));
-    public static final MemoryModuleType<Unit> STOMP_CHARGING = register("stomp_charging", Codec.unit(Unit.INSTANCE));
-    public static final MemoryModuleType<Unit> SPIT_CHARGING = register("spit_charging", Codec.unit(Unit.INSTANCE));
-
-    private static <U> MemoryModuleType<U> register(String string, Codec<U> codec) {
-        MemoryModuleType<U> type = new MemoryModuleType<>(Optional.of(codec));
-        MEMORY_MODULES.put(new ResourceLocation(Species.MOD_ID, string), type);
-        return type;
-    }
-
-    private static <U> MemoryModuleType<U> register(String string) {
-        MemoryModuleType<U> type = new MemoryModuleType<>(Optional.empty());
-        MEMORY_MODULES.put(new ResourceLocation(Species.MOD_ID, string), type);
-        return type;
-    }
-
-    public static void init() {
-        MEMORY_MODULES.forEach((resourceLocation, memoryModuleType) -> Registry.register(BuiltInRegistries.MEMORY_MODULE_TYPE, resourceLocation, memoryModuleType));
-    }
+    public static final RegistryObject<MemoryModuleType<Unit>> ROAR_CHARGING = MEMORY_MODULE_TYPES.register("roar_charging", () -> new MemoryModuleType<>(Optional.of(Codec.unit(Unit.INSTANCE))));
+    public static final RegistryObject<MemoryModuleType<Unit>> ROAR_COOLDOWN = MEMORY_MODULE_TYPES.register("roar_cooldown", () -> new MemoryModuleType<>(Optional.of(Codec.unit(Unit.INSTANCE))));
+    public static final RegistryObject<MemoryModuleType<Unit>> STOMP_CHARGING = MEMORY_MODULE_TYPES.register("stomp_charging", () -> new MemoryModuleType<>(Optional.of(Codec.unit(Unit.INSTANCE))));
+    public static final RegistryObject<MemoryModuleType<Unit>> SPIT_CHARGING = MEMORY_MODULE_TYPES.register("spit_charging", () -> new MemoryModuleType<>(Optional.of(Codec.unit(Unit.INSTANCE))));
 
 }

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "species:ghoul",
+    "species:deepfish",
+    "minecraft:cod",
+    "minecraft:salmon",
+    "minecraft:tropical_fish",
+    "minecraft:pufferfish",
+    "minecraft:dolphin",
+    "minecraft:phantom",
+    "minecraft:creeper"
+  ]
+}

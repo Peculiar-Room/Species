@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "species:wicked_wax"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    }
+  },
+  "result": {
+    "item": "species:wicked_dope",
+    "count": 1
+  }
+}

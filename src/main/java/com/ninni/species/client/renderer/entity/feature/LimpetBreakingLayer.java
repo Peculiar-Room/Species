@@ -2,8 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.LimpetModel;
-import com.ninni.species.entity.Limpet;
+import com.ninni.species.client.model.mob.update_1.LimpetModel;
+import com.ninni.species.server.entity.mob.update_1.Limpet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -26,8 +26,7 @@ public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetModel<Limpet>
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Limpet limpet, float f, float g, float h, float j, float k, float l) {
-        if (limpet.getCrackedStage() == 0) return;
-        else {
+        if (limpet.getCrackedStage() != 0) {
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(limpet, f, g, h);
             this.model.setupAnim(limpet, f, g, j, k, l);

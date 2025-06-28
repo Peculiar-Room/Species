@@ -1,0 +1,9 @@
+{
+  "type": "species:quake",
+  "item": {
+    "id": "species:kinetic_core",
+    "Count": 1
+  },
+  "minTries": 4,
+  "maxTries": 8
+}

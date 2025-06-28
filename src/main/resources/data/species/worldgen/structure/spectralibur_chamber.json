@@ -1,0 +1,7 @@
+{
+  "type": "species:spectralibur_chamber",
+  "biomes": "#species:spectralibur_chamber_has_structure",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box"
+}

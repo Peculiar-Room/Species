@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "species:block/kinetic_core",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "species:block/kinetic_core"
+    },
+    "facing=south": {
+      "model": "species:block/kinetic_core",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "species:block/kinetic_core",
+      "y": 270
+    }
+  }
+}

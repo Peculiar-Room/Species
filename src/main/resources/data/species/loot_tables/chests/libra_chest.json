@@ -1,0 +1,98 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 3,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_log",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:fermented_spider_eye",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 6
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:white_banner",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{BlockEntityTag:{Patterns:[{Pattern:'mr',Color:9},{Pattern:'bs',Color:8},{Pattern:'cs',Color:7},{Pattern:'bo',Color:8},{Pattern:'ms',Color:15},{Pattern:'hh',Color:8},{Pattern:'mc',Color:8},{Pattern:'bo',Color:15}]},display:{Name:'{\"translate\":\"block.minecraft.ominous_banner\",\"color\":\"gold\"}'},HideFlags:32}"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": -2,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "species:scattershot"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "species:item/logo"
-  }
+	"format_version": "1.9.0",
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "species:item/advancements/logo"
+	},
+	"display": {
+		"gui": {
+			"scale": [1.5, 1.5, 1]
+		}
+	}
 }

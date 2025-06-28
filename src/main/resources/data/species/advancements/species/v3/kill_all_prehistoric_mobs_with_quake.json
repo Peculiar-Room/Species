@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v3/kill_ten_mobs_with_quake",
+  "display": {
+    "icon": {
+      "item": "species:kinetic_core"
+    },
+    "title": {
+      "translate": "advancements.species.kill_all_prehistoric_mobs_with_quake.title"
+    },
+    "description": {
+      "translate": "advancements.species.kill_all_prehistoric_mobs_with_quake.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "kill_all_prehistoric_mobs_with_quake": {
+      "trigger": "species:kill_all_prehistoric_mobs_with_quake"
+    }
+  },
+  "requirements": [
+    [
+      "kill_all_prehistoric_mobs_with_quake"
+    ]
+  ]
+}

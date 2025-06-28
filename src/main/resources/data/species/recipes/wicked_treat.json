@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#B#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "species:werefang"
+    },
+    "B": {
+      "item": "species:wicked_wax"
+    }
+  },
+  "result": {
+    "item": "species:wicked_treat",
+    "count": 3
+  }
+}

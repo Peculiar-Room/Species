@@ -46,15 +46,15 @@
   "advancements.species.deepfish_in_a_bucket.title": "Пісня з глибин",
   "advancements.species.deepfish_in_a_bucket.description": "Спіймайте глибинну рибу у відро",
 
-  "entity.species.roombug": "Кімнатний жук",
-  "item.species.roombug_spawn_egg": "Яйце виклику кімнатного жука",
+  "entity.species.stackatick": "Кімнатний жук",
+  "item.species.stackatick_spawn_egg": "Яйце виклику кімнатного жука",
 
-  "subtitles.entity.species.roombug.eat": "Кімнатний жук жує",
-  "subtitles.entity.species.roombug.death": "Кімнатний жук гине",
-  "subtitles.entity.species.roombug.hurt": "Кімнатного жука поранено",
-  "subtitles.entity.species.roombug.idle": "Кімнатний жук стрекоче",
-  "subtitles.entity.species.roombug.snoring": "Кімнатний жук хропе",
-  "subtitles.entity.species.roombug.step": "Кімнатний жук крокує",
+  "subtitles.entity.species.stackatick.eat": "Кімнатний жук жує",
+  "subtitles.entity.species.stackatick.death": "Кімнатний жук гине",
+  "subtitles.entity.species.stackatick.hurt": "Кімнатного жука поранено",
+  "subtitles.entity.species.stackatick.idle": "Кімнатний жук стрекоче",
+  "subtitles.entity.species.stackatick.snoring": "Кімнатний жук хропе",
+  "subtitles.entity.species.stackatick.step": "Кімнатний жук крокує",
 
   "entity.species.birt": "Біт-птах",
   "entity.species.birt_egg": "Яйце біт-птаха",

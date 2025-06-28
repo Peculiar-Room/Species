@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
 import com.google.common.collect.Lists;
-import com.ninni.species.entity.Mammutilation;
+import com.ninni.species.server.entity.mob.update_2.Mammutilation;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -92,7 +92,7 @@ public class LightningRodMixin {
                                 level.levelEvent(2001, blockPos1, Block.getId(level.getBlockState(blockPos1)));
                                 level.blockUpdated(blockPos1, Blocks.AIR);
                             });
-                            Mammutilation mammutilation = SpeciesEntities.MAMMUTILATION.create(level);
+                            Mammutilation mammutilation = SpeciesEntities.MAMMUTILATION.get().create(level);
                             float x = 0.0F;
                             float y = 0.0F;
                             mammutilation.moveTo((double)blockPos.getX() + 0.5, (double)blockPos.getY() + 0.05, (double)blockPos.getZ() + 0.5, Mth.wrapDegrees(x), Mth.wrapDegrees(y));
@@ -107,7 +107,7 @@ public class LightningRodMixin {
                 }
             }
         }
+
     }
 
 }
-

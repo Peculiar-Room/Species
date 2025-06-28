@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#species:birt_tree_spawns_in",
+  "features": "species:birted_birch_trees",
+  "step": "vegetal_decoration"
+}

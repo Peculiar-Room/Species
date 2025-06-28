@@ -1,0 +1,9 @@
+{
+  "id": "species:coal",
+  "item": "minecraft:coal",
+  "block": "minecraft:coal_ore",
+  "maxCount": 24,
+  "spawnWeight": 65,
+  "maxSpawnHeight": 30,
+  "minSpawnHeight": 16
+}

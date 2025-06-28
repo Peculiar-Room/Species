@@ -2,10 +2,8 @@ package com.ninni.species.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.ninni.species.client.model.entity.TreeperModel;
-import com.ninni.species.entity.Treeper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.ninni.species.client.model.mob.update_2.TreeperModel;
+import com.ninni.species.server.entity.mob.update_2.Treeper;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,10 +11,12 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
-@Environment(value=EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TreeperFeatureRenderer<T extends Treeper, M extends TreeperModel<T>> extends RenderLayer<T, M> {
     private static final RenderType TREEPER_EYES = RenderType.entityTranslucentEmissive(new ResourceLocation(MOD_ID, "textures/entity/treeper/treeper_eyes.png"));
     private static final RenderType TREEPER_EYES_BURNED = RenderType.entityTranslucentEmissive(new ResourceLocation(MOD_ID, "textures/entity/treeper/treeper_eyes_burned.png"));

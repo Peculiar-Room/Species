@@ -1,0 +1,9 @@
+{
+  "id": "species:spinel",
+  "item": "caverns_and_chasms:spinel",
+  "block": "caverns_and_chasms:spinel_ore",
+  "maxCount": 6,
+  "spawnWeight": 50,
+  "maxSpawnHeight": 64,
+  "minSpawnHeight": -32
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "O",
+    "_"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:carved_pumpkin"
+    },
+    "O": {
+      "item": "species:kinetic_core"
+    },
+    "_": {
+      "item": "minecraft:smooth_stone_slab"
+    }
+  },
+  "result": {
+    "item": "species:deflector_dummy",
+    "count": 1
+  }
+}

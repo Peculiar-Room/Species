@@ -1,0 +1,9 @@
+{
+  "type": "species:ghoul",
+  "item": {
+    "id": "species:ghoul_head",
+    "Count": 1
+  },
+  "minTries": 4,
+  "maxTries": 8
+}

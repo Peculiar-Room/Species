@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v2/obtain_springling_egg",
+  "display": {
+    "icon": {
+      "item": "minecraft:ladder"
+    },
+    "title": {
+      "translate": "advancements.species.extend_springling_fully.title"
+    },
+    "description": {
+      "translate": "advancements.species.extend_springling_fully.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "extend_springling_fully": {
+      "trigger": "species:extend_springling_fully"
+    }
+  },
+  "requirements": [
+    [
+      "extend_springling_fully"
+    ]
+  ]
+}

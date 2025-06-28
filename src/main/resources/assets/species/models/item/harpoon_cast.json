@@ -1,0 +1,21 @@
+{
+  "loader": "forge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "minecraft:item/generated"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "species:item/harpoon_cast"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated"
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated"
+    }
+  }
+}

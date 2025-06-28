@@ -4,6 +4,6 @@
     "id": "minecraft:gold_nugget",
     "Count": 1
   },
-  "minTries": 8,
-  "maxTries": 16
+  "minTries": 10,
+  "maxTries": 20
 }

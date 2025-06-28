@@ -45,15 +45,15 @@
   "advancements.species.deepfish_in_a_bucket.title": "Derinlerin şarkısı",
   "advancements.species.deepfish_in_a_bucket.description": "Kovayla bir Damlabalığı yakala",
 
-  "entity.species.roombug": "Roombug",
-  "item.species.roombug_spawn_egg": "Roombug Çağırma Yumurtası",
+  "entity.species.stackatick": "Stackatick",
+  "item.species.stackatick_spawn_egg": "Stackatick Çağırma Yumurtası",
 
-  "subtitles.entity.species.roombug.eat": "Roombug yedi",
-  "subtitles.entity.species.roombug.death": "Roombug öldü",
-  "subtitles.entity.species.roombug.hurt": "Roombug hasar aldı",
-  "subtitles.entity.species.roombug.idle": "Roombug tıkırdadı",
-  "subtitles.entity.species.roombug.snoring": "Roombug horluyor",
-  "subtitles.entity.species.roombug.step": "Roombug geziniyor",
+  "subtitles.entity.species.stackatick.eat": "Stackatick yedi",
+  "subtitles.entity.species.stackatick.death": "Stackatick öldü",
+  "subtitles.entity.species.stackatick.hurt": "Stackatick hasar aldı",
+  "subtitles.entity.species.stackatick.idle": "Stackatick tıkırdadı",
+  "subtitles.entity.species.stackatick.snoring": "Stackatick horluyor",
+  "subtitles.entity.species.stackatick.step": "Stackatick geziniyor",
 
   "entity.species.birt": "Birt",
   "entity.species.birt_egg": "Birt Yumurtası",

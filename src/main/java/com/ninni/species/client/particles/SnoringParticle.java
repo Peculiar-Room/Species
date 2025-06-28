@@ -1,7 +1,5 @@
 package com.ninni.species.client.particles;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -12,8 +10,10 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SnoringParticle extends TextureSheetParticle {
     private final SpriteSet spriteProvider;
 
@@ -47,14 +47,14 @@ public class SnoringParticle extends TextureSheetParticle {
 
     @Override
     protected int getLightColor(float f) {
-        BlockPos blockPos = new BlockPos((int)this.x, (int)this.y, (int)this.z);
+        BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
         if (this.level.hasChunkAt(blockPos)) {
             return LevelRenderer.getLightColor(this.level, blockPos);
         }
         return 0;
     }
 
-    @Environment(value = EnvType.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public record Factory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 
         @Override

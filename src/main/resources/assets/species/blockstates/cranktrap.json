@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,open=false": {
+      "model": "species:block/cranktrap_closed",
+      "y": 90
+    },
+    "facing=north,open=false": {
+      "model": "species:block/cranktrap_closed"
+    },
+    "facing=south,open=false": {
+      "model": "species:block/cranktrap_closed",
+      "y": 180
+    },
+    "facing=west,open=false": {
+      "model": "species:block/cranktrap_closed",
+      "y": 270
+    },
+    "facing=east,open=true": {
+      "model": "species:block/cranktrap",
+      "y": 90
+    },
+    "facing=north,open=true": {
+      "model": "species:block/cranktrap"
+    },
+    "facing=south,open=true": {
+      "model": "species:block/cranktrap",
+      "y": 180
+    },
+    "facing=west,open=true": {
+      "model": "species:block/cranktrap",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "loader": "forge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "species:item/crankbow_template",
+    "textures": {
+      "layer0": "species:item/crankbow_pulling_2"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "species:item/crankbow_small_template",
+      "textures": {
+        "layer0": "species:item/crankbow_small_pulling_2"
+      }
+    },
+    "ground": {
+      "parent": "species:item/crankbow_small_template",
+      "textures": {
+        "layer0": "species:item/crankbow_small_pulling_2"
+      }
+    },
+    "fixed": {
+      "parent": "species:item/crankbow_small_template",
+      "textures": {
+        "layer0": "species:item/crankbow_small_pulling_2"
+      }
+    }
+  }
+}

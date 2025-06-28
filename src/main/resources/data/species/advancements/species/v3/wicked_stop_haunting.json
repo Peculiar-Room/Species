@@ -1,0 +1,28 @@
+{
+  "parent": "species:species/v3/v3",
+  "display": {
+    "icon": {
+      "item": "species:wicked_wax"
+    },
+    "title": {
+      "translate": "advancements.species.wicked_stop_haunting.title"
+    },
+    "description": {
+      "translate": "advancements.species.wicked_stop_haunting.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "wicked_stop_haunting": {
+      "trigger": "species:wicked_stop_haunting"
+    }
+  },
+  "requirements": [
+    [
+      "wicked_stop_haunting"
+    ]
+  ]
+}

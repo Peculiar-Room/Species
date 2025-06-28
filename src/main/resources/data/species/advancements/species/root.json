@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "picked_up_any_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{}]
+      }
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "species:textures/gui/advancements/backgrounds/species.png",
+    "description": {
+      "translate": "advancements.species.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "species:tab"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.species.root.title"
+    }
+  },
+  "requirements": [
+    ["picked_up_any_item"]
+  ],
+  "sends_telemetry_event": true
+}

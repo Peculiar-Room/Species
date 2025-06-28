@@ -1,0 +1,9 @@
+{
+  "type": "caverns_and_chasms:deeper",
+  "item": {
+    "id": "caverns_and_chasms:deeper_head",
+    "Count": 1
+  },
+  "minTries": 12,
+  "maxTries": 18
+}

@@ -1,0 +1,8 @@
+{
+  "id": "species:uranium",
+  "item": "alexscaves:uranium",
+  "block": "alexscaves:radrock_uranium_ore",
+  "maxCount": 8,
+  "location": "alexscaves:toxic_caves",
+  "spawnWeight": 10
+}

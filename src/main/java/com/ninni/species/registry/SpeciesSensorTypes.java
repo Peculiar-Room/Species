@@ -1,30 +1,17 @@
 package com.ninni.species.registry;
 
-import com.google.common.collect.Maps;
 import com.ninni.species.Species;
-import com.ninni.species.entity.ai.sensors.CruncherAttackEntitySensor;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.sensing.Sensor;
+import com.ninni.species.server.entity.ai.sensors.CruncherAttackEntitySensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
+@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesSensorTypes {
-    private static final Map<ResourceLocation, SensorType<?>> SENSOR_TYPES = Maps.newLinkedHashMap();
+    public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Species.MOD_ID);
 
-    public static final SensorType<CruncherAttackEntitySensor> CRUNCHER_ATTACK_ENTITY_SENSOR = register("cruncher_attack_entity_sensor", CruncherAttackEntitySensor::new);
-
-    private static <U extends Sensor<?>> SensorType<U> register(String string, Supplier<U> supplier) {
-        SensorType<U> sensorType = new SensorType<>(supplier);
-        SENSOR_TYPES.put(new ResourceLocation(Species.MOD_ID, string), sensorType);
-        return sensorType;
-    }
-
-    public static void init() {
-        SENSOR_TYPES.forEach((resourceLocation, sensorType) -> Registry.register(BuiltInRegistries.SENSOR_TYPE, resourceLocation, sensorType));
-    }
+    public static final RegistryObject<SensorType<CruncherAttackEntitySensor>> CRUNCHER_ATTACK_ENTITY_SENSOR = SENSOR_TYPES.register("cruncher_attack_entity_sensor", () -> new SensorType<>(CruncherAttackEntitySensor::new));
 
 }

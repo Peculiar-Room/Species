@@ -15,8 +15,8 @@ public class SpeciesDevelopers {
     public static final ResourceLocation NOON_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/noonyeyz.png");
     public static final ResourceLocation BORNULHU_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/bornulhu.png");
     public static final ResourceLocation GLADOS_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/glados_edition.png");
+    public static final ResourceLocation YAPETTO_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/yapetto.png");
     public static final ResourceLocation CONTRIBUTOR_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/contributor.png");
-    public static final ResourceLocation GUEST_ARTIST_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/guest_artist.png");
 
 
     public enum SpeciesDeveloperNames {
@@ -25,11 +25,12 @@ public class SpeciesDevelopers {
         NOON("Noonyeyz", ContributionLevel.DEVELOPER, ChatFormatting.AQUA, NOON_TEXTURE),
         BORNULHU("Bornulhu", ContributionLevel.DEVELOPER, ChatFormatting.GREEN, BORNULHU_TEXTURE),
         GLADOS("GLaDOS edition", ContributionLevel.DEVELOPER, ChatFormatting.LIGHT_PURPLE, GLADOS_TEXTURE),
-        ORCINUS("Orcinus", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
-        VAKY("VakyPanda", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
-        TAZZ("Tazz", ContributionLevel.CONTRIBUTOR, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
-        BUNTEN("lunarbunten", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE),
-        EXCLAIM("Exclaim!", ContributionLevel.COMPOSER, ChatFormatting.DARK_GRAY, CONTRIBUTOR_TEXTURE);
+        YAPETTO("Yapetto", ContributionLevel.GUEST_ARTIST, ChatFormatting.BLUE, YAPETTO_TEXTURE),
+        ORCINUS("Orcinus", ContributionLevel.CONTRIBUTOR, ChatFormatting.BLUE, CONTRIBUTOR_TEXTURE),
+        VAKY("VakyPanda", ContributionLevel.CONTRIBUTOR, ChatFormatting.BLUE, CONTRIBUTOR_TEXTURE),
+        TAZZ("Tazz", ContributionLevel.CONTRIBUTOR, ChatFormatting.BLUE, CONTRIBUTOR_TEXTURE),
+        BUNTEN("lunarbunten", ContributionLevel.COMPOSER, ChatFormatting.BLUE, CONTRIBUTOR_TEXTURE),
+        EXCLAIM("Exclaim!", ContributionLevel.COMPOSER, ChatFormatting.BLUE, CONTRIBUTOR_TEXTURE);
 
         private final String name;
         private final ContributionLevel contributionLevel;
@@ -57,10 +58,10 @@ public class SpeciesDevelopers {
         }
 
         public enum ContributionLevel {
-            DEVELOPER(" "),
-            GUEST_ARTIST("(Guest Artist) "),
-            COMPOSER("(Composer) "),
-            CONTRIBUTOR("(Contributor) ");
+            DEVELOPER("developer"),
+            GUEST_ARTIST("guest_artist"),
+            COMPOSER("composer"),
+            CONTRIBUTOR("contributor");
 
             private final String name;
 

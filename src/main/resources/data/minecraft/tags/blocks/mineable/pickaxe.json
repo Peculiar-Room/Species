@@ -1,8 +1,11 @@
 {
   "replace": false,
   "values": [
+    "species:kinetic_core",
+    "species:chaindelier",
     "species:bone_bark",
     "species:bone_vertebra",
-    "species:bone_spike"
+    "species:bone_spike",
+    "species:cranktrap"
   ]
 }

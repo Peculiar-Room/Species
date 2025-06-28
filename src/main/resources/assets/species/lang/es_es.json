@@ -46,15 +46,15 @@
   "advancements.species.deepfish_in_a_bucket.title": "Canción de las profundidades",
   "advancements.species.deepfish_in_a_bucket.description": "Captura a un Pezprofundo en una cubeta",
 
-  "entity.species.roombug": "Roombug",
-  "item.species.roombug_spawn_egg": "Generar Roombug",
+  "entity.species.stackatick": "Stackatick",
+  "item.species.stackatick_spawn_egg": "Generar Stackatick",
 
-  "subtitles.entity.species.roombug.eat": "Roombug come",
-  "subtitles.entity.species.roombug.death": "Roombug muere",
-  "subtitles.entity.species.roombug.hurt": "Roombug es dañado",
-  "subtitles.entity.species.roombug.idle": "Roombug hace clic",
-  "subtitles.entity.species.roombug.snoring": "Roombug ronca",
-  "subtitles.entity.species.roombug.step": "Roombug camina",
+  "subtitles.entity.species.stackatick.eat": "Stackatick come",
+  "subtitles.entity.species.stackatick.death": "Stackatick muere",
+  "subtitles.entity.species.stackatick.hurt": "Stackatick es dañado",
+  "subtitles.entity.species.stackatick.idle": "Stackatick hace clic",
+  "subtitles.entity.species.stackatick.snoring": "Stackatick ronca",
+  "subtitles.entity.species.stackatick.step": "Stackatick camina",
 
   "entity.species.birt": "Birt",
   "entity.species.birt_egg": "Huevo de Birt",

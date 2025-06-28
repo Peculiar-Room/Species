@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "species:placing": 0
+      },
+      "model": "species:item/coil_not_placing"
+    },
+    {
+      "predicate": {
+        "species:placing": 1
+      },
+      "model": "species:item/coil_placing"
+    }
+  ]
+}

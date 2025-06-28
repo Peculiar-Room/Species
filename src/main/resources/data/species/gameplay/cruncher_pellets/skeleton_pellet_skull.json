@@ -4,6 +4,6 @@
     "id": "minecraft:skeleton_skull",
     "Count": 1
   },
-  "minTries": 24,
-  "maxTries": 32
+  "minTries": 16,
+  "maxTries": 20
 }
