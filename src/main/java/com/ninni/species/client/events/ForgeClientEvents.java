@@ -2,13 +2,17 @@ package com.ninni.species.client.events;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import com.ninni.species.Species;
-import com.ninni.species.server.entity.mob.update_2.Springling;
-import com.ninni.species.server.entity.util.LivingEntityAccess;
+import com.ninni.species.mixin_util.EntityRenderDispatcherAccess;
+import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.registry.SpeciesItems;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EndermanModel;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -16,6 +20,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -23,12 +28,18 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 import static net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords;
 import static net.minecraft.client.renderer.entity.LivingEntityRenderer.isEntityUpsideDown;
@@ -37,16 +48,15 @@ import static net.minecraft.client.renderer.entity.LivingEntityRenderer.isEntity
 public class ForgeClientEvents {
 
     @SubscribeEvent
-    public static void onRenderDisguisedInInventory(RenderLivingEvent.Pre<?, ?> event) {
+    public static void onRenderLivingSpecialPre(RenderLivingEvent.Pre<?, ?> event) {
         LivingEntity entity = event.getEntity();
 
-        if (Minecraft.getInstance().screen != null) {
+        if (Minecraft.getInstance().getEntityRenderDispatcher() instanceof EntityRenderDispatcherAccess access && access.getRenderingInventoryEntity()) {
             if (entity.getItemBySlot(EquipmentSlot.HEAD).is(SpeciesItems.WICKED_MASK.get())) {
                 LivingEntity disguise = ((LivingEntityAccess) entity).getDisguisedEntity();
                 if (disguise != null) {
                     float maxDisguise = Math.max(disguise.getBbHeight(), disguise.getBbWidth());
                     float maxPlayer = Math.max(1.8F, 0.6F);
-
                     if (maxDisguise > maxPlayer) {
                         float scale = Mth.clamp((maxPlayer / maxDisguise), 0.3F, 1.0F);
                         event.getPoseStack().scale(scale, scale, scale);
@@ -55,8 +65,6 @@ public class ForgeClientEvents {
             }
         }
     }
-
-
 
     @SubscribeEvent
     public static void livingEntityRenderer(RenderLivingEvent<LivingEntity, EntityModel<LivingEntity>> event) {
@@ -119,14 +127,18 @@ public class ForgeClientEvents {
                 if (entity.hasPose(Pose.SLEEPING)) {
                     Direction bedDir = entity.getBedOrientation();
                     if (bedDir != null) {
+
                         float offset = entity.getEyeHeight(Pose.STANDING) - 0.1F;
                         poseStack.translate(-bedDir.getStepX() * offset, 0.0F, -bedDir.getStepZ() * offset);
+
+                        poseStack.mulPose(Axis.YN.rotationDegrees(bedDir.toYRot() - 90));
                     }
                 }
 
                 float animProgress = renderer.getBob(disguise, partialTicks);
                 renderer.setupRotations(disguise, poseStack, animProgress, bodyRot, partialTicks);
                 poseStack.scale(-1.0F, -1.0F, 1.0F);
+
                 renderer.scale(disguise, poseStack, partialTicks);
                 poseStack.translate(0.0F, -1.501F, 0.0F);
 
@@ -158,9 +170,9 @@ public class ForgeClientEvents {
 
                 if (!entity.isSpectator()) {
                     for (Object layer : renderer.layers) {
-                        try {
-                            ((RenderLayer)layer).render(poseStack, buffer, light, disguise, walkPos, walkSpeed, partialTicks, animProgress, netHeadYaw, headPitch);
-                        } catch (Exception ignored) {}
+                           try {
+                               ((RenderLayer)layer).render(poseStack, buffer, light, disguise, walkPos, walkSpeed, partialTicks, animProgress, netHeadYaw, headPitch);
+                           } catch (Exception ignored) {}
                     }
                 }
 

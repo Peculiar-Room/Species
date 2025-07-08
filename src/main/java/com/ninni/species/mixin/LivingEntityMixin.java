@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
 import com.ninni.species.server.entity.util.CustomDeathParticles;
-import com.ninni.species.server.entity.util.LivingEntityAccess;
+import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.server.packet.SnatchedPacket;
 import com.ninni.species.server.packet.TankedPacket;
 import com.ninni.species.registry.*;
@@ -10,10 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -93,6 +90,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
                         Entity rawEntity = entityType.get().create(this.level());
                         if (rawEntity instanceof LivingEntity living) {
                             living.load(tag);
+                            if (living instanceof Mob mob) mob.readAdditionalSaveData(tag);
                             this.setDisguisedEntity(living);
                             this.setDisguisedEntityType(entityType.get());
                         } else {

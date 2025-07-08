@@ -1,6 +1,6 @@
 package com.ninni.species.mixin.client;
 
-import com.ninni.species.server.entity.util.WolfAccess;
+import com.ninni.species.mixin_util.WolfAccess;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Wolf;

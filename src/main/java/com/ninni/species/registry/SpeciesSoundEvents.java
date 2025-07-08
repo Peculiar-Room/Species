@@ -62,12 +62,15 @@ public class SpeciesSoundEvents {
     public static final RegistryObject<SoundEvent> BLOCK_BIRT_DWELLING_EXIT = register("block.birt_dwelling.exit");
     public static final RegistryObject<SoundEvent> BLOCK_BIRT_DWELLING_WORK = register("block.birt_dwelling.work");
 
+    public static final RegistryObject<SoundEvent> BLOCK_BIRTDAY_CAKE_BLOW = register("block.birtday_cake.blow");
+
     public static final RegistryObject<SoundEvent> ENTITY_BIRTD = register("effect.birtd.applied");
 
     public static final RegistryObject<SoundEvent> ITEM_BIRT_EGG_THROW = register("item.birt_egg.throw");
     public static final RegistryObject<SoundEvent> ITEM_BIRT_EGG_HIT = register("item.birt_egg.hit");
 
     public static final RegistryObject<SoundEvent> MUSIC_DISC_DIAL = register("music.disc.dial");
+    public static final RegistryObject<SoundEvent> HAPPY_BIRTDAY = register("music.happy_birtday");
 
     public static final RegistryObject<SoundEvent> LIMPET_DEATH = register("entity.limpet.death");
     public static final RegistryObject<SoundEvent> LIMPET_HURT = register("entity.limpet.hurt");
@@ -295,6 +298,7 @@ public class SpeciesSoundEvents {
     public static final RegistryObject<SoundEvent> HARPOON_PULL = register("item.harpoon.pull");
 
     public static final SoundType WRAPTOR_EGG_BLOCK = new ForgeSoundType(1.0F, 1.5F, SpeciesSoundEvents.WRAPTOR_EGG_BREAK, () -> SoundEvents.SHROOMLIGHT_STEP, () -> SoundEvents.SHROOMLIGHT_PLACE, () -> SoundEvents.SHROOMLIGHT_HIT, () -> SoundEvents.SHROOMLIGHT_FALL);
+    public static final SoundType BIRTDAY_CAKE = register("birtday_cake", 1F, 1.0F);
     public static final SoundType FROZEN_HAIR = register("frozen_hair", 0.8F, 1);
     public static final SoundType FROZEN_MEAT = register("frozen_meat", 0.8F, 1);
     public static final SoundType ALPHACENE_GRASS = register("alphacene_grass", 0.8F, 1.6F);

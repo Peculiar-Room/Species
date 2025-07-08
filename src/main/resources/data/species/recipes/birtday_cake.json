@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "###",
+    "ARA"
+  ],
+  "key": {
+    "#": {
+      "item": "species:birt_egg"
+    },
+    "B": {
+      "item": "minecraft:milk_bucket"
+    },
+    "A": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "species:birtday_cake",
+    "count": 1
+  }
+}

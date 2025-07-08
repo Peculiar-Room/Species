@@ -139,9 +139,10 @@ public class LimpetOreManager extends SimpleJsonResourceReloadListener {
         for (LimpetOreManager.LimpetOreData data : LimpetOreManager.DATA) {
             if (data.item != Items.AIR && data.block != Blocks.AIR) {
                 if (filter.test(data)) {
-                    int weight = data.spawnWeight().orElse(0);
-                    ItemStack itemStack = data.item() != null ? data.item().getDefaultInstance() : Items.BONE_MEAL.getDefaultInstance();
-                    weightedEntries.add(new WeightedEntry(data.id(), weight, data.maxCount().orElse(0), itemStack, data.block().defaultBlockState()));
+                    if (data.spawnWeight().isPresent() && data.spawnWeight().get() > 0) {
+                        ItemStack itemStack = data.item() != null ? data.item().getDefaultInstance() : Items.BONE_MEAL.getDefaultInstance();
+                        weightedEntries.add(new WeightedEntry(data.id(), data.spawnWeight().get(), data.maxCount().orElse(0), itemStack, data.block().defaultBlockState()));
+                    }
                 }
             }
         }

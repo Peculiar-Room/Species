@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "lit=false": [
+      {
+        "model": "species:block/birtday_cake"
+      }
+    ],
+    "lit=true": [
+      {
+        "model": "species:block/birtday_cake_lit"
+      }
+    ]
+  }
+}

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.model.mob.update_3.SpectreModel;
 import com.ninni.species.client.renderer.entity.SpectreRenderer;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
+import com.ninni.species.registry.SpeciesRenderTypes;
 import com.ninni.species.server.entity.mob.update_3.Spectre;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,7 +38,7 @@ public class SpectreBodyFeatureRenderer<T extends Spectre, M extends SpectreMode
             model(spectre).prepareMobModel(spectre, f, g, h);
             model(spectre).setupAnim(spectre, f, g, j, k, l);
 
-            VertexConsumer vertexConsumerCharged = multiBufferSource.getBuffer(RenderType.dragonExplosionAlpha(getTEXTURE(spectre)));
+            VertexConsumer vertexConsumerCharged = multiBufferSource.getBuffer(SpeciesRenderTypes.spectreBody(getTEXTURE(spectre)));
             model(spectre).renderToBuffer(poseStack, vertexConsumerCharged, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1);
         }
     }

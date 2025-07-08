@@ -1,5 +1,6 @@
 package com.ninni.species.client.events;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.ninni.species.client.inventory.CruncherInventoryMenu;
 import com.ninni.species.client.inventory.CruncherInventoryScreen;
 import com.ninni.species.registry.SpeciesBannerPatterns;
@@ -9,11 +10,10 @@ import com.ninni.species.server.packet.OpenCruncherScreenPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.Painting;
@@ -23,13 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
+import java.util.*;
 
 public class ClientEventsHandler {
-    public static final HashMap<UUID, Float> PULL_PROGRESS = new HashMap<>();
 
     public static void openCruncherScreen(OpenCruncherScreenPacket packet) {
         Minecraft client = Minecraft.getInstance();
@@ -49,6 +45,9 @@ public class ClientEventsHandler {
         });
     }
 
+    public static boolean isValidKey(InputConstants.Key key) {
+        return key.getType() == InputConstants.Type.KEYSYM && key.getValue() > 0;
+    }
 
     public static ItemStack getHopefulBannerInstance() {
         ItemStack itemstack = new ItemStack(Items.WHITE_BANNER);

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "species:birtday_cake",
     "species:kinetic_core",
     "species:chaindelier",
     "species:bone_bark",

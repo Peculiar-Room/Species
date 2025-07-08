@@ -14,6 +14,7 @@ public class SpeciesBlockEntities {
 
     //Wave 1
     public static final RegistryObject<BlockEntityType<BirtDwellingBlockEntity>> BIRT_DWELLING = BLOCK_ENTITY_TYPES.register("birt_dwelling", () -> BlockEntityType.Builder.of(BirtDwellingBlockEntity::new, SpeciesBlocks.BIRT_DWELLING.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BirtdayCakeBlockEntity>> BIRTDAY_CAKE = BLOCK_ENTITY_TYPES.register("birtday_cake", () -> BlockEntityType.Builder.of(BirtdayCakeBlockEntity::new, SpeciesBlocks.BIRTDAY_CAKE.get()).build(null));
 
     //Wave 2
     public static final RegistryObject<BlockEntityType<CruncherPelletBlockEntity>> CRUNCHER_PELLET = BLOCK_ENTITY_TYPES.register("cruncher_pellet", () -> BlockEntityType.Builder.of(CruncherPelletBlockEntity::new, SpeciesBlocks.CRUNCHER_PELLET.get()).build(null));

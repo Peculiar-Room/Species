@@ -64,7 +64,9 @@ public class StackatickModel<E extends Stackatick> extends HierarchicalModel<E> 
         this.animate(entity.sitAnimationState, StackatickAnimations.SIT, animationProgress);
         this.animate(entity.standUpAnimationState, StackatickAnimations.STAND_UP, animationProgress);
 
-        if (entity.getPose() == Pose.CROUCHING) this.applyStatic(StackatickAnimations.SITTING);
+        if (entity.getPose() == Pose.CROUCHING && !entity.sitAnimationState.isStarted()) {
+            this.applyStatic(StackatickAnimations.SITTING);
+        }
         if (this.young) this.applyStatic(StackatickAnimations.BABY_PROPORTIONS);
     }
 

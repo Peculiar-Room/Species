@@ -1,6 +1,7 @@
 package com.ninni.species.server.item;
 
 import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.server.entity.mob.update_3.Spectre;
 import com.ninni.species.server.item.util.HasImportantInteraction;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.ChatFormatting;
@@ -59,6 +60,11 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
         super(new Properties().stacksTo(1));
     }
 
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!stack.hasTag()) stack.setTag(new CompoundTag());
+        super.inventoryTick(stack, level, entity, slot, selected);
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -70,10 +76,16 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
         if (entity.isAlive() && !entity.level().isClientSide && (!stack.hasTag() || !stack.getTag().contains("id")) && player.isSecondaryUseActive()) {
             CompoundTag tag = stack.getOrCreateTag();
+
             String encodeId = entity.getEncodeId();
             if (encodeId != null) {
                 tag.putString("id", encodeId);
                 tag.putBoolean("OnGround", true);
+                if (entity instanceof Spectre spectre) {
+                    // Set base variant in NBT
+                    tag.putString("Type", Spectre.Type.SPECTRE.getSerializedName());
+                }
+
                 if (entity.hasCustomName() && !"jeb_".equals(entity.getName().getString())) {
                     tag.putString("CustomName", Component.Serializer.toJson(entity.getCustomName()));
                 }
@@ -84,6 +96,7 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
                     tag.put("Tags", listtag);
                 }
                 entity.addAdditionalSaveData(tag);
+
                 if (entity instanceof WitherBoss && player instanceof ServerPlayer serverPlayer) {
                     SpeciesCriterion.WICKED_MASK_WITHER.trigger(serverPlayer);
                 }
@@ -98,11 +111,13 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        CompoundTag compoundtag = itemStack.getOrCreateTag();
-        if (compoundtag.contains("id")) {
-            EntityType<?> type = EntityType.byString(compoundtag.getString("id")).orElse(null);
-            if (type != null) list.add(type.getDescription().copy().withStyle(Style.EMPTY.withColor(0xffca3d)));
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.contains("id")) {
+            EntityType<?> type = EntityType.byString(tag.getString("id")).orElse(null);
+            if (type != null) {
+                list.add(type.getDescription().copy().withStyle(Style.EMPTY.withColor(0xffca3d)));
+            }
         } else {
             list.add(Component.translatable("item.species.wicked_mask.desc.disguise.1", Component.translatable("key.sneak"), Component.translatable("key.mouse.right")).withStyle(ChatFormatting.GRAY));
             list.add(Component.translatable("item.species.wicked_mask.desc.disguise.2").withStyle(ChatFormatting.GRAY));
@@ -116,7 +131,6 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     public EquipmentSlot getEquipmentSlot() {
         return EquipmentSlot.HEAD;
     }
-
 
     @Override
     public SoundEvent getEquipSound() {

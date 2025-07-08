@@ -94,7 +94,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
 
     @Override
     protected void registerGoals() {
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, livingEntity -> !this.isFromSword()));
         this.targetSelector.addGoal(0, new OwnerHurtByTargetGoal());
         this.targetSelector.addGoal(1, new OwnerHurtTargetGoal());
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(Spectre.class));

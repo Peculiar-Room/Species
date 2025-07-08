@@ -2,7 +2,7 @@ package com.ninni.species.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.ninni.species.server.entity.util.LivingEntityAccess;
+import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.server.item.CrankbowItem;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.server.item.SpectraliburItem;
@@ -60,9 +60,10 @@ public abstract class ItemInHandRendererMixin {
 
     @Inject(at = @At("HEAD"), method = "evaluateWhichHandsToRender", cancellable = true)
     private static void S$evaluateWhichHandsToRender(LocalPlayer localPlayer, CallbackInfoReturnable<ItemInHandRenderer.HandRenderSelection> cir) {
-        ItemStack stack = localPlayer.getMainHandItem();
+        ItemStack stack = localPlayer.getUseItem();
         if (stack.getItem() instanceof CrankbowItem && localPlayer.isUsingItem() && stack.hasTag() && stack.getTag().contains(CrankbowItem.TAG_ITEMS)) {
-            cir.setReturnValue(ItemInHandRenderer.HandRenderSelection.RENDER_MAIN_HAND_ONLY);
+            InteractionHand interactionhand = localPlayer.getUsedItemHand();
+            cir.setReturnValue(interactionhand == InteractionHand.MAIN_HAND ? ItemInHandRenderer.HandRenderSelection.RENDER_MAIN_HAND_ONLY : ItemInHandRenderer.HandRenderSelection.RENDER_OFF_HAND_ONLY);
         }
     }
 
@@ -91,12 +92,12 @@ public abstract class ItemInHandRendererMixin {
             poseStack.translate((float)i2 * f12, f7, f11);
             this.applyItemArmTransform(poseStack, humanoidarm, v3);
             this.applyItemArmAttackTransform(poseStack, humanoidarm, v2);
-            if (v2 < 0.001F && flag) {
+            if (v2 < 0.001F) {
                 if (stack.getItem() instanceof CrankbowItem) {
                     poseStack.translate((float) i2 * -0.641864F, 0.0F, 0.0F);
                     poseStack.mulPose(Axis.YP.rotationDegrees((float) i2 * 10.0F));
                 }
-                if (stack.getItem() instanceof SpectraliburItem) {
+                if (stack.getItem() instanceof SpectraliburItem && flag) {
                     poseStack.translate((float) i2 * -1F, 0.15F, -0.05F);
                     poseStack.mulPose(Axis.YP.rotationDegrees((float) i2 * 100.0F));
                 }

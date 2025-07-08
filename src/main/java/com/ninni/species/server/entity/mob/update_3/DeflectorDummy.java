@@ -49,6 +49,7 @@ public class DeflectorDummy extends ArmorStand {
 
     public DeflectorDummy(EntityType<DeflectorDummy> entityEntityType, Level level) {
         super(entityEntityType, level);
+        this.setMaxUpStep(0.0F);
     }
 
     public static AttributeSupplier.Builder createLivingAttributes() {
@@ -321,5 +322,10 @@ public class DeflectorDummy extends ArmorStand {
     @Override
     public ItemStack getPickedResult(HitResult target) {
         return new ItemStack(SpeciesItems.DEFLECTOR_DUMMY.get());
+    }
+
+    @Override
+    public InteractionResult interact(Player p_19978_, InteractionHand p_19979_) {
+        return InteractionResult.FAIL;
     }
 }

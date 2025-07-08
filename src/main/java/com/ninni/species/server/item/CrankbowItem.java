@@ -1,8 +1,7 @@
 package com.ninni.species.server.item;
 
 import com.ninni.species.registry.*;
-import com.ninni.species.server.entity.util.AbstractArrowAccess;
-import com.ninni.species.server.packet.CrankbowPullPacket;
+import com.ninni.species.mixin_util.AbstractArrowAccess;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +9,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,7 +25,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -41,6 +38,7 @@ public class CrankbowItem extends ProjectileWeaponItem implements Vanishable {
     public static final String TAG_ITEMS = "Items";
     public static final String TAG_SHOTS_FIRED = "Speed";
     public static final String TAG_COOLDOWN = "Cooldown";
+    public static final String TAG_USING = "IsUsing";
 
     public CrankbowItem() {
         super(new Properties().stacksTo(1).durability(865));
@@ -89,14 +87,7 @@ public class CrankbowItem extends ProjectileWeaponItem implements Vanishable {
                     if (shotsFired < 40) tag.putInt(TAG_SHOTS_FIRED, shotsFired + 1);
                 }
             }
-
-            if (!level.isClientSide && entity instanceof ServerPlayer serverPlayer) {
-                if (entity.isUsingItem() && entity.getUseItem() == stack) {
-                    float progress = 1.0f - (tag.getInt(TAG_COOLDOWN) / (float)Math.max(getShootingCooldown(stack), 1));
-                    SpeciesNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> serverPlayer), new CrankbowPullPacket(entity.getUUID(), progress));
-
-                }
-            }
+            if (!level.isClientSide) stack.getOrCreateTag().putBoolean(TAG_USING, true);
         } else {
             if (entity instanceof Player player) {
                 tag.remove(TAG_SHOTS_FIRED);
@@ -127,9 +118,7 @@ public class CrankbowItem extends ProjectileWeaponItem implements Vanishable {
                 }
             }
             tag.remove(TAG_SHOTS_FIRED);
-            if (!level.isClientSide && livingEntity instanceof ServerPlayer serverPlayer) {
-                SpeciesNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> serverPlayer), new CrankbowPullPacket(livingEntity.getUUID(), -1.0f));
-            }
+            stack.removeTagKey(TAG_USING);
         }
     }
 
@@ -185,7 +174,7 @@ public class CrankbowItem extends ProjectileWeaponItem implements Vanishable {
         if (tag != null && tag.contains(TAG_SHOTS_FIRED)) {
             int shots = tag.getInt(TAG_SHOTS_FIRED);
             int level = stack.getEnchantmentLevel(SpeciesEnchantments.QUICK_CRANK.get());
-            int i = level == 0 ? 3 : 4 - level;
+            int i = level == 0 ? 3 : Math.max(1, 4 - level);
 
             int cooldown = getMinSpeed(stack);
             if (shots == 0) cooldown = getMinSpeed(stack);
@@ -253,7 +242,7 @@ public class CrankbowItem extends ProjectileWeaponItem implements Vanishable {
 
                 if (!flag1 && !player.getAbilities().instabuild) {
                     int sparingLevel = stack.getEnchantmentLevel(SpeciesEnchantments.SPARING.get());
-                    int i = sparingLevel == 1 ? 10 : sparingLevel == 2 ? 5 : sparingLevel == 3 ? 3 : 0;
+                    int i = sparingLevel == 1 ? 10 : sparingLevel == 2 ? 5 : 3;
                     if (sparingLevel > 0 && level.random.nextInt(i) == 0) {
                         abstractarrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         level.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),  SpeciesSoundEvents.CRANKBOW_SHOOT_SPARING.get(), SoundSource.PLAYERS, 1.0F, pitch);

@@ -3,7 +3,7 @@ package com.ninni.species.server.entity.mob.update_3;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.server.entity.util.PlayerAccess;
+import com.ninni.species.mixin_util.PlayerAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -120,6 +120,7 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
 
     private boolean handleZiplining(Player player) {
         if (isZiplining && currentCoil != null) {
+            player.resetFallDistance();
             Coil endPoint = currentCoil.getEndPoint();
             if (endPoint == null) {
                 stopZiplining();
@@ -194,7 +195,6 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
             Vec3 motion = this.getDeltaMovement().add(0, -0.05, 0);
             this.setDeltaMovement(motion);
             this.move(MoverType.SELF, motion);
-            player.resetFallDistance();
 
             return true;
         }

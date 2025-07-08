@@ -16,16 +16,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
 public class WraptorModel<E extends Wraptor> extends HierarchicalModel<E> {
-    public static final String TAIL_BASE = "tail_base";
-    public static final String TAIL_TIP = "tail_tip";
-    public static final String BODY_FEATHERS = "body_feathers";
-    public static final String NECK_FEATHERS = "neck_feathers";
-    public static final String NECK_BASE_FEATHERS = "neck_base_feathers";
-    public static final String HEAD_FEATHERS = "head_feathers";
-    public static final String TAIL_FEATHERS = "tail_feathers";
-    public static final String FEATHER_TUFT = "feather_tuft";
-    public static final String TUFT = "tuft";
-    public static final String ROTATED_TUFT = "rotated_tuft";
 
     private final ModelPart root;
     private final ModelPart all;
@@ -119,7 +109,7 @@ public class WraptorModel<E extends Wraptor> extends HierarchicalModel<E> {
         this.rightWing.visible = stage == 0 || this.young;
     }
 
-    public static LayerDefinition getLayerDefinition() {
+    public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -163,7 +153,7 @@ public class WraptorModel<E extends Wraptor> extends HierarchicalModel<E> {
 
         PartDefinition neckFeathersTop = neck.addOrReplaceChild("neckFeathersTop", CubeListBuilder.create().texOffs(56, 28).addBox(-2.5F, -2.0F, -2.5F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.0F, 0.0F));
 
-        PartDefinition neckFeathersMid = neck.addOrReplaceChild("neckFeathersMid", CubeListBuilder.create().texOffs(56, 28).addBox(-2.5F, -2.0F, -2.5F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.5F, 0.0F));
+        PartDefinition neckFeathersMid = neck.addOrReplaceChild("neckFeathersMid", CubeListBuilder.create().texOffs(60, 57).addBox(-2.5F, -2.0F, -2.5F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.5F, 0.0F));
 
         PartDefinition head = neck.addOrReplaceChild("head", CubeListBuilder.create().texOffs(48, 11).addBox(-3.0F, -5.0F, -2.5F, 6.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 16).addBox(-2.5F, -2.0F, -8.5F, 5.0F, 2.0F, 6.0F, new CubeDeformation(0.0F))
@@ -185,7 +175,7 @@ public class WraptorModel<E extends Wraptor> extends HierarchicalModel<E> {
 
         PartDefinition rightFrill = head.addOrReplaceChild("rightFrill", CubeListBuilder.create().texOffs(49, 37).mirror().addBox(-8.0F, -5.5F, 0.0F, 8.0F, 11.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.0F, -2.5F, 0.5F));
 
-        PartDefinition neckFeathersBottom = neck.addOrReplaceChild("neckFeathersBottom", CubeListBuilder.create().texOffs(56, 28).addBox(-6.0F, -15.0F, -4.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(3.5F, 12.0F, 1.5F));
+        PartDefinition neckFeathersBottom = neck.addOrReplaceChild("neckFeathersBottom", CubeListBuilder.create().texOffs(60, 66).addBox(-6.0F, -15.0F, -4.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(3.5F, 12.0F, 1.5F));
 
         return LayerDefinition.create(meshdefinition, 80, 80);
     }

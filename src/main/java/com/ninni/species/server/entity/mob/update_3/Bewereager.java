@@ -5,7 +5,7 @@ import com.ninni.species.server.criterion.SpeciesCriterion;
 import com.ninni.species.server.entity.ai.goal.BewereagerAttackGoal;
 import com.ninni.species.server.entity.ai.goal.CelebrateWithVillagersGoal;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.server.entity.util.WolfAccess;
+import com.ninni.species.mixin_util.WolfAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;

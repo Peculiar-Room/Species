@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.server.entity.util.PlayerAccess;
+import com.ninni.species.mixin_util.PlayerAccess;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

@@ -1,13 +1,11 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.server.entity.ai.goal.CelebrateWithVillagersGoal;
 import com.ninni.species.server.entity.ai.goal.TransformDuringFullMoonGoal;
-import com.ninni.species.server.entity.util.WolfAccess;
+import com.ninni.species.mixin_util.WolfAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Wolf;

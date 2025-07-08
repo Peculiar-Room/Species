@@ -45,6 +45,8 @@ public class Stackatick extends TamableAnimal {
     int cooldownAnimTicks = 0;
     public final AnimationState sitAnimationState = new AnimationState();
     public final AnimationState standUpAnimationState = new AnimationState();
+    private static final byte EVENT_PLAY_SIT_ANIMATION = 8;
+    private static final byte EVENT_PLAY_STAND_ANIMATION = 9;
 
 
     public Stackatick(EntityType<? extends TamableAnimal> entityType, Level world) {
@@ -147,32 +149,40 @@ public class Stackatick extends TamableAnimal {
                                 this.setOrderedToSit(false);
                                 this.setInSittingPose(false);
                                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.STACKATICK_STAND_UP.get(), this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
-                                this.standUpAnimationState.start(this.tickCount);
+                                if (!this.level().isClientSide) {
+                                    this.level().broadcastEntityEvent(this, EVENT_PLAY_STAND_ANIMATION);
+                                }
                                 this.cooldownAnimTicks = 20;
                             } else {
-                                this.sitAnimationState.start(this.tickCount);
                                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpeciesSoundEvents.STACKATICK_SIT.get(), this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
                                 this.setPos(Math.floor(position().x) + 0.5F, this.getY(), Math.floor(position().z) + 0.5F);
+                                if (!this.level().isClientSide) {
+                                    this.level().broadcastEntityEvent(this, EVENT_PLAY_SIT_ANIMATION);
+                                }
+                                this.sittingAnimTicks = 15;
                             }
-                            this.sittingAnimTicks = 15;
                             return InteractionResult.SUCCESS;
                         }
-                    }
-                    if (itemStack.getItem() == Items.HONEY_BOTTLE && this.getHealth() < this.getMaxHealth()) {
-                        if (!this.level().isClientSide) {
-                            if (!player.getAbilities().instabuild) itemStack.shrink(1);
-                            if (!player.getInventory().add(Items.GLASS_BOTTLE.getDefaultInstance()))
-                                player.drop(Items.GLASS_BOTTLE.getDefaultInstance(), false);
-                            this.heal(6);
-                            this.level().broadcastEntityEvent(this, (byte) 7);
-                            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.HONEY_DRINK, this.getSoundSource(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
-                        }
-                        return InteractionResult.SUCCESS;
                     }
                 }
             }
         }
         return super.mobInteract(player, hand);
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == EVENT_PLAY_SIT_ANIMATION) {
+            this.standUpAnimationState.stop();
+            this.sitAnimationState.start(this.tickCount);
+            return;
+        }
+        if (id == EVENT_PLAY_STAND_ANIMATION) {
+            this.sitAnimationState.stop();
+            this.standUpAnimationState.start(this.tickCount);
+            return;
+        }
+        super.handleEntityEvent(id);
     }
 
     @Override
@@ -212,10 +222,6 @@ public class Stackatick extends TamableAnimal {
             if (sittingAnimTicks == 6 && cooldownAnimTicks == 0) {
                 this.setOrderedToSit(true);
                 this.setInSittingPose(true);
-            }
-            if (this.level().isClientSide && sittingAnimTicks == 5) {
-                this.standUpAnimationState.stop();
-                this.sitAnimationState.stop();
             }
         }
 

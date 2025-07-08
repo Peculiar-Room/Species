@@ -13,6 +13,7 @@
   "species.developer.contribution_level.guest_artist": " (Guest Artist) ",
   "species.developer.contribution_level.composer": " (Composer) ",
   "species.developer.contribution_level.contributor": " (Contributor) ",
+
   "key.categories.species": "Species",
   "key.extend": "Springling Extend",
   "key.retract": "Springling Retract",
@@ -97,6 +98,14 @@
   "subtitles.block.species.birt_dwelling.work": "Birts are plotting",
   "subtitles.item.species.birt_egg.throw": "Birt Egg thrown",
   "subtitles.item.species.birt_egg.hit": "Birt Egg hits something",
+
+  "block.species.birtday_cake": "Birtday Cake",
+  "container.species.birtday_cake": "Set Birthday Info",
+  "item.species.birtday_cake_slice": "Birtday Cake Slice",
+  "item.species.birtday_cake_slice.desc.birtd": "Birt'd (0:10)",
+  "item.species.birtday_cake_slice.desc.effect": "Prevents Movement",
+  "subtitles.block.species.birtday_cake.blow": "Birtday Cake antenna blown",
+  "messages.species.birtday": "A little Birtie told me that %s is %s years old today!",
 
   "advancements.species.birt_egg_at_warden.title": "Birt is the Word",
   "advancements.species.birt_egg_at_warden.description": "Throw a birt egg at a warden and live to tell the tale",
@@ -377,7 +386,6 @@
   "item.species.spectralibur.desc.hulking_spectre.1": "%1$s Hulking Spectre",
   "item.species.spectralibur.desc.hulking_spectre.2": "%1$s Hulking Spectres",
 
-  "item.species.spectralibur.desc.action.2": "+3 Magic Damage",
   "block.species.spectralibur_pedestal": "Spectralibur Pedestal",
   "block.species.spectralibur": "Spectralibur",
   "subtitles.entity.species.spectre.death": "Spectre pops",
@@ -578,8 +586,8 @@
   "painting.species.the_composition.title": "The Composition",
   "painting.species.the_composition.author": "Yapettoshen",
 
-  "advancements.species.fall_for_hanger.title": "We can Always Tell",
-  "advancements.species.fall_for_hanger.description": "Fall for a Hanger's Trap",
+  "advancements.species.fall_for_hanger.title": "Fool me Once",
+  "advancements.species.fall_for_hanger.description": "Fall for a Hanger's Trap, shame on them",
 
   "advancements.species.fall_for_hanger_twice.title": "Fell for it Again Award",
   "advancements.species.fall_for_hanger_twice.description": "Fall for a Hanger's Trap again, like, were you even looking?"

@@ -40,6 +40,12 @@ public class SpringlingNeckLayer extends RenderLayer<Springling, SpringlingModel
 
         poseStack.pushPose();
 
+        if (entity.isBaby()) {
+            float scale = 1.0f / 4.0f;
+            poseStack.scale(scale, scale, scale);
+            poseStack.translate(0.0f, 4.5f, 0.0f);
+        }
+
         Vec3 base = new Vec3(0, 0, 0);
         Vec3 tip = new Vec3(0, height, 0);
         poseStack.translate(0.0D, 0.4375F, 0.0D);

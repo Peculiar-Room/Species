@@ -1,7 +1,7 @@
 package com.ninni.species.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.ninni.species.server.entity.util.LivingEntityAccess;
+import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.server.item.CrankbowItem;
 import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.client.Minecraft;

@@ -25,4 +25,9 @@ public class SpeciesRenderTypes extends RenderType {
     public static RenderType spectreLight(ResourceLocation p_110437_) {
         return ENTITY_TRANSLUCENT_EMISSIVE.apply(p_110437_, true);
     }
+
+    public static RenderType spectreBody(ResourceLocation texture) {
+        RenderType.CompositeState state = RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_ENERGY_SWIRL_SHADER).setTextureState(new RenderStateShard.TextureStateShard(texture, false, false)).setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setCullState(RenderStateShard.NO_CULL).setLightmapState(RenderStateShard.NO_LIGHTMAP).setOverlayState(RenderStateShard.OVERLAY).createCompositeState(false);
+        return RenderType.create("spectre_body", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, state);
+}
 }

@@ -1,6 +1,6 @@
 package com.ninni.species.server.packet;
 
-import com.ninni.species.server.entity.util.LivingEntityAccess;
+import com.ninni.species.mixin_util.LivingEntityAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,4 +1,4 @@
-package com.ninni.species.server.entity.util;
+package com.ninni.species.mixin_util;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

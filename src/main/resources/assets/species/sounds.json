@@ -331,6 +331,10 @@
 		],
 		"subtitle": "subtitles.item.species.birt_egg.hit"
 	},
+	"block.birtday_cake.blow": {
+		"sounds": ["species:block/birtday_cake/blow"],
+		"subtitle": "subtitles.block.species.birtday_cake.blow"
+	},
 	"music.disc.dial": {
 		"sounds": [
 			{
@@ -338,6 +342,56 @@
 				"stream": true
 			}
 		]
+	},
+	"music.happy_birtday": {
+		"sounds": [
+			{
+				"name": "species:music/happy_birtday",
+				"stream": true
+			}
+		]
+	},
+	"block.birtday_cake.break": {
+		"sounds": [
+			"species:block/birtday_cake/heavy1",
+			"species:block/birtday_cake/heavy2",
+			"species:block/birtday_cake/heavy3"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.birtday_cake.fall": {
+		"sounds": [
+			{
+				"name": "species:block.birtday_cake.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.birtday_cake.hit": {
+		"sounds": [
+			{
+				"name": "species:block.birtday_cake.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.birtday_cake.place": {
+		"sounds": [
+			{
+				"name": "species:block.birtday_cake.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.birtday_cake.step": {
+		"sounds": [
+			"species:block/birtday_cake/light1",
+			"species:block/birtday_cake/light2",
+			"species:block/birtday_cake/light3"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
 	},
 	"entity.limpet.death": {
 		"sounds": [
@@ -784,6 +838,14 @@
 			}
 		],
 		"subtitle": "subtitles.block.species.springling_egg.plop"
+	},
+	"block.springling_egg.crack": {
+		"sounds": [],
+		"subtitle": "subtitles.block.species.springling_egg.crack"
+	},
+	"block.springling_egg.hatch": {
+		"sounds": [],
+		"subtitle": "subtitles.block.species.springling_egg.hatch"
 	},
 	"entity.mammutilation.idle": {
 		"sounds": [

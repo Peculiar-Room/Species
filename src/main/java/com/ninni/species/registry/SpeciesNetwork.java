@@ -33,9 +33,9 @@ public class SpeciesNetwork {
         INSTANCE.registerMessage(getPacketID(), BlockEntitySyncPacket.class, BlockEntitySyncPacket::write, BlockEntitySyncPacket::read, BlockEntitySyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         INSTANCE.registerMessage(getPacketID(), HarpoonInputPacket.class, HarpoonInputPacket::write, HarpoonInputPacket::read, HarpoonInputPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(getPacketID(), HarpoonSyncPacket.class, HarpoonSyncPacket::write, HarpoonSyncPacket::read, HarpoonSyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        INSTANCE.registerMessage(getPacketID(), CrankbowPullPacket.class, CrankbowPullPacket::write, CrankbowPullPacket::read, CrankbowPullPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         INSTANCE.registerMessage(getPacketID(), GooberGooSyncPacket.class, GooberGooSyncPacket::write, GooberGooSyncPacket::read, GooberGooSyncPacket::handle);
         INSTANCE.registerMessage(getPacketID(), CruncherPelletSyncPacket.class, CruncherPelletSyncPacket::write, CruncherPelletSyncPacket::read, CruncherPelletSyncPacket::handle);
+        INSTANCE.registerMessage(getPacketID(), UpdateBirtdayCakeDataPacket.class, UpdateBirtdayCakeDataPacket::write, UpdateBirtdayCakeDataPacket::read, UpdateBirtdayCakeDataPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static int getPacketID() {

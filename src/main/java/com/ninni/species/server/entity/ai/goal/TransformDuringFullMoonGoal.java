@@ -2,7 +2,7 @@ package com.ninni.species.server.entity.ai.goal;
 
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.entity.mob.update_3.Bewereager;
-import com.ninni.species.server.entity.util.WolfAccess;
+import com.ninni.species.mixin_util.WolfAccess;
 import com.ninni.species.registry.SpeciesEntities;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.ai.goal.Goal;

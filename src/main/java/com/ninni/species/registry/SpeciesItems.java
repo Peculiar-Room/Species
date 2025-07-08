@@ -37,6 +37,8 @@ public class SpeciesItems {
     public static final RegistryObject<Item> BIRT_SPAWN_EGG = ITEMS.register("birt_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.BIRT, 0x4DD1E1, 0xD87247, SpeciesDevelopers.SpeciesDeveloperNames.REDA, new Item.Properties().stacksTo(64)));
     public static final RegistryObject<Item> BIRT_EGG = ITEMS.register("birt_egg", () -> new BirtEggItem(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> BIRT_DWELLING = ITEMS.register("birt_dwelling", () -> new BlockItem(SpeciesBlocks.BIRT_DWELLING.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BIRTDAY_CAKE = ITEMS.register("birtday_cake", () -> new BlockItem(SpeciesBlocks.BIRTDAY_CAKE.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> BIRTDAY_CAKE_SLICE = ITEMS.register("birtday_cake_slice", () -> new BirtdayCakeSliceItem(new Item.Properties().food(new FoodProperties.Builder().alwaysEat().nutrition(4).saturationMod(0.6f).effect(new MobEffectInstance(SpeciesStatusEffects.BIRTD.get(), 20 * 10, 0), 1).build())));
     public static final RegistryObject<Item> MUSIC_DISC_DIAL = ITEMS.register("music_disc_dial", () -> new RecordItem(1, SpeciesSoundEvents.MUSIC_DISC_DIAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 193 * 20));
 
     public static final RegistryObject<Item> LIMPET_SPAWN_EGG = ITEMS.register("limpet_spawn_egg", () -> new SpeciesSpawnEggItem(SpeciesEntities.LIMPET, 0xA5C1D2, 0xFBF236, SpeciesDevelopers.SpeciesDeveloperNames.GLADOS, new Item.Properties().stacksTo(64)));

@@ -17,7 +17,7 @@ import static com.ninni.species.Species.MOD_ID;
 public class SpringlingRenderer<T extends LivingEntity> extends MobRenderer<Springling, SpringlingModel<Springling>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/springling/springling.png");
     public static final ResourceLocation TEXTURE_NECK = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck.png");
-    public static final ResourceLocation TEXTURE_PISTON = new ResourceLocation(MOD_ID, "textures/entity/springling/springling.png");
+    public static final ResourceLocation TEXTURE_PISTON = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_piston.png");
     public static final ResourceLocation TEXTURE_PISTON_NECK = new ResourceLocation(MOD_ID, "textures/entity/springling/springling_neck_piston.png");
 
     public SpringlingRenderer(EntityRendererProvider.Context ctx) {

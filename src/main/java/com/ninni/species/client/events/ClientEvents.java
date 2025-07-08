@@ -20,7 +20,7 @@ import com.ninni.species.client.screen.ScreenShakeEvent;
 import com.ninni.species.registry.*;
 import com.ninni.species.server.entity.mob.update_2.Springling;
 import com.ninni.species.server.entity.mob.update_3.Harpoon;
-import com.ninni.species.server.entity.util.PlayerAccess;
+import com.ninni.species.mixin_util.PlayerAccess;
 import com.ninni.species.server.item.CrankbowItem;
 import com.ninni.species.server.item.SpectreLightBlockItem;
 import com.ninni.species.server.packet.HarpoonInputPacket;
@@ -50,9 +50,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static com.ninni.species.client.events.ClientEventsHandler.isValidKey;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -89,9 +89,11 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void clientTick(TickEvent.ClientTickEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+
         //Code taken and modified from Alex
         if (event.phase == TickEvent.Phase.END) {
-            Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
+            Entity cameraEntity = mc.getCameraEntity();
             prevShakeAmount = shakeAmount;
             float shake = 0.0F;
             Iterator<ScreenShakeEvent> groundShakeMomentIterator = SCREEN_SHAKE_EVENTS.iterator();
@@ -101,11 +103,10 @@ public class ClientEvents {
                 if (groundShakeMoment.isDone()) groundShakeMomentIterator.remove();
                 else shake = Math.max(shake, groundShakeMoment.getDegree(cameraEntity, 1.0F));
             }
-            shakeAmount = shake * Minecraft.getInstance().options.screenEffectScale().get().floatValue();
+            shakeAmount = shake * mc.options.screenEffectScale().get().floatValue();
         }
 
 
-        Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.level != null && event.phase == TickEvent.Phase.END) {
 
             InputConstants.Key keyForward = mc.options.keyUp.getKey();
@@ -117,12 +118,12 @@ public class ClientEvents {
 
             long window = mc.getWindow().getWindow();
 
-            boolean forward = InputConstants.isKeyDown(window, keyForward.getValue());
-            boolean back = InputConstants.isKeyDown(window, keyBack.getValue());
-            boolean left = InputConstants.isKeyDown(window, keyLeft.getValue());
-            boolean right = InputConstants.isKeyDown(window, keyRight.getValue());
-            boolean jumpKeyDown = InputConstants.isKeyDown(window, jump.getValue());
-            boolean sneakKeyDown = InputConstants.isKeyDown(window, sneak.getValue());
+            boolean forward = isValidKey(keyForward) && InputConstants.isKeyDown(window, keyForward.getValue());
+            boolean back = isValidKey(keyBack) && InputConstants.isKeyDown(window, keyBack.getValue());
+            boolean left = isValidKey(keyLeft) && InputConstants.isKeyDown(window, keyLeft.getValue());
+            boolean right = isValidKey(keyRight) && InputConstants.isKeyDown(window, keyRight.getValue());
+            boolean jumpKeyDown = isValidKey(jump) && InputConstants.isKeyDown(window, jump.getValue());
+            boolean sneakKeyDown = isValidKey(sneak) && InputConstants.isKeyDown(window, sneak.getValue());
 
             float x = (right ? 1 : 0) - (left ? 1 : 0);
             float z = (forward ? 1 : 0) - (back ? 1 : 0);
@@ -130,23 +131,6 @@ public class ClientEvents {
 
             if (mc.player.isUsingItem() && mc.player.getUseItem().is(SpeciesItems.HARPOON.get()) && mc.player instanceof PlayerAccess playerAccess) {
                 SpeciesNetwork.INSTANCE.sendToServer(new HarpoonInputPacket(playerAccess.getHarpoonId(), x, y, z));
-            }
-        }
-
-        if (event.phase == TickEvent.Phase.END && Minecraft.getInstance().level != null) {
-
-            Player player = Minecraft.getInstance().player;
-            if (player == null) return;
-
-            ItemStack stack = player.getUseItem();
-            if (stack.getItem() instanceof CrankbowItem && player.isUsingItem()) {
-                int cooldown = stack.getOrCreateTag().getInt(CrankbowItem.TAG_COOLDOWN);
-                int maxCooldown = CrankbowItem.getShootingCooldown(stack);
-
-                float progress = 1.0f - ((float) cooldown / Math.max(maxCooldown, 1));
-                ClientEventsHandler.PULL_PROGRESS.put(player.getUUID(), progress);
-            } else {
-                ClientEventsHandler.PULL_PROGRESS.remove(player.getUUID());
             }
         }
     }
@@ -386,7 +370,7 @@ public class ClientEvents {
         event.registerLayerDefinition(SpeciesEntityModelLayers.DEEPFISH, DeepfishModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.STACKATICK, StackatickModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.BIRT, BirtModel::getLayerDefinition);
-        event.registerLayerDefinition(SpeciesEntityModelLayers.WRAPTOR, WraptorModel::getLayerDefinition);
+        event.registerLayerDefinition(SpeciesEntityModelLayers.WRAPTOR, WraptorModel::createBodyLayer);
         event.registerLayerDefinition(SpeciesEntityModelLayers.TREEPER, TreeperModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.TROOPER, TrooperModel::getLayerDefinition);
         event.registerLayerDefinition(SpeciesEntityModelLayers.GOOBER, GooberModel::getLayerDefinition);
@@ -435,6 +419,7 @@ public class ClientEvents {
         event.registerBlockEntityRenderer(SpeciesBlockEntities.HOPELIGHT.get(), HopelightBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(SpeciesBlockEntities.CHAINDELIER.get(), ChaindelierBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(SpeciesBlockEntities.MOB_HEAD.get(), MobHeadBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(SpeciesBlockEntities.BIRTDAY_CAKE.get(), BirtdayCakeBlockEntityRenderer::new);
     }
 
     @SubscribeEvent
@@ -442,4 +427,13 @@ public class ClientEvents {
         event.register(SpeciesKeyMappings.EXTEND_KEY);
         event.register(SpeciesKeyMappings.RETRACT_KEY);
     }
+
+    @SubscribeEvent
+    public static void onRegisterSpectatorShaders(RegisterEntitySpectatorShadersEvent event) {
+        event.register(SpeciesEntities.GHOUL.get(), new ResourceLocation(Species.MOD_ID, "shaders/post/blind.json"));
+        event.register(SpeciesEntities.BEWEREAGER.get(), new ResourceLocation(Species.MOD_ID, "shaders/post/dog_vision.json"));
+        event.register(SpeciesEntities.WICKED.get(), new ResourceLocation(Species.MOD_ID, "shaders/post/shadow.json"));
+        event.register(SpeciesEntities.QUAKE.get(), new ResourceLocation(Species.MOD_ID, "shaders/post/clank.json"));
+    }
+
 }

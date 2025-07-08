@@ -1,4 +1,4 @@
-package com.ninni.species.server.entity.util;
+package com.ninni.species.mixin_util;
 
 public interface PlayerAccess {
     int getHarpoonId();

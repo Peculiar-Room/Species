@@ -27,6 +27,8 @@
   "client": [
     "client.AbstractClientPlayerMixin",
     "client.CustomHeadLayerMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.InventoryScreenMixin",
     "client.ItemInHandRendererMixin",
     "client.PlayerRendererMixin",
     "client.VillagerProfessionLayerMixin",

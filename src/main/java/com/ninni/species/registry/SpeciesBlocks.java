@@ -27,6 +27,7 @@ public class SpeciesBlocks {
     //UPDATE 1
     public static final RegistryObject<Block> WRAPTOR_EGG = BLOCKS.register("wraptor_egg", () -> new WraptorEggBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(10.0f, 1200.0f).sound(SpeciesSoundEvents.WRAPTOR_EGG_BLOCK).lightLevel(state -> 7)));
     public static final RegistryObject<Block> BIRT_DWELLING = BLOCKS.register("birt_dwelling", () -> new BirtDwellingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).strength(2.0f).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> BIRTDAY_CAKE = BLOCKS.register("birtday_cake", () -> new BirtdayCakeBlock(BlockBehaviour.Properties.of().strength(10.0f, 1200.0f).sound(SpeciesSoundEvents.BIRTDAY_CAKE).lightLevel(state -> state.getValue(BirtdayCakeBlock.LIT) ? 11 : 0)));
 
     //UPDATE 2
     public static final RegistryObject<Block> RED_SUSPICIOUS_SAND = BLOCKS.register("red_suspicious_sand", () -> new BrushableBlock(Blocks.RED_SAND, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.SNARE).strength(0.25f).sound(SoundType.SUSPICIOUS_SAND).pushReaction(PushReaction.DESTROY), SoundEvents.BRUSH_SAND, SoundEvents.BRUSH_SAND_COMPLETED));
@@ -65,7 +66,7 @@ public class SpeciesBlocks {
     public static final RegistryObject<Block> QUAKE_HEAD = BLOCKS.register("quake_head", () -> new MobHeadBlock(MobHeadBlock.Types.QUAKE, BlockBehaviour.Properties.of().instrument(SpeciesNoteBlockInstrument.QUAKE.get()).strength(1.0F).pushReaction(PushReaction.DESTROY)));
     public static final RegistryObject<Block> QUAKE_WALL_HEAD = BLOCKS.register("quake_wall_head", () -> new WallMobHeadBlock(MobHeadBlock.Types.QUAKE, BlockBehaviour.Properties.of().dropsLike(QUAKE_HEAD.get()).strength(1.0F).pushReaction(PushReaction.DESTROY)));
 
-    public static final RegistryObject<Block> SPECTRALIBUR = BLOCKS.register("spectralibur", () -> new SpectraliburBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(75.0F, 1200.0F).sound(SoundType.METAL).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> SPECTRALIBUR = BLOCKS.register("spectralibur", () -> new SpectraliburBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(75.0F, 1200.0F).sound(SoundType.METAL).pushReaction(PushReaction.IGNORE).noOcclusion()));
     public static final RegistryObject<Block> SPECTRALIBUR_PEDESTAL = BLOCKS.register("spectralibur_pedestal", () -> new SpectraliburPedestalBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(75.0F, 1200.0F).sound(SoundType.METAL).lightLevel(litBlockEmission(10, SpeciesProperties.ACTIVE)).noOcclusion()));
     public static final RegistryObject<Block> SPECLIGHT = BLOCKS.register("speclight", () -> new SpeclightBlock(BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY).sound(SpeciesSoundEvents.SPECLIGHT).lightLevel(litBlockEmission(8, BlockStateProperties.POWERED))));
     public static final RegistryObject<Block> CHAINDELIER = BLOCKS.register("chaindelier", () -> new ChaindelierBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SpeciesSoundEvents.SPECLIGHT).noOcclusion().pushReaction(PushReaction.DESTROY).lightLevel(value -> 13)));

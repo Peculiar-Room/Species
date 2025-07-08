@@ -1,6 +1,6 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.server.entity.util.AbstractArrowAccess;
+import com.ninni.species.mixin_util.AbstractArrowAccess;
 import com.ninni.species.server.item.CrankbowItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;

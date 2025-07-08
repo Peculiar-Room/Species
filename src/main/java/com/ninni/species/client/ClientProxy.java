@@ -3,12 +3,16 @@ package com.ninni.species.client;
 import com.ninni.species.CommonProxy;
 import com.ninni.species.Species;
 import com.ninni.species.client.events.ClientEvents;
-import com.ninni.species.client.events.ClientEventsHandler;
+import com.ninni.species.client.inventory.BirtdayCakeScreen;
 import com.ninni.species.client.screen.ScreenShakeEvent;
 import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.server.entity.util.PlayerAccess;
+import com.ninni.species.registry.SpeciesMenus;
+import com.ninni.species.mixin_util.PlayerAccess;
+import com.ninni.species.server.item.CrankbowItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -23,20 +27,25 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void clientSetup() {
+        MenuScreens.register(SpeciesMenus.BIRTDAY_CAKE.get(), BirtdayCakeScreen::new);
 
         ItemProperties.register(SpeciesItems.CRANKBOW.get(),
                 new ResourceLocation(Species.MOD_ID, "pull"),
                 (stack, level, entity, seed) -> {
-                    if (entity != null && ClientEventsHandler.PULL_PROGRESS.containsKey(entity.getUUID())) {
-                        float progress = ClientEventsHandler.PULL_PROGRESS.get(entity.getUUID());
+                    if (!(entity instanceof Player)) return -1.0F;
 
-                        if (progress < 0.05F) return 0.0F;
-                        else if (progress < 0.20F) return 0.15F;
-                        else if (progress < 0.35F) return 0.3F;
-                        else if (progress < 0.5F) return 0.4F;
-                        else return 0.6F;
-                    }
-                    return -1.0F;
+                    if (!stack.getOrCreateTag().getBoolean(CrankbowItem.TAG_USING)) return -1.0F;
+
+                    CompoundTag tag = stack.getOrCreateTag();
+                    int cooldown = tag.getInt(CrankbowItem.TAG_COOLDOWN);
+                    int maxCooldown = CrankbowItem.getShootingCooldown(stack);
+                    float progress = 1.0f - ((float) cooldown / Math.max(1, maxCooldown));
+
+                    if (progress < 0.05F) return 0.0F;
+                    else if (progress < 0.20F) return 0.15F;
+                    else if (progress < 0.35F) return 0.3F;
+                    else if (progress < 0.5F) return 0.4F;
+                    else return 0.6F;
                 });
 
         ItemProperties.register(SpeciesItems.RICOSHIELD.get(), new ResourceLocation(Species.MOD_ID, "blocking"), (stack, level, player, i) -> {

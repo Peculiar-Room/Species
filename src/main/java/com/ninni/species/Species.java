@@ -55,6 +55,7 @@ public class Species {
 		SpeciesEnchantments.ENCHANTMENTS.register(modEventBus);
 		SpeciesPaintingVariants.PAINTING_VARIANTS.register(modEventBus);
 		SpeciesRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+		SpeciesMenus.MENUS.register(modEventBus);
 		PROXY.init();
 		eventBus.register(new ModEvents());
 		eventBus.register(new ForgeEvents());
