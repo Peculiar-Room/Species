@@ -59,8 +59,8 @@ public class SpeciesItemRenderers extends BlockEntityWithoutLevelRenderer {
             if (block instanceof MobHeadBlock || block instanceof WallMobHeadBlock) {
                 MobHeadBlock.Type type = block instanceof MobHeadBlock ? ((MobHeadBlock)block).getType() : ((WallMobHeadBlock)block).getType();
                 MobHeadModelBase modelBase = this.headModelBaseMap.get(type);
+                if (modelBase == null) return;
                 RenderType rendertype = MobHeadBlockEntityRenderer.getRenderType(type);
-
                 MobHeadBlockEntityRenderer.renderMobHead(null, 180.0F, 0.0F, poseStack, bufferSource, p_108834_, modelBase, rendertype, itemDisplayContext, type, false);
             }
         } else if (item instanceof RicoshieldItem) {

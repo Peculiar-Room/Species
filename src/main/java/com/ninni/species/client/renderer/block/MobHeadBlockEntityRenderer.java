@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.ninni.species.Species;
 import com.ninni.species.client.model.mob_heads.*;
 import com.ninni.species.server.block.MobHeadBlock;
 import com.ninni.species.server.block.WallMobHeadBlock;
@@ -11,6 +12,8 @@ import com.ninni.species.server.block.entity.MobHeadBlockEntity;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import net.minecraft.Util;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -41,11 +44,26 @@ public class MobHeadBlockEntityRenderer implements BlockEntityRenderer<MobHeadBl
 
     public static Map<MobHeadBlock.Type, MobHeadModelBase> createMobHeadRenderers(EntityModelSet root) {
         ImmutableMap.Builder<MobHeadBlock.Type, MobHeadModelBase> builder = ImmutableMap.builder();
-        builder.put(MobHeadBlock.Types.GHOUL, new GhoulHeadModel(root.bakeLayer(SpeciesEntityModelLayers.GHOUL_HEAD)));
-        builder.put(MobHeadBlock.Types.WICKED, new WickedHeadModel(root.bakeLayer(SpeciesEntityModelLayers.WICKED_CANDLE)));
-        builder.put(MobHeadBlock.Types.QUAKE, new QuakeHeadModel(root.bakeLayer(SpeciesEntityModelLayers.QUAKE_HEAD)));
-        builder.put(MobHeadBlock.Types.BEWEREAGER, new BewereagerHeadModel(root.bakeLayer(SpeciesEntityModelLayers.BEWEREAGER_HEAD)));
+
+        ModelPart ghoul = safeBake(root, SpeciesEntityModelLayers.GHOUL_HEAD, "GhoulHeadModel");
+        if (ghoul != null) builder.put(MobHeadBlock.Types.GHOUL, new GhoulHeadModel(ghoul));
+        ModelPart wicked = safeBake(root, SpeciesEntityModelLayers.WICKED_CANDLE, "WickedHeadModel");
+        if (wicked != null) builder.put(MobHeadBlock.Types.WICKED, new WickedHeadModel(wicked));
+        ModelPart quake = safeBake(root, SpeciesEntityModelLayers.QUAKE_HEAD, "QuakeHeadModel");
+        if (quake != null) builder.put(MobHeadBlock.Types.QUAKE, new QuakeHeadModel(quake));
+        ModelPart bewere = safeBake(root, SpeciesEntityModelLayers.BEWEREAGER_HEAD, "BewereagerHeadModel");
+        if (bewere != null) builder.put(MobHeadBlock.Types.BEWEREAGER, new BewereagerHeadModel(bewere));
+
         return builder.build();
+    }
+
+    private static @Nullable ModelPart safeBake(EntityModelSet root, ModelLayerLocation layer, String who) {
+        try {
+            return root.bakeLayer(layer);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            Species.LOGGER.warn("[Species] Skipping mob-head layer {} while creating {} ({}).", layer, who, e.toString());
+            return null;
+        }
     }
 
     public MobHeadBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
@@ -54,13 +72,16 @@ public class MobHeadBlockEntityRenderer implements BlockEntityRenderer<MobHeadBl
 
     public void render(MobHeadBlockEntity blockEntity, float v, PoseStack poseStack, MultiBufferSource bufferSource, int i1, int i2) {
         float f = blockEntity.getAnimation(v);
-        BlockState blockstate = blockEntity.getBlockState();
-        boolean flag = blockstate.getBlock() instanceof WallMobHeadBlock;
-        Direction direction = flag ? blockstate.getValue(WallMobHeadBlock.FACING) : null;
-        int i = flag ? RotationSegment.convertToSegment(direction.getOpposite()) : blockstate.getValue(MobHeadBlock.ROTATION);
+        BlockState state = blockEntity.getBlockState();
+        boolean flag = state.getBlock() instanceof WallMobHeadBlock;
+        Direction direction = flag ? state.getValue(WallMobHeadBlock.FACING) : null;
+        int i = flag ? RotationSegment.convertToSegment(direction.getOpposite()) : state.getValue(MobHeadBlock.ROTATION);
         float f1 = RotationSegment.convertToDegrees(i);
-        MobHeadBlock.Type type = blockstate.getBlock() instanceof WallMobHeadBlock ? ((WallMobHeadBlock)blockstate.getBlock()).getType() : ((MobHeadBlock)blockstate.getBlock()).getType();
+        MobHeadBlock.Type type = state.getBlock() instanceof WallMobHeadBlock
+                ? ((WallMobHeadBlock) state.getBlock()).getType()
+                : ((MobHeadBlock) state.getBlock()).getType();
         MobHeadModelBase modelBase = this.modelByType.get(type);
+        if (modelBase == null) return;
         RenderType rendertype = getRenderType(type);
         renderMobHead(direction, f1, f, poseStack, bufferSource, i1, modelBase, rendertype, null, type, false);
     }
