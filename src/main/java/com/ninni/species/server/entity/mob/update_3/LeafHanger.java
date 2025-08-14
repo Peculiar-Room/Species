@@ -339,19 +339,15 @@ public class LeafHanger extends Hanger {
         }
 
         public boolean canUse() {
-            if (this.leafHanger.isUnderWater()) {
-                return !leafHanger.isTongueOut() && leafHanger.getNavigation().isDone();
-            } else {
-                Vec3 vec3 = this.getWaterPos();
-                if (vec3 == null) {
-                    return false;
-                } else {
-                    this.wantedX = vec3.x;
-                    this.wantedY = vec3.y;
-                    this.wantedZ = vec3.z;
-                    return true;
-                }
-            }
+            if (leafHanger.isTongueOut() || !leafHanger.getNavigation().isDone()) return false;
+
+            Vec3 vec3 = this.getWaterPos();
+            if (vec3 == null) return false;
+
+            this.wantedX = vec3.x;
+            this.wantedY = vec3.y;
+            this.wantedZ = vec3.z;
+            return true;
         }
 
         public boolean canContinueToUse() {
@@ -364,16 +360,23 @@ public class LeafHanger extends Hanger {
 
         @Nullable
         private Vec3 getWaterPos() {
-            RandomSource randomsource = this.leafHanger.getRandom();
-            BlockPos blockpos = this.leafHanger.blockPosition();
+            RandomSource random = this.leafHanger.getRandom();
+            BlockPos origin = this.leafHanger.blockPosition();
 
-            for(int i = 0; i < 10; ++i) {
-                BlockPos blockpos1 = blockpos.offset(randomsource.nextInt(20) - 10, 2 - randomsource.nextInt(20), randomsource.nextInt(20) - 10);
-                if (this.level.getBlockState(blockpos1).is(Blocks.WATER)) {
-                    return Vec3.atBottomCenterOf(blockpos1);
+            for (int i = 0; i < 10; i++) {
+                BlockPos pos = origin.offset(
+                        random.nextInt(20) - 10,
+                        2 - random.nextInt(20),
+                        random.nextInt(20) - 10
+                );
+
+                if (!level.hasChunkAt(pos)) continue;
+                if (pos.getY() <= level.getMinBuildHeight() || pos.getY() >= level.getMaxBuildHeight()) continue;
+
+                if (this.level.getBlockState(pos).is(Blocks.WATER)) {
+                    return Vec3.atBottomCenterOf(pos);
                 }
             }
-
             return null;
         }
     }
