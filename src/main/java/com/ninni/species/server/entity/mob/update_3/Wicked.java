@@ -129,6 +129,11 @@ public class Wicked extends Monster implements RangedAttackMob {
         for (ServerPlayer serverPlayer : list) SpeciesCriterion.WICKED_STOP_HAUNTING.trigger(serverPlayer);
     }
 
+    @Override
+    public boolean removeWhenFarAway(double d) {
+        return !this.isHaunting;
+    }
+
     public void addWickedEffects(Mob target) {
         int i = this.random.nextInt(4);
         MobEffect effect;
@@ -211,7 +216,7 @@ public class Wicked extends Monster implements RangedAttackMob {
         }
 
         //Make it stop haunting a mob
-        if (this.isHaunting && (!hauntedTarget.isAlive() || !this.isSuitableForHaunting(hauntedTarget))) {
+        if (this.isHaunting && (!hauntedTarget.isAlive() || !this.isSuitableForHaunting(hauntedTarget) || hauntedTarget == null)) {
             this.stopHaunting();
         }
 
