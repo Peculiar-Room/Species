@@ -35,7 +35,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '3.2'
+version = '3.5'
 group = 'https://github.com/Peculiar-Room' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'species'
 
