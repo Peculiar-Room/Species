@@ -199,7 +199,7 @@ public class CliffHanger extends Hanger {
                     }
 
                     if (target instanceof Player player) {
-                        player.setDeltaMovement(player.getDeltaMovement().add(diff.add(0, (0.08 / 4.0D), 0)));
+                        player.setDeltaMovement(player.getDeltaMovement().add(0, 0.04, 0));
                         player.hurtMarked = true;
                     }
                 }

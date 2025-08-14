@@ -110,7 +110,7 @@ public class CoilItem extends Item {
         tag.putUUID("EndPointUUID", coil.getUUID());
         tag.put("EndPointPos", NbtUtils.writeBlockPos(blockPos));
         tag.putInt("CooldownTicks", 400);
-        
+
         stack.setTag(tag);
         level.addFreshEntity(coil);
     }
