@@ -76,7 +76,7 @@ public class GooberGoo extends ThrowableItemProjectile {
 
                                 if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) continue;
 
-                                posBlockStateMap.put(placePos, output.defaultBlockState());
+                                posBlockStateMap.put(placePos, output.withPropertiesOf(state));
                             }
                         }
                     }
