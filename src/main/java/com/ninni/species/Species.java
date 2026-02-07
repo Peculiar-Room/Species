@@ -7,13 +7,14 @@ import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.server.events.ForgeEvents;
 import com.ninni.species.server.events.ModEvents;
 import com.ninni.species.server.world.poi.SpeciesPointOfInterestTypes;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -24,9 +25,15 @@ public class Species {
 	public static final String MOD_ID = "species";
 	public static final Logger LOGGER = LogUtils.getLogger();
 	public static final List<Runnable> CALLBACKS = new ArrayList<>();
-	public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+	public static CommonProxy PROXY;
 
 	public Species() {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            PROXY = new ClientProxy();
+        } else {
+            PROXY = new CommonProxy();
+        }
+
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus eventBus = MinecraftForge.EVENT_BUS;
 		modEventBus.addListener(this::clientSetup);
