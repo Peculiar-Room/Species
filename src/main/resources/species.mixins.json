@@ -16,6 +16,7 @@
     "FlowerPotBlockMixin",
     "alexscaves.EntityVesperMixin",
     "alexsmobs.EntityVoidWormMixin",
+    "cataclysm.IgnisCrackinessMixin",
     "iceandfire.EntityDragonBaseMixin",
     "iceandfire.EntityHippogryphMixin",
     "spawn.StickbugMixin",

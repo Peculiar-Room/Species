@@ -95,7 +95,9 @@ public class ClientEvents {
         // all tracking clients. See DisguiseSpecialActionPacket.
         if (event.phase == TickEvent.Phase.END && mc.player != null) {
             while (SpeciesKeyMappings.DISGUISE_ACTION_KEY.consumeClick()) {
-                SpeciesNetwork.INSTANCE.sendToServer(new com.ninni.species.server.packet.DisguiseSpecialActionPacket());
+                // Shift modifier dispatches the alt action (phase cycling on multi-stage bosses).
+                boolean shifted = net.minecraft.client.gui.screens.Screen.hasShiftDown();
+                SpeciesNetwork.INSTANCE.sendToServer(new com.ninni.species.server.packet.DisguiseSpecialActionPacket(shifted));
             }
         }
 

@@ -45,6 +45,15 @@ public final class SpeciesIMCKeys {
     /** Override shadow radius and/or strength on the disguise. Payload: {@link ShadowOverrideEntry}. */
     public static final String SET_SHADOW_OVERRIDE = "set_shadow_override";
 
+    /** Register a sneak+keybind phase-cycle handler. Payload: {@link PhaseCycleRegistration}. */
+    public static final String REGISTER_PHASE_CYCLE = "register_phase_cycle";
+
+    /** Register a Wraptor-style integer visual cycle. Payload: {@link IntStateCycleRegistration}. */
+    public static final String REGISTER_INT_STATE_CYCLE = "register_int_state_cycle";
+
+    /** Register a Stackatick-style companion stack. Payload: {@link CompanionStackRegistration}. */
+    public static final String REGISTER_COMPANION_STACK = "register_companion_stack";
+
     /** Register a render-layer for a specific type. Payload: {@link RenderLayerRegistration}. */
     public static final String REGISTER_RENDER_LAYER = "register_render_layer";
 

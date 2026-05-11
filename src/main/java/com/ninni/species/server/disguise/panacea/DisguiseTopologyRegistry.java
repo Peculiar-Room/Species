@@ -256,6 +256,7 @@ public final class DisguiseTopologyRegistry {
         try {
             Class.forName(BoundroidPairManager.class.getName());
             Class.forName(com.ninni.species.server.disguise.MineGuardianAnchorManager.class.getName());
+            Class.forName(com.ninni.species.server.disguise.StackatickStackManager.class.getName());
         } catch (ClassNotFoundException ignored) {}
 
         // Hullback: ~17-block Z span (nose +6 to fluke -11), bbox only covers a few.

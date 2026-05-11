@@ -14,15 +14,20 @@ import java.util.function.Supplier;
 
 /** Client → server: wearer pressed {@code DISGUISE_ACTION_KEY}. Server runs the authoritative
  *  {@code onSpecialAction}, then broadcasts {@link DisguiseSpecialActionAckPacket} so every
- *  tracking client replays it (the disguise isn't a level entity, so synced data won't reach). */
+ *  tracking client replays it. {@code shifted} carries sneak-modifier state for alt actions. */
 public final class DisguiseSpecialActionPacket {
 
-    public DisguiseSpecialActionPacket() {}
+    private final boolean shifted;
 
-    public static void write(DisguiseSpecialActionPacket msg, FriendlyByteBuf buf) {}
+    public DisguiseSpecialActionPacket() { this(false); }
+    public DisguiseSpecialActionPacket(boolean shifted) { this.shifted = shifted; }
+
+    public static void write(DisguiseSpecialActionPacket msg, FriendlyByteBuf buf) {
+        buf.writeBoolean(msg.shifted);
+    }
 
     public static DisguiseSpecialActionPacket read(FriendlyByteBuf buf) {
-        return new DisguiseSpecialActionPacket();
+        return new DisguiseSpecialActionPacket(buf.readBoolean());
     }
 
     public static void handle(DisguiseSpecialActionPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -32,16 +37,16 @@ public final class DisguiseSpecialActionPacket {
             LivingEntity disguise = ((LivingEntityAccess) player).getDisguisedEntity();
             if (disguise == null) return;
             com.ninni.species.api.disguise.ActionContext context =
-                    com.ninni.species.api.disguise.ActionContext.of(player);
+                    com.ninni.species.api.disguise.ActionContext.of(player, msg.shifted);
             try {
                 DisguiseBehaviorRegistry.get(disguise).onSpecialAction(player, disguise, context);
                 DisguiseCosmeticRegistry.get(disguise).onSpecialAction(player, disguise, context);
             } catch (Throwable ignored) {}
             // Broadcast to tracking clients (and sender) so each side runs the action locally.
-            // Context is recomputed per-side on the ack so each viewer's local wearer state drives it.
+            // Context is recomputed per-side on the ack from local state; shifted is relayed.
             SpeciesNetwork.INSTANCE.send(
                     PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player),
-                    new DisguiseSpecialActionAckPacket(player.getId()));
+                    new DisguiseSpecialActionAckPacket(player.getId(), msg.shifted));
         });
         ctx.get().setPacketHandled(true);
     }

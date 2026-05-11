@@ -18,17 +18,20 @@ import java.util.function.Supplier;
 public final class DisguiseSpecialActionAckPacket {
 
     private final int wearerId;
+    private final boolean shifted;
 
-    public DisguiseSpecialActionAckPacket(int wearerId) {
+    public DisguiseSpecialActionAckPacket(int wearerId, boolean shifted) {
         this.wearerId = wearerId;
+        this.shifted = shifted;
     }
 
     public static void write(DisguiseSpecialActionAckPacket msg, FriendlyByteBuf buf) {
         buf.writeInt(msg.wearerId);
+        buf.writeBoolean(msg.shifted);
     }
 
     public static DisguiseSpecialActionAckPacket read(FriendlyByteBuf buf) {
-        return new DisguiseSpecialActionAckPacket(buf.readInt());
+        return new DisguiseSpecialActionAckPacket(buf.readInt(), buf.readBoolean());
     }
 
     public static void handle(DisguiseSpecialActionAckPacket msg, Supplier<NetworkEvent.Context> ctx) {
@@ -44,7 +47,7 @@ public final class DisguiseSpecialActionAckPacket {
         LivingEntity disguise = ((LivingEntityAccess) wearer).getDisguisedEntity();
         if (disguise == null) return;
         com.ninni.species.api.disguise.ActionContext context =
-                com.ninni.species.api.disguise.ActionContext.of(wearer);
+                com.ninni.species.api.disguise.ActionContext.of(wearer, msg.shifted);
         try {
             DisguiseBehaviorRegistry.get(disguise).onSpecialAction(wearer, disguise, context);
             DisguiseCosmeticRegistry.get(disguise).onSpecialAction(wearer, disguise, context);

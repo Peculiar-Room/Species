@@ -130,4 +130,67 @@ public final class SpeciesAPI {
     public static void registerChainHeadMapping(EntityType<?> head, EntityType<?>... segments) {
         com.ninni.species.server.disguise.ChainHeadRegistry.register(head, segments);
     }
+
+    // ---- Phase cycle (shift+keybind alt action) -----------------------
+
+    /** Register a phase-cycle handler for the type — invoked when the wearer presses
+     *  sneak+special-action. Composes onto any existing behavior; plain keybind is unaffected. */
+    public static void registerPhaseCycle(EntityType<?> type, PhaseCycleHandler handler) {
+        if (type == null || handler == null) return;
+        composeBehavior(type, new DisguiseBehavior() {
+            @Override
+            public void onSpecialAction(net.minecraft.world.entity.LivingEntity wearer,
+                                        net.minecraft.world.entity.LivingEntity disguise,
+                                        ActionContext context) {
+                if (context.shifted()) handler.cycleNext(disguise);
+            }
+        });
+    }
+
+    /** Sugar for the Wraptor-style "cycle through N integer visual states" pattern. Reads via
+     *  {@code spec.getter()}, writes via {@code spec.setter()}, wraps at {@code min}/{@code max}.
+     *  Driven by sneak+special-action like {@link #registerPhaseCycle}. */
+    public static void registerIntStateCycle(EntityType<?> type, IntStateCycleSpec spec) {
+        if (type == null || spec == null) return;
+        composeBehavior(type, new DisguiseBehavior() {
+            @Override
+            public void onSpecialAction(net.minecraft.world.entity.LivingEntity wearer,
+                                        net.minecraft.world.entity.LivingEntity disguise,
+                                        ActionContext context) {
+                if (!context.shifted()) return;
+                int current = spec.getter().applyAsInt(disguise);
+                spec.setter().accept(disguise, spec.nextValue(current));
+            }
+        });
+    }
+
+    /** Sugar for the Stackatick-style "stacked companions above the wearer" pattern. The spec
+     *  declares the companion type, max level, vertical spacing, and per-companion init + tick
+     *  callbacks. Drives sub-entity rendering automatically via the generic stack manager. */
+    public static <C extends net.minecraft.world.entity.LivingEntity> void registerCompanionStack(
+            EntityType<?> type, CompanionStackSpec<C> spec) {
+        if (type == null || spec == null) return;
+        com.ninni.species.server.disguise.GenericCompanionStackManager.register(type, spec);
+        composeBehavior(type, new DisguiseBehavior() {
+            @Override
+            public void onSpecialAction(net.minecraft.world.entity.LivingEntity wearer,
+                                        net.minecraft.world.entity.LivingEntity disguise,
+                                        ActionContext context) {
+                if (!context.shifted()) return;
+                com.ninni.species.server.disguise.GenericCompanionStackManager.cycle(wearer, disguise);
+            }
+
+            @Override
+            public void postTick(net.minecraft.world.entity.LivingEntity wearer,
+                                 net.minecraft.world.entity.LivingEntity disguise) {
+                com.ninni.species.server.disguise.GenericCompanionStackManager.tickStack(wearer, disguise);
+            }
+
+            @Override
+            public void onDestroyed(net.minecraft.world.entity.LivingEntity wearer,
+                                    net.minecraft.world.entity.LivingEntity disguise) {
+                com.ninni.species.server.disguise.GenericCompanionStackManager.clear(wearer);
+            }
+        });
+    }
 }

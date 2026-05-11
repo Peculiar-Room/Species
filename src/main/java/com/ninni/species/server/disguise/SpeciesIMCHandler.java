@@ -65,9 +65,21 @@ public final class SpeciesIMCHandler {
                         if (!Float.isNaN(e.radius())) SpeciesAPI.setShadowRadius(e.type(), e.radius());
                         if (!Float.isNaN(e.strength())) SpeciesAPI.setShadowStrength(e.type(), e.strength());
                     })),
+            Map.entry(SpeciesIMCKeys.REGISTER_PHASE_CYCLE,
+                    Dispatcher.of(PhaseCycleRegistration.class, r -> SpeciesAPI.registerPhaseCycle(r.type(), r.handler()))),
+            Map.entry(SpeciesIMCKeys.REGISTER_INT_STATE_CYCLE,
+                    Dispatcher.of(IntStateCycleRegistration.class, r -> SpeciesAPI.registerIntStateCycle(r.type(), r.spec()))),
+            Map.entry(SpeciesIMCKeys.REGISTER_COMPANION_STACK,
+                    Dispatcher.of(CompanionStackRegistration.class, r -> registerCompanionStackTypeErased(r))),
             Map.entry(SpeciesIMCKeys.REGISTER_RENDER_LAYER,
                     Dispatcher.of(RenderLayerRegistration.class, r -> SpeciesAPI.registerRenderLayer(r.type(), r.layer())))
     );
+
+    /** Type-erasure helper — IMC payloads can't carry a parametric type, so route via raw. */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void registerCompanionStackTypeErased(CompanionStackRegistration r) {
+        SpeciesAPI.registerCompanionStack(r.type(), (com.ninni.species.api.disguise.CompanionStackSpec) r.spec());
+    }
 
     private SpeciesIMCHandler() {}
 

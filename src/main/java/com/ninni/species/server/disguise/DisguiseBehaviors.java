@@ -76,6 +76,8 @@ public final class DisguiseBehaviors {
         registerIfPresent("species", "wraptor", WraptorSpecialActionBehavior.INSTANCE);
         registerIfPresent("species", "wicked", WickedSpecialActionBehavior.INSTANCE);
         registerIfPresent("species", "mammutilation", MammutilationSpecialActionBehavior.INSTANCE);
+        registerIfPresent("species", "stackatick",
+                com.ninni.species.server.disguise.behaviors.StackatickStackBehavior.INSTANCE);
 
         // Modded — soft-dep registration. Only register if the entity type exists.
         registerIfPresent("whaleborne", "hullback", HullbackBehavior.INSTANCE);
@@ -183,6 +185,10 @@ public final class DisguiseBehaviors {
                 SpawnStickbugDanceBehavior.INSTANCE);
         registerIfPresent("spawn", "clam", SpawnClamOpenBehavior.INSTANCE);
         registerIfPresent("spawn", "dodo", SpawnDodoPeckBehavior.INSTANCE);
+
+        // Cataclysm bosses with multi-stage models: shift+keybind cycles phases.
+        registerIfPresent("cataclysm", "ignis",
+                com.ninni.species.server.disguise.behaviors.IgnisPhaseCycleBehavior.INSTANCE);
     }
 
     /**

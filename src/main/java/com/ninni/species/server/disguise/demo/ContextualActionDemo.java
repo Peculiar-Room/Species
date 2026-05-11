@@ -31,7 +31,7 @@ public final class ContextualActionDemo {
                     double x = wearer.getX();
                     double y = wearer.getY() + wearer.getBbHeight() * 0.5;
                     double z = wearer.getZ();
-                    switch (ctx) {
+                    switch (ctx.phase()) {
                         case GROUND -> {
                             server.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 12, 0.4, 0.4, 0.4, 0.0);
                             server.playSound(null, x, y, z, SoundEvents.PIG_AMBIENT,
