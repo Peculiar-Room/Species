@@ -1,26 +1,21 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.AnimatedTransitionSpec;
 import com.ninni.species.api.disguise.DisguiseBehavior;
-import com.ninni.species.api.util.PerSideStateMap;
+import com.ninni.species.api.disguise.SpeciesAPI;
 import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /** Ignis (Cataclysm) disguise: shift+keybind cycles {@code BOSS_PHASE} (0→1→2→0) playing the
- *  native PHASE_2/PHASE_3 transitions. Phase write happens at the native trigger tick (34/58)
- *  so texture + shield stay in lockstep. Reverse (2→0) is instant — no native anim. */
+ *  native PHASE_2/PHASE_3 transitions. Stages match the native goals (setBossPhase + shield
+ *  at the same tick). Reverse (2→0) is instant. Soft-dep, reflective. */
 public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
 
     public static final IgnisPhaseCycleBehavior INSTANCE = new IgnisPhaseCycleBehavior();
-
-    /** PHASE_2: 68t total, setBossPhase(1) at t=34 in the native goal. */
-    private static final int PHASE_2_DURATION = 68;
-    private static final int PHASE_2_TRIGGER = 34;
-    /** PHASE_3: 120t total, setBossPhase(2) at t=58 in the native goal. */
-    private static final int PHASE_3_DURATION = 120;
-    private static final int PHASE_3_TRIGGER = 58;
 
     private static volatile boolean reflectionInited;
     private static Method getBossPhaseMethod;
@@ -28,21 +23,9 @@ public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
     private static Method setShowShieldMethod;
     private static Method setAnimationMethod;
     private static Method setAnimationTickMethod;
-    private static Field animationTickField;
     private static Object phase2Animation;
     private static Object phase3Animation;
     private static Object noAnimation;
-
-    private static final class State {
-        int targetPhase;
-        int triggerTick;
-        int durationTicks;
-        int elapsed;
-        boolean phaseFired;
-        boolean active;
-    }
-
-    private final PerSideStateMap<State> states = new PerSideStateMap<>();
 
     private IgnisPhaseCycleBehavior() {}
 
@@ -63,62 +46,38 @@ public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
             return;
         }
 
-        Object anim = current == 0 ? phase2Animation : phase3Animation;
-        int trigger = current == 0 ? PHASE_2_TRIGGER : PHASE_3_TRIGGER;
-        int duration = current == 0 ? PHASE_2_DURATION : PHASE_3_DURATION;
-        if (anim == null || setAnimationMethod == null) {
-            // Animation lookup failed — fall back to instant phase change.
+        AnimatedTransitionSpec spec = current == 0 ? phase2Spec() : phase3Spec();
+        if (spec == null) {
+            // Reflection didn't resolve the Animation object — fall back to instant phase change.
             invokeInt(setBossPhaseMethod, disguise, current + 1);
             return;
         }
-        try { setAnimationMethod.invoke(disguise, anim); }
-        catch (ReflectiveOperationException ignored) { return; }
-
-        State st = states.computeIfAbsent(wearer, State::new);
-        st.targetPhase = current + 1;
-        st.triggerTick = trigger;
-        st.durationTicks = duration;
-        st.elapsed = 0;
-        st.phaseFired = false;
-        st.active = true;
+        SpeciesAPI.startAnimatedTransition(wearer, disguise, spec);
     }
 
-    @Override
-    public void postTick(LivingEntity wearer, LivingEntity disguise) {
-        State st = states.get(wearer);
-        if (st == null || !st.active) return;
-        st.elapsed++;
-        if (!st.phaseFired && st.elapsed >= st.triggerTick) {
-            invokeInt(setBossPhaseMethod, disguise, st.targetPhase);
-            // PHASE_3 (target=2) breaks the shield; mirror native shield-vanish.
-            if (st.targetPhase == 2) invokeBoolean(setShowShieldMethod, disguise, false);
-            st.phaseFired = true;
-        }
-        if (st.elapsed >= st.durationTicks) {
-            // Clear animation; setAnimation resets tick to 0 internally.
-            if (noAnimation != null && setAnimationMethod != null) {
-                try { setAnimationMethod.invoke(disguise, noAnimation); }
-                catch (ReflectiveOperationException ignored) {}
-            }
-            st.active = false;
-        } else {
-            // Drive the animation tick so the renderer interpolates keyframes per-frame.
-            // Field write as a fallback if the setter resolution failed.
-            if (setAnimationTickMethod != null) {
-                invokeInt(setAnimationTickMethod, disguise, st.elapsed);
-            } else if (animationTickField != null) {
-                try { animationTickField.setInt(disguise, st.elapsed); }
-                catch (IllegalAccessException ignored) {}
-            }
-        }
+    /** PHASE_2 timeline (68t total, setBossPhase at t=34). */
+    private static AnimatedTransitionSpec phase2Spec() {
+        if (phase2Animation == null || setAnimationMethod == null) return null;
+        return new AnimatedTransitionSpec(68,
+                List.of(
+                        new AnimatedTransitionSpec.Stage(0,  d -> invokeMethod(setAnimationMethod, d, phase2Animation)),
+                        new AnimatedTransitionSpec.Stage(34, d -> invokeInt(setBossPhaseMethod, d, 1)),
+                        new AnimatedTransitionSpec.Stage(68, d -> invokeMethod(setAnimationMethod, d, noAnimation))),
+                (d, elapsed) -> invokeInt(setAnimationTickMethod, d, elapsed));
     }
 
-    // Manual particle/sound emission removed — native Ignis_Entity.aiStep emits them naturally
-    // once setAnimation lookup succeeds (was broken by Citadel-vs-Lionfish reflection mismatch).
-
-    @Override
-    public void onDestroyed(LivingEntity wearer, LivingEntity disguise) {
-        states.remove(wearer);
+    /** PHASE_3 timeline (120t total, setBossPhase at t=58 + shield vanish). */
+    private static AnimatedTransitionSpec phase3Spec() {
+        if (phase3Animation == null || setAnimationMethod == null) return null;
+        return new AnimatedTransitionSpec(120,
+                List.of(
+                        new AnimatedTransitionSpec.Stage(0,   d -> invokeMethod(setAnimationMethod, d, phase3Animation)),
+                        new AnimatedTransitionSpec.Stage(58,  d -> {
+                            invokeInt(setBossPhaseMethod, d, 2);
+                            invokeBoolean(setShowShieldMethod, d, false);
+                        }),
+                        new AnimatedTransitionSpec.Stage(120, d -> invokeMethod(setAnimationMethod, d, noAnimation))),
+                (d, elapsed) -> invokeInt(setAnimationTickMethod, d, elapsed));
     }
 
     private static void invokeInt(Method m, LivingEntity disguise, int value) {
@@ -131,6 +90,11 @@ public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
         try { m.invoke(disguise, value); } catch (ReflectiveOperationException ignored) {}
     }
 
+    private static void invokeMethod(Method m, LivingEntity disguise, Object value) {
+        if (m == null || value == null) return;
+        try { m.invoke(disguise, value); } catch (ReflectiveOperationException ignored) {}
+    }
+
     private static void initReflection(Class<?> entityClass) {
         if (reflectionInited) return;
         synchronized (IgnisPhaseCycleBehavior.class) {
@@ -139,11 +103,7 @@ public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
             setBossPhaseMethod = ReflectionHelper.publicMethod(entityClass, "setBossPhase", int.class);
             setShowShieldMethod = ReflectionHelper.publicMethod(entityClass, "setShowShield", boolean.class);
             setAnimationTickMethod = ReflectionHelper.publicMethod(entityClass, "setAnimationTick", int.class);
-            animationTickField = ReflectionHelper.declaredFieldOfType(entityClass, "animationTick", int.class);
             try {
-                // Cataclysm uses LionfishAPI's animation framework, NOT Citadel — same class names
-                // but different packages. Resolving the wrong one makes setAnimation(...) lookup
-                // fail (parameter type mismatch) and the entire transition silently no-ops.
                 Class<?> animationCls = Class.forName(
                         "com.github.L_Ender.lionfishapi.server.animation.Animation", false, entityClass.getClassLoader());
                 setAnimationMethod = ReflectionHelper.publicMethod(entityClass, "setAnimation", animationCls);

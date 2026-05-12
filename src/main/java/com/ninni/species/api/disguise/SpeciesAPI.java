@@ -193,4 +193,25 @@ public final class SpeciesAPI {
             }
         });
     }
+
+    // ---- Animated transitions (phase-change choreography) ---------------
+
+    /** Starts a timed transition on the wearer's disguise. The driver walks the spec's stages
+     *  at their declared ticks and (optionally) invokes the per-tick callback every frame
+     *  until {@code durationTicks}. Calling again replaces any in-flight transition. */
+    public static void startAnimatedTransition(net.minecraft.world.entity.LivingEntity wearer,
+                                               net.minecraft.world.entity.LivingEntity disguise,
+                                               AnimatedTransitionSpec spec) {
+        com.ninni.species.server.disguise.AnimatedTransitionDriver.start(wearer, disguise, spec);
+    }
+
+    /** Whether the wearer has an in-flight animated transition on their tick side. */
+    public static boolean hasAnimatedTransition(net.minecraft.world.entity.LivingEntity wearer) {
+        return com.ninni.species.server.disguise.AnimatedTransitionDriver.isActive(wearer);
+    }
+
+    /** Cancels the wearer's in-flight animated transition on both sides. */
+    public static void cancelAnimatedTransition(net.minecraft.world.entity.LivingEntity wearer) {
+        com.ninni.species.server.disguise.AnimatedTransitionDriver.cancel(wearer);
+    }
 }
