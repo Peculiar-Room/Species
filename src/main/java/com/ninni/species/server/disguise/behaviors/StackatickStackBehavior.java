@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.disguise.StackatickStackManager;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +16,7 @@ public final class StackatickStackBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!context.shifted()) return;
         StackatickStackManager.cycle(wearer, disguise);
     }

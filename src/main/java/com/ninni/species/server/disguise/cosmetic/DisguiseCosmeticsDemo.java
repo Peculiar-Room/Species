@@ -1,6 +1,7 @@
 package com.ninni.species.server.disguise.cosmetic;
 
 import com.ninni.species.api.disguise.DisguiseCosmetics;
+import com.ninni.species.api.disguise.DisguiseRenderer;
 import com.ninni.species.registry.SpeciesConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -131,7 +132,7 @@ public final class DisguiseCosmeticsDemo {
         static void registerSlimeRenderer() {
             DisguiseCosmeticRegistry.register(EntityType.SLIME, new DisguiseCosmetics() {
                 @Override
-                public com.ninni.species.api.disguise.DisguiseRenderer overrideRenderer(LivingEntity wearer, LivingEntity disguise) {
+                public DisguiseRenderer overrideRenderer(LivingEntity wearer, LivingEntity disguise) {
                     if (!enabled()) return null;
                     return (w, d, baseRenderer, bodyYaw, partialTick, poseStack, buffer, packedLight) -> {
                         poseStack.pushPose();

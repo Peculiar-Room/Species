@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.api.util.ReflectionHelper;
 import com.ninni.species.registry.SpeciesSoundEvents;
@@ -39,7 +40,7 @@ public final class MammutilationSpecialActionBehavior implements DisguiseBehavio
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!(disguise instanceof Mammutilation mammutilation)) return;
         initReflection(disguise.getClass());
 

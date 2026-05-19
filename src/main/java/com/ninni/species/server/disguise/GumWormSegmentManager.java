@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise;
 
+import com.ninni.species.registry.SpeciesConfig;
 import com.ninni.species.server.disguise.panacea.SegmentChainManager;
 import com.ninni.species.server.disguise.panacea.spec.ChainSpec;
 import com.ninni.species.server.disguise.panacea.spec.IdealApproachPositioner;
@@ -82,7 +83,7 @@ public final class GumWormSegmentManager extends SegmentChainManager {
     }
 
     private static boolean clampFromConfig() {
-        try { return com.ninni.species.registry.SpeciesConfig.SEGMENT_CHAIN_GROUND_CLAMP.get(); }
+        try { return SpeciesConfig.SEGMENT_CHAIN_GROUND_CLAMP.get(); }
         catch (Throwable t) { return true; }
     }
 }

@@ -1,6 +1,7 @@
 package com.ninni.species.server.disguise;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
+import com.ninni.species.server.disguise.dsl.CompositeDisguiseBehavior;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -40,7 +41,7 @@ public final class DisguiseBehaviorRegistry {
         if (existing == null) {
             BY_TYPE.put(type, behavior);
         } else {
-            BY_TYPE.put(type, com.ninni.species.server.disguise.dsl.CompositeDisguiseBehavior.of(existing, behavior));
+            BY_TYPE.put(type, CompositeDisguiseBehavior.of(existing, behavior));
         }
         invalidateCache();
     }
@@ -75,7 +76,7 @@ public final class DisguiseBehaviorRegistry {
         int i = 0;
         for (DisguiseBehavior g : GLOBAL_BEHAVIORS) all[i++] = g;
         if (perType != null) all[i++] = perType;
-        return com.ninni.species.server.disguise.dsl.CompositeDisguiseBehavior.of(all);
+        return CompositeDisguiseBehavior.of(all);
     }
 
     public static boolean hasOverride(EntityType<?> type) {

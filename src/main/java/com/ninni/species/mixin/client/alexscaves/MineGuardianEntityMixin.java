@@ -34,8 +34,8 @@ public abstract class MineGuardianEntityMixin {
     private void species$skipTickForDisguise(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (self.getTags().contains(WickedMaskDisguiseEvents.DISGUISE_TAG)) {
-            // Replicate only animation-state lines from MineGuardianEntity.tick (lines 186-199).
-            // Anchor spawning, explosion logic, scan-target tracking intentionally skipped.
+            // Replicate only animation-state lines from MineGuardianEntity.tick; anchor
+            // spawning, explosion logic, scan-target tracking intentionally skipped.
             this.prevExplodeProgress = this.explodeProgress;
             this.prevScanProgress = this.scanProgress;
             try {

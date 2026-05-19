@@ -1,6 +1,7 @@
 package com.ninni.species.server.events;
 
 import com.ninni.species.Species;
+import com.ninni.species.server.disguise.ChainHeadRegistry;
 import com.ninni.species.server.item.WickedMaskItem;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +45,7 @@ public class WickedMaskInteractionEvents {
         // Chain segment that overrides interact() to forward to the head — pre-empt the forward
         // and capture the segment itself, identified via the registry populated by SegmentChainManager.
         if (target instanceof LivingEntity segment
-                && com.ninni.species.server.disguise.ChainHeadRegistry.isSegment(segment.getType())
+                && ChainHeadRegistry.isSegment(segment.getType())
                 && WickedMaskItem.tryImprint(stack, segment, player, event.getHand())) {
             event.setCancellationResult(InteractionResult.SUCCESS);
             event.setCanceled(true);

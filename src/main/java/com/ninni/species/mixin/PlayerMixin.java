@@ -42,6 +42,8 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAccess {
         try {
             DisguiseCosmetics cosmetics = DisguiseCosmeticRegistry.get(disguise);
             SoundEvent override = cosmetics.overrideHurtSound(self, disguise, source);
+            // No data-driven override configured: fall back to the disguised mob's own hurt sound.
+            if (override == null) override = ((LivingEntitySoundAccessor) disguise).species$invokeGetHurtSound(source);
             if (override != null) cir.setReturnValue(override);
         } catch (Throwable ignored) {}
     }
@@ -54,6 +56,8 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAccess {
         try {
             DisguiseCosmetics cosmetics = DisguiseCosmeticRegistry.get(disguise);
             SoundEvent override = cosmetics.overrideDeathSound(self, disguise);
+            // No data-driven override configured: fall back to the disguised mob's own death sound.
+            if (override == null) override = ((LivingEntitySoundAccessor) disguise).species$invokeGetDeathSound();
             if (override != null) cir.setReturnValue(override);
         } catch (Throwable ignored) {}
     }

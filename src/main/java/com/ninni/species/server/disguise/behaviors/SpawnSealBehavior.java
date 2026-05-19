@@ -1,7 +1,8 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.LivingEntity;
@@ -180,7 +181,7 @@ public final class SpawnSealBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         // Toggle: if currently laying via override, stand up; otherwise pick LAY_SIDE or
         // LAY_BELLY_UP at 50/50. Auto-clears when the wearer starts moving (see postTick).
         initReflection(disguise.getClass());

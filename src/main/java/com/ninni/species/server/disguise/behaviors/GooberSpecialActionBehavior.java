@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.entity.mob.update_2.Goober;
@@ -27,7 +28,7 @@ public final class GooberSpecialActionBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!(disguise instanceof Goober goober)) return;
         if (goober.isGooberLayingDown()) goober.standUp();
         else goober.layDown();

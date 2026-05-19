@@ -1,6 +1,7 @@
 package com.ninni.species.server.disguise;
 
 import com.ninni.species.Species;
+import com.ninni.species.api.disguise.CompanionStackSpec;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.api.disguise.SpeciesAPI;
 import com.ninni.species.api.disguise.SubEntityProvider;
@@ -78,7 +79,7 @@ public final class SpeciesIMCHandler {
     /** Type-erasure helper — IMC payloads can't carry a parametric type, so route via raw. */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void registerCompanionStackTypeErased(CompanionStackRegistration r) {
-        SpeciesAPI.registerCompanionStack(r.type(), (com.ninni.species.api.disguise.CompanionStackSpec) r.spec());
+        SpeciesAPI.registerCompanionStack(r.type(), (CompanionStackSpec) r.spec());
     }
 
     private SpeciesIMCHandler() {}

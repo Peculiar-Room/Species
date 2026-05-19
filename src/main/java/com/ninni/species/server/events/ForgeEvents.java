@@ -4,6 +4,7 @@ import com.ninni.species.Species;
 import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.server.disguise.BoundroidPairManager;
 import com.ninni.species.server.disguise.DisguiseBodyRegistry;
+import com.ninni.species.server.disguise.DisguiseLifecycleTracker;
 import com.ninni.species.server.disguise.MineGuardianAnchorManager;
 import com.ninni.species.server.entity.mob.update_2.Springling;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +39,9 @@ public class ForgeEvents {
             try {
                 LivingEntity disguise = ((LivingEntityAccess) wearer).getDisguisedEntity();
                 if (disguise != null) {
+                    // Snapshot the body so a rebuild (dimension change) resumes its runtime state
+                    // instead of resetting to the mask's capture-time NBT.
+                    DisguiseLifecycleTracker.snapshot(wearer, disguise);
                     DisguiseBodyRegistry.unregister(disguise);
                 }
             } catch (Throwable ignored) {}

@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.AnimatedTransitionSpec;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.api.disguise.SpeciesAPI;
@@ -31,7 +32,7 @@ public final class IgnisPhaseCycleBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!context.shifted()) return;
         initReflection(disguise.getClass());
         if (getBossPhaseMethod == null || setBossPhaseMethod == null) return;

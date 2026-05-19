@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.disguise.util.DisguiseSounds;
@@ -16,7 +17,7 @@ public final class BewereagerSpecialActionBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (disguise.getPose() == Pose.ROARING) return;
         disguise.setPose(Pose.ROARING);
         DisguiseSounds.playServerBroadcast(wearer, SpeciesSoundEvents.BEWEREAGER_HOWL.get(), 4.0F);

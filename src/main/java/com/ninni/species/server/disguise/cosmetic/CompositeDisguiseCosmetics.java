@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.cosmetic;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseCosmetics;
 import com.ninni.species.api.disguise.DisguiseRenderer;
 import net.minecraft.network.chat.Component;
@@ -80,7 +81,7 @@ public final class CompositeDisguiseCosmetics implements DisguiseCosmetics {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         for (DisguiseCosmetics c : children) {
             try { c.onSpecialAction(wearer, disguise, context); }
             catch (Throwable ignored) { /* visual side-effect; tick must continue */ }

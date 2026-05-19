@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.disguise.util.DisguiseSounds;
@@ -27,7 +28,7 @@ public final class CruncherSpecialActionBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!(disguise instanceof Cruncher cruncher)) return;
         // Force IDLE -> STOMP cycle so setState(STOMP) actually changes CRUNCHER_STATE (and
         // dispatches the synced-data hook that drives the animation) even when a previous cycle

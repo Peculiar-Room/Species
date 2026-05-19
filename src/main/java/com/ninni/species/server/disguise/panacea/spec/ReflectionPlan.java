@@ -1,6 +1,6 @@
 package com.ninni.species.server.disguise.panacea.spec;
 
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;

@@ -5,6 +5,9 @@ import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.server.packet.SnatchedPacket;
 import com.ninni.species.server.packet.TankedPacket;
 import com.ninni.species.registry.*;
+import com.ninni.species.server.disguise.DisguiseTickContext;
+import com.ninni.species.server.disguise.DisguiseLogging;
+import com.ninni.species.server.disguise.util.BehaviorHooks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -42,6 +45,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
     private @Unique EntityType disguisedEntityType;
     private @Unique LivingEntity disguisedEntity;
     private @Unique String lastDisguiseId;
+    private @Unique CompoundTag lastDisguiseTag;
 
     /** Snapshot pre-baseTick rotation deltas; baseTick zeroes them and Citadel chain buffers
      *  (IaF dragon tail/neck) need the delta to survive into post-super.tick logic. */
@@ -134,6 +138,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
                 this.setDisguisedEntity(null);
                 this.setDisguisedEntityType(null);
                 this.lastDisguiseId = null;
+                this.lastDisguiseTag = null;
+                com.ninni.species.server.disguise.DisguiseLifecycleTracker.clear((LivingEntity) (Object) this);
             }
             return;
         }
@@ -149,28 +155,43 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
             if (redirect) currentId = tag.getString("species:head_id");
         }
 
-        if (!currentId.equals(this.lastDisguiseId) || this.getDisguisedEntity() == null) {
+        // Imprint NBT that actually configures the disguise — empty on redirect: a fresh segment
+        // head must not load the imprinted save data. Rebuild also when this NBT changes for an
+        // unchanged type id, so swapping between two masks of the same entity type but different
+        // captured state (variant/phase/dimension texture, ...) refreshes the model.
+        boolean redirected = !currentId.equals(capturedId);
+        CompoundTag effectiveTag = (redirected || tag == null) ? new CompoundTag() : tag;
+
+        if (!currentId.equals(this.lastDisguiseId) || this.getDisguisedEntity() == null
+                || !effectiveTag.equals(this.lastDisguiseTag)) {
             species$cleanupOldDisguise(this.getDisguisedEntity());
             Optional<EntityType<?>> entityType = EntityType.byString(currentId);
             if (entityType.isPresent()) {
                 Entity rawEntity = entityType.get().create(this.level());
                 if (rawEntity instanceof LivingEntity living) {
-                    // Skip load on redirect — segment save data would write nonsense onto a fresh head.
-                    boolean redirected = !currentId.equals(capturedId);
-                    species$configureNewDisguise(living, redirected ? new CompoundTag() : tag);
+                    // A non-null carryover (matched by id) means the body is being REBUILT for a
+                    // still-active disguise (e.g. dimension change): load its runtime NBT and route
+                    // to onBodyRebuilt so one-shot onCreated setup (intros/folds) isn't replayed.
+                    CompoundTag rebuildNbt = com.ninni.species.server.disguise.DisguiseLifecycleTracker
+                            .takeRebuildNbt((LivingEntity) (Object) this, currentId);
+                    boolean rebuild = rebuildNbt != null;
+                    species$configureNewDisguise(living, rebuild ? rebuildNbt : effectiveTag, rebuild);
                     this.setDisguisedEntity(living);
                     this.setDisguisedEntityType(entityType.get());
                     this.lastDisguiseId = currentId;
+                    this.lastDisguiseTag = effectiveTag.copy();
                     species$wireNewDisguise(living);
                 } else {
                     this.setDisguisedEntity(null);
                     this.setDisguisedEntityType(null);
                     this.lastDisguiseId = currentId;
+                    this.lastDisguiseTag = effectiveTag.copy();
                 }
             } else {
                 this.setDisguisedEntity(null);
                 this.setDisguisedEntityType(null);
                 this.lastDisguiseId = currentId;
+                this.lastDisguiseTag = effectiveTag.copy();
             }
         }
 
@@ -237,7 +258,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
             disguise.setHealth(disguise.getMaxHealth());
         }
 
-        com.ninni.species.server.disguise.util.BehaviorHooks.run(
+        BehaviorHooks.run(
                 "behavior.preTick:" + behavior.getClass().getName(),
                 () -> behavior.preTick(self, disguise));
 
@@ -245,20 +266,25 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
         boolean suppressDisguiseParticles = self.level().isClientSide
                 && com.ninni.species.client.events.LocalFirstPersonCheck.isLocalFirstPersonWearer(self);
         if (suppressDisguiseParticles) {
-            com.ninni.species.server.disguise.DisguiseTickContext.pushSuppress();
+            DisguiseTickContext.pushSuppress();
         }
+        DisguiseTickContext.pushTick();
         try {
+            // Refresh the portal cooldown each tick so the proxy body can never teleport across
+            // dimensions and spawn a real mob in the destination.
+            disguise.setPortalCooldown();
             disguise.tick();
         } catch (Throwable t) {
-            com.ninni.species.server.disguise.DisguiseLogging.rateLimited(
+            DisguiseLogging.rateLimited(
                     "disguise.tick:" + disguise.getType().toString(), t);
         } finally {
+            DisguiseTickContext.popTick();
             if (suppressDisguiseParticles) {
-                com.ninni.species.server.disguise.DisguiseTickContext.popSuppress();
+                DisguiseTickContext.popSuppress();
             }
         }
 
-        com.ninni.species.server.disguise.util.BehaviorHooks.run(
+        BehaviorHooks.run(
                 "behavior.postTick:" + behavior.getClass().getName(),
                 () -> behavior.postTick(self, disguise));
 
@@ -294,6 +320,17 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
         disguise.yBodyRot = yBodyRotForDisguise;
         disguise.yHeadRotO = self.yHeadRotO + yawOffset;
         disguise.yHeadRot = self.yHeadRot + yawOffset;
+
+        // Disguise bodies never enter the level, so other mods' per-entity tick handlers (footsteps,
+        // etc.) never fire. Re-fire the tick event server-side (body pinned to the wearer); guarded.
+        if (!self.level().isClientSide) {
+            try {
+                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(
+                        new net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent(disguise));
+            } catch (Throwable t) {
+                DisguiseLogging.rateLimited("disguise.tickEventReplay:" + disguise.getType(), t);
+            }
+        }
 
         com.ninni.species.server.disguise.BoundroidPairManager.tickCompanion(self);
         com.ninni.species.server.disguise.MineGuardianAnchorManager.tickAnchor(self);
@@ -367,7 +404,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
         // Segment-chain managers tick their segments via preTick to follow the stand's pose.
         // disguise.tick() is still skipped so idle anims/particles/cooldowns stay frozen.
-        com.ninni.species.server.disguise.util.BehaviorHooks.run(
+        BehaviorHooks.run(
                 "behavior.preTick(armorStand):" + behavior.getClass().getName(),
                 () -> behavior.preTick((LivingEntity) (Object) this, disguise));
     }
@@ -386,7 +423,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
     /** Configure a new disguise: load NBT, strip goals, tag, silence, apply effects. */
     @Unique
-    private void species$configureNewDisguise(LivingEntity living, CompoundTag tag) {
+    private void species$configureNewDisguise(LivingEntity living, CompoundTag tag, boolean rebuild) {
         living.load(tag);
         if (living instanceof Mob mob) {
             // Strip goals so aiStep doesn't drive AI side-effects.
@@ -400,8 +437,12 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
         // Must never die — death triggers dropAllDeathLoot and freezes the tick.
         living.setInvulnerable(true);
         try {
-            com.ninni.species.server.disguise.DisguiseBehaviorRegistry.get(living)
-                    .onCreated((LivingEntity) (Object) this, living);
+            com.ninni.species.api.disguise.DisguiseBehavior behavior =
+                    com.ninni.species.server.disguise.DisguiseBehaviorRegistry.get(living);
+            // Rebuild (dimension change, etc.) routes to onBodyRebuilt so behaviors resume their
+            // persisted state instead of replaying one-shot onCreated setup.
+            if (rebuild) behavior.onBodyRebuilt((LivingEntity) (Object) this, living);
+            else behavior.onCreated((LivingEntity) (Object) this, living);
         } catch (Throwable ignored) {}
         if (!this.level().isClientSide) {
             try {
@@ -432,7 +473,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
     @Unique
     private void species$cleanupOldDisguise(@Nullable LivingEntity oldDisguise) {
         if (oldDisguise != null) {
-            com.ninni.species.server.disguise.util.BehaviorHooks.run("behavior.onDestroyed",
+            BehaviorHooks.run("behavior.onDestroyed",
                     () -> com.ninni.species.server.disguise.DisguiseBehaviorRegistry.get(oldDisguise)
                             .onDestroyed((LivingEntity) (Object) this, oldDisguise));
             species$removeWearerEffects((LivingEntity) (Object) this, oldDisguise);

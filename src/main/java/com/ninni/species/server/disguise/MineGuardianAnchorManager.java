@@ -1,6 +1,7 @@
 package com.ninni.species.server.disguise;
 
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +31,7 @@ public final class MineGuardianAnchorManager {
 
     static {
         // Self-register as a Panacea sub-entity provider (same pattern as BoundroidPairManager).
-        com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.registerGlobalSubEntityProvider(
+        DisguiseTopologyRegistry.registerGlobalSubEntityProvider(
                 (wearer, disguise) -> {
                     if (!isMineGuardianDisguise(disguise)) return java.util.Collections.emptyList();
                     Entity anchor = ANCHORS.get(wearer.getUUID());

@@ -1,7 +1,7 @@
 package com.ninni.species.server.disguise.behaviors;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;

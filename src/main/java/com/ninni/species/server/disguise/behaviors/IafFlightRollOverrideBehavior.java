@@ -2,7 +2,7 @@ package com.ninni.species.server.disguise.behaviors;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.disguise.dsl.WearerPredicates;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -147,8 +147,10 @@ public final class IafFlightRollOverrideBehavior implements DisguiseBehavior {
 
     private static Class<?> findBufferClass(ClassLoader cl) {
         for (String name : new String[]{
-                "com.github.alexthe666.iceandfire.client.model.IFChainBuffer",
-                "com.github.alexthe666.citadel.client.model.ChainBuffer"
+                "com.iafenvoy.iceandfire.render.model.IFChainBuffer",          // IaF-CE
+                "com.github.alexthe666.iceandfire.client.model.IFChainBuffer", // stock IaF
+                "com.iafenvoy.uranus.client.model.tools.ChainBuffer",          // Uranus
+                "com.github.alexthe666.citadel.client.model.ChainBuffer"       // stock Citadel
         }) {
             try { return Class.forName(name, false, cl); }
             catch (ClassNotFoundException ignored) {}

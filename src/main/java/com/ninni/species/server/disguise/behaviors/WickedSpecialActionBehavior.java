@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.entity.mob.update_3.Wicked;
 import com.ninni.species.server.entity.util.SpeciesPose;
@@ -26,7 +27,7 @@ public final class WickedSpecialActionBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (disguise.getPose() == SpeciesPose.SPOT.get()) return;
         disguise.setPose(SpeciesPose.SPOT.get());
     }

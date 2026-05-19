@@ -41,7 +41,6 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class CliffHanger extends Hanger {

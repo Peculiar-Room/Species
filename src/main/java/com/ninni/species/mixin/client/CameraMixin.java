@@ -4,6 +4,7 @@ import com.ninni.species.client.events.WickedMaskDisguiseEvents;
 import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.server.disguise.panacea.DisguiseTopology;
+import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -33,8 +34,8 @@ public abstract class CameraMixin {
         // per-type minimum floor for streaming chains. AABB updates dynamically (IaF stage,
         // armor stand, etc.) so size tracks the current disguise state.
         double intrinsic = Math.max(disguise.getBbWidth(), disguise.getBbHeight())
-                * com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.getCameraSizeFactor(disguise);
-        double pinned = com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.getCameraSizeMinimum(disguise);
+                * DisguiseTopologyRegistry.getCameraSizeFactor(disguise);
+        double pinned = DisguiseTopologyRegistry.getCameraSizeMinimum(disguise);
         double visualSize = Math.max(intrinsic, pinned);
         if (visualSize <= DisguiseTopology.PLAYER_BASELINE) return original;
 

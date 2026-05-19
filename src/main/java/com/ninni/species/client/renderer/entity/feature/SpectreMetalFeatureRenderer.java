@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.model.mob.update_3.SpectreModel;
 import com.ninni.species.client.renderer.entity.SpectreRenderer;
-import com.ninni.species.client.renderer.entity.rendertypes.OffsetRenderLayer;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.server.entity.mob.update_3.Spectre;
 import net.minecraft.client.model.EntityModel;

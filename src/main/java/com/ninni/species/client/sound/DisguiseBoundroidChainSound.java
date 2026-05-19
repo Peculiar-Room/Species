@@ -9,9 +9,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-/** Looping chain-rattle for Boundroid/Winch disguise bodies; mirrors AC's
- *  {@code BoundroidSound} (volume/pitch from chain-length delta) but skips the {@code isSilent}
- *  gate and stops via {@link #requestStop()} on cleanup (the body isn't discarded on un-equip). */
+/** Looping chain-rattle for Boundroid/Winch disguise bodies; mirrors AC's {@code BoundroidSound}
+ *  but skips the {@code isSilent} gate and stops via {@link #requestStop()}. */
 public final class DisguiseBoundroidChainSound extends AbstractTickableSoundInstance {
 
     private static final ResourceLocation CHAIN_LOOP_ID =

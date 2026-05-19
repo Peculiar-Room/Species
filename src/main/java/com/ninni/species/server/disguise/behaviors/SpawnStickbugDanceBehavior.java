@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.api.util.ReflectionHelper;
 import com.ninni.species.api.util.PerSideStateMap;
@@ -27,7 +28,7 @@ public final class SpawnStickbugDanceBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         initReflection(disguise.getClass());
         State st = states.computeIfAbsent(wearer, State::new);
         st.dancing = !st.dancing;

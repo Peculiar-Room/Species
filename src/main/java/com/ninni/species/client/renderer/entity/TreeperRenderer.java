@@ -6,7 +6,6 @@ import com.ninni.species.client.renderer.entity.feature.TreeperCanopyLayer;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.mob.update_2.TreeperModel;
 import com.ninni.species.client.renderer.entity.feature.TreeperFeatureRenderer;
-import com.ninni.species.server.entity.mob.update_2.Springling;
 import com.ninni.species.server.entity.mob.update_2.Treeper;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;

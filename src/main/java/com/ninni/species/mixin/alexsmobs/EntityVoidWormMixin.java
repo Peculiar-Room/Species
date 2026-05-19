@@ -22,7 +22,7 @@ public abstract class EntityVoidWormMixin {
     }
 
     @Inject(method = "launch", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private void species$cancelLaunchForDisguise(net.minecraft.world.entity.Entity e, boolean huge, CallbackInfo ci) {
+    private void species$cancelLaunchForDisguise(Entity e, boolean huge, CallbackInfo ci) {
         if (((Entity) (Object) this).getTags().contains(WickedMaskDisguiseEvents.DISGUISE_TAG)) {
             ci.cancel();
         }

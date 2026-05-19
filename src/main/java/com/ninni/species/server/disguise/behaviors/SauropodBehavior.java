@@ -2,7 +2,7 @@ package com.ninni.species.server.disguise.behaviors;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.disguise.ModelStraightenBridge;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.LivingEntity;
 

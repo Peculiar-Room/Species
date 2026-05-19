@@ -1,7 +1,9 @@
 package com.ninni.species.mixin.alexscaves;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.ninni.species.client.events.WickedMaskDisguiseEvents;
+import com.ninni.species.server.disguise.DisguiseBodyRegistry;
+import com.ninni.species.server.disguise.dsl.WearerPredicates;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,8 +28,8 @@ public abstract class EntityVesperMixin {
     )
     private boolean species$suppressFlapForDisguise(@Coerce Object self, SoundEvent sound) {
         if (self instanceof LivingEntity disguise && disguise.getTags().contains(WickedMaskDisguiseEvents.DISGUISE_TAG)) {
-            LivingEntity wearer = com.ninni.species.server.disguise.DisguiseBodyRegistry.getWearer(disguise);
-            if (wearer != null && com.ninni.species.server.disguise.dsl.WearerPredicates.CEILING_HANGING.test(wearer)) {
+            LivingEntity wearer = DisguiseBodyRegistry.getWearer(disguise);
+            if (wearer != null && WearerPredicates.CEILING_HANGING.test(wearer)) {
                 return false;
             }
         }

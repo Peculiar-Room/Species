@@ -18,6 +18,10 @@ public interface DisguiseBehavior {
      */
     default void onDestroyed(LivingEntity wearer, LivingEntity disguise) {}
 
+    /** Called instead of {@link #onCreated} when the body is rebuilt (not freshly equipped) — e.g. a
+     *  dimension change; NBT state is already restored, so override only for transient render state. */
+    default void onBodyRebuilt(LivingEntity wearer, LivingEntity disguise) {}
+
     /**
      * Called each tick before {@code disguise.tick()}. Position/rotation already synced.
      * Use for state that must be in place before the disguise's own tick runs.

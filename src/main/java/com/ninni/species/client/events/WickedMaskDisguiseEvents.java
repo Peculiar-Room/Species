@@ -4,10 +4,12 @@ import com.ninni.species.Species;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.Explosion;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -40,8 +42,7 @@ public class WickedMaskDisguiseEvents {
         }
     }
 
-    /** Cancels disguise-driven block destruction (e.g. Cataclysm Ancient Remnant bypasses the
-     *  mob-griefing gameRule via its own flag but still fires this hook). */
+    /** Cancels disguise-driven block destruction (some mobs bypass the mob-griefing gameRule but still fire this hook). */
     @SubscribeEvent
     public static void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
         if (isDisguise(event.getEntity())) {
@@ -49,7 +50,16 @@ public class WickedMaskDisguiseEvents {
         }
     }
 
-    /** Cancels world side-effect entities (AOE clouds, projectiles) spawned by a disguise's tick that {@link #onLivingAttack} would otherwise leave with visible hitboxes. */
+    /** Cancels explosions sourced by a disguise body (e.g. a boss-phase transition would otherwise detonate at the wearer). */
+    @SubscribeEvent
+    public static void onExplosion(ExplosionEvent.Start event) {
+        Explosion explosion = event.getExplosion();
+        if (isDisguise(explosion.getDirectSourceEntity()) || isDisguise(explosion.getIndirectSourceEntity())) {
+            event.setCanceled(true);
+        }
+    }
+
+    /** Cancels AOE clouds / projectiles spawned by a disguise's tick. */
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();

@@ -1,7 +1,10 @@
 package com.ninni.species.server.disguise.panacea;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
+import com.ninni.species.registry.SpeciesConfig;
+import com.ninni.species.server.disguise.ChainHeadRegistry;
 import com.ninni.species.server.disguise.DisguiseBehaviorRegistry;
+import com.ninni.species.server.disguise.panacea.spec.BeforeChainTickHook;
 import com.ninni.species.server.disguise.panacea.spec.ChainSpec;
 import com.ninni.species.server.disguise.panacea.spec.SegmentContext;
 import com.ninni.species.server.disguise.panacea.spec.TickHook;
@@ -68,7 +71,7 @@ public class SegmentChainManager implements DisguiseBehavior {
         }
         // Map this chain's segment types back to the head so the Wicked Mask imprint can redirect
         // segment captures (centipede body/tail, anaconda part, …) to the head when the config flag is on.
-        com.ninni.species.server.disguise.ChainHeadRegistry.registerByIds(
+        ChainHeadRegistry.registerByIds(
                 spec.headId(), spec.partId(), spec.tailPartId());
     }
 
@@ -136,7 +139,7 @@ public class SegmentChainManager implements DisguiseBehavior {
     }
 
     private static boolean shouldRenderChain() {
-        try { return com.ninni.species.registry.SpeciesConfig.REDIRECT_SEGMENT_TO_HEAD.get(); }
+        try { return SpeciesConfig.REDIRECT_SEGMENT_TO_HEAD.get(); }
         catch (Throwable ignored) { return true; }
     }
 
@@ -209,7 +212,7 @@ public class SegmentChainManager implements DisguiseBehavior {
     private void tickChain(LivingEntity wearer, LivingEntity disguise) {
         List<Entity> chain = chains.get(wearer.getUUID());
         if (chain == null || chain.isEmpty()) return;
-        for (com.ninni.species.server.disguise.panacea.spec.BeforeChainTickHook h : spec.beforeChainTickHooks()) {
+        for (BeforeChainTickHook h : spec.beforeChainTickHooks()) {
             h.run(wearer, disguise, spec.reflectionPlan());
         }
         // First segment's parent is the disguise body, NOT the wearer. Both share world position,

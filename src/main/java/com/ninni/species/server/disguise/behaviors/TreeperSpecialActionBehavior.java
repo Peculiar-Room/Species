@@ -1,5 +1,6 @@
 package com.ninni.species.server.disguise.behaviors;
 
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.entity.mob.update_2.Treeper;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +17,7 @@ public final class TreeperSpecialActionBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         if (!(disguise instanceof Treeper treeper)) return;
         if (treeper.isPlanted()) treeper.uproot();
         else treeper.plant();

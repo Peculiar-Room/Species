@@ -1,7 +1,9 @@
 package com.ninni.species.server.disguise;
 
+import com.ninni.species.client.sound.DisguiseBoundroidChainSound;
 import com.ninni.species.mixin_util.LivingEntityAccess;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -49,12 +51,12 @@ public final class BoundroidPairManager {
     /** Per-wearer chain-rattle sound instance. Tracked so it can be stopped explicitly on
      *  cleanup — the sound's {@code canPlaySound} otherwise sees the disguise body as alive
      *  (the cleanup unregisters it but doesn't discard the entity). Client-only. */
-    private static final java.util.Map<UUID, com.ninni.species.client.sound.DisguiseBoundroidChainSound> CHAIN_SOUNDS = new ConcurrentHashMap<>();
+    private static final java.util.Map<UUID, DisguiseBoundroidChainSound> CHAIN_SOUNDS = new ConcurrentHashMap<>();
 
     static {
         // Self-register as a Panacea sub-entity provider so the companion is
         // included in render dispatch without per-type registration elsewhere.
-        com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.registerGlobalSubEntityProvider(
+        DisguiseTopologyRegistry.registerGlobalSubEntityProvider(
                 (wearer, disguise) -> {
                     if (!isPairDisguise(disguise)) return java.util.Collections.emptyList();
                     Entity companion = COMPANIONS.get(wearer.getUUID());
@@ -178,8 +180,8 @@ public final class BoundroidPairManager {
         COMPANIONS.put(wearer.getUUID(), companion);
 
         try {
-            com.ninni.species.client.sound.DisguiseBoundroidChainSound sound =
-                    new com.ninni.species.client.sound.DisguiseBoundroidChainSound(disguise, companion);
+            DisguiseBoundroidChainSound sound =
+                    new DisguiseBoundroidChainSound(disguise, companion);
             CHAIN_SOUNDS.put(wearer.getUUID(), sound);
             net.minecraft.client.Minecraft.getInstance().getSoundManager().queueTickingSound(sound);
         } catch (Throwable ignored) {}
@@ -378,7 +380,7 @@ public final class BoundroidPairManager {
             WINCH_PARTNER.entrySet().removeIf(e -> wearerUUID.equals(e.getValue().wearerUUID));
             if (!comp.isRemoved()) comp.discard();
         }
-        com.ninni.species.client.sound.DisguiseBoundroidChainSound sound = CHAIN_SOUNDS.remove(wearerUUID);
+        DisguiseBoundroidChainSound sound = CHAIN_SOUNDS.remove(wearerUUID);
         if (sound != null) sound.requestStop();
     }
 

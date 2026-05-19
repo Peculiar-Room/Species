@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.ninni.species.Species;
 import com.ninni.species.api.disguise.SpeciesAPI;
 import com.ninni.species.api.disguise.data.DisguiseData;
+import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -41,9 +42,9 @@ public final class DisguiseDataReloadListener extends SimpleJsonResourceReloadLi
     protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager resourceManager, ProfilerFiller profiler) {
         // Clear topology entries from prior reload (cosmetics layer is map-based; replaceAll handles it).
         for (EntityType<?> type : trackedTopologyTypes) {
-            com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.clearInventoryScale(type);
-            com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.clearInventoryYOffset(type);
-            com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.clearCameraSizeMinimum(type);
+            DisguiseTopologyRegistry.clearInventoryScale(type);
+            DisguiseTopologyRegistry.clearInventoryYOffset(type);
+            DisguiseTopologyRegistry.clearCameraSizeMinimum(type);
         }
         trackedTopologyTypes.clear();
 

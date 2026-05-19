@@ -11,7 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Cancels {@code roar()} on disguise-tagged dragons — applies {@code MobEffects.WEAKNESS}
  *  to nearby entities directly via {@code addEffect}, bypassing Forge events. Soft-dep. */
 @Pseudo
-@Mixin(targets = "com.github.alexthe666.iceandfire.entity.EntityDragonBase", remap = false)
+@Mixin(targets = {
+        "com.github.alexthe666.iceandfire.entity.EntityDragonBase", // stock IaF
+        "com.iafenvoy.iceandfire.entity.DragonBaseEntity"           // IaF-CE
+}, remap = false)
 public abstract class EntityDragonBaseMixin {
 
     @Inject(method = "roar", at = @At("HEAD"), cancellable = true, remap = false, require = 0)

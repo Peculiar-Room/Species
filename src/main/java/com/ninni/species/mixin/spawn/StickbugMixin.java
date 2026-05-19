@@ -1,6 +1,6 @@
 package com.ninni.species.mixin.spawn;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.ninni.species.client.events.WickedMaskDisguiseEvents;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

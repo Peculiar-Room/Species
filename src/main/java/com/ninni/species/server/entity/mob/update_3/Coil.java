@@ -6,6 +6,8 @@ import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -251,7 +253,7 @@ public class Coil extends Entity {
         if (!this.isStartPoint() && (player == null || !player.isCreative())) this.spawnAtLocation(SpeciesItems.COIL.get().getDefaultInstance());
 
         if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(new net.minecraft.core.particles.ItemParticleOption(net.minecraft.core.particles.ParticleTypes.ITEM, SpeciesItems.COIL.get().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 5, 0.2, 0.2, 0.2, 0.05);
+            serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, SpeciesItems.COIL.get().getDefaultInstance()), this.getX(), this.getY() + 0.5, this.getZ(), 5, 0.2, 0.2, 0.2, 0.05);
         }
 
         this.playSound(SpeciesSoundEvents.COIL_REMOVE.get());

@@ -1,6 +1,7 @@
 package com.ninni.species.server.disguise.dsl;
 
 import com.mojang.logging.LogUtils;
+import com.ninni.species.api.disguise.ActionContext;
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import net.minecraft.world.entity.LivingEntity;
 import org.slf4j.Logger;
@@ -44,6 +45,14 @@ public final class CompositeDisguiseBehavior implements DisguiseBehavior {
         for (DisguiseBehavior b : behaviors) {
             try { b.onCreated(wearer, disguise); }
             catch (Throwable t) { rateLimitedLog(b, 0, "onCreated", t); }
+        }
+    }
+
+    @Override
+    public void onBodyRebuilt(LivingEntity wearer, LivingEntity disguise) {
+        for (DisguiseBehavior b : behaviors) {
+            try { b.onBodyRebuilt(wearer, disguise); }
+            catch (Throwable t) { rateLimitedLog(b, 10, "onBodyRebuilt", t); }
         }
     }
 
@@ -136,7 +145,7 @@ public final class CompositeDisguiseBehavior implements DisguiseBehavior {
 
     @Override
     public void onSpecialAction(LivingEntity wearer, LivingEntity disguise,
-                                com.ninni.species.api.disguise.ActionContext context) {
+                                ActionContext context) {
         for (DisguiseBehavior b : behaviors) {
             try { b.onSpecialAction(wearer, disguise, context); }
             catch (Throwable t) { rateLimitedLog(b, 9, "onSpecialAction", t); }

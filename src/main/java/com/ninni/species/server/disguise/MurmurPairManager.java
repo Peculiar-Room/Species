@@ -2,7 +2,7 @@ package com.ninni.species.server.disguise;
 
 import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
-import com.ninni.species.server.disguise.panacea.ReflectionHelper;
+import com.ninni.species.api.util.ReflectionHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public final class MurmurPairManager implements DisguiseBehavior {
     private MurmurPairManager() {}
 
     public void register() {
-        com.ninni.species.server.disguise.DisguiseBehaviorRegistry.registerGlobal(this);
+        DisguiseBehaviorRegistry.registerGlobal(this);
         DisguiseTopologyRegistry.registerGlobalSubEntityProvider((wearer, disguise) -> {
             if (!isMurmur(disguise)) return Collections.emptyList();
             Entity head = COMPANIONS.get(wearer.getUUID());
@@ -53,29 +53,10 @@ public final class MurmurPairManager implements DisguiseBehavior {
 
     @Override
     public void onCreated(LivingEntity wearer, LivingEntity disguise) {
-        if (!isMurmur(disguise) || !wearer.level().isClientSide) return;
-        initReflection(wearer.level());
-        if (headType == null) return;
-
-        Entity head = headType.create(wearer.level());
-        if (head == null) return;
-        head.noPhysics = true;
-        head.setNoGravity(true);
-        // Head sits ~2 blocks above the body's neck base; native EntityMurmurHead.tick pulls
-        // toward the body each tick, but we pin manually since the head isn't world-ticked.
-        Vec3 spawn = wearer.position().add(0, wearer.getBbHeight() + 1.0, 0);
-        head.setPos(spawn);
-        head.xo = head.xOld = spawn.x;
-        head.yo = head.yOld = spawn.y;
-        head.zo = head.zOld = spawn.z;
-
-        try {
-            if (bodySetHeadUuid != null) bodySetHeadUuid.invoke(disguise, head.getUUID());
-            if (headSetBodyId != null) headSetBodyId.invoke(head, disguise.getUUID());
-            if (headBodyIdAccessor != null) head.getEntityData().set(headBodyIdAccessor, wearer.getId());
-        } catch (ReflectiveOperationException ignored) {}
-
-        COMPANIONS.put(wearer.getUUID(), head);
+        // No client companion head: a head bound to the wearer can't render a connected neck —
+        // EntityMurmurHead#getNeckTop/getNeckBottom are guarded by `body instanceof EntityMurmur`
+        // and degrade to a ~0.5-block stub for a Player body. The disguise instead forces the
+        // body's own cosmetic head+neck via the EntityMurmur shouldRenderFakeHead mixin.
     }
 
     @Override

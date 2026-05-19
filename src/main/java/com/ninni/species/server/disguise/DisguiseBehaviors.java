@@ -4,7 +4,11 @@ import com.ninni.species.api.disguise.DisguiseBehavior;
 import com.ninni.species.server.disguise.behaviors.AmSealBehavior;
 import com.ninni.species.server.disguise.behaviors.BatBehavior;
 import com.ninni.species.server.disguise.behaviors.BewereagerSpecialActionBehavior;
+import com.ninni.species.server.disguise.behaviors.BirtFlyAnimationBehavior;
+import com.ninni.species.server.disguise.behaviors.BirtSignalSpecialActionBehavior;
+import com.ninni.species.server.disguise.behaviors.CliffHangerBehavior;
 import com.ninni.species.server.disguise.behaviors.CruncherSpecialActionBehavior;
+import com.ninni.species.server.disguise.behaviors.LeafHangerBehavior;
 import com.ninni.species.server.disguise.behaviors.EnderDragonBehavior;
 import com.ninni.species.server.disguise.behaviors.FlightPitchOverrideBehavior;
 import com.ninni.species.server.disguise.behaviors.GhoulSpecialActionBehavior;
@@ -13,6 +17,7 @@ import com.ninni.species.server.disguise.behaviors.HippogryphBehavior;
 import com.ninni.species.server.disguise.behaviors.HullbackBehavior;
 import com.ninni.species.server.disguise.behaviors.IafDragonBehavior;
 import com.ninni.species.server.disguise.behaviors.IafFlightRollOverrideBehavior;
+import com.ninni.species.server.disguise.behaviors.IgnisPhaseCycleBehavior;
 import com.ninni.species.server.disguise.behaviors.LuxtructosaurusBehavior;
 import com.ninni.species.server.disguise.behaviors.MammutilationSpecialActionBehavior;
 import com.ninni.species.server.disguise.behaviors.QuakeSpecialActionBehavior;
@@ -22,9 +27,11 @@ import com.ninni.species.server.disguise.behaviors.SpawnBoobyDanceBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnClamOpenBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnCrabBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnDodoPeckBehavior;
+import com.ninni.species.server.disguise.behaviors.SpawnFirekeeperSpecialActionBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnSealBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnStickbugBehavior;
 import com.ninni.species.server.disguise.behaviors.SpawnStickbugDanceBehavior;
+import com.ninni.species.server.disguise.behaviors.StackatickStackBehavior;
 import com.ninni.species.server.disguise.behaviors.StraightenViaBridgeBehavior;
 import com.ninni.species.server.disguise.behaviors.SubterranodonBackwardFlapBehavior;
 import com.ninni.species.server.disguise.behaviors.TreeperSpecialActionBehavior;
@@ -32,6 +39,7 @@ import com.ninni.species.server.disguise.behaviors.TremorsaurusBehavior;
 import com.ninni.species.server.disguise.behaviors.TriopsBehavior;
 import com.ninni.species.server.disguise.behaviors.WickedSpecialActionBehavior;
 import com.ninni.species.server.disguise.behaviors.WraptorSpecialActionBehavior;
+import com.ninni.species.server.disguise.dsl.AutoFlightSyncBehavior;
 import com.ninni.species.server.disguise.dsl.WalkAnimationDampingBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -48,17 +56,17 @@ public final class DisguiseBehaviors {
     public static void registerDefaults() {
         // Force class load so static initialisers of self-registering global behaviors run.
         try {
-            Class.forName(com.ninni.species.server.disguise.dsl.AutoFlightSyncBehavior.class.getName());
+            Class.forName(AutoFlightSyncBehavior.class.getName());
         } catch (ClassNotFoundException ignored) {}
 
         // Segment-chain managers self-register as global DisguiseBehaviors + sub-entity providers.
         // Each gates onCreated/preTick/onDestroyed on its own entity-type id, so ordering doesn't matter.
-        com.ninni.species.server.disguise.GumWormSegmentManager.INSTANCE.register();
-        com.ninni.species.server.disguise.AnacondaSegmentManager.INSTANCE.register();
-        com.ninni.species.server.disguise.BoneSerpentSegmentManager.INSTANCE.register();
-        com.ninni.species.server.disguise.CentipedeSegmentManager.INSTANCE.register();
-        com.ninni.species.server.disguise.VoidWormSegmentManager.INSTANCE.register();
-        com.ninni.species.server.disguise.MurmurPairManager.INSTANCE.register();
+        GumWormSegmentManager.INSTANCE.register();
+        AnacondaSegmentManager.INSTANCE.register();
+        BoneSerpentSegmentManager.INSTANCE.register();
+        CentipedeSegmentManager.INSTANCE.register();
+        VoidWormSegmentManager.INSTANCE.register();
+        MurmurPairManager.INSTANCE.register();
 
         // Vanilla
         DisguiseBehaviorRegistry.register(EntityType.ENDER_DRAGON, EnderDragonBehavior.INSTANCE);
@@ -76,8 +84,18 @@ public final class DisguiseBehaviors {
         registerIfPresent("species", "wraptor", WraptorSpecialActionBehavior.INSTANCE);
         registerIfPresent("species", "wicked", WickedSpecialActionBehavior.INSTANCE);
         registerIfPresent("species", "mammutilation", MammutilationSpecialActionBehavior.INSTANCE);
-        registerIfPresent("species", "stackatick",
-                com.ninni.species.server.disguise.behaviors.StackatickStackBehavior.INSTANCE);
+        registerIfPresent("species", "stackatick", StackatickStackBehavior.INSTANCE);
+        // Birt: fly-pose sync (drives flyingAnimationState while wearer is airborne) + signal keybind
+        // (antenna-glow pulse via the existing antennaTicks/BIRT_SEARCH surface).
+        composeStackIfPresent("species", "birt",
+                BirtFlyAnimationBehavior.INSTANCE,
+                BirtSignalSpecialActionBehavior.INSTANCE);
+        // Cliff Hanger: clings upside-down to ceilings — forces the ATTACHED flag from the wearer's
+        // ceiling state, and the model self-flips about its origin to seat the body on the ceiling.
+        registerIfPresent("species", "cliff_hanger", CliffHangerBehavior.INSTANCE);
+        // Leaf Hanger: in water, dangles a lily pad up to the surface and turns the body translucent,
+        // matching the native mob's bait pose.
+        registerIfPresent("species", "leaf_hanger", LeafHangerBehavior.INSTANCE);
 
         // Modded — soft-dep registration. Only register if the entity type exists.
         registerIfPresent("whaleborne", "hullback", HullbackBehavior.INSTANCE);
@@ -173,7 +191,8 @@ public final class DisguiseBehaviors {
 
         // Spawn (soft-dep) — fixes for goal-stripped animation triggers.
         registerIfPresent("spawn", "seal", SpawnSealBehavior.INSTANCE);
-        // Booby: flap/glide alternation + flight roll/pitch override + dance keybind.
+        // Booby: flap/glide alternation + flight roll/pitch override + dance keybind. Footprints come
+        // from Spawn's own handler via the disguise tick-event re-fire in LivingEntityMixin.
         composeStackIfPresent("spawn", "booby",
                 SpawnBoobyBehavior.INSTANCE,
                 new FlightPitchOverrideBehavior(1F),
@@ -185,10 +204,11 @@ public final class DisguiseBehaviors {
                 SpawnStickbugDanceBehavior.INSTANCE);
         registerIfPresent("spawn", "clam", SpawnClamOpenBehavior.INSTANCE);
         registerIfPresent("spawn", "dodo", SpawnDodoPeckBehavior.INSTANCE);
+        // Firekeeper: keybind plays AWAKENING + modulates molten overlay (rock <-> glow over 6 spins).
+        registerIfPresent("spawn", "firekeeper", SpawnFirekeeperSpecialActionBehavior.INSTANCE);
 
         // Cataclysm bosses with multi-stage models: shift+keybind cycles phases.
-        registerIfPresent("cataclysm", "ignis",
-                com.ninni.species.server.disguise.behaviors.IgnisPhaseCycleBehavior.INSTANCE);
+        registerIfPresent("cataclysm", "ignis", IgnisPhaseCycleBehavior.INSTANCE);
     }
 
     /**

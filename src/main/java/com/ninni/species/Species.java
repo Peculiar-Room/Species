@@ -6,6 +6,12 @@ import com.ninni.species.registry.*;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.server.disguise.DisguiseBehaviors;
 import com.ninni.species.server.disguise.SpeciesIMCHandler;
+import com.ninni.species.server.disguise.cosmetic.DisguiseCosmeticRegistry;
+import com.ninni.species.server.disguise.cosmetic.DisguiseCosmeticsDemo;
+import com.ninni.species.server.disguise.data.DataDrivenCosmetics;
+import com.ninni.species.server.disguise.data.DisguiseDataReloadListener;
+import com.ninni.species.server.disguise.demo.ContextualActionDemo;
+import com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry;
 import com.ninni.species.server.events.ForgeEvents;
 import com.ninni.species.server.events.ModEvents;
 import com.ninni.species.server.world.poi.SpeciesPointOfInterestTypes;
@@ -74,19 +80,19 @@ public class Species {
 		event.enqueueWork(() -> {
 			PROXY.commonSetup();
 			DisguiseBehaviors.registerDefaults();
-			com.ninni.species.server.disguise.panacea.DisguiseTopologyRegistry.registerDefaults();
-			com.ninni.species.server.disguise.cosmetic.DisguiseCosmeticRegistry.registerDefaults();
-			com.ninni.species.server.disguise.cosmetic.DisguiseCosmeticsDemo.registerDemo();
-			com.ninni.species.server.disguise.demo.ContextualActionDemo.registerDemo();
+			DisguiseTopologyRegistry.registerDefaults();
+			DisguiseCosmeticRegistry.registerDefaults();
+			DisguiseCosmeticsDemo.registerDemo();
+			ContextualActionDemo.registerDemo();
 			// Data-driven layer (datapack JSON via DisguiseDataReloadListener); per-type entries win.
-			com.ninni.species.server.disguise.cosmetic.DisguiseCosmeticRegistry.registerGlobal(
-					com.ninni.species.server.disguise.data.DataDrivenCosmetics.INSTANCE);
+			DisguiseCosmeticRegistry.registerGlobal(
+					DataDrivenCosmetics.INSTANCE);
 		});
 	}
 
 	/** Reload listener for datapack-driven disguise overrides; one shared instance for client+server. */
-	public static final com.ninni.species.server.disguise.data.DisguiseDataReloadListener DISGUISE_DATA_LISTENER =
-			new com.ninni.species.server.disguise.data.DisguiseDataReloadListener();
+	public static final DisguiseDataReloadListener DISGUISE_DATA_LISTENER =
+			new DisguiseDataReloadListener();
 
 	public void clientSetup(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> PROXY.clientSetup());

@@ -3,6 +3,8 @@ package com.ninni.species.server.disguise.panacea;
 import com.ninni.species.api.disguise.DisguiseRenderLayer;
 import com.ninni.species.api.disguise.SubEntityProvider;
 import com.ninni.species.server.disguise.BoundroidPairManager;
+import com.ninni.species.server.disguise.MineGuardianAnchorManager;
+import com.ninni.species.server.disguise.StackatickStackManager;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -255,8 +257,8 @@ public final class DisguiseTopologyRegistry {
         // Force-load companion managers so their static initializers register global providers.
         try {
             Class.forName(BoundroidPairManager.class.getName());
-            Class.forName(com.ninni.species.server.disguise.MineGuardianAnchorManager.class.getName());
-            Class.forName(com.ninni.species.server.disguise.StackatickStackManager.class.getName());
+            Class.forName(MineGuardianAnchorManager.class.getName());
+            Class.forName(StackatickStackManager.class.getName());
         } catch (ClassNotFoundException ignored) {}
 
         // Hullback: ~17-block Z span (nose +6 to fluke -11), bbox only covers a few.

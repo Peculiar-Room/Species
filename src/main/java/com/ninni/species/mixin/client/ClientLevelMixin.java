@@ -2,6 +2,7 @@ package com.ninni.species.mixin.client;
 
 import com.ninni.species.server.disguise.DisguiseBodyRegistry;
 import com.ninni.species.server.disguise.DisguiseTickContext;
+import com.ninni.species.server.disguise.panacea.SegmentChainManager;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +27,7 @@ public abstract class ClientLevelMixin {
         LivingEntity disguise = DisguiseBodyRegistry.findById(id);
         if (disguise != null) { cir.setReturnValue(disguise); return; }
         // Chain segments aren't in the ClientLevel; resolve via the chain manager.
-        Entity segment = com.ninni.species.server.disguise.panacea.SegmentChainManager.findById(id);
+        Entity segment = SegmentChainManager.findById(id);
         if (segment != null) cir.setReturnValue(segment);
     }
 

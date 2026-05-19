@@ -1,6 +1,5 @@
 package com.ninni.species.client.inventory;
 
-import com.ninni.species.Species;
 import com.ninni.species.server.data.CruncherPelletManager;
 import com.ninni.species.server.entity.mob.update_2.Cruncher;
 import net.minecraft.world.Container;
