@@ -1,5 +1,6 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.block.entity.ChaindelierBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -26,12 +27,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class ChaindelierBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<ChaindelierBlock> CODEC = simpleCodec(ChaindelierBlock::new);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape AABB = Shapes.or(Block.box(0, 7, 0, 16, 13, 16), Block.box(6.5, 13, 6.5, 9.5, 16, 9.5));
 
     public ChaindelierBlock(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext p_153467_) {

@@ -3,18 +3,22 @@ package com.ninni.species.client.renderer.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.ninni.species.server.block.entity.SpectraliburBlockEntity;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesRenderTypes;
+import com.ninni.species.server.block.SpectraliburPedestalBlock;
+import com.ninni.species.server.block.entity.ChaindelierBlockEntity;
+import com.ninni.species.server.block.entity.SpectraliburBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -68,130 +72,120 @@ public class SpectraliburPedestalBlockEntityRenderer implements BlockEntityRende
         };
 
         //FRONT
-        builder.vertex(poseStack.last().pose(), vertices[0].x, vertices[0].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[1].x, vertices[1].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[2].x, vertices[2].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(0.5F, 0.5F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[3].x, vertices[3].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(1, 1)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
+        builder.addVertex(poseStack.last().pose(), vertices[0].x, vertices[0].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[1].x, vertices[1].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[2].x, vertices[2].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(0.5F, 0.5F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[3].x, vertices[3].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(1, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
 
 
         //BACK
-        builder.vertex(poseStack.last().pose(), vertices[0].x, vertices[0].y, 1)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[1].x, vertices[1].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[2].x, vertices[2].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(0.5F, 0.5F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), vertices[3].x, vertices[3].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(1, 1)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
+        builder.addVertex(poseStack.last().pose(), vertices[0].x, vertices[0].y, 1)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[1].x, vertices[1].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[2].x, vertices[2].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(0.5F, 0.5F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), vertices[3].x, vertices[3].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(1, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
 
         //LEFT
-        builder.vertex(poseStack.last().pose(), 0.0001F, vertices[0].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.0001F, vertices[1].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.0001F, vertices[2].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(0.5F, 0.5F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.0001F, vertices[3].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(1, 1)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
+        builder.addVertex(poseStack.last().pose(), 0.0001F, vertices[0].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.0001F, vertices[1].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.0001F, vertices[2].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(0.5F, 0.5F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.0001F, vertices[3].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(1, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
 
         //RIGHT
-        builder.vertex(poseStack.last().pose(), 0.9999f, vertices[0].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.9999f, vertices[1].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.9999f, vertices[2].y, 1.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(0.5F, 0.5F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
-        builder.vertex(poseStack.last().pose(), 0.9999f, vertices[3].y, 0.0F)
-                .color(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
-                .uv(1, 1)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(15728880)
-                .normal(poseStack.last().normal(), 0.0F, 1.0F, 0.0F)
-                .endVertex();
+        builder.addVertex(poseStack.last().pose(), 0.9999f, vertices[0].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.9999f, vertices[1].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 0.0F)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.9999f, vertices[2].y, 1.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(0.5F, 0.5F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
+        builder.addVertex(poseStack.last().pose(), 0.9999f, vertices[3].y, 0.0F)
+                .setColor(1.0F, 1 - swordPosition, 1 - swordPosition, 1.0F)
+                .setUv(1, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(15728880)
+                .setNormal(poseStack.last(), 0.0F, 1.0F, 0.0F);
 
         poseStack.popPose();
     }
 
     public ResourceLocation getTextureLocation() {
-        return new ResourceLocation(MOD_ID, "textures/block/spectralibur_glow.png");
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/block/spectralibur_glow.png");
+    }
+
+    @Override
+    public net.minecraft.world.phys.AABB getRenderBoundingBox(SpectraliburBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(pos.getX(), pos.getY() - 2, pos.getZ(), pos.getX() + 1.0, pos.getY() + 2, pos.getZ() + 1.0);
     }
 }

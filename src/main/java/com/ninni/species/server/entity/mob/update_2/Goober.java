@@ -1,16 +1,16 @@
 package com.ninni.species.server.entity.mob.update_2;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.ai.goal.GooberLayDownGoal;
 import com.ninni.species.server.entity.ai.goal.GooberRearUpGoal;
 import com.ninni.species.server.entity.ai.goal.GooberYawnGoal;
 import com.ninni.species.server.entity.util.GooberBehavior;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,26 +26,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowParentGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -84,12 +71,16 @@ public class Goober extends Animal {
         super(entityType, level);
         this.moveControl = new GooberMoveControl();
         this.lookControl = new GooberLookControl(this);
-        this.setMaxUpStep(1);
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1f;
     }
 
     @Override
     protected BodyRotationControl createBodyControl() {
-        return new Goober.GooberBodyRotationControl(this);
+        return new GooberBodyRotationControl(this);
     }
 
     @Override
@@ -126,7 +117,7 @@ public class Goober extends Animal {
 
         if ((itemStack.is(Items.FEATHER) || itemStack.is(Items.BRUSH)) && this.getSneezeCooldown() == 0 && this.getBehavior().equals(GooberBehavior.IDLE.getName())) {
             this.setSneezeTimer(GooberBehavior.SNEEZING.getLength());
-            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TICKLE_GOOBER.trigger(serverPlayer);
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TICKLE_GOOBER.get().trigger(serverPlayer);
             this.setPose(this.isGooberLayingDown() ? SpeciesPose.SNEEZING_LAYING_DOWN.get() : SpeciesPose.SNEEZING.get());
             this.sneezeCooldown();
             this.playSound(SpeciesSoundEvents.GOOBER_SNEEZE.get(), 2, 1);
@@ -256,8 +247,12 @@ public class Goober extends Animal {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return (pose == SpeciesPose.LAYING_DOWN.get() || pose == SpeciesPose.YAWNING_LAYING_DOWN.get() || pose == SpeciesPose.SNEEZING_LAYING_DOWN.get()) ? SITTING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return (pose == SpeciesPose.LAYING_DOWN.get()
+                || pose == SpeciesPose.YAWNING_LAYING_DOWN.get()
+                || pose == SpeciesPose.SNEEZING_LAYING_DOWN.get())
+                ? SITTING_DIMENSIONS.scale(this.getAgeScale())
+                : super.getDefaultDimensions(pose);
     }
 
     @Override
@@ -302,17 +297,17 @@ public class Goober extends Animal {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
-        this.entityData.define(BEHAVIOR, GooberBehavior.IDLE.getName());
-        this.entityData.define(LAY_DOWN_COOLDOWN, 12 * 20 + random.nextInt(30 * 20));
-        this.entityData.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
-        this.entityData.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
-        this.entityData.define(SNEEZE_TIMER, 0);
-        this.entityData.define(REAR_UP_TIMER, 0);
-        this.entityData.define(YAWN_TIMER, 0);
-        this.entityData.define(SNEEZE_COOLDOWN, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(LAST_POSE_CHANGE_TICK, 0L);
+        builder.define(BEHAVIOR, GooberBehavior.IDLE.getName());
+        builder.define(LAY_DOWN_COOLDOWN, 12 * 20 + random.nextInt(30 * 20));
+        builder.define(YAWN_COOLDOWN, 2 * 20 + random.nextInt(12 * 20));
+        builder.define(REAR_UP_COOLDOWN, 60 * 20 + random.nextInt(60 * 4 * 20));
+        builder.define(SNEEZE_TIMER, 0);
+        builder.define(REAR_UP_TIMER, 0);
+        builder.define(YAWN_TIMER, 0);
+        builder.define(SNEEZE_COOLDOWN, 0);
     }
 
     @Override
@@ -520,7 +515,7 @@ public class Goober extends Animal {
         @Override
         public void tick() {
             if (!Goober.this.refuseToMove()) {
-                if (this.operation == MoveControl.Operation.MOVE_TO && !Goober.this.isLeashed() && Goober.this.isGooberLayingDown() && !Goober.this.isInPoseTransition()) {
+                if (this.operation == Operation.MOVE_TO && !Goober.this.isLeashed() && Goober.this.isGooberLayingDown() && !Goober.this.isInPoseTransition()) {
                     Goober.this.standUp();
                 }
                 super.tick();

@@ -6,10 +6,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.Species;
 import com.ninni.species.client.model.mob_heads.*;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.server.block.MobHeadBlock;
 import com.ninni.species.server.block.WallMobHeadBlock;
 import com.ninni.species.server.block.entity.MobHeadBlockEntity;
-import com.ninni.species.registry.SpeciesEntityModelLayers;
 import net.minecraft.Util;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -24,8 +24,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -36,10 +36,10 @@ import static com.ninni.species.Species.MOD_ID;
 public class MobHeadBlockEntityRenderer implements BlockEntityRenderer<MobHeadBlockEntity> {
     public final Map<MobHeadBlock.Type, MobHeadModelBase> modelByType;
     public static final Map<MobHeadBlock.Type, ResourceLocation> SKIN_BY_TYPE = Util.make(Maps.newHashMap(), (p_261388_) -> {
-        p_261388_.put(MobHeadBlock.Types.GHOUL, new ResourceLocation(MOD_ID, "textures/entity/ghoul/ghoul.png"));
-        p_261388_.put(MobHeadBlock.Types.WICKED, new ResourceLocation(MOD_ID, "textures/entity/wicked/wicked.png"));
-        p_261388_.put(MobHeadBlock.Types.QUAKE, new ResourceLocation(MOD_ID, "textures/entity/quake/quake.png"));
-        p_261388_.put(MobHeadBlock.Types.BEWEREAGER, new ResourceLocation(MOD_ID, "textures/entity/bewereager/bewereager.png"));
+        p_261388_.put(MobHeadBlock.Types.GHOUL, ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/ghoul/ghoul.png"));
+        p_261388_.put(MobHeadBlock.Types.WICKED, ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/wicked/wicked.png"));
+        p_261388_.put(MobHeadBlock.Types.QUAKE, ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/quake/quake.png"));
+        p_261388_.put(MobHeadBlock.Types.BEWEREAGER, ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/bewereager/bewereager.png"));
     });
 
     public static Map<MobHeadBlock.Type, MobHeadModelBase> createMobHeadRenderers(EntityModelSet root) {
@@ -136,7 +136,7 @@ public class MobHeadBlockEntityRenderer implements BlockEntityRenderer<MobHeadBl
 
         VertexConsumer vertexconsumer = multiBufferSource.getBuffer(renderType);
         modelBase.setupAnim(v1, v, 0.0F);
-        modelBase.renderToBuffer(poseStack, vertexconsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        modelBase.renderToBuffer(poseStack, vertexconsumer, i, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }
 

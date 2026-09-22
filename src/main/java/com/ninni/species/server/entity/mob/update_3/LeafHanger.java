@@ -3,9 +3,8 @@ package com.ninni.species.server.entity.mob.update_3;
 import com.ninni.species.Species;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import com.ninni.species.server.entity.mob.update_1.Limpet;
-import net.minecraft.advancements.Advancement;
+import com.ninni.species.registry.SpeciesCriterion;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -34,12 +32,15 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -55,8 +56,12 @@ public class LeafHanger extends Hanger {
 
     public LeafHanger(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.setMaxUpStep(1);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override
@@ -81,13 +86,13 @@ public class LeafHanger extends Hanger {
     }
 
     @Override
-    public @org.jetbrains.annotations.Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnType, @org.jetbrains.annotations.Nullable SpawnGroupData groupData, @org.jetbrains.annotations.Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @org.jetbrains.annotations.Nullable SpawnGroupData spawnGroupData) {
         Holder<Biome> holder = serverLevelAccessor.getBiome(this.blockPosition());
 
         if (holder.is(SpeciesTags.LEAF_HANGER_HAS_DRIPLEAF)) {
             this.setBaitBlockState(Blocks.BIG_DRIPLEAF.defaultBlockState());
         }
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, spawnType, groupData, tag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -129,10 +134,10 @@ public class LeafHanger extends Hanger {
 
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_PULLING_TARGET, false);
-        this.entityData.define(BAIT_BLOCK_STATE, Blocks.LILY_PAD.defaultBlockState());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(IS_PULLING_TARGET, false);
+        builder.define(BAIT_BLOCK_STATE, Blocks.LILY_PAD.defaultBlockState());
     }
 
     @Override
@@ -262,11 +267,11 @@ public class LeafHanger extends Hanger {
                 leafHanger.level().playSound(null, potentialTargets.get(0).blockPosition(), SpeciesSoundEvents.LEAF_HANGER_CATCH.get(), leafHanger.getSoundSource(), 2, 1);
 
                 if (potentialTargets.get(0) instanceof ServerPlayer serverPlayer) {
-                    Advancement hangerAdvancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(Species.MOD_ID, "species/v3/fall_for_hanger"));
+                    AdvancementHolder hangerAdvancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "species/v3/fall_for_hanger"));
 
                     if (hangerAdvancement != null) {
-                        if (serverPlayer.getAdvancements().getOrStartProgress(hangerAdvancement).isDone()) SpeciesCriterion.FALL_FOR_HANGER_TWICE.trigger(serverPlayer);
-                        else SpeciesCriterion.FALL_FOR_HANGER.trigger(serverPlayer);
+                        if (serverPlayer.getAdvancements().getOrStartProgress(hangerAdvancement).isDone()) SpeciesCriterion.FALL_FOR_HANGER_TWICE.get().trigger(serverPlayer);
+                        else SpeciesCriterion.FALL_FOR_HANGER.get().trigger(serverPlayer);
                     }
                 }
                 return true;
@@ -335,7 +340,7 @@ public class LeafHanger extends Hanger {
             this.leafHanger = leafHanger;
             this.speedModifier = speed;
             this.level = leafHanger.level();
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         public boolean canUse() {

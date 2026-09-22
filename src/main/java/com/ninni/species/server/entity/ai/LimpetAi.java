@@ -7,15 +7,7 @@ import com.ninni.species.server.entity.mob.update_1.Limpet;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.AnimalPanic;
-import net.minecraft.world.entity.ai.behavior.DoNothing;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
-import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
-import net.minecraft.world.entity.ai.behavior.RandomStroll;
-import net.minecraft.world.entity.ai.behavior.RunOne;
-import net.minecraft.world.entity.ai.behavior.SetEntityLookTargetSometimes;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.schedule.Activity;
 
@@ -33,7 +25,7 @@ public class LimpetAi {
 
     private static void initCoreActivity(Brain<Limpet> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new AnimalPanic(1.4F),
+                new AnimalPanic<>(1.4F),
                 new LookAtTargetSink(45, 90),
                 new MoveToTargetSink()
         ));

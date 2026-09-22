@@ -1,15 +1,16 @@
 package com.ninni.species.server.entity.mob.update_3;
 
+import com.ninni.species.mixin_util.WolfAccess;
 import com.ninni.species.registry.*;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.ai.goal.BewereagerAttackGoal;
 import com.ninni.species.server.entity.ai.goal.CelebrateWithVillagersGoal;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.mixin_util.WolfAccess;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -27,7 +28,10 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
@@ -38,7 +42,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,7 +50,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -198,10 +201,22 @@ public class Bewereager extends Monster implements OwnableEntity {
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        ListTag listtag = (new BannerPattern.Builder()).addPattern(BannerPatterns.RHOMBUS_MIDDLE, DyeColor.CYAN).addPattern(BannerPatterns.STRIPE_BOTTOM, DyeColor.LIGHT_GRAY).addPattern(BannerPatterns.STRIPE_CENTER, DyeColor.GRAY).addPattern(BannerPatterns.BORDER, DyeColor.LIGHT_GRAY).addPattern(BannerPatterns.STRIPE_MIDDLE, DyeColor.BLACK).addPattern(BannerPatterns.HALF_HORIZONTAL, DyeColor.LIGHT_GRAY).addPattern(BannerPatterns.CIRCLE_MIDDLE, DyeColor.LIGHT_GRAY).addPattern(BannerPatterns.BORDER, DyeColor.BLACK).toListTag();
-        if (this.getFromWolf() && this.getOwner() != null && this.getOwner().is(player) && itemstack.is(Items.WHITE_BANNER) && BlockItem.getBlockEntityData(itemstack).contains("Patterns") && BlockItem.getBlockEntityData(itemstack).get("Patterns").equals(listtag)) {
 
-            if (this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) || this.hasEffect(SpeciesStatusEffects.STUCK.get())) {
+        var patternRegistry = player.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN);
+        BannerPatternLayers patternLayers = new BannerPatternLayers.Builder()
+                .addIfRegistered(patternRegistry, BannerPatterns.RHOMBUS_MIDDLE, DyeColor.CYAN)
+                .addIfRegistered(patternRegistry, BannerPatterns.STRIPE_BOTTOM, DyeColor.LIGHT_GRAY)
+                .addIfRegistered(patternRegistry, BannerPatterns.STRIPE_CENTER, DyeColor.GRAY)
+                .addIfRegistered(patternRegistry, BannerPatterns.BORDER, DyeColor.LIGHT_GRAY)
+                .addIfRegistered(patternRegistry, BannerPatterns.STRIPE_MIDDLE, DyeColor.BLACK)
+                .addIfRegistered(patternRegistry, BannerPatterns.HALF_HORIZONTAL, DyeColor.LIGHT_GRAY)
+                .addIfRegistered(patternRegistry, BannerPatterns.CIRCLE_MIDDLE, DyeColor.LIGHT_GRAY)
+                .addIfRegistered(patternRegistry, BannerPatterns.BORDER, DyeColor.BLACK)
+                .build();
+
+        if (this.getFromWolf() && this.getOwner() != null && this.getOwner().is(player) && itemstack.is(Items.WHITE_BANNER) && itemstack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY).equals(patternLayers)) {
+
+            if (this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) || this.hasEffect(SpeciesStatusEffects.STUCK)) {
                 if (!player.getAbilities().instabuild) itemstack.shrink(1);
                 if (!this.level().isClientSide) this.startSplitting(this.random.nextInt(401) + 400);
                 this.playSound(SpeciesSoundEvents.BEWEREAGER_TRANSFORM_START.get());
@@ -252,14 +267,14 @@ public class Bewereager extends Monster implements OwnableEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(HOWL_COOLDOWN, 0);
-        this.entityData.define(ATTACK_SPEED, 0);
-        this.entityData.define(DATA_COLLAR_COLOR, DyeColor.RED.getId());
-        this.entityData.define(FROM_WOLF, false);
-        this.entityData.define(DATA_OWNERUUID_ID, Optional.empty());
-        this.entityData.define(DATA_SPLITTING_ID, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(HOWL_COOLDOWN, 0);
+        builder.define(ATTACK_SPEED, 0);
+        builder.define(DATA_COLLAR_COLOR, DyeColor.RED.getId());
+        builder.define(FROM_WOLF, false);
+        builder.define(DATA_OWNERUUID_ID, Optional.empty());
+        builder.define(DATA_SPLITTING_ID, false);
     }
 
     @Override
@@ -401,7 +416,7 @@ public class Bewereager extends Monster implements OwnableEntity {
             else if (this.getPose() == SpeciesPose.SHAKING.get()) {
                 this.shakeTime = 25;
                 this.playSound(SpeciesSoundEvents.BEWEREAGER_SHAKE.get(), this.getSoundVolume(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                this.gameEvent(GameEvent.ENTITY_SHAKE);
+                this.gameEvent(GameEvent.ENTITY_ACTION);
                 this.shakeAnimationState.start(this.tickCount);
             }
             else if (this.getPose() == Pose.STANDING) {
@@ -423,13 +438,15 @@ public class Bewereager extends Monster implements OwnableEntity {
             this.playSound(SpeciesSoundEvents.BEWEREAGER_TRANSFORM.get(), 1, 1);
 
             Wolf wolf = this.convertTo(EntityType.WOLF, false);
-            wolf.setCollarColor(this.getCollarColor());
             if (this.getOwnerUUID() != null) {
                 wolf.setOwnerUUID(this.getOwnerUUID());
-                wolf.setTame(true);
+                wolf.setTame(true, false);
                 wolf.setOrderedToSit(true);
             }
-            if (wolf instanceof WolfAccess wolfAccess) wolfAccess.setIsBewereager(true);
+            if (wolf instanceof WolfAccess wolfAccess) {
+                wolfAccess.setNewCollarColor(this.getCollarColor());
+                wolfAccess.setIsBewereager(true);
+            }
             this.addTransformingParticles();
             this.level().addFreshEntity(wolf);
         }
@@ -445,7 +462,7 @@ public class Bewereager extends Monster implements OwnableEntity {
                 if (this.getOwnerUUID() != null) serverLevel.onReputationEvent(ReputationEventType.ZOMBIE_VILLAGER_CURED, this.getOwner(), villager);
                 villager.refreshBrain(serverLevel);
             }
-            if (this.getOwner() instanceof ServerPlayer serverPlayer) SpeciesCriterion.CURE_BEWEREAGER.trigger(serverPlayer);
+            if (this.getOwner() instanceof ServerPlayer serverPlayer) SpeciesCriterion.CURE_BEWEREAGER.get().trigger(serverPlayer);
             if (this.hasCustomName()) villager.setCustomName(this.getCustomName());
             villager.teleportTo(this.getX(),this.getY(),this.getZ());
             villager.setXRot(this.getXRot());
@@ -453,12 +470,13 @@ public class Bewereager extends Monster implements OwnableEntity {
             this.level().addFreshEntity(villager);
 
             Wolf wolf = this.convertTo(EntityType.WOLF, false);
-            wolf.setCollarColor(this.getCollarColor());
             if (this.getOwnerUUID() != null) {
                 wolf.setOwnerUUID(this.getOwnerUUID());
-                wolf.setTame(true);
+                wolf.setTame(true, false);
+                wolf.setVariant(wolf.registryAccess().lookupOrThrow(Registries.WOLF_VARIANT).getOrThrow(SpeciesWolfVariants.CURED_BEWEREAGER));
             }
             if (wolf instanceof WolfAccess wolfAccess) {
+                wolfAccess.setNewCollarColor(this.getCollarColor());
                 wolfAccess.setIsBewereager(false);
                 wolfAccess.setIsCuredBewereager(true);
             }
@@ -496,9 +514,9 @@ public class Bewereager extends Monster implements OwnableEntity {
         return !this.getFromWolf();
     }
 
-    protected void dropCustomDeathLoot(DamageSource p_34697_, int p_34698_, boolean p_34699_) {
-        super.dropCustomDeathLoot(p_34697_, p_34698_, p_34699_);
-        Entity entity = p_34697_.getEntity();
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
+        Entity entity = damageSource.getEntity();
         if (entity instanceof Creeper creeper) {
             if (creeper.canDropMobsSkull()) {
                 ItemStack itemstack = new ItemStack(SpeciesItems.BEWEREAGER_HEAD.get());
@@ -562,7 +580,7 @@ public class Bewereager extends Monster implements OwnableEntity {
                     && mob.onGround()
                     && mob.getPose() == Pose.STANDING
                     && !this.mob.isSplitting()
-                    && !this.mob.hasEffect(SpeciesStatusEffects.STUCK.get())
+                    && !this.mob.hasEffect(SpeciesStatusEffects.STUCK)
                     && !this.mob.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
         }
 

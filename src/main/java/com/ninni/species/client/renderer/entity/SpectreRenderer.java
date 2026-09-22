@@ -4,13 +4,13 @@ import com.ninni.species.client.model.mob.update_3.SpectreModel;
 import com.ninni.species.client.renderer.entity.feature.SpectreBodyFeatureRenderer;
 import com.ninni.species.client.renderer.entity.feature.SpectreMetalFeatureRenderer;
 import com.ninni.species.client.renderer.entity.feature.SpectreWiggleFeatureRenderer;
-import com.ninni.species.server.entity.mob.update_3.Spectre;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
+import com.ninni.species.server.entity.mob.update_3.Spectre;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
@@ -26,7 +26,7 @@ public class SpectreRenderer extends MobRenderer<Spectre, SpectreModel<Spectre>>
 
     @Override
     public ResourceLocation getTextureLocation(Spectre p_114482_) {
-        return new ResourceLocation(MOD_ID, "textures/misc/empty.png");
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/misc/empty.png");
     }
 
     @Override
@@ -36,6 +36,6 @@ public class SpectreRenderer extends MobRenderer<Spectre, SpectreModel<Spectre>>
 
     public static ResourceLocation getSpectreVariantTextureLocation(Spectre spectre, String texture) {
         String string = spectre.getVariant() != Spectre.Type.SPECTRE ? "/" + spectre.getVariant().getSerializedName().replace("_spectre", "") : "";
-        return new ResourceLocation(MOD_ID, "textures/entity/spectre" + string + "/spectre_" + texture + ".png");
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/spectre" + string + "/spectre_" + texture + ".png");
     }
 }

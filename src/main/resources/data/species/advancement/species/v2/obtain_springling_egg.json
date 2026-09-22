@@ -1,0 +1,34 @@
+{
+  "parent": "species:species/v2/ancient_eggs",
+  "display": {
+    "icon": {
+      "id": "species:springling_egg",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.species.obtain_springling_egg.title"
+    },
+    "description": {
+      "translate": "advancements.species.obtain_springling_egg.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "has_egg": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": ["species:springling_egg"] }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_egg"
+    ]
+  ]
+}

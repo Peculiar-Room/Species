@@ -9,6 +9,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,19 +37,19 @@ import java.util.Set;
 
 public class PaleontologyDigSiteGenerator {
     public static final Map<ResourceLocation, Integer> HEIGHT_TO_TEMPLATES = Util.make(Maps.newHashMap(), map -> {
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_bigger"), 9);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_crippler"), 6);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_gripper"), 7);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_extender"), 3);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_grinner"), 1);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_lilypadder"), 7);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_loser"), 3);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_shell"), 7);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_tail"), 5);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_stroker"), 2);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_trampler"), 6);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_tremor"), 4);
-        map.put(new ResourceLocation(Species.MOD_ID, "paleontology_dig_site/dig_site_zipper"), 10);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_bigger"), 9);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_crippler"), 6);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_gripper"), 7);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_extender"), 3);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_grinner"), 1);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_lilypadder"), 7);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_loser"), 3);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_shell"), 7);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_shimmer_tail"), 5);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_stroker"), 2);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_trampler"), 6);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_tremor"), 4);
+        map.put(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "paleontology_dig_site/dig_site_zipper"), 10);
     });
 
     public static void addPieces(StructureTemplateManager manager, BlockPos pos, StructurePieceAccessor holder, RandomSource random) {
@@ -84,7 +86,7 @@ public class PaleontologyDigSiteGenerator {
         @Override
         public void postProcess(WorldGenLevel world, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource randomSource, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos blockPos) {
             BlockPos blockPos1 = this.templatePosition;
-            this.templatePosition = this.templatePosition.below(PaleontologyDigSiteGenerator.HEIGHT_TO_TEMPLATES.get(new ResourceLocation(this.templateName)));
+            this.templatePosition = this.templatePosition.below(PaleontologyDigSiteGenerator.HEIGHT_TO_TEMPLATES.get(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, this.templateName.replace("species:", ""))));
             super.postProcess(world, structureManager, chunkGenerator, randomSource, boundingBox, chunkPos, blockPos);
             this.templatePosition = blockPos1;
         }
@@ -103,7 +105,7 @@ public class PaleontologyDigSiteGenerator {
             }
         }
 
-        protected void createRedSuspiciousSand(ServerLevelAccessor serverLevelAccessor, BoundingBox boundingBox, RandomSource randomSource, BlockPos blockPos, ResourceLocation resourceLocation) {
+        protected void createRedSuspiciousSand(ServerLevelAccessor serverLevelAccessor, BoundingBox boundingBox, RandomSource randomSource, BlockPos blockPos, ResourceKey<LootTable> lootTableResourceKey) {
             Block redSuspiciousSand = SpeciesBlocks.RED_SUSPICIOUS_SAND.get();
 
             boolean outsideBoundingBox = !boundingBox.isInside(blockPos);
@@ -116,7 +118,7 @@ public class PaleontologyDigSiteGenerator {
 
             BlockEntity blockEntity = serverLevelAccessor.getBlockEntity(blockPos);
 
-            if (blockEntity instanceof BrushableBlockEntity entity) entity.setLootTable(resourceLocation, randomSource.nextLong());
+            if (blockEntity instanceof BrushableBlockEntity entity) entity.setLootTable(lootTableResourceKey, randomSource.nextLong());
         }
 
     }

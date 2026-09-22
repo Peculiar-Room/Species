@@ -34,11 +34,11 @@ public abstract class AbstractArrowMixin extends Projectile implements AbstractA
     @Inject(at = @At("HEAD"), method = "tryPickup", cancellable = true)
     private void S$tryPickup(Player player, CallbackInfoReturnable<Boolean> cir) {
         ItemStack stack = player.getMainHandItem();
-        if (stack.getItem() instanceof CrankbowItem && CrankbowItem.getContentWeight(stack) < CrankbowItem.getMaxWeight(stack)) {
+        if (stack.getItem() instanceof CrankbowItem && CrankbowItem.getContentWeight(stack) < CrankbowItem.getMaxWeight(stack, player.registryAccess())) {
             cir.cancel();
             switch (this.pickup) {
                 case ALLOWED -> {
-                    CrankbowItem.add(stack,this.getPickupItem());
+                    CrankbowItem.add(stack,this.getPickupItem(), player.registryAccess());
                     cir.setReturnValue(true);
                 }
                 case CREATIVE_ONLY -> cir.setReturnValue(player.getAbilities().instabuild);

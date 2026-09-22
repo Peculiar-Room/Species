@@ -1,8 +1,8 @@
 package com.ninni.species.server.entity.effect;
 
-import com.ninni.species.server.entity.mob.update_2.Cruncher;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_2.Cruncher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -26,21 +27,22 @@ public class GutFeelingEffect extends MobEffect {
         super(mobEffectCategory, i);
     }
 
-    @Override
-    public boolean isDurationEffectTick(int i, int j) {
-        return i == 1;
-    }
+    // No idea what this means
+    //@Override
+    //public boolean isDurationEffectTick(int i, int j) {
+    //    return i == 1;
+    //}
 
     @Override
-    public void applyEffectTick(LivingEntity livingEntity, int i) {
+    public boolean applyEffectTick(LivingEntity livingEntity, int amplifier)  {
         if (livingEntity instanceof ServerPlayer serverPlayer) {
             if (!livingEntity.isSpectator()) {
                 BlockPos blockPos = serverPlayer.blockPosition();
                 Level level = livingEntity.level();
 
-                if (!(level instanceof ServerLevel serverLevel)) return;
+                if (!(level instanceof ServerLevel serverLevel)) return true;
 
-                int k = i == 0 ? 2 : 2 - i;
+                int k = amplifier == 0 ? 2 : 2 - amplifier;
                 int j = 20;
                 BlockPos spawnPos = null;
                 BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
@@ -57,11 +59,13 @@ public class GutFeelingEffect extends MobEffect {
                     }
 
                     mutableBlockPos.set(m, o, n);
-                    if (serverLevel.isVillage(mutableBlockPos) && i < 2) continue;
+                    if (serverLevel.isVillage(mutableBlockPos) && amplifier < 2) continue;
 
                     if (!serverLevel.hasChunksAt(mutableBlockPos.getX() - 10, mutableBlockPos.getZ() - 10, mutableBlockPos.getX() + 10, mutableBlockPos.getZ() + 10)
                             || !serverLevel.isPositionEntityTicking(mutableBlockPos)
-                            || !NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, serverLevel, mutableBlockPos, SpeciesEntities.CRUNCHER.get())
+                            //Need to look into
+                            //|| !NaturalSpawner.isValidPositionForMob(serverLevel, SpeciesEntities.CRUNCHER.get(), )
+                            //|| !NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, serverLevel, mutableBlockPos, SpeciesEntities.CRUNCHER.get())
                             && (!serverLevel.getBlockState(mutableBlockPos.below()).is(Blocks.SNOW) || !serverLevel.getBlockState(mutableBlockPos).isAir())) continue;
 
                     spawnPos = mutableBlockPos;
@@ -69,11 +73,12 @@ public class GutFeelingEffect extends MobEffect {
                 }
                 if (spawnPos != null) {
                     serverLevel.playSound(null, livingEntity.blockPosition(), SpeciesSoundEvents.GUT_FEELING_SPAWN.get(), SoundSource.HOSTILE, 2, 1);
-                    Cruncher cruncher = SpeciesEntities.CRUNCHER.get().spawn(serverLevel, (CompoundTag)null, null, spawnPos, MobSpawnType.TRIGGERED, true, false);
+                    Cruncher cruncher = SpeciesEntities.CRUNCHER.get().spawn(serverLevel, null, null, spawnPos, MobSpawnType.TRIGGERED, true, false);
                     if (cruncher != null) cruncher.getBrain().setMemory(MemoryModuleType.NEAREST_ATTACKABLE, serverPlayer);
                 }
             }
         }
+        return true;
     }
 
 }

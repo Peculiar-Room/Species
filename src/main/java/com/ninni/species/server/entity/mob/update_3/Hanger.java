@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -52,23 +53,23 @@ public abstract class Hanger extends Monster {
     }
 
     @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnType, @Nullable SpawnGroupData groupData, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.setRare(random.nextInt(10) == 0);
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, spawnType, groupData, tag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 50.0).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.KNOCKBACK_RESISTANCE, 1).add(Attributes.ATTACK_DAMAGE, 8);
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
+    //@Override
+    //public MobType getMobType() {
+    //    return MobType.ARTHROPOD;
+    //}
 
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
+    //public boolean canBreatheUnderwater() {
+    //    return true;
+    //}
 
     public boolean isPushedByFluid() {
         return false;
@@ -175,14 +176,15 @@ public abstract class Hanger extends Monster {
     }
 
     @Override
-    protected void dropCustomDeathLoot(DamageSource source, int lootingMultiplier, boolean recentlyHit) {
-        super.dropCustomDeathLoot(source, lootingMultiplier, recentlyHit);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 
         if (this.isTongueOut()) {
             if (this.random.nextFloat() < 0.8F) {
                 int count = 1;
 
-                if (this.random.nextFloat() < 0.3F + (0.05F * lootingMultiplier)) {
+                //if (this.random.nextFloat() < 0.3F + (0.05F * lootingMultiplier)) {
+                if (this.random.nextFloat() < 0.3F) {
                     count += 1 + this.random.nextInt(2);
                 }
                 for (int i = 0; i < count; i++) {
@@ -206,14 +208,14 @@ public abstract class Hanger extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CURRENT_TONGUE_POS, new Vector3f((float) this.getX(), (float) (this.getY() + getTongueOffset()), (float) this.getZ()));
-        this.entityData.define(JAW_SNAP_TICKS, 0);
-        this.entityData.define(CANT_ATTACK_TICKS, 0);
-        this.entityData.define(TARGET_POS, new Vector3f((float) this.getX(), (float) this.getY() + getTongueOffset(), (float) this.getZ()));
-        this.entityData.define(IS_TONGUE_OUT, false);
-        this.entityData.define(RARE, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CURRENT_TONGUE_POS, new Vector3f((float) this.getX(), (float) (this.getY() + getTongueOffset()), (float) this.getZ()));
+        builder.define(JAW_SNAP_TICKS, 0);
+        builder.define(CANT_ATTACK_TICKS, 0);
+        builder.define(TARGET_POS, new Vector3f((float) this.getX(), (float) this.getY() + getTongueOffset(), (float) this.getZ()));
+        builder.define(IS_TONGUE_OUT, false);
+        builder.define(RARE, false);
     }
 
     @Override

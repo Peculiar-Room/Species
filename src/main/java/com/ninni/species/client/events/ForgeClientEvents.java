@@ -7,12 +7,9 @@ import com.ninni.species.Species;
 import com.ninni.species.mixin_util.EntityRenderDispatcherAccess;
 import com.ninni.species.mixin_util.LivingEntityAccess;
 import com.ninni.species.registry.SpeciesItems;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EndermanModel;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -20,7 +17,9 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -28,23 +27,21 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords;
 import static net.minecraft.client.renderer.entity.LivingEntityRenderer.isEntityUpsideDown;
 
-@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Species.MOD_ID, value = Dist.CLIENT)
 public class ForgeClientEvents {
 
     @SubscribeEvent
@@ -67,15 +64,17 @@ public class ForgeClientEvents {
     }
 
     @SubscribeEvent
-    public static void livingEntityRenderer(RenderLivingEvent<LivingEntity, EntityModel<LivingEntity>> event) {
+    public static void livingEntityRenderer(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entity = event.getEntity();
         ItemStack headItem = entity.getItemBySlot(EquipmentSlot.HEAD);
         LivingEntity disguise = ((LivingEntityAccess) entity).getDisguisedEntity();
 
-        if (headItem.is(SpeciesItems.WICKED_MASK.get()) && headItem.hasTag() && headItem.getTag().contains("id") && disguise != null && !(entity instanceof Player player && player.isSpectator())) {
+        CompoundTag tag = headItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (headItem.is(SpeciesItems.WICKED_MASK.get()) && tag.contains("id") && disguise != null && !(entity instanceof Player player && player.isSpectator())) {
             event.setCanceled(true);
             EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<?> baseRenderer = dispatcher.getRenderer(disguise);
+
 
             if (baseRenderer instanceof LivingEntityRenderer renderer && disguise != null && !disguise.isRemoved() && disguise.getType() != null && !entity.hasEffect(MobEffects.INVISIBILITY)) {
                 EntityModel model = renderer.getModel();
@@ -88,7 +87,7 @@ public class ForgeClientEvents {
 
                 poseStack.pushPose();
 
-                model.attackTime = renderer.getAttackAnim(entity, partialTicks);
+                model.attackTime = entity.getAttackAnim(partialTicks);
                 disguise.hurtTime = entity.hurtTime;
                 disguise.swingingArm = entity.swingingArm;
                 disguise.tickCount = entity.tickCount;
@@ -135,11 +134,25 @@ public class ForgeClientEvents {
                     }
                 }
 
-                float animProgress = renderer.getBob(disguise, partialTicks);
-                renderer.setupRotations(disguise, poseStack, animProgress, bodyRot, partialTicks);
+                float animProgress = disguise.tickCount + partialTicks;
+
+                try {
+                    Class<?> c = Class.forName("net.minecraft.client.renderer.entity.LivingEntityRenderer");
+                    Method method = c.getDeclaredMethod("setupRotations", LivingEntity.class, PoseStack.class, float.class, float.class, float.class, float.class);
+                    method.setAccessible(true);
+                    method.invoke(renderer, disguise, poseStack, animProgress, bodyRot, partialTicks, 1f);
+                }
+                catch (Exception ignored) {}
+
                 poseStack.scale(-1.0F, -1.0F, 1.0F);
 
-                renderer.scale(disguise, poseStack, partialTicks);
+                try {
+                    Class<?> c = Class.forName("net.minecraft.client.renderer.entity.LivingEntityRenderer");
+                    Method method = c.getDeclaredMethod("scale", LivingEntity.class, PoseStack.class, float.class);
+                    method.setAccessible(true);
+                    method.invoke(renderer, disguise, poseStack, partialTicks);
+                }
+                catch (Exception ignored) {}
                 poseStack.translate(0.0F, -1.501F, 0.0F);
 
                 float walkSpeed = entity.walkAnimation.speed(partialTicks);
@@ -154,17 +167,42 @@ public class ForgeClientEvents {
                 model.prepareMobModel(disguise, walkPos, walkSpeed, partialTicks);
                 model.setupAnim(disguise, walkPos, walkSpeed, animProgress, netHeadYaw, headPitch);
 
+                boolean bodyVisible = true;
+                try {
+                    Class<?> c = Class.forName("net.minecraft.client.renderer.entity.LivingEntityRenderer");
+                    Method method = c.getDeclaredMethod("isBodyVisible", LivingEntity.class);
+                    method.setAccessible(true);
+                    bodyVisible = (boolean)method.invoke(renderer, entity);
+                }
+                catch (Exception ignored) {}
+
                 Minecraft mc = Minecraft.getInstance();
-                boolean bodyVisible = renderer.isBodyVisible(entity);
                 boolean invisible = !bodyVisible && !entity.isInvisibleTo(mc.player);
                 boolean glowing = mc.shouldEntityAppearGlowing(entity);
-                RenderType type = renderer.getRenderType(disguise, bodyVisible, invisible, glowing);
+
+                RenderType type = RenderType.SOLID;
+                try {
+                    Class<?> c = Class.forName("net.minecraft.client.renderer.entity.LivingEntityRenderer");
+                    Method method = c.getDeclaredMethod("getRenderType", LivingEntity.class, boolean.class, boolean.class, boolean.class);
+                    method.setAccessible(true);
+                    type = (RenderType) method.invoke(renderer, disguise, bodyVisible, invisible, glowing);
+                }
+                catch (Exception ignored) {}
 
                 if (type != null) {
                     VertexConsumer consumer = buffer.getBuffer(type);
-                    int overlay = getOverlayCoords(entity, event.getRenderer().getWhiteOverlayProgress(entity, partialTicks));
+                    float whiteOverlayProgress = 0;
                     try {
-                        model.renderToBuffer(poseStack, consumer, light, overlay, 1.0F, 1.0F, 1.0F, invisible ? 0.15F : 1.0F);
+                        Class<?> c = Class.forName("net.minecraft.client.renderer.entity.LivingEntityRenderer");
+                        Method method = c.getDeclaredMethod("getWhiteOverlayProgress", LivingEntity.class, float.class);
+                        method.setAccessible(true);
+                        whiteOverlayProgress = (float) method.invoke(renderer, entity, partialTicks);
+                    }
+                    catch (Exception ignored) {}
+
+                    int overlay = getOverlayCoords(entity, whiteOverlayProgress);
+                    try {
+                        model.renderToBuffer(poseStack, consumer, light, overlay, FastColor.ARGB32.colorFromFloat(invisible ? 0.15F : 1.0F, 1.0F, 1.0F, 1.0F));
                     } catch (Exception ignored) {}
                 }
 
@@ -178,6 +216,8 @@ public class ForgeClientEvents {
 
                 poseStack.popPose();
             }
+
+
         }
 
         if (((LivingEntityAccess) entity).hasTanked()) event.getPoseStack().scale(1.35F, 1.125F, 1.35F);

@@ -32,7 +32,7 @@ public class SmokeBombItem extends Item {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (entity instanceof Player player) {
-            int chargeTime = this.getUseDuration(stack) - timeLeft;
+            int chargeTime = this.getUseDuration(stack, entity) - timeLeft;
             if (chargeTime < 10) {
                 player.getCooldowns().addCooldown(this, 20);
                 return;
@@ -65,7 +65,7 @@ public class SmokeBombItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
@@ -75,12 +75,12 @@ public class SmokeBombItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.translatable("item.species.smoke_bomb.desc.invisibility").withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("item.species.smoke_bomb.desc.speed").withStyle(ChatFormatting.BLUE));
         list.add(Component.literal(""));
         list.add(Component.translatable("potion.whenDrank").withStyle(ChatFormatting.DARK_PURPLE));
         list.add(Component.translatable("item.species.smoke_bomb.desc.speed.effect").withStyle(ChatFormatting.BLUE));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 }

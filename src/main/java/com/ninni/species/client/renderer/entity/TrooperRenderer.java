@@ -1,23 +1,23 @@
 package com.ninni.species.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.client.model.mob.update_2.TrooperModel;
+import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.server.entity.mob.update_2.Trooper;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class TrooperRenderer<T extends LivingEntity> extends MobRenderer<Trooper, TrooperModel<Trooper>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/treeper/trooper.png");
-    public static final ResourceLocation TAMED_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/treeper/trooper_tame.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/treeper/trooper.png");
+    public static final ResourceLocation TAMED_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/treeper/trooper_tame.png");
 
     public TrooperRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new TrooperModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.TROOPER)), 0.3F);

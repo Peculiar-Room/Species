@@ -1,17 +1,19 @@
 package com.ninni.species.server.entity.mob.update_1;
 
-import com.ninni.species.server.entity.util.SpeciesPose;
+import com.ninni.species.Species;
 import com.ninni.species.registry.SpeciesBlocks;
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import com.ninni.species.server.entity.ai.goal.WraptorSwoopAtTargetGoal;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.SpeciesCriterion;
+import com.ninni.species.server.entity.ai.goal.WraptorSwoopAtTargetGoal;
+import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -28,15 +30,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowParentGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -69,6 +63,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
     private int roarTime;
     private long timeSinceSheared;
 
+
     public Wraptor(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
         this.xpReward = 3;
@@ -88,17 +83,17 @@ public class Wraptor extends Animal implements Enemy, Shearable {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-        this.getAttribute(Attributes.FOLLOW_RANGE).addPermanentModifier(new AttributeModifier("Random spawn bonus", serverLevelAccessor.getRandom().triangle(0.0, 0.11485000000000001), AttributeModifier.Operation.MULTIPLY_BASE));
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
+        this.getAttribute(Attributes.FOLLOW_RANGE).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "random_spawn_bonus"), serverLevelAccessor.getRandom().triangle(0.0, 0.11485000000000001), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FEATHER_STAGE, 5);
-        this.entityData.define(IS_BORN_FROM_EGG, false);
-        this.entityData.define(HAS_EGG, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(FEATHER_STAGE, 5);
+        builder.define(IS_BORN_FROM_EGG, false);
+        builder.define(HAS_EGG, false);
     }
 
     @Override
@@ -106,9 +101,9 @@ public class Wraptor extends Animal implements Enemy, Shearable {
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, WitherSkeleton.class, false));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new WraptorSwoopAtTargetGoal(this, 0.5F));
-        this.goalSelector.addGoal(2, new Wraptor.AttackGoal(1.2, false));
-        this.goalSelector.addGoal(1, new Wraptor.MateGoal(this, 1.0D));
-        this.goalSelector.addGoal(1, new Wraptor.LayGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new AttackGoal(1.2, false));
+        this.goalSelector.addGoal(1, new MateGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new LayGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.WRAPTOR_BREED_ITEMS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1));
@@ -198,7 +193,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
     }
 
     @Override
-    public int getExperienceReward() {
+    public int getBaseExperienceReward() {
         return this.xpReward;
     }
 
@@ -209,9 +204,9 @@ public class Wraptor extends Animal implements Enemy, Shearable {
             if (!this.level().isClientSide && this.readyForShearing()) {
                 this.shear(SoundSource.PLAYERS);
                 this.gameEvent(GameEvent.SHEAR, player);
-                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                stack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(player.getItemInHand(hand)));
                 if (this.getFeatherStage() == 0) {
-                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SHEAR_WRAPTOR_COMPLETELY.trigger(serverPlayer);
+                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SHEAR_WRAPTOR_COMPLETELY.get().trigger(serverPlayer);
                     if (!player.isCreative() && !this.isBormFromEgg()) {
                         if (!this.isSilent()) this.level().playSound(null, this, SpeciesSoundEvents.WRAPTOR_AGGRO.get(), SoundSource.HOSTILE, 3.0f, 1.0f);
                         this.setPose(Pose.ROARING);
@@ -271,10 +266,10 @@ public class Wraptor extends Animal implements Enemy, Shearable {
         this.setHasEgg(nbt.getBoolean("HasEgg"));
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height * 0.95F;
-    }
+    //@Override
+    //protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
+    //    return entityDimensions.height * 0.95F;
+    //}
 
     @Nullable
     @Override
@@ -329,7 +324,7 @@ public class Wraptor extends Animal implements Enemy, Shearable {
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashed() {
         return this.isBormFromEgg();
     }
 
@@ -424,9 +419,8 @@ public class Wraptor extends Animal implements Enemy, Shearable {
 
 
         @Override
-        protected void checkAndPerformAttack(LivingEntity target, double squaredDistance) {
-            double d = this.getAttackReachSqr(target);
-            if (squaredDistance <= d && this.isTimeToAttack()) {
+        protected void checkAndPerformAttack(LivingEntity target) {
+            if (this.mob.isWithinMeleeAttackRange(target) && this.isTimeToAttack()) {
                 this.resetAttackCooldown();
                 Wraptor.this.doHurtTarget(target);
                 Wraptor.this.playSound(SpeciesSoundEvents.WRAPTOR_ATTACK.get(), 1.0F, 1.0F);

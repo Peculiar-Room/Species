@@ -1,9 +1,11 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.client.inventory.BirtdayCakeMenu;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.block.entity.BirtdayCakeBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -13,13 +15,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -36,10 +41,12 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.extensions.IPlayerExtension;
+import net.neoforged.neoforge.network.registration.NetworkChannel;
 import org.jetbrains.annotations.Nullable;
 
 public class BirtdayCakeBlock extends BaseEntityBlock {
+    public static final MapCodec<BirtdayCakeBlock> CODEC = simpleCodec(BirtdayCakeBlock::new);
     private static final VoxelShape SHAPE = Shapes.join(Block.box(7, 6, 7, 9, 10, 9), Block.box(2, 0, 2, 14, 6, 14), BooleanOp.OR);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
@@ -49,8 +56,13 @@ public class BirtdayCakeBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS;
 
         if (!state.getValue(LIT)) {
             if (player.getItemInHand(hand).is(Items.FLINT_AND_STEEL)) {
@@ -68,8 +80,8 @@ public class BirtdayCakeBlock extends BaseEntityBlock {
                     }
                 }
 
-            } else {
-                NetworkHooks.openScreen((ServerPlayer) player, new MenuProvider() {
+            } else if (player instanceof IPlayerExtension playerExtension){
+                playerExtension.openMenu(new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.translatable("container.species.birtday_cake");
@@ -77,17 +89,18 @@ public class BirtdayCakeBlock extends BaseEntityBlock {
 
                     @Override
                     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+                        System.out.println("Creating menu");
                         return new BirtdayCakeMenu(id, inv, pos);
                     }
                 }, pos);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         level.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRTDAY_CAKE_BLOW.get(), SoundSource.BLOCKS, 1, 1);
         level.setBlock(pos, state.setValue(LIT, false), 3);
         level.scheduleTick(pos, this, 80);
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
 
@@ -114,7 +127,7 @@ public class BirtdayCakeBlock extends BaseEntityBlock {
 
     @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, LivingEntity livingEntity, ItemStack itemStack) {
-        if (level.getBlockEntity(blockPos) instanceof BirtdayCakeBlockEntity blockEntity && (!itemStack.hasTag() || !itemStack.getTag().getCompound("BlockEntityTag").contains("PlayerName"))) {
+        if (level.getBlockEntity(blockPos) instanceof BirtdayCakeBlockEntity blockEntity && (!itemStack.has(DataComponents.BLOCK_ENTITY_DATA) || ! itemStack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY).contains("PlayerName"))) {
             blockEntity.setPlayerName(livingEntity.getScoreboardName());
         }
     }

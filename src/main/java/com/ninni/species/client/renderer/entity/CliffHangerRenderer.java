@@ -15,15 +15,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class CliffHangerRenderer extends HangerRenderer<CliffHanger, CliffHangerModel<CliffHanger>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/hanger/cliff_hanger.png");
-    public static final ResourceLocation TEXTURE_RARE = new ResourceLocation(MOD_ID, "textures/entity/hanger/drip_hanger.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/cliff_hanger.png");
+    public static final ResourceLocation TEXTURE_RARE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/drip_hanger.png");
 
     public CliffHangerRenderer(EntityRendererProvider.Context context) {
         super(context, new CliffHangerModel<>(context.bakeLayer(SpeciesEntityModelLayers.CLIFF_HANGER)), 0.5f);

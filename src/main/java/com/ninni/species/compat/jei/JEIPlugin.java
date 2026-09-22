@@ -9,15 +9,15 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
-    public static final ResourceLocation ID = new ResourceLocation(Species.MOD_ID, "jei_plugin");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "jei_plugin");
     public static final RecipeType<GooberGooManager.GooberGooData> GOOBER_GOO = RecipeType.create(Species.MOD_ID, "goober_goo", GooberGooManager.GooberGooData.class);
     public static final RecipeType<CruncherPelletManager.CruncherPelletData> CRUNCHER_PELLET = RecipeType.create(Species.MOD_ID, "cruncher_pellet", CruncherPelletManager.CruncherPelletData.class);
 

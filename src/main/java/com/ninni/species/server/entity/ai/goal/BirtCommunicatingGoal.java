@@ -1,7 +1,7 @@
 package com.ninni.species.server.entity.ai.goal;
 
-import com.ninni.species.server.entity.mob.update_1.Birt;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_1.Birt;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
@@ -25,7 +25,7 @@ public class BirtCommunicatingGoal extends Goal {
         this.sender = birt;
         this.world = birt.level();
         this.entityClass = entityClass;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override

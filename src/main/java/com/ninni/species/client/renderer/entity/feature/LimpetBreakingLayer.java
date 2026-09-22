@@ -10,14 +10,15 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 import static com.ninni.species.Species.MOD_ID;
 
 public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetModel<Limpet>> {
     private final LimpetModel<Limpet> model;
-    public static final ResourceLocation TEXTURE_0 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/0.png");
-    public static final ResourceLocation TEXTURE_1 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/1.png");
-    public static final ResourceLocation TEXTURE_2 = new ResourceLocation(MOD_ID, "textures/entity/limpet/breaking_overlay/2.png");
+    public static final ResourceLocation TEXTURE_0 = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/limpet/breaking_overlay/0.png");
+    public static final ResourceLocation TEXTURE_1 = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/limpet/breaking_overlay/1.png");
+    public static final ResourceLocation TEXTURE_2 = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/limpet/breaking_overlay/2.png");
 
     public LimpetBreakingLayer(RenderLayerParent<Limpet, LimpetModel<Limpet>> renderLayerParent, LimpetModel<Limpet> entityModel) {
         super(renderLayerParent);
@@ -31,7 +32,7 @@ public class LimpetBreakingLayer extends RenderLayer<Limpet, LimpetModel<Limpet>
             this.model.prepareMobModel(limpet, f, g, h);
             this.model.setupAnim(limpet, f, g, j, k, l);
             VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityTranslucent(this.getOverlayTextureLocation(limpet)));
-            this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 0.75f);
+            this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(0.75f, 1.0f, 1.0f, 1.0f));
         }
     }
 

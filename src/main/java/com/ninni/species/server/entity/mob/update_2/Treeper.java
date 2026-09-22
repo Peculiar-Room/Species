@@ -3,15 +3,15 @@ package com.ninni.species.server.entity.mob.update_2;
 import com.google.common.annotations.VisibleForTesting;
 import com.ninni.species.Species;
 import com.ninni.species.client.screen.ScreenShakeEvent;
+import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.ai.goal.TreeperPlantGoal;
 import com.ninni.species.server.entity.ai.goal.TreeperUprootGoal;
 import com.ninni.species.server.entity.mob.update_3.Quake;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -28,15 +28,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
@@ -52,7 +44,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.PartEntity;
+import net.neoforged.neoforge.entity.PartEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -79,7 +71,6 @@ public class Treeper extends AgeableMob {
 
     public Treeper(EntityType<? extends AgeableMob> entityType, Level level) {
         super(entityType, level);
-        this.setMaxUpStep(1);
         this.lookControl = new TreeperLookControl(this);
 
         this.trunk1 = new TreeperCanopy(this, "trunk1", 2F, 4, 0,0,0);
@@ -118,6 +109,11 @@ public class Treeper extends AgeableMob {
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1);
     }
 
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
+    }
+
     public void setId(int i1) {
         super.setId(i1);
         for(int i = 0; i < this.subEntities.length; ++i) {
@@ -126,9 +122,9 @@ public class Treeper extends AgeableMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.setHasMob(this.random.nextInt(10) == 0);
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -162,7 +158,7 @@ public class Treeper extends AgeableMob {
                 this.level().addParticle(ParticleTypes.FLAME, this.getRandomX(2), this.getY() + Math.random(), this.getRandomZ(2), 0.0, 0.0, 0.0);
             }
             this.setBurned(true);
-            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.BURN_TREEPER_INTO_PLACE.trigger(serverPlayer);
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.BURN_TREEPER_INTO_PLACE.get().trigger(serverPlayer);
             if (!this.isPlanted()) this.plant();
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else if (itemStack.is(SpeciesTags.EXTINGUISHES_TREEPER) && this.isBurned()) {
@@ -248,13 +244,13 @@ public class Treeper extends AgeableMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SAPLING_COOLDOWN, 0);
-        this.entityData.define(LAST_POSE_CHANGE_TICK, 0L);
-        this.entityData.define(PLANTED, false);
-        this.entityData.define(BURNED, false);
-        this.entityData.define(HAS_MOB, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SAPLING_COOLDOWN, 0);
+        builder.define(LAST_POSE_CHANGE_TICK, 0L);
+        builder.define(PLANTED, false);
+        builder.define(BURNED, false);
+        builder.define(HAS_MOB, false);
     }
 
     @Override
@@ -331,10 +327,10 @@ public class Treeper extends AgeableMob {
         return (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || source.getEntity() instanceof Quake)  && super.hurt(source, amount);
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return pose == SpeciesPose.PLANTING.get() ? entityDimensions.height * 0.5F : entityDimensions.height * 0.65F;
-    }
+    //@Override
+    //protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
+    //    return pose == SpeciesPose.PLANTING.get() ? entityDimensions.height * 0.5F : entityDimensions.height * 0.65F;
+    //}
 
     @Override
     public void travel(Vec3 movementInput) {

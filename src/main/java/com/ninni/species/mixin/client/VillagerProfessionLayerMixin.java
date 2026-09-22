@@ -24,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(VillagerProfessionLayer.class)
 public abstract class VillagerProfessionLayerMixin<T extends LivingEntity & VillagerDataHolder, M extends EntityModel<T> & VillagerHeadModel> extends RenderLayer<T, M> {
     @Shadow protected abstract ResourceLocation getResourceLocation(String p_117669_, ResourceLocation p_117670_);
@@ -34,24 +36,24 @@ public abstract class VillagerProfessionLayerMixin<T extends LivingEntity & Vill
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void S$render(PoseStack poseStack, MultiBufferSource bufferSource, int p_117648_, T villager, float p_117650_, float p_117651_, float p_117652_, float p_117653_, float p_117654_, float p_117655_, CallbackInfo ci) {
-        VillagerData $$10 = villager.getVillagerData();
-        VillagerType $$11 = $$10.getType();
-        VillagerProfession $$12 = $$10.getProfession();
+    private void S$render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T villager, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
+        VillagerData villagerData = villager.getVillagerData();
+        VillagerType villagerType = villagerData.getType();
+        VillagerProfession villagerProfession = villagerData.getProfession();
 
-        if (!villager.isInvisible() && $$11 == SpeciesVillagerTypes.CURED_BEWEREAGER.get()) {
+        if (!villager.isInvisible() && villagerType == SpeciesVillagerTypes.CURED_BEWEREAGER.get()) {
             ci.cancel();
-            M $$15 = this.getParentModel();
-            ($$15).hatVisible(true);
-            ResourceLocation $$16 = this.getResourceLocation("type", BuiltInRegistries.VILLAGER_TYPE.getKey($$11));
-            renderColoredCutoutModel($$15, $$16, poseStack, bufferSource, p_117648_, villager, 1.0F, 1.0F, 1.0F);
-            ($$15).hatVisible(true);
-            if ($$12 != VillagerProfession.NONE && !villager.isBaby()) {
-                ResourceLocation $$17 = this.getResourceLocation("profession", BuiltInRegistries.VILLAGER_PROFESSION.getKey($$12));
-                renderColoredCutoutModel($$15, $$17, poseStack, bufferSource, p_117648_, villager, 1.0F, 1.0F, 1.0F);
-                if ($$12 != VillagerProfession.NITWIT) {
-                    ResourceLocation $$18 = this.getResourceLocation("profession_level", LEVEL_LOCATIONS.get(Mth.clamp($$10.getLevel(), 1, LEVEL_LOCATIONS.size())));
-                    renderColoredCutoutModel($$15, $$18, poseStack, bufferSource, p_117648_, villager, 1.0F, 1.0F, 1.0F);
+            M m = this.getParentModel();
+            (m).hatVisible(true);
+            ResourceLocation typeLocation = this.getResourceLocation("type", BuiltInRegistries.VILLAGER_TYPE.getKey(villagerType));
+            renderColoredCutoutModel(m, typeLocation, poseStack, bufferSource, packedLight, villager, -1);
+            (m).hatVisible(true);
+            if (villagerProfession != VillagerProfession.NONE && !villager.isBaby()) {
+                ResourceLocation professionLocation = this.getResourceLocation("profession", BuiltInRegistries.VILLAGER_PROFESSION.getKey(villagerProfession));
+                renderColoredCutoutModel(m, professionLocation, poseStack, bufferSource, packedLight, villager, -1);
+                if (villagerProfession != VillagerProfession.NITWIT) {
+                    ResourceLocation professionLevelLocation = this.getResourceLocation("profession_level", LEVEL_LOCATIONS.get(Mth.clamp(villagerData.getLevel(), 1, LEVEL_LOCATIONS.size())));
+                    renderColoredCutoutModel(m, professionLevelLocation, poseStack, bufferSource, packedLight, villager, -1);
                 }
             }
 

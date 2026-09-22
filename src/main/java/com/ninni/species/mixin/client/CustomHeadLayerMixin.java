@@ -1,10 +1,10 @@
 package com.ninni.species.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.ninni.species.server.block.MobHeadBlock;
-import com.ninni.species.server.block.WallMobHeadBlock;
 import com.ninni.species.client.model.mob_heads.MobHeadModelBase;
 import com.ninni.species.client.renderer.block.MobHeadBlockEntityRenderer;
+import com.ninni.species.server.block.MobHeadBlock;
+import com.ninni.species.server.block.WallMobHeadBlock;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -20,10 +20,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

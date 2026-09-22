@@ -1,8 +1,8 @@
 package com.ninni.species.server.item;
 
-import com.ninni.species.server.entity.mob.update_3.DeflectorDummy;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_3.DeflectorDummy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DeflectorDummyItem extends Item {
-    public DeflectorDummyItem(Item.Properties p_40503_) {
+    public DeflectorDummyItem(Properties p_40503_) {
         super(p_40503_);
     }
 
@@ -46,7 +46,7 @@ public class DeflectorDummyItem extends Item {
             if (level.noCollision(null, aabb) && level.getEntities(null, aabb).isEmpty()) {
                 if (level instanceof ServerLevel serverlevel) {
                     Consumer<DeflectorDummy> consumer = EntityType.createDefaultStackConfig(serverlevel, itemstack, useOnContext.getPlayer());
-                    DeflectorDummy dummy = SpeciesEntities.DEFLECTOR_DUMMY.get().create(serverlevel, itemstack.getTag(), consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
+                    DeflectorDummy dummy = SpeciesEntities.DEFLECTOR_DUMMY.get().create(serverlevel, consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
                     if (dummy == null) {
                         return InteractionResult.FAIL;
                     }
@@ -67,11 +67,11 @@ public class DeflectorDummyItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.literal(""));
         list.add(Component.translatable("item.species.deflector_dummy.desc.powered").withStyle(ChatFormatting.GRAY));
         list.add(Component.literal(" ").append(Component.translatable("item.species.deflector_dummy.desc.damage").withStyle(style -> style.withColor(0xE21447))));
 
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 }

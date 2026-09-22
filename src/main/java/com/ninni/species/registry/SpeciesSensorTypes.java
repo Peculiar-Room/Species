@@ -2,16 +2,16 @@ package com.ninni.species.registry;
 
 import com.ninni.species.Species;
 import com.ninni.species.server.entity.ai.sensors.CruncherAttackEntitySensor;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesSensorTypes {
-    public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Species.MOD_ID);
+    public static final DeferredRegister<SensorType<?>> SENSOR_TYPES = DeferredRegister.create(BuiltInRegistries.SENSOR_TYPE, Species.MOD_ID);
 
-    public static final RegistryObject<SensorType<CruncherAttackEntitySensor>> CRUNCHER_ATTACK_ENTITY_SENSOR = SENSOR_TYPES.register("cruncher_attack_entity_sensor", () -> new SensorType<>(CruncherAttackEntitySensor::new));
+    public static final DeferredHolder<SensorType<?>, SensorType<CruncherAttackEntitySensor>> CRUNCHER_ATTACK_ENTITY_SENSOR = SENSOR_TYPES.register("cruncher_attack_entity_sensor", () -> new SensorType<>(CruncherAttackEntitySensor::new));
 
 }

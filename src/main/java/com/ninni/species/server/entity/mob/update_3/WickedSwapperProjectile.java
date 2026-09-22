@@ -16,12 +16,12 @@ import net.minecraft.world.phys.HitResult;
 
 public class WickedSwapperProjectile extends ThrowableItemProjectile {
 
-    public WickedSwapperProjectile(EntityType<? extends WickedSwapperProjectile> p_37491_, Level p_37492_) {
-        super(p_37491_, p_37492_);
+    public WickedSwapperProjectile(EntityType<? extends WickedSwapperProjectile> entityType, Level level) {
+        super(entityType, level);
     }
 
-    public WickedSwapperProjectile(Level p_37499_, LivingEntity p_37500_) {
-        super(SpeciesEntities.WICKED_SWAPPER.get(), p_37500_, p_37499_);
+    public WickedSwapperProjectile(Level level, LivingEntity entityType) {
+        super(SpeciesEntities.WICKED_SWAPPER.get(), entityType, level);
     }
 
     @Override

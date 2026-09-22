@@ -10,13 +10,13 @@ import static com.ninni.species.Species.MOD_ID;
 
 public class SpeciesDevelopers {
     public static HashMap<UUID, SpeciesDeveloperNames> developerUUIDS = new HashMap<>();
-    public static final ResourceLocation NINNI_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/ninni.png");
-    public static final ResourceLocation REDA_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/floofhips.png");
-    public static final ResourceLocation NOON_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/noonyeyz.png");
-    public static final ResourceLocation BORNULHU_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/bornulhu.png");
-    public static final ResourceLocation GLADOS_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/glados_edition.png");
-    public static final ResourceLocation YAPETTO_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/yapetto.png");
-    public static final ResourceLocation CONTRIBUTOR_TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/capes/contributor.png");
+    public static final ResourceLocation NINNI_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/ninni.png");
+    public static final ResourceLocation REDA_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/floofhips.png");
+    public static final ResourceLocation NOON_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/noonyeyz.png");
+    public static final ResourceLocation BORNULHU_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/bornulhu.png");
+    public static final ResourceLocation GLADOS_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/glados_edition.png");
+    public static final ResourceLocation YAPETTO_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/yapetto.png");
+    public static final ResourceLocation CONTRIBUTOR_TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/capes/contributor.png");
 
 
     public enum SpeciesDeveloperNames {

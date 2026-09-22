@@ -2,12 +2,13 @@ package com.ninni.species.server.entity.mob.update_1;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Dynamic;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.Species;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.data.LimpetOreManager;
 import com.ninni.species.server.entity.ai.LimpetAi;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,6 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -35,13 +37,15 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -89,9 +93,9 @@ public class Limpet extends PathfinderMob {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         LimpetOreManager.setOre(this);
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -110,15 +114,15 @@ public class Limpet extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SCARED_TICKS, 0);
-        this.entityData.define(HAS_SHELL, true);
-        this.entityData.define(CRACKED_STAGE, 0);
-        this.entityData.define(ORE, LimpetOreManager.DEFAULT_VARIANT_NAME);
-        this.entityData.define(MAX_COUNT, 0);
-        this.entityData.define(ORE_ITEM_STACK, Items.BONE_MEAL.getDefaultInstance());
-        this.entityData.define(ORE_BLOCK_STATE, Blocks.STONE.defaultBlockState());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SCARED_TICKS, 0);
+        builder.define(HAS_SHELL, true);
+        builder.define(CRACKED_STAGE, 0);
+        builder.define(ORE, LimpetOreManager.DEFAULT_VARIANT_NAME);
+        builder.define(MAX_COUNT, 0);
+        builder.define(ORE_ITEM_STACK, Items.BONE_MEAL.getDefaultInstance());
+        builder.define(ORE_BLOCK_STATE, Blocks.STONE.defaultBlockState());
     }
 
     @Override
@@ -129,7 +133,7 @@ public class Limpet extends PathfinderMob {
         nbt.putInt("CrackedStage", this.getCrackedStage());
         nbt.putString("Ore", this.getOre());
         nbt.putInt("MaxCount", this.getMaxCount());
-        nbt.put("OreItemStack", this.getOreItemStack().save(new CompoundTag()));
+        nbt.put("OreItemStack", this.getOreItemStack().save(registryAccess()));
         nbt.put("OreBlockState", NbtUtils.writeBlockState(this.getOreBlockState()));
     }
 
@@ -142,7 +146,7 @@ public class Limpet extends PathfinderMob {
 
         if (nbt.contains("Ore")) this.setOre(nbt.getString("Ore"));
         if (nbt.contains("MaxCount")) this.setMaxCount(nbt.getInt("MaxCount"));
-        if (nbt.contains("OreItemStack")) this.setOreItemStack(ItemStack.of(nbt.getCompound("OreItemStack")));
+        if (nbt.contains("OreItemStack")) this.setOreItemStack(ItemStack.parseOptional(registryAccess(), nbt.getCompound("OreItemStack")));
         if (nbt.contains("OreBlockState")) this.setOreBlockState(NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), nbt.getCompound("OreBlockState")));
     }
 
@@ -215,9 +219,10 @@ public class Limpet extends PathfinderMob {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return pose == SpeciesPose.SCARED.get() ? SCARED_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return pose == SpeciesPose.SCARED.get() ? SCARED_DIMENSIONS.scale(this.getScale()) : super.getDefaultDimensions(pose);
     }
+
     @Override
     public boolean canBeCollidedWith() {
         return this.isScared();
@@ -285,7 +290,7 @@ public class Limpet extends PathfinderMob {
                 return false;
             } else {
                 if (this.getMaxCount() > 0) {
-                    int count = (int) ((this.getMaxCount() / 2 + random.nextInt(this.getMaxCount() / 2)) * (1 + (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack) * 0.15f)));
+                    int count = (int) ((this.getMaxCount() / 2 + random.nextInt(this.getMaxCount() / 2)) * (1 + stack.getEnchantmentLevel(registryAccess().holderOrThrow(Enchantments.FORTUNE)) * 0.15f));
 
                     if (hasOre) {
                         for (int i = 0; i < count; i++) {
@@ -297,16 +302,16 @@ public class Limpet extends PathfinderMob {
                 this.playSound(this.getOreBlockState().getSoundType().getBreakSound(), 1, (float) this.getCrackedStage() * 0.3f + 1f);
                 this.playSound(SpeciesSoundEvents.LIMPET_BREAK.get(), 0.6f, this.getCrackedStage() + 1.5f);
                 this.setCrackedStage(0);
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack) != 0) {
+                if (EnchantmentHelper.hasTag(stack, SpeciesTags.PREVENT_LIMPET_ORE_DROPS)) {
                     if (hasOre) LimpetOreManager.setNoOre(this);
                     else this.setHasShell(false);
-                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.trigger(serverPlayer);
+                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.SILK_TOUCH_BREAK_LIMPET.get().trigger(serverPlayer);
                     return false;
                 } else {
                     this.setHasShell(false);
                     this.setScaredTicks(0);
                 }
-                if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.BREAK_LIMPET.trigger(serverPlayer);
+                if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.BREAK_LIMPET.get().trigger(serverPlayer);
             }
 
         } else if (source.getEntity() instanceof LivingEntity && amount < 12 && !this.level().isClientSide && this.hasShell()) {

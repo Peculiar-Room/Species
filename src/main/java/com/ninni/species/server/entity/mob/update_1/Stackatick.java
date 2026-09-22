@@ -61,11 +61,11 @@ public class Stackatick extends TamableAnimal {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         if (spawnGroupData == null) {
-            spawnGroupData = new AgeableMob.AgeableMobGroupData(false);
+            spawnGroupData = new AgeableMobGroupData(false);
         }
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -186,14 +186,14 @@ public class Stackatick extends TamableAnimal {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return pose == Pose.CROUCHING ? EntityDimensions.scalable(1F, 0.5625F) : super.getDimensions(pose);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return pose == Pose.CROUCHING ? EntityDimensions.scalable(1F, 0.5625F) : super.getDefaultDimensions(pose);
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
+    //@Override
+    //public MobType getMobType() {
+    //    return MobType.ARTHROPOD;
+    //}
 
     @Override
     public void aiStep() {
@@ -254,10 +254,11 @@ public class Stackatick extends TamableAnimal {
         }
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DYED, false);
-        this.entityData.define(COLOR, DyeColor.WHITE.getId());
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DYED, false);
+        builder.define(COLOR, DyeColor.WHITE.getId());
     }
 
     public void readAdditionalSaveData(CompoundTag tag) {
@@ -290,9 +291,10 @@ public class Stackatick extends TamableAnimal {
         return this.level().getBlockState( this.getOnPos()).is(SpeciesTags.STACKATICK_IS_COMFY_ON) || this.isDyed();
     }
 
-    @Override
-    public double getPassengersRidingOffset() {
-        return this.isInSittingPose() ? 0.4235F : 0.7351F;
+
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        float height = this.isInSittingPose() ? 0.4235F : 0.7351F;
+        return (new Vec3(0.0F, height, 0f));
     }
 
     @Override
@@ -301,7 +303,7 @@ public class Stackatick extends TamableAnimal {
     }
 
     @Override
-    public boolean canBeLeashed(Player p_21813_) {
+    public boolean canBeLeashed() {
         return false;
     }
 

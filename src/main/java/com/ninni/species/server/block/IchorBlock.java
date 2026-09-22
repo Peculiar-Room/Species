@@ -1,5 +1,6 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,6 +11,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -22,6 +24,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -31,6 +34,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class IchorBlock extends FallingBlock {
     private static final VoxelShape SHAPE = box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+
+    public static final MapCodec<IchorBlock> CODEC = simpleCodec(IchorBlock::new);
+    @Override
+    protected MapCodec<? extends FallingBlock> codec() {
+        return CODEC;
+    }
 
     public IchorBlock(Properties properties) {
         super(properties);
@@ -71,7 +80,7 @@ public class IchorBlock extends FallingBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         Item item = itemStack.getItem();
 
@@ -86,9 +95,9 @@ public class IchorBlock extends FallingBlock {
             level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
             player.awardStat(Stats.ITEM_USED.get(item));
             level.removeBlock(blockPos, false);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+        return super.useItemOn(stack, blockState, level, blockPos, player, interactionHand, blockHitResult);
     }
 }

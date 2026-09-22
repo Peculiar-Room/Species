@@ -4,6 +4,7 @@ import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.entity.mob.update_3.Coil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.sounds.SoundSource;
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -49,7 +51,7 @@ public class CoilItem extends Item {
         }
 
         int rot = direction == Direction.UP ? -90 : direction == Direction.DOWN ? 90 : 0;
-        if (!stack.hasTag()) {
+        if (!stack.has(DataComponents.CUSTOM_DATA)) {
             Coil coil = new Coil(level, true, pos, null, null);
             coil.setKnot(knot);
             coil.setYRot(direction.toYRot());
@@ -61,10 +63,11 @@ public class CoilItem extends Item {
             tag.putUUID("EndPointUUID", coil.getUUID());
             tag.put("EndPointPos", NbtUtils.writeBlockPos(blockPos));
             tag.putInt("CooldownTicks", 400);
-            stack.setTag(tag);
+            CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         } else {
-            UUID endPointUUID = stack.getTag().getUUID("EndPointUUID");
-            BlockPos endPointPos = NbtUtils.readBlockPos(stack.getTag().getCompound("EndPointPos"));
+            CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+            UUID endPointUUID = tag.getUUID("EndPointUUID");
+            BlockPos endPointPos = NbtUtils.readBlockPos(tag, "EndPointPos").get();
 
             Coil coil = new Coil(level, false, pos, endPointUUID, endPointPos);
             coil.setKnot(knot);
@@ -77,7 +80,7 @@ public class CoilItem extends Item {
                 startCoil.setEndPointUUID(coil.getUUID());
                 startCoil.setEndPointPos(BlockPos.containing(coil.position()));
                 level.addFreshEntity(coil);
-                stack.setTag(null);
+                stack.remove(DataComponents.CUSTOM_DATA);
                 stack.shrink(1);
             } else {
                 setStart(stack, level, blockPos, knot, direction);
@@ -88,7 +91,9 @@ public class CoilItem extends Item {
     }
 
     private static void setStart(ItemStack stack, Level level, BlockPos blockPos, boolean isKnot, Direction direction) {
-        if (stack.getTag() != null) stack.setTag(null);
+        if (stack.has(DataComponents.CUSTOM_DATA)) {
+            stack.remove(DataComponents.CUSTOM_DATA);
+        }
 
         Vec3 pos;
         if (isKnot) {
@@ -111,33 +116,38 @@ public class CoilItem extends Item {
         tag.put("EndPointPos", NbtUtils.writeBlockPos(blockPos));
         tag.putInt("CooldownTicks", 400);
 
-        stack.setTag(tag);
+        CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         level.addFreshEntity(coil);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && stack.hasTag() && stack.getTag().contains("CooldownTicks")) {
-            CompoundTag tag = stack.getTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (!level.isClientSide && stack.has(DataComponents.CUSTOM_DATA) && tag.contains("CooldownTicks")) {
             int ticks = tag.getInt("CooldownTicks");
-            if (ticks > 0) tag.putInt("CooldownTicks", ticks - 1);
+            if (ticks > 0) {
+                tag.putInt("CooldownTicks", ticks - 1);
+                CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
+            }
             else {
                 level.playSound(null, entity.blockPosition(), SpeciesSoundEvents.COIL_REMOVE.get(), SoundSource.BLOCKS);
-                stack.setTag(null);
+                stack.remove(DataComponents.CUSTOM_DATA);
             }
         }
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains("CooldownTicks");
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        return stack.has(DataComponents.CUSTOM_DATA) && tag.contains("CooldownTicks");
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
         if (!isBarVisible(stack)) return 0;
 
-        int ticks = stack.getTag().getInt("CooldownTicks");
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        int ticks = tag.getInt("CooldownTicks");
         float progress = Math.min(1.0f, ticks / 400.0f);
         return Math.round(13 * progress);
     }

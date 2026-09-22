@@ -1,28 +1,35 @@
 package com.ninni.species.server.world.gen.features;
 
 import com.mojang.serialization.Codec;
-import com.ninni.species.registry.SpeciesBlocks;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesTreeDecorators;
+import com.ninni.species.server.block.entity.BirtDwellingBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
 import java.util.List;
+import java.util.Map;
 
 public class BirtDwellingLogDecorator extends TreeDecorator {
 
     public static final BirtDwellingLogDecorator INSTANCE = new BirtDwellingLogDecorator();
-    public static final Codec<BirtDwellingLogDecorator> CODEC = Codec.unit(() -> INSTANCE);
+    public static final MapCodec<BirtDwellingLogDecorator> CODEC = MapCodec.unit(() -> INSTANCE);
 
     private boolean placeBirtDwelling(Context context, List<BlockPos> list, int index, RandomSource random) {
         Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
@@ -32,9 +39,7 @@ public class BirtDwellingLogDecorator extends TreeDecorator {
             context.level().getBlockEntity(pos, SpeciesBlockEntities.BIRT_DWELLING.get()).ifPresent((blockEntity) -> {
                 int i = 2 + random.nextInt(2);
                 for (int j = 0; j < i; ++j) {
-                    CompoundTag nbtCompound = new CompoundTag();
-                    nbtCompound.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpeciesEntities.BIRT.get()).toString());
-                    blockEntity.addBirt(nbtCompound, random.nextInt(599));
+                    blockEntity.addBirt(BirtDwellingBlockEntity.Occupant.create(random.nextInt(599)));
                 }
 
             });

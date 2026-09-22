@@ -31,8 +31,8 @@ public class WickedTreatItem extends Item implements HasImportantInteraction {
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity livingEntity, InteractionHand hand) {
         if (livingEntity instanceof OwnableEntity ownableEntity && ownableEntity.getOwner() != null && ownableEntity.getOwner().is(player) && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-            livingEntity.addEffect(new MobEffectInstance(SpeciesStatusEffects.SNATCHED.get(), 45 * 20, 1));
-            livingEntity.addEffect(new MobEffectInstance(SpeciesStatusEffects.IRON_WILL.get(), 45 * 20, 0));
+            livingEntity.addEffect(new MobEffectInstance(SpeciesStatusEffects.SNATCHED, 45 * 20, 1));
+            livingEntity.addEffect(new MobEffectInstance(SpeciesStatusEffects.IRON_WILL, 45 * 20, 0));
             livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 45 * 20, 0));
             livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 20, 0));
             player.getCooldowns().addCooldown(stack.getItem(), 45 * 20);
@@ -55,7 +55,7 @@ public class WickedTreatItem extends Item implements HasImportantInteraction {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
 
         list.add(Component.translatable("item.species.wicked_treat.desc").withStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)));
         list.add(Component.literal(""));
@@ -63,6 +63,6 @@ public class WickedTreatItem extends Item implements HasImportantInteraction {
         list.add(Component.translatable("item.species.wicked_treat.desc.iron_will").withStyle(Style.EMPTY.withColor(0xe72a8b)));
         list.add(Component.translatable("item.species.wicked_treat.desc.regeneration").withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("item.species.wicked_treat.desc.strength").withStyle(ChatFormatting.BLUE));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 }

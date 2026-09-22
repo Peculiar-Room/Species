@@ -1,7 +1,7 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
 import net.minecraft.nbt.CompoundTag;

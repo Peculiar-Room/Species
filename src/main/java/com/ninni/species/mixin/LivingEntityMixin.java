@@ -1,10 +1,12 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.server.entity.util.CustomDeathParticles;
 import com.ninni.species.mixin_util.LivingEntityAccess;
+import com.ninni.species.registry.*;
+import com.ninni.species.server.entity.util.CustomDeathParticles;
 import com.ninni.species.server.packet.SnatchedPacket;
 import com.ninni.species.server.packet.TankedPacket;
-import com.ninni.species.registry.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -12,10 +14,11 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,9 +33,8 @@ import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements LivingEntityAccess {
-    @Shadow public abstract boolean hasEffect(MobEffect effect);
-    @Shadow @Nullable public abstract MobEffectInstance getEffect(MobEffect p_21125_);
-    @Shadow public abstract RandomSource getRandom();
+    @Shadow public abstract boolean hasEffect(Holder<MobEffect> effect);
+    @Shadow @Nullable public abstract MobEffectInstance getEffect(Holder<MobEffect> effect);
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot p_21127_);
     @OnlyIn(Dist.CLIENT)
     private @Unique boolean snatched;
@@ -48,16 +50,16 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
     @Inject(method = "tickEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;updateGlowingStatus()V", ordinal = 0))
     private void onStatusEffectChange(CallbackInfo ci) {
-        SpeciesNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new SnatchedPacket(this.getId(), this.hasEffect(SpeciesStatusEffects.SNATCHED.get())));
-        SpeciesNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this), new TankedPacket(this.getId(), this.hasEffect(SpeciesStatusEffects.TANKED.get())));
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, new SnatchedPacket(this.getId(), this.hasEffect(SpeciesStatusEffects.SNATCHED)));
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, new TankedPacket(this.getId(), this.hasEffect(SpeciesStatusEffects.TANKED)));
     }
 
     @Inject(method = "tickEffects", at = @At("HEAD"))
     public void applySpeciesEffects(CallbackInfo ci) {
         Level level = this.level();
 
-        if (this.hasEffect(SpeciesStatusEffects.GUT_FEELING.get()) ) {
-            if (this.getEffect(SpeciesStatusEffects.GUT_FEELING.get()).getDuration() < 20 * 60 * 5) {
+        if (this.hasEffect(SpeciesStatusEffects.GUT_FEELING) ) {
+            if (this.getEffect(SpeciesStatusEffects.GUT_FEELING).getDuration() < 20 * 60 * 5) {
                 if (this.getRandom().nextInt(200) == 0) this.playSound(SpeciesSoundEvents.GUT_FEELING_ROAR.get(), 0.2f, 0);
             }
             else {
@@ -65,7 +67,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
             }
         }
 
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) && level instanceof ServerLevel world) {
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD) && level instanceof ServerLevel world) {
             if (this.tickCount % 10 == 1) {
                 world.sendParticles(SpeciesParticles.BIRTD.get(), this.getX(), this.getEyeY() + 0.5F, this.getZ() - 0.5, 1,0, 0, 0, 0);
             }
@@ -76,7 +78,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
     @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo ci) {
         ItemStack headItem = this.getItemBySlot(EquipmentSlot.HEAD);
-        CompoundTag tag = headItem.getTag();
+        CompoundTag tag = headItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
         if (headItem.is(SpeciesItems.WICKED_MASK.get())) {
             if ((this.getDisguisedEntity() == null || this.getDisguisedEntityType() == null) ||
@@ -115,7 +117,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)
     public void applyBirtd(CallbackInfo ci) {
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) || this.hasEffect(SpeciesStatusEffects.STUCK.get())) ci.cancel();
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD) || this.hasEffect(SpeciesStatusEffects.STUCK)) ci.cancel();
     }
 
     @Inject(method = "makePoofParticles", at = @At("HEAD"), cancellable = true)
@@ -129,7 +131,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
     @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
     public void S$isPushable(CallbackInfoReturnable<Boolean> cir) {
-        if (this.hasEffect(SpeciesStatusEffects.BIRTD.get()) || this.hasEffect(SpeciesStatusEffects.STUCK.get())) {
+        if (this.hasEffect(SpeciesStatusEffects.BIRTD) || this.hasEffect(SpeciesStatusEffects.STUCK)) {
             cir.setReturnValue(false);
         }
     }

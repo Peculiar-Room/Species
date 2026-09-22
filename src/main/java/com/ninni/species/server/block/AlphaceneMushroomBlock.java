@@ -1,5 +1,6 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesConfiguredFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.CarrotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -21,10 +23,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.Optional;
 
 public class AlphaceneMushroomBlock extends BushBlock implements BonemealableBlock {
+    public static final MapCodec<AlphaceneMushroomBlock> CODEC = simpleCodec(AlphaceneMushroomBlock::new);
     protected static final VoxelShape SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 9.0, 12.0);
 
     public AlphaceneMushroomBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -38,7 +46,7 @@ public class AlphaceneMushroomBlock extends BushBlock implements BonemealableBlo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         BlockState blockState2 = levelReader.getBlockState(blockPos.below());
         return blockState2.is(BlockTags.DIRT);
     }

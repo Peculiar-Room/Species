@@ -18,15 +18,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class HarpoonRenderer<T extends Harpoon> extends EntityRenderer<T> {
-    public static final ResourceLocation TEXTURE_ROPE = new ResourceLocation(MOD_ID, "textures/entity/hanger/coil/coil_rope.png");
-    public static final ResourceLocation TEXTURE_HOOK = new ResourceLocation(MOD_ID, "textures/entity/hanger/hook/harpoon_hook.png");
+    public static final ResourceLocation TEXTURE_ROPE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/coil/coil_rope.png");
+    public static final ResourceLocation TEXTURE_HOOK = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/hook/harpoon_hook.png");
 
     public HarpoonRenderer(EntityRendererProvider.Context p_174008_) {
         super(p_174008_);
@@ -130,76 +130,72 @@ public class HarpoonRenderer<T extends Harpoon> extends EntityRenderer<T> {
         Vec3 viewNormal = new Vec3(pose.pose().m02(), pose.pose().m12(), pose.pose().m22()).normalize();
 
         // First quad (XY plane, facing camera normal)
-        builder.vertex(pose.pose(), -halfSize, -halfSize, 0f)
-                .color(1f, 1f, 1f, 1f).uv(0f, 1f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z).endVertex();
+        builder.addVertex(pose.pose(), -halfSize, -halfSize, 0f)
+                .setColor(1f, 1f, 1f, 1f).setUv(0f, 1f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z);
 
-        builder.vertex(pose.pose(), halfSize, -halfSize, 0f)
-                .color(1f, 1f, 1f, 1f).uv(1f, 1f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z).endVertex();
+        builder.addVertex(pose.pose(), halfSize, -halfSize, 0f)
+                .setColor(1f, 1f, 1f, 1f).setUv(1f, 1f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z);
 
-        builder.vertex(pose.pose(), halfSize, halfSize, 0f)
-                .color(1f, 1f, 1f, 1f).uv(1f, 0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z).endVertex();
+        builder.addVertex(pose.pose(), halfSize, halfSize, 0f)
+                .setColor(1f, 1f, 1f, 1f).setUv(1f, 0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z);
 
-        builder.vertex(pose.pose(), -halfSize, halfSize, 0f)
-                .color(1f, 1f, 1f, 1f).uv(0f, 0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z).endVertex();
+        builder.addVertex(pose.pose(), -halfSize, halfSize, 0f)
+                .setColor(1f, 1f, 1f, 1f).setUv(0f, 0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal.x, (float) viewNormal.y, (float) viewNormal.z);
 
         // Second quad (YZ plane — rotated 90° around Y)
         Vec3 viewNormal2 = new Vec3(pose.pose().m00(), pose.pose().m10(), pose.pose().m20()).normalize();
 
-        builder.vertex(pose.pose(), 0f, -halfSize, -halfSize)
-                .color(1f, 1f, 1f, 1f).uv(0f, 1f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z).endVertex();
+        builder.addVertex(pose.pose(), 0f, -halfSize, -halfSize)
+                .setColor(1f, 1f, 1f, 1f).setUv(0f, 1f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z);
 
-        builder.vertex(pose.pose(), 0f, -halfSize, halfSize)
-                .color(1f, 1f, 1f, 1f).uv(1f, 1f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z).endVertex();
+        builder.addVertex(pose.pose(), 0f, -halfSize, halfSize)
+                .setColor(1f, 1f, 1f, 1f).setUv(1f, 1f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z);
 
-        builder.vertex(pose.pose(), 0f, halfSize, halfSize)
-                .color(1f, 1f, 1f, 1f).uv(1f, 0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z).endVertex();
+        builder.addVertex(pose.pose(), 0f, halfSize, halfSize)
+                .setColor(1f, 1f, 1f, 1f).setUv(1f, 0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z);
 
-        builder.vertex(pose.pose(), 0f, halfSize, -halfSize)
-                .color(1f, 1f, 1f, 1f).uv(0f, 0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z).endVertex();
+        builder.addVertex(pose.pose(), 0f, halfSize, -halfSize)
+                .setColor(1f, 1f, 1f, 1f).setUv(0f, 0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight)
+                .setNormal((float) viewNormal2.x, (float) viewNormal2.y, (float) viewNormal2.z);
     }
 
 
     void drawRopeQuad(PoseStack poseStack, VertexConsumer builder, Vec3 base, Vec3 tip, Vec3 side, float vMax, int packedLight, float baseOpacity, float tipOpacity) {
         PoseStack.Pose pose = poseStack.last();
 
-        builder.vertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
-                .color(1F, 1F, 1F, baseOpacity)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
+                .setColor(1F, 1F, 1F, baseOpacity)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
-                .color(1F, 1F, 1F, baseOpacity)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
+                .setColor(1F, 1F, 1F, baseOpacity)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
-                .color(1F, 1F, 1F, tipOpacity)
-                .uv(1F, vMax)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
+                .setColor(1F, 1F, 1F, tipOpacity)
+                .setUv(1F, vMax)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
-                .color(1F, 1F, 1F, tipOpacity)
-                .uv(0F, vMax)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
+                .setColor(1F, 1F, 1F, tipOpacity)
+                .setUv(0F, vMax)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
     }
 }

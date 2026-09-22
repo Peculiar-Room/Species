@@ -1,9 +1,10 @@
 package com.ninni.species.server.entity.mob.update_3;
 
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import com.ninni.species.server.entity.util.SpeciesPose;
 import com.ninni.species.registry.*;
+import com.ninni.species.registry.SpeciesCriterion;
+import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -43,10 +44,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
-
-import static net.minecraft.world.entity.EntitySelector.NO_CREATIVE_OR_SPECTATOR;
 
 public class Wicked extends Monster implements RangedAttackMob {
     private boolean isHaunting = false;
@@ -64,7 +66,11 @@ public class Wicked extends Monster implements RangedAttackMob {
     public Wicked(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.setInvisible(false);
-        this.setMaxUpStep(1);
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override
@@ -126,7 +132,7 @@ public class Wicked extends Monster implements RangedAttackMob {
             serverLevel.sendParticles(SpeciesParticles.POOF.get(), Wicked.this.position().x, Wicked.this.position().y + 0.01, Wicked.this.position().z, 1, 0, 0, 0, 0.5F);
         }
         List<ServerPlayer> list = level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(10D), player -> true);
-        for (ServerPlayer serverPlayer : list) SpeciesCriterion.WICKED_STOP_HAUNTING.trigger(serverPlayer);
+        for (ServerPlayer serverPlayer : list) SpeciesCriterion.WICKED_STOP_HAUNTING.get().trigger(serverPlayer);
     }
 
     @Override
@@ -136,13 +142,13 @@ public class Wicked extends Monster implements RangedAttackMob {
 
     public void addWickedEffects(Mob target) {
         int i = this.random.nextInt(4);
-        MobEffect effect;
+        Holder<MobEffect> effect;
         int amplifier = 0;
         switch (i) {
-            default -> effect = SpeciesStatusEffects.COMBUSTION.get();
-            case 1 -> effect = SpeciesStatusEffects.IRON_WILL.get();
-            case 2 -> effect = SpeciesStatusEffects.TANKED.get();
-            case 3 -> effect = SpeciesStatusEffects.SNATCHED.get();
+            default -> effect = SpeciesStatusEffects.COMBUSTION;
+            case 1 -> effect = SpeciesStatusEffects.IRON_WILL;
+            case 2 -> effect = SpeciesStatusEffects.TANKED;
+            case 3 -> effect = SpeciesStatusEffects.SNATCHED;
         }
         if (target.hasEffect(effect)) amplifier = target.getEffect(effect).getAmplifier() + 1;
         if (this.level().getDifficulty() == Difficulty.HARD) amplifier += 1;
@@ -150,10 +156,10 @@ public class Wicked extends Monster implements RangedAttackMob {
     }
 
     public void removeWickedEffect(Mob target) {
-        target.removeEffect(SpeciesStatusEffects.COMBUSTION.get());
-        target.removeEffect(SpeciesStatusEffects.IRON_WILL.get());
-        target.removeEffect(SpeciesStatusEffects.TANKED.get());
-        target.removeEffect(SpeciesStatusEffects.SNATCHED.get());
+        target.removeEffect(SpeciesStatusEffects.COMBUSTION);
+        target.removeEffect(SpeciesStatusEffects.IRON_WILL);
+        target.removeEffect(SpeciesStatusEffects.TANKED);
+        target.removeEffect(SpeciesStatusEffects.SNATCHED);
     }
 
     @Override
@@ -229,7 +235,7 @@ public class Wicked extends Monster implements RangedAttackMob {
     }
 
     private void spawnParticles(ServerLevel serverLevel, Mob mob) {
-        float heightAdjustment = mob.hasEffect(SpeciesStatusEffects.SNATCHED.get()) || mob.hasEffect(SpeciesStatusEffects.TANKED.get()) ? 0.5F : 0.0F;
+        float heightAdjustment = mob.hasEffect(SpeciesStatusEffects.SNATCHED) || mob.hasEffect(SpeciesStatusEffects.TANKED) ? 0.5F : 0.0F;
 
         serverLevel.sendParticles(
                 SpeciesParticles.WICKED_EMBER.get(),
@@ -278,7 +284,7 @@ public class Wicked extends Monster implements RangedAttackMob {
         //Refilling the flame
         if (itemstack.is(Items.FLINT_AND_STEEL) && this.getMana() < 5) {
             this.setMana(Math.min(5, this.getMana() + 1));
-            itemstack.hurtAndBreak(1, player, (player1) -> player1.broadcastBreakEvent(hand));
+            itemstack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(player.getItemInHand(hand)));
             this.playSound(SoundEvents.FLINTANDSTEEL_USE);
             this.setPersistenceRequired();
             return InteractionResult.SUCCESS;
@@ -291,12 +297,15 @@ public class Wicked extends Monster implements RangedAttackMob {
                 && (((livingEntity instanceof Enemy) || (livingEntity instanceof NeutralMob))
                 && !livingEntity.getType().is(SpeciesTags.CANT_BE_HAUNTED)
                 && !livingEntity.hasCustomName()
-                && livingEntity.getMobType() != MobType.WATER)
+                //Replace with tag?
+                //&& livingEntity.getMobType() != MobType.WATER
+                )
                 || (livingEntity.getType().is(SpeciesTags.CAN_BE_HAUNTED_EXTRAS));
     }
     public boolean isSuitableForRunningAway(LivingEntity livingEntity) {
         if (this.getTarget() != null) return livingEntity.is(this.getTarget());
-        return (livingEntity instanceof Creeper creeper && creeper.getSwellDir() == 1) || livingEntity.getMobType() == MobType.WATER;
+        return (livingEntity instanceof Creeper creeper && creeper.getSwellDir() == 1);
+                //|| livingEntity.getMobType() == MobType.WATER;
     }
 
     @Override
@@ -320,10 +329,10 @@ public class Wicked extends Monster implements RangedAttackMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MANA_AMOUNT, 5);
-        this.entityData.define(HAUNTED_TARGET_UUID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MANA_AMOUNT, 5);
+        builder.define(HAUNTED_TARGET_UUID, Optional.empty());
     }
 
     @Override
@@ -370,8 +379,8 @@ public class Wicked extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return pose == SpeciesPose.HAUNTING.get() ? EntityDimensions.scalable(0.0F, 0.0F) : super.getDimensions(pose);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return pose == SpeciesPose.HAUNTING.get() ? EntityDimensions.scalable(0.0F, 0.0F) : super.getDefaultDimensions(pose);
     }
 
     @Override
@@ -455,9 +464,9 @@ public class Wicked extends Monster implements RangedAttackMob {
     protected void playStepSound(BlockPos p_20135_, BlockState p_20136_) {
     }
 
-    protected void dropCustomDeathLoot(DamageSource p_34697_, int p_34698_, boolean p_34699_) {
-        super.dropCustomDeathLoot(p_34697_, p_34698_, p_34699_);
-        Entity entity = p_34697_.getEntity();
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
+        Entity entity = damageSource.getEntity();
         if (entity instanceof Creeper creeper) {
             if (creeper.canDropMobsSkull()) {
                 ItemStack itemstack = new ItemStack(SpeciesItems.WICKED_CANDLE.get());
@@ -468,7 +477,7 @@ public class Wicked extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public int getExperienceReward() {
+    public int getBaseExperienceReward() {
         int expBasedOnMana;
         switch (this.getMana()) {
             case 0 -> expBasedOnMana = 5;
@@ -478,7 +487,7 @@ public class Wicked extends Monster implements RangedAttackMob {
             case 4 -> expBasedOnMana = 1;
             default -> expBasedOnMana = 0;
         }
-        return super.getExperienceReward() + expBasedOnMana;
+        return super.getBaseExperienceReward() + expBasedOnMana;
     }
 
     class ShootGoal extends RangedAttackGoal {

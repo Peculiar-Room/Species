@@ -1,9 +1,9 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.criterion.SpeciesCriterion;
 import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.server.entity.mob.update_1.Wraptor;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesCriterion;
+import com.ninni.species.server.entity.mob.update_1.Wraptor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -37,7 +36,7 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
 
-    public WraptorEggBlock(BlockBehaviour.Properties settings) {
+    public WraptorEggBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(HATCH, 0));
     }
@@ -65,7 +64,9 @@ public class WraptorEggBlock extends Block implements SimpleWaterloggedBlock {
             wraptor.setPersistenceRequired();
             wraptor.moveTo(pos.getX() + 0.3, pos.getY(), pos.getZ() + 0.3, 0.0f, 0.0f);
             world.addFreshEntity(wraptor);
-            if (wraptor.level().getNearestPlayer(wraptor, 16) instanceof ServerPlayer serverPlayer) SpeciesCriterion.HATCH_WRAPTOR.trigger(serverPlayer);
+            if (wraptor.level().getNearestPlayer(wraptor, 16) instanceof ServerPlayer serverPlayer) {
+                SpeciesCriterion.HATCH_WRAPTOR.get().trigger(serverPlayer);
+            }
         }
     }
 

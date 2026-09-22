@@ -1,0 +1,145 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 3,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:dark_oak_log",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 3
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:fermented_spider_eye",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 6
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:white_banner",
+          "functions": [
+            {
+              "function": "minecraft:set_banner_pattern",
+              "patterns": [
+                {
+                  "pattern": "rhombus",
+                  "color": "cyan"
+                },
+                {
+                  "pattern": "stripe_bottom",
+                  "color": "light_gray"
+                },
+                {
+                  "pattern": "stripe_center",
+                  "color": "gray"
+                },
+                {
+                  "pattern": "border",
+                  "color": "light_gray"
+                },
+                {
+                  "pattern": "stripe_middle",
+                  "color": "black"
+                },
+                {
+                  "pattern": "half_horizontal",
+                  "color": "light_gray"
+                },
+                {
+                  "pattern": "circle",
+                  "color": "light_gray"
+                },
+                {
+                  "pattern": "border",
+                  "color": "black"
+                }
+              ],
+              "append": true
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "block.minecraft.ominous_banner",
+                "color": "gold"
+              }
+            },
+            {
+              "function": "minecraft:set_components",
+              "toggles": {},
+              "components": {
+                "minecraft:hide_additional_tooltip": {}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": -2,
+        "max": 1
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "species:scattershot"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

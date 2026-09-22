@@ -3,7 +3,7 @@ package com.ninni.species.registry;
 import com.ninni.species.Species;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -17,7 +17,7 @@ public class SpeciesStructureSets {
     public static final ResourceKey<StructureSet> LIBRA = register("libra");
     public static final ResourceKey<StructureSet> SPECTRALIBUR_CHAMBER = register("spectralibur_chamber");
 
-    public static void bootstrap(BootstapContext<StructureSet> bootstapContext) {
+    public static void bootstrap(BootstrapContext<StructureSet> bootstapContext) {
         HolderGetter<Structure> holderGetter = bootstapContext.lookup(Registries.STRUCTURE);
         bootstapContext.register(WRAPTOR_COOPS, new StructureSet(holderGetter.getOrThrow(SpeciesStructureKeys.WRAPTOR_COOP), new RandomSpreadStructurePlacement(64, 8, RandomSpreadType.LINEAR, 867700449)));
         bootstapContext.register(PALEONTOLOGY_DIG_SITE, new StructureSet(holderGetter.getOrThrow(SpeciesStructureKeys.PALEONTOLOGY_DIG_SITE), new RandomSpreadStructurePlacement(8, 5, RandomSpreadType.LINEAR, 867700449)));
@@ -26,6 +26,6 @@ public class SpeciesStructureSets {
     }
 
     private static ResourceKey<StructureSet> register(String string) {
-        return ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(Species.MOD_ID, string));
+        return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, string));
     }
 }

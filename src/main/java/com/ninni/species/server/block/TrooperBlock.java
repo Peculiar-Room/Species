@@ -1,11 +1,13 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.entity.mob.update_2.Trooper;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.server.entity.mob.update_2.Trooper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -18,12 +20,19 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 @SuppressWarnings("deprecation")
 public class TrooperBlock extends BushBlock implements BonemealableBlock {
+    public static final MapCodec<TrooperBlock> CODEC = simpleCodec(TrooperBlock::new);
+    @Override
+    protected MapCodec<? extends BushBlock> codec() {
+        return CODEC;
+    }
+
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
     protected static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
 
@@ -33,7 +42,7 @@ public class TrooperBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         return new ItemStack(SpeciesItems.ANCIENT_PINECONE.get());
     }
 
@@ -64,7 +73,7 @@ public class TrooperBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         return blockState.getValue(AGE) < 3;
     }
 

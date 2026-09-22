@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class LibraGenerator {
 
     public static void addPieces(StructureTemplateManager manager, BlockPos pos, Rotation rotation, StructurePieceAccessor holder) {
-        holder.addPiece(new LibraGenerator.Piece(manager, new ResourceLocation(Species.MOD_ID, "libra"), pos, rotation));
+        holder.addPiece(new Piece(manager, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "libra"), pos, rotation));
     }
 
     public static class Piece extends TemplateStructurePiece {
@@ -78,7 +78,7 @@ public class LibraGenerator {
                 for (Mob entity : entities) {
                     entity.setPersistenceRequired();
                     entity.moveTo(blockPos, 0.0f, 0.0f);
-                    entity.finalizeSpawn(serverLevelAccessor, serverLevelAccessor.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, null, null);
+                    entity.finalizeSpawn(serverLevelAccessor, serverLevelAccessor.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, null);
                     serverLevelAccessor.addFreshEntityWithPassengers(entity);
                 }
             }

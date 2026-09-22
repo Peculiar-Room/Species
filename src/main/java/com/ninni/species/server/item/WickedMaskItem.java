@@ -1,12 +1,14 @@
 package com.ninni.species.server.item;
 
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.mob.update_3.Spectre;
 import com.ninni.species.server.item.util.HasImportantInteraction;
-import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -24,11 +26,14 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,12 +45,12 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     };
 
     public static boolean dispenseMask(BlockSource blockSource, ItemStack stack) {
-        BlockPos blockpos = blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING));
-        List<LivingEntity> list = blockSource.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(blockpos), EntitySelector.NO_SPECTATORS.and(new EntitySelector.MobCanWearArmorEntitySelector(stack)));
+        BlockPos blockpos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
+        List<LivingEntity> list = blockSource.level().getEntitiesOfClass(LivingEntity.class, new AABB(blockpos), EntitySelector.NO_SPECTATORS.and(new EntitySelector.MobCanWearArmorEntitySelector(stack)));
         if (list.isEmpty()) return false;
         else {
-            LivingEntity livingentity = list.get(0);
-            EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(stack);
+            LivingEntity livingentity = list.getFirst();
+            EquipmentSlot equipmentslot = livingentity.getEquipmentSlotForItem(stack);
             ItemStack itemstack = stack.split(1);
             livingentity.setItemSlot(equipmentslot, itemstack);
             if (livingentity instanceof Mob) {
@@ -62,7 +67,7 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!stack.hasTag()) stack.setTag(new CompoundTag());
+        //if (!stack.hasTag()) stack.setTag(new CompoundTag());
         super.inventoryTick(stack, level, entity, slot, selected);
     }
 
@@ -74,8 +79,8 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.isAlive() && !entity.level().isClientSide && (!stack.hasTag() || !stack.getTag().contains("id")) && player.isSecondaryUseActive()) {
-            CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (entity.isAlive() && !entity.level().isClientSide && (!stack.has(DataComponents.CUSTOM_DATA) || !tag.contains("id")) && player.isSecondaryUseActive()) {
 
             String encodeId = entity.getEncodeId();
             if (encodeId != null) {
@@ -87,7 +92,7 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
                 }
 
                 if (entity.hasCustomName() && !"jeb_".equals(entity.getName().getString())) {
-                    tag.putString("CustomName", Component.Serializer.toJson(entity.getCustomName()));
+                    tag.putString("CustomName", Component.Serializer.toJson(entity.getCustomName(), entity.registryAccess()));
                 }
                 if (entity.isCustomNameVisible()) tag.putBoolean("CustomNameVisible", true);
                 if (!entity.getTags().isEmpty()) {
@@ -98,8 +103,10 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
                 entity.addAdditionalSaveData(tag);
 
                 if (entity instanceof WitherBoss && player instanceof ServerPlayer serverPlayer) {
-                    SpeciesCriterion.WICKED_MASK_WITHER.trigger(serverPlayer);
+                    SpeciesCriterion.WICKED_MASK_WITHER.get().trigger(serverPlayer);
                 }
+
+                CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
             }
 
             player.setItemInHand(hand, stack);
@@ -111,8 +118,8 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
-        CompoundTag tag = stack.getOrCreateTag();
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains("id")) {
             EntityType<?> type = EntityType.byString(tag.getString("id")).orElse(null);
             if (type != null) {
@@ -133,12 +140,12 @@ public class WickedMaskItem extends Item implements Equipable, HasImportantInter
     }
 
     @Override
-    public SoundEvent getEquipSound() {
-        return SpeciesSoundEvents.WICKED_MASK_EQUIP.get();
+    public Holder<SoundEvent> getEquipSound() {
+        return SpeciesSoundEvents.WICKED_MASK_EQUIP;
     }
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        return super.isFoil(stack) || (stack.hasTag() && stack.getTag().contains("id"));
+        return super.isFoil(stack) || (stack.has(DataComponents.CUSTOM_DATA) && stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("id"));
     }
 }

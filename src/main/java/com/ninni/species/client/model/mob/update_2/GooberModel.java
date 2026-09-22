@@ -8,13 +8,9 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.model.geom.builders.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
@@ -149,7 +145,7 @@ public class GooberModel<E extends Goober> extends HierarchicalModel<E> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, int f) {
         if (this.young) {
             float babyScale = 0.5f;
             float bodyYOffset = 24.0f;
@@ -157,10 +153,10 @@ public class GooberModel<E extends Goober> extends HierarchicalModel<E> {
             poseStack.pushPose();
             poseStack.scale(babyScale, babyScale, babyScale);
             poseStack.translate(0.0f, bodyYOffset / 16.0f, 0.0f);
-            this.root().render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.root().render(poseStack, vertexConsumer, i, j);
             poseStack.popPose();
         } else {
-            this.root().render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.root().render(poseStack, vertexConsumer, i, j);
         }
     }
 

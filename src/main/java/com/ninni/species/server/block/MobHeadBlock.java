@@ -1,8 +1,9 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.block.entity.MobHeadBlockEntity;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.server.block.entity.MobHeadBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Equipable;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class MobHeadBlock extends BaseEntityBlock implements Equipable {
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
-    private final MobHeadBlock.Type type;
+    private final Type type;
     private static final int ROTATIONS = MAX + 1;
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     protected static final VoxelShape GHOUL_SHAPE = Block.box(2, 0, 2, 14, 7, 14);
@@ -36,7 +36,21 @@ public class MobHeadBlock extends BaseEntityBlock implements Equipable {
     protected static final VoxelShape QUAKE_SHAPE = Block.box(1.5, 0, 1.5, 14.5, 7, 14.5);
     protected static final VoxelShape BEWEREAGER_SHAPE = Block.box(3, 0, 3, 13, 10, 13);
 
-    public MobHeadBlock(MobHeadBlock.Type type, BlockBehaviour.Properties properties) {
+    public static final MapCodec<MobHeadBlock> CODEC = simpleCodec(MobHeadBlock::new);
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    public MobHeadBlock(Properties properties) {
+        super(properties);
+        //Set default type to ghoul
+        this.type = Types.GHOUL;
+        this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, Integer.valueOf(0)));
+    }
+
+
+    public MobHeadBlock(Type type, Properties properties) {
         super(properties);
         this.type = type;
         this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, Integer.valueOf(0)));
@@ -82,17 +96,18 @@ public class MobHeadBlock extends BaseEntityBlock implements Equipable {
         return null;
     }
 
-    public MobHeadBlock.Type getType() {
+    public Type getType() {
         return this.type;
     }
 
-    public boolean isPathfindable(BlockState state, BlockGetter blockGetter, BlockPos pos, PathComputationType computationType) {
+    public boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 
     public EquipmentSlot getEquipmentSlot() {
         return EquipmentSlot.HEAD;
     }
+
     public interface Type {
     }
 

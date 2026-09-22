@@ -1,13 +1,15 @@
 package com.ninni.species.server.block.entity;
 
-import com.ninni.species.server.block.CruncherEggBlock;
-import com.ninni.species.registry.SpeciesStatusEffects;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.registry.SpeciesNetwork;
+import com.ninni.species.registry.SpeciesStatusEffects;
+import com.ninni.species.server.block.CruncherEggBlock;
 import com.ninni.species.server.packet.PlayGutFeelingSoundPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class CruncherEggBlockEntity extends BlockEntity {
     public LivingEntity target;
@@ -27,14 +29,14 @@ public class CruncherEggBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         compoundTag.putInt("Timer", this.timer);
     }
 
     @Override
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         this.timer = compoundTag.getInt("Timer");
     }
 
@@ -75,12 +77,12 @@ public class CruncherEggBlockEntity extends BlockEntity {
                     level.setBlock(blockPos.above(), aboveState.setValue(CruncherEggBlock.CRACKED, true), 2);
                 }
 
-                if (!target.hasEffect(SpeciesStatusEffects.GUT_FEELING.get())) {
-                    target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING.get(), 24000, 0, true, true));
+                if (!target.hasEffect(SpeciesStatusEffects.GUT_FEELING)) {
+                    target.addEffect(new MobEffectInstance(SpeciesStatusEffects.GUT_FEELING, 24000, 0, true, true));
                 }
 
                 if (target instanceof ServerPlayer serverPlayer) {
-                    SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayGutFeelingSoundPacket());
+                    PacketDistributor.sendToPlayer(serverPlayer, new PlayGutFeelingSoundPacket());
                 }
             }
         }

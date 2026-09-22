@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.server.entity.mob.update_3.LeafHanger;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.util.FastColor;
+
+import java.awt.*;
 
 public class LeafHangerModel<T extends LeafHanger> extends HangerModel<T> {
     private LeafHanger leafHanger;
@@ -19,8 +22,8 @@ public class LeafHangerModel<T extends LeafHanger> extends HangerModel<T> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int i1, float v, float v1, float v2, float v3) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int i1, int color) {
         float opacity = leafHanger.isTongueOut() && !leafHanger.isPullingTarget() ? 0.4F : 1;
-        super.renderToBuffer(poseStack, vertexConsumer, i, i1, v, v1, v2, opacity);
+        super.renderToBuffer(poseStack, vertexConsumer, i, i1, color);
     }
 }

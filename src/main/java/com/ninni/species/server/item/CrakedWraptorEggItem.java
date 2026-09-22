@@ -17,7 +17,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 public class CrakedWraptorEggItem extends Item {
-    public CrakedWraptorEggItem(Item.Properties settings) {
+    public CrakedWraptorEggItem(Properties settings) {
         super(settings);
     }
 
@@ -33,7 +33,7 @@ public class CrakedWraptorEggItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack itemStack) {
+    public int getUseDuration(ItemStack itemStack, LivingEntity entity) {
         return 40;
     }
 

@@ -1,10 +1,11 @@
 package com.ninni.species.server.entity.mob.update_3;
 
 import com.ninni.species.registry.*;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.mob.update_1.Birt;
 import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -58,16 +59,20 @@ public class Ghoul extends Monster implements VibrationSystem {
     private static final EntityDimensions CRAWLING_DIMENSIONS = EntityDimensions.scalable(0.8F, 0.8F);
     private final VibrationUser vibrationUser;
     private final DynamicGameEventListener<LoudVibrationListener> loudVibrationListener;
-    private VibrationSystem.Data vibrationData;
+    private Data vibrationData;
 
     public Ghoul(EntityType<? extends Monster> p_33002_, Level p_33003_) {
         super(p_33002_, p_33003_);
         this.moveControl = new GhoulMoveControl();
         this.refreshDimensions();
-        this.setMaxUpStep(1);
         this.vibrationUser = new VibrationUser();
-        this.vibrationData = new VibrationSystem.Data();
-        this.loudVibrationListener = new DynamicGameEventListener<>(new LoudVibrationListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.getNotificationRadius()));
+        this.vibrationData = new Data();
+        this.loudVibrationListener = new DynamicGameEventListener<>(new LoudVibrationListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.value().notificationRadius()));
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override
@@ -149,8 +154,8 @@ public class Ghoul extends Monster implements VibrationSystem {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return pose == Pose.CROUCHING ? CRAWLING_DIMENSIONS.scale(this.getScale()) : super.getDimensions(pose);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return pose == Pose.CROUCHING ? CRAWLING_DIMENSIONS.scale(this.getScale()) : super.getDefaultDimensions(pose);
     }
 
     private void setupAnimationStates() {
@@ -206,10 +211,10 @@ public class Ghoul extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SEARCH_COOLDOWN, 100);
-        this.entityData.define(IS_CRAWLING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SEARCH_COOLDOWN, 100);
+        builder.define(IS_CRAWLING, false);
     }
 
     @Override
@@ -270,10 +275,10 @@ public class Ghoul extends Monster implements VibrationSystem {
         boolean flag = entity.hurt(this.torn(this), (float)((int)this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
         if (flag) {
             this.setPose(SpeciesPose.ATTACK.get());
-            this.doEnchantDamageEffects(this, entity);
+            //this.doEnchantDamageEffects(this, entity);
             if (entity instanceof Player player) {
-                if (!player.hasEffect(SpeciesStatusEffects.BLOODLUST.get())) {
-                    player.addEffect(new MobEffectInstance(SpeciesStatusEffects.BLOODLUST.get(), -1, 0, false, true), this);
+                if (!player.hasEffect(SpeciesStatusEffects.BLOODLUST)) {
+                    player.addEffect(new MobEffectInstance(SpeciesStatusEffects.BLOODLUST, -1, 0, false, true), this);
                     this.playSound(SpeciesSoundEvents.GHOUL_INFECT.get(), 1.0F, 1.0F);
                 } else this.playSound(SpeciesSoundEvents.GHOUL_ATTACK.get(), 1.0F, 1.0F);
             }
@@ -286,9 +291,9 @@ public class Ghoul extends Monster implements VibrationSystem {
         return flag;
     }
 
-    protected void dropCustomDeathLoot(DamageSource p_34697_, int p_34698_, boolean p_34699_) {
-        super.dropCustomDeathLoot(p_34697_, p_34698_, p_34699_);
-        Entity entity = p_34697_.getEntity();
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
+        Entity entity = damageSource.getEntity();
         if (entity instanceof Creeper creeper) {
             if (creeper.canDropMobsSkull()) {
                 ItemStack itemstack = new ItemStack(SpeciesItems.GHOUL_HEAD.get());
@@ -314,7 +319,7 @@ public class Ghoul extends Monster implements VibrationSystem {
         return this.vibrationUser;
     }
 
-    public class VibrationUser implements VibrationSystem.User {
+    public class VibrationUser implements User {
         private final PositionSource positionSource;
 
         VibrationUser() {
@@ -331,13 +336,13 @@ public class Ghoul extends Monster implements VibrationSystem {
         }
 
         @Override
-        public boolean canReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, GameEvent.Context context) {
+        public boolean canReceiveVibration(ServerLevel var1, BlockPos var2, Holder<GameEvent> var3, GameEvent.Context var4) {
             if (Ghoul.this.isNoAi()) return false;
             return Ghoul.this.getTarget() != null;
         }
 
         @Override
-        public void onReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, @Nullable Entity entity, @Nullable Entity entity2, float f) {
+        public void onReceiveVibration(ServerLevel var1, BlockPos var2, Holder<GameEvent> var3, @javax.annotation.Nullable Entity var4, @javax.annotation.Nullable Entity var5, float var6) {
         }
 
         @Override
@@ -365,9 +370,9 @@ public class Ghoul extends Monster implements VibrationSystem {
         }
 
         @Override
-        public boolean handleGameEvent(ServerLevel serverLevel, GameEvent gameEvent, GameEvent.Context context, Vec3 vec3) {
+        public boolean handleGameEvent(ServerLevel serverLevel, Holder<GameEvent> holder, GameEvent.Context context, Vec3 vec3) {
             BlockPos blockPos = BlockPos.containing(vec3);
-            if (Ghoul.isLoudNoise(gameEvent, serverLevel, blockPos) && Ghoul.this.searchTimer == 0 && Ghoul.this.confusedTimer == 0) {
+            if (Ghoul.isLoudNoise(holder.value(), serverLevel, blockPos) && Ghoul.this.searchTimer == 0 && Ghoul.this.confusedTimer == 0) {
                 Ghoul.this.setPose(Ghoul.this.shouldCrawl() ? SpeciesPose.CROUCHING_STUN.get() : SpeciesPose.STUN.get());
                 Ghoul.this.playSound(SpeciesSoundEvents.GHOUL_CONFUSED.get(), 1, 1);
                 return true;
@@ -376,7 +381,7 @@ public class Ghoul extends Monster implements VibrationSystem {
         }
     }
     public static boolean isLoudNoise(GameEvent gameEvent, ServerLevel serverLevel, BlockPos blockPos) {
-        return gameEvent == GameEvent.EXPLODE || gameEvent == GameEvent.INSTRUMENT_PLAY || gameEvent == GameEvent.JUKEBOX_PLAY || (gameEvent == GameEvent.BLOCK_CHANGE && serverLevel.getBlockState(blockPos).is(Blocks.BELL));
+        return gameEvent == GameEvent.EXPLODE.value() || gameEvent == GameEvent.INSTRUMENT_PLAY.value() || gameEvent == GameEvent.JUKEBOX_PLAY.value() || (gameEvent == GameEvent.BLOCK_CHANGE.value() && serverLevel.getBlockState(blockPos).is(Blocks.BELL));
     }
 
     class GhoulMoveControl extends MoveControl {
@@ -528,7 +533,7 @@ public class Ghoul extends Monster implements VibrationSystem {
                     Ghoul.this.getMoveControl().setWantedPosition(list.get(index).getX(),list.get(index).getY(),list.get(index).getZ(), 1);
                     Ghoul.this.searchTimer = 0;
                     Ghoul.this.playSound(SpeciesSoundEvents.GHOUL_AGGRO.get());
-                    if (list.get(index) instanceof ServerPlayer serverPlayer) SpeciesCriterion.AGGRO_GHOUL.trigger(serverPlayer);
+                    if (list.get(index) instanceof ServerPlayer serverPlayer) SpeciesCriterion.AGGRO_GHOUL.get().trigger(serverPlayer);
                 }
             }
         }
@@ -536,7 +541,7 @@ public class Ghoul extends Monster implements VibrationSystem {
         @Override
         public void stop() {
             List<ServerPlayer> list = level().getEntitiesOfClass(ServerPlayer.class, Ghoul.this.getBoundingBox().inflate(5D), PREY);
-            if (!endedEarly) for (ServerPlayer serverPlayer : list) SpeciesCriterion.SURVIVE_GHOUL.trigger(serverPlayer);
+            if (!endedEarly) for (ServerPlayer serverPlayer : list) SpeciesCriterion.SURVIVE_GHOUL.get().trigger(serverPlayer);
 
             Ghoul.this.setPose(Ghoul.this.shouldCrawl() ? Pose.CROUCHING : Pose.STANDING);
             Ghoul.this.setSearchCooldown(800);

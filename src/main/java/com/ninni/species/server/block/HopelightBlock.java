@@ -1,18 +1,25 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.server.block.entity.HopelightBlockEntity;
 import com.ninni.species.server.block.entity.SpectreLightBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -23,11 +30,18 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.extensions.IBlockStateExtension;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public class HopelightBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<HopelightBlock> CODEC = simpleCodec(HopelightBlock::new);
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty NORTH = PipeBlock.NORTH;
     public static final BooleanProperty EAST = PipeBlock.EAST;
     public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
@@ -39,7 +53,7 @@ public class HopelightBlock extends BaseEntityBlock implements SimpleWaterlogged
     protected static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 3, 16);
     protected static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION.entrySet().stream().filter((p_52346_) -> p_52346_.getKey().getAxis().isHorizontal()).collect(Util.toMap());
 
-    public HopelightBlock(BlockBehaviour.Properties properties) {
+    public HopelightBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(HANGING, false).setValue(WATERLOGGED, false).setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(CONNECTED_Y, Boolean.FALSE));
     }
@@ -77,10 +91,10 @@ public class HopelightBlock extends BaseEntityBlock implements SimpleWaterlogged
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         ItemStack stack = new ItemStack(this);
         if (level.getBlockEntity(pos) instanceof SpectreLightBlockEntity blockEntity) {
-            stack.getOrCreateTagElement("BlockEntityTag").putInt("color", blockEntity.getColor());
+            stack.set(DataComponents.DYED_COLOR, new DyedItemColor(blockEntity.getColor(), false));
         }
         return stack;
     }
@@ -101,7 +115,7 @@ public class HopelightBlock extends BaseEntityBlock implements SimpleWaterlogged
         return p_52362_.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(p_52362_);
     }
 
-    public boolean isPathfindable(BlockState p_52333_, BlockGetter p_52334_, BlockPos p_52335_, PathComputationType p_52336_) {
+    public boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 

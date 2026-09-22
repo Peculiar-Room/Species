@@ -1,9 +1,9 @@
 package com.ninni.species.server.entity.mob.update_3;
 
+import com.ninni.species.mixin_util.PlayerAccess;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.mixin_util.PlayerAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -25,15 +26,13 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.extensions.IEntityExtension;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
-public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
+public class Harpoon extends Projectile {
     public static final EntityDataAccessor<Boolean> ANCHORED = SynchedEntityData.defineId(Harpoon.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Optional<BlockPos>> ANCHOR_POS = SynchedEntityData.defineId(Harpoon.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private float swingInputX = 0;
@@ -232,7 +231,7 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
         if (swingInputY == 1) releaseFactor = Math.min(3, releaseFactor + 0.2);
         if (player.onGround()) releaseFactor = 1;
 
-        double yMovement = (swingInputY * descendingFactor) - player.getAttributeValue(ForgeMod.ENTITY_GRAVITY.get()) - 0.025;
+        double yMovement = (swingInputY * descendingFactor) - player.getAttributeValue(Attributes.GRAVITY) - 0.025;
         double pullStrength = Mth.clamp(-distanceError * dampingFactor, yMovement, 0.2);
 
         playSwingingSounds(player, pullStrength);
@@ -319,16 +318,16 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(ANCHOR_POS, Optional.empty());
-        this.entityData.define(ANCHORED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(ANCHOR_POS, Optional.empty());
+        builder.define(ANCHORED, false);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setAnchored(tag.getBoolean("IsAnchored"));
-        if (tag.contains("AnchorPos")) this.setAnchorPos(NbtUtils.readBlockPos(tag.getCompound("AnchorPos")));
+        if (tag.contains("AnchorPos")) this.setAnchorPos(NbtUtils.readBlockPos(tag,"AnchorPos").get());
     }
 
     @Override
@@ -359,6 +358,9 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
         this.swingInputZ = z;
     }
 
+    //Look into later
+    /*
+
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -377,4 +379,6 @@ public class Harpoon extends Projectile implements IEntityAdditionalSpawnData {
             if (owner != null) this.setOwner(owner);
         }
     }
+
+     */
 }

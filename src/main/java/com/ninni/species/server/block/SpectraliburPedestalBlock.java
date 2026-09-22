@@ -1,10 +1,10 @@
 package com.ninni.species.server.block;
 
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.block.property.SpeciesProperties;
 import com.ninni.species.server.entity.mob.update_3.Spectre;
-import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,6 +15,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -45,13 +46,13 @@ public class SpectraliburPedestalBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
         if (state.getValue(POWERED) || !state.getValue(ACTIVE) || world.getBlockState(pos.above()).is(SpeciesBlocks.SPECTRALIBUR.get()) || world.getDifficulty() == Difficulty.PEACEFUL) {
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else {
             tryToSummonSpectres(state, world, pos, player);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
     }
 

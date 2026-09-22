@@ -1,0 +1,8 @@
+{
+  "comparator_output": 1,
+  "description": {
+    "translate": "item.species.music_disc_dial.desc"
+  },
+  "length_in_seconds": 193,
+  "sound_event": "species:music.disc.dial"
+}

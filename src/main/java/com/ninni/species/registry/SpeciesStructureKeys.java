@@ -13,6 +13,6 @@ public class SpeciesStructureKeys {
     public static final ResourceKey<Structure> PALEONTOLOGY_DIG_SITE = of("paleontology_dig_site");
 
     private static ResourceKey<Structure> of(String id) {
-        return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(Species.MOD_ID, id));
+        return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, id));
     }
 }

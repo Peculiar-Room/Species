@@ -1,0 +1,20 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.species.scattershot"
+  },
+  "max_cost": {
+    "base": 48,
+    "per_level_above_first": 18
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 19,
+    "per_level_above_first": 18
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#species:enchantable/crankbow",
+  "weight": 10
+}

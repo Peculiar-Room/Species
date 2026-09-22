@@ -11,15 +11,16 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class TreeperFeatureRenderer<T extends Treeper, M extends TreeperModel<T>> extends RenderLayer<T, M> {
-    private static final RenderType TREEPER_EYES = RenderType.entityTranslucentEmissive(new ResourceLocation(MOD_ID, "textures/entity/treeper/treeper_eyes.png"));
-    private static final RenderType TREEPER_EYES_BURNED = RenderType.entityTranslucentEmissive(new ResourceLocation(MOD_ID, "textures/entity/treeper/treeper_eyes_burned.png"));
+    private static final RenderType TREEPER_EYES = RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/treeper/treeper_eyes.png"));
+    private static final RenderType TREEPER_EYES_BURNED = RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/treeper/treeper_eyes_burned.png"));
 
     public TreeperFeatureRenderer(RenderLayerParent<T, M> renderLayerParent) {
         super(renderLayerParent);
@@ -28,6 +29,6 @@ public class TreeperFeatureRenderer<T extends Treeper, M extends TreeperModel<T>
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T entity, float f, float g, float h, float j, float k, float l) {
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(entity.isBurned() ? TREEPER_EYES_BURNED : TREEPER_EYES);
-        ((Model)this.getParentModel()).renderToBuffer(poseStack, vertexConsumer, 0xF00000, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
+        ((Model)this.getParentModel()).renderToBuffer(poseStack, vertexConsumer, 0xF00000, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1f, 1f, 1f, 1f));
     }
 }

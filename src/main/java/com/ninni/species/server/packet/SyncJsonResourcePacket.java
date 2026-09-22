@@ -3,12 +3,13 @@ package com.ninni.species.server.packet;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
 //Code from alex my goat
-public abstract class SyncJsonResourcePacket<T> {
+public abstract class SyncJsonResourcePacket<T> implements CustomPacketPayload {
 
     protected BiMap<ResourceLocation, T> registryMap;
 

@@ -1,0 +1,37 @@
+{
+  "parent": "species:species/v3/v3",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_banner",
+      "components": {
+        "minecraft:banner_patterns": [
+          {
+            "color": "white",
+            "pattern": "species:villager"
+          }
+        ]
+      },
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.species.cure_bewereager.title"
+    },
+    "description": {
+      "translate": "advancements.species.cure_bewereager.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "cure_bewereager": {
+      "trigger": "species:cure_bewereager"
+    }
+  },
+  "requirements": [
+    [
+      "cure_bewereager"
+    ]
+  ]
+}

@@ -4,13 +4,23 @@ import com.google.common.collect.BiMap;
 import com.ninni.species.Species;
 import com.ninni.species.server.data.GooberGooManager;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class GooberGooSyncPacket extends SyncJsonResourcePacket<GooberGooManager.GooberGooData> {
+
+    public static final CustomPacketPayload.Type<GooberGooSyncPacket> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "goober_goo"));
+    public static final StreamCodec<FriendlyByteBuf, GooberGooSyncPacket> STREAM_CODEC = StreamCodec.of(GooberGooSyncPacket::write, GooberGooSyncPacket::read);
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     public GooberGooSyncPacket(BiMap<ResourceLocation, GooberGooManager.GooberGooData> registryMap) {
         super(registryMap);
@@ -34,13 +44,13 @@ public class GooberGooSyncPacket extends SyncJsonResourcePacket<GooberGooManager
         return message;
     }
 
-    public static void write(GooberGooSyncPacket message, FriendlyByteBuf buf) {
+    public static void write(FriendlyByteBuf buf, GooberGooSyncPacket message) {
         message.writeMap(buf);
     }
 
-    public static void handle(GooberGooSyncPacket message, Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+    public static void handle(GooberGooSyncPacket message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.flow().isClientbound()) {
                 Species.PROXY.getGooberGooManager().synchronizeRegistryForClient(message.registryMap);
             }
         });

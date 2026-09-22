@@ -1,13 +1,11 @@
 package com.ninni.species;
 
 import com.ninni.species.client.screen.ScreenShakeEvent;
-import com.ninni.species.registry.SpeciesNetwork;
-import com.ninni.species.registry.SpeciesPotions;
 import com.ninni.species.server.data.CruncherPelletManager;
 import com.ninni.species.server.data.GooberGooManager;
 import com.ninni.species.server.data.LimpetOreManager;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 
@@ -20,8 +18,7 @@ public class CommonProxy {
     }
 
     public void commonSetup() {
-        SpeciesNetwork.init();
-        SpeciesPotions.register();
+        //SpeciesNetwork.init();
         addSpeciesDevelopers();
     }
 

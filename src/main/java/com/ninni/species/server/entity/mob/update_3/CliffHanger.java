@@ -1,9 +1,11 @@
 package com.ninni.species.server.entity.mob.update_3;
 
 import com.ninni.species.Species;
-import com.ninni.species.registry.*;
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import net.minecraft.advancements.Advancement;
+import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.SpeciesCriterion;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -35,13 +38,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class CliffHanger extends Hanger {
@@ -70,8 +71,8 @@ public class CliffHanger extends Hanger {
         if (this.level() instanceof ServerLevel level) {
             setAttached(verticalCollision && getDeltaMovement().y >= 0);
 
-            if (!this.isAttached() && !isGoingUpwards() && this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).getValue() < 0) {
-                this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0.08D);
+            if (!this.isAttached() && !isGoingUpwards() && this.getAttribute(Attributes.GRAVITY).getValue() < 0) {
+                this.getAttribute(Attributes.GRAVITY).setBaseValue(0.08D);
             }
 
             boolean flag = (this.random.nextFloat() < 0.02f && this.isAttached()) || (this.random.nextFloat() < 0.3f && this.isTongueOut());
@@ -115,15 +116,17 @@ public class CliffHanger extends Hanger {
 
     @Override
     public float getTongueOffset() {
-        if (this.entityData.hasItem(ATTACHED)) return this.isAttached() ? 1.2F : super.getTongueOffset();
+        if (this.entityData != null) {
+            return this.isAttached() ? 1.2F : super.getTongueOffset();
+        }
         return super.getTongueOffset();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ATTACHED, false);
-        this.entityData.define(GOING_UPWARDS, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ATTACHED, false);
+        builder.define(GOING_UPWARDS, false);
     }
 
     @Override
@@ -189,7 +192,7 @@ public class CliffHanger extends Hanger {
             if (!cliffHanger.level().isClientSide) {
 
                 if (target.position().y < cliffHanger.position().y - 1F) {
-                    AttributeInstance gravity = target.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
+                    AttributeInstance gravity = target.getAttribute(Attributes.GRAVITY);
                     Vec3 diff = cliffHanger.position().add(0, cliffHanger.getTongueOffset(), 0).subtract(target.position());
                     diff = diff.multiply(0.05, 0, 0.05).add(0, 0.025, 0);
 
@@ -297,9 +300,9 @@ public class CliffHanger extends Hanger {
                 if (cliffHanger.tickCount % 15 == 0) {
                     cliffHanger.playSound(SpeciesSoundEvents.HANGER_PULL.get(), 1,1);
                 }
-                cliffHanger.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(-0.04D);
+                cliffHanger.getAttribute(Attributes.GRAVITY).setBaseValue(-0.04D);
                 if (cliffHanger.getY() > cliffHanger.getTargetPos().y) {
-                    cliffHanger.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0.08D);
+                    cliffHanger.getAttribute(Attributes.GRAVITY).setBaseValue(0.08D);
                     stop();
                 }
             }
@@ -398,11 +401,11 @@ public class CliffHanger extends Hanger {
                 if (potentialTargets.get(0) instanceof Mob mob && (mob.getTarget() == null || !mob.getTarget().is(cliffHanger))) mob.setTarget(cliffHanger);
 
                 if (potentialTargets.get(0) instanceof ServerPlayer serverPlayer) {
-                    Advancement hangerAdvancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(Species.MOD_ID, "species/v3/fall_for_hanger"));
+                    AdvancementHolder hangerAdvancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "species/v3/fall_for_hanger"));
 
                     if (hangerAdvancement != null) {
-                        if (serverPlayer.getAdvancements().getOrStartProgress(hangerAdvancement).isDone()) SpeciesCriterion.FALL_FOR_HANGER_TWICE.trigger(serverPlayer);
-                        else SpeciesCriterion.FALL_FOR_HANGER.trigger(serverPlayer);
+                        if (serverPlayer.getAdvancements().getOrStartProgress(hangerAdvancement).isDone()) SpeciesCriterion.FALL_FOR_HANGER_TWICE.get().trigger(serverPlayer);
+                        else SpeciesCriterion.FALL_FOR_HANGER.get().trigger(serverPlayer);
                     }
                 }
                 return true;

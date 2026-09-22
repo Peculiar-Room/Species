@@ -14,7 +14,7 @@ public class TrooperSwellGoal extends Goal {
 
     public TrooperSwellGoal(Trooper trooper) {
         this.trooper = trooper;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

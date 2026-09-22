@@ -2,8 +2,8 @@ package com.ninni.species.server.item;
 
 import com.ninni.species.client.renderer.item.SpeciesItemRenderers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.world.entity.EntitySelector;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,12 +28,12 @@ public class MobHeadItem extends StandingAndWallBlockItem {
     };
 
     public static boolean dispenseHead(BlockSource blockSource, ItemStack stack) {
-        BlockPos blockpos = blockSource.getPos().relative(blockSource.getBlockState().getValue(DispenserBlock.FACING));
-        List<LivingEntity> list = blockSource.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(blockpos), EntitySelector.NO_SPECTATORS.and(new EntitySelector.MobCanWearArmorEntitySelector(stack)));
+        BlockPos blockpos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
+        List<LivingEntity> list = blockSource.level().getEntitiesOfClass(LivingEntity.class, new AABB(blockpos), EntitySelector.NO_SPECTATORS.and(new EntitySelector.MobCanWearArmorEntitySelector(stack)));
         if (list.isEmpty()) return false;
         else {
             LivingEntity livingentity = list.get(0);
-            EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(stack);
+            EquipmentSlot equipmentslot = livingentity.getEquipmentSlotForItem(stack);
             ItemStack itemstack = stack.split(1);
             livingentity.setItemSlot(equipmentslot, itemstack);
             if (livingentity instanceof Mob) {

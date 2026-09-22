@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_custom_data",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "dyed_color",
+                  "target": "BlockEntityTag.color",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "species:speclight"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "species:blocks/speclight"
+}

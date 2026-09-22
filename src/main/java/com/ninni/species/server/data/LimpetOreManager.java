@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
@@ -27,8 +26,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +133,7 @@ public class LimpetOreManager extends SimpleJsonResourceReloadListener {
 
     private static List<WeightedEntry> buildWeightedEntries(Predicate<LimpetOreData> filter) {
         List<WeightedEntry> weightedEntries = new ArrayList<>();
-        for (LimpetOreManager.LimpetOreData data : LimpetOreManager.DATA) {
+        for (LimpetOreData data : LimpetOreManager.DATA) {
             if (data.item != Items.AIR && data.block != Blocks.AIR) {
                 if (filter.test(data)) {
                     if (data.spawnWeight().isPresent() && data.spawnWeight().get() > 0) {

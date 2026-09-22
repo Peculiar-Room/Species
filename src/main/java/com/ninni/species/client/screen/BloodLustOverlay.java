@@ -7,28 +7,30 @@ import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.GuiLayerManager;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
+@EventBusSubscriber(modid = Species.MOD_ID, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class BloodLustOverlay {
-    private static final ResourceLocation SPECIES_ICONS = new ResourceLocation(Species.MOD_ID, "textures/gui/icons.png");
-    private static final ResourceLocation ICONS = new ResourceLocation("textures/gui/icons.png");
+    private static final ResourceLocation SPECIES_ICONS = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "textures/gui/icons.png");
+    private static final ResourceLocation ICONS = ResourceLocation.withDefaultNamespace("textures/gui/icons.png");
 
     @SubscribeEvent
-    public void preGuiRender(RenderGuiOverlayEvent.Pre event) {
+    public static void preGuiRender(RenderGuiLayerEvent.Pre event) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
-        if (shouldRenderBloodLust(player, event.getOverlay())) {
+        if (shouldRenderBloodLust(player, event.getName())) {
             event.setCanceled(true);
             PoseStack poseStack = event.getGuiGraphics().pose();
 
@@ -42,23 +44,23 @@ public class BloodLustOverlay {
         }
     }
 
-    private static boolean shouldRenderBloodLust(LocalPlayer player, NamedGuiOverlay overlay) {
-        return player != null && player.hasEffect(SpeciesStatusEffects.BLOODLUST.get()) && overlay == VanillaGuiOverlay.FOOD_LEVEL.type() && !player.isCreative() && !player.isSpectator();
+    private static boolean shouldRenderBloodLust(LocalPlayer player, ResourceLocation layerName) {
+        return player != null && player.hasEffect(SpeciesStatusEffects.BLOODLUST) && layerName == VanillaGuiLayers.FOOD_LEVEL && !player.isCreative() && !player.isSpectator();
     }
 
     private static void renderFood(GuiGraphics guiGraphics, Player player) {
         Minecraft minecraft = Minecraft.getInstance();
         Gui gui = minecraft.gui;
 
-        if (!(gui instanceof ForgeGui forgeGui)) return;
+        //if (!(gui instanceof ScreenUtils forgeGui)) return;
 
         minecraft.getProfiler().push("food");
 
         RenderSystem.enableBlend();
 
         int left = guiGraphics.guiWidth() / 2 + 91;
-        int top = guiGraphics.guiHeight() - forgeGui.rightHeight;
-        forgeGui.rightHeight = forgeGui.rightHeight + 10;
+        int top = guiGraphics.guiHeight() - gui.rightHeight;
+        gui.rightHeight = gui.rightHeight + 10;
         FoodData stats = minecraft.player.getFoodData();
         int level = stats.getFoodLevel();
 
@@ -71,7 +73,7 @@ public class BloodLustOverlay {
                 y = top + (gui.random.nextInt(3) - 1);
             }
 
-            guiGraphics.blit(ICONS, x, y, 16, 27, 9, 9);
+            //guiGraphics.blit(ICONS, x, y, 16, 27, 9, 9);
             if (idx < level) {
                 guiGraphics.blit(SPECIES_ICONS, x, y, 0, 0, 9, 9);
             }

@@ -66,7 +66,7 @@ public class BewereagerAttackGoal extends Goal {
         LivingEntity livingEntity = this.bewereager.getTarget();
         if (livingEntity != null) {
             this.bewereager.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
-            double distanceToTarget = this.bewereager.getPerceivedTargetDistanceSquareForMeleeAttack(livingEntity);
+            double distanceToTarget = this.bewereager.distanceToSqr(livingEntity);
             this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
 
             if (this.bewereager.getSensing().hasLineOfSight(livingEntity) && this.ticksUntilNextPathRecalculation <= 0 && (this.pathedTargetX == 0.0 && this.pathedTargetY == 0.0 && this.pathedTargetZ == 0.0 || livingEntity.distanceToSqr(this.pathedTargetX, this.pathedTargetY, this.pathedTargetZ) >= 0.0 || this.bewereager.getRandom().nextFloat() < 0.05F)) {

@@ -1,9 +1,10 @@
 package com.ninni.species.server.block.entity;
 
 import com.ninni.species.registry.*;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.packet.BlockEntitySyncPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -23,13 +24,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.extensions.IForgeBlockEntity;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.common.extensions.IBlockEntityExtension;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockEntity {
+public class SpectraliburBlockEntity extends BlockEntity implements IBlockEntityExtension {
     public static final float BASE_INCREMENT = 0.1f;
     public float swordPosition;
     public float shaking;
@@ -89,7 +89,7 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
                     else level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SpeciesSoundEvents.SPECTRALIBUR_GO_IN.get(), SoundSource.BLOCKS, 2.0F, 0.75F + (entity.swordPosition * 0.5F));
 
                     entity.decrementCoolDown = 40;
-                    entity.sync();
+                    entity.sync(level.registryAccess());
                 }
 
             }
@@ -106,7 +106,7 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
                 } else {
                     boolean higherStrengthlevel = player.hasEffect(MobEffects.DAMAGE_BOOST) && player.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() > 0;
                     swordPosition = Math.min(1.0f, swordPosition + BASE_INCREMENT);
-                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.START_SPECTRE_CHALLENGE.trigger(serverPlayer);
+                    if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.START_SPECTRE_CHALLENGE.get().trigger(serverPlayer);
 
                     if (player.level().getDifficulty() == Difficulty.PEACEFUL) {
                         hitCooldown = 20;
@@ -132,14 +132,14 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
                 }
             }
             shaking = player.level().getGameTime();
-            sync();
+            sync(level.registryAccess());
         }
     }
 
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
         if (nbt.contains("SwordPosition")) this.swordPosition = nbt.getFloat("SwordPosition");
         if (nbt.contains("Shaking")) this.shaking = nbt.getFloat("Shaking");
         if (nbt.contains("HitCooldown")) this.hitCooldown = nbt.getInt("HitCooldown");
@@ -148,8 +148,8 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
+        super.saveAdditional(nbt, provider);
         nbt.putFloat("SwordPosition", swordPosition);
         nbt.putFloat("Shaking", shaking);
         nbt.putInt("HitCooldown", hitCooldown);
@@ -157,25 +157,25 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
         nbt.putInt("DecrementCooldown", decrementCoolDown);
     }
 
-    public void sync() {
+    public void sync(HolderLookup.Provider provider) {
         setChanged();
         CompoundTag tag = new CompoundTag();
-        saveAdditional(tag);
+        saveAdditional(tag, provider);
         if (level == null) return;
         if (!level.isClientSide()) {
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(worldPosition)), new BlockEntitySyncPacket(worldPosition, tag));
+            PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) level, level.getChunkAt(worldPosition).getPos(), new BlockEntitySyncPacket(worldPosition, tag));
         }
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        if (pkt.getTag() != null) handleUpdateTag(pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
+        super.onDataPacket(net, pkt, provider);
+        if (pkt.getTag() != null) handleUpdateTag(pkt.getTag(), provider);
     }
 
     @Nullable
@@ -193,11 +193,5 @@ public class SpectraliburBlockEntity extends BlockEntity implements IForgeBlockE
     }
     public float getShaking() {
         return shaking;
-    }
-
-    @Override
-    public AABB getRenderBoundingBox() {
-        BlockPos pos = this.worldPosition;
-        return new AABB(pos.getX(), pos.getY() - 2, pos.getZ(), pos.getX() + 1.0, pos.getY() + 2, pos.getZ() + 1.0);
     }
 }

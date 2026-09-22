@@ -18,12 +18,12 @@ import net.minecraft.world.phys.Vec3;
 public class WickedFireball extends AbstractHurtingProjectile {
     public float hurtAmount;
 
-    public WickedFireball(EntityType<? extends WickedFireball> p_37006_, Level p_37007_) {
-        super(p_37006_, p_37007_);
+    public WickedFireball(EntityType<? extends WickedFireball> entityType, Level level) {
+        super(entityType, level);
     }
 
-    public WickedFireball(LivingEntity p_37000_, double p_37001_, double p_37002_, double p_37003_, Level p_37004_, float hurtAmount) {
-        super(SpeciesEntities.WICKED_FIREBALL.get(), p_37000_, p_37001_, p_37002_, p_37003_, p_37004_);
+    public WickedFireball(LivingEntity entityType, double x, double y, double z, Level level, float hurtAmount) {
+        super(SpeciesEntities.WICKED_FIREBALL.get(), entityType, new Vec3(x, y, z), level);
         this.hurtAmount = hurtAmount;
     }
 
@@ -50,7 +50,7 @@ public class WickedFireball extends AbstractHurtingProjectile {
         if (hitResult instanceof EntityHitResult entityHitResult) {
             Entity entity = entityHitResult.getEntity();
             if (this.getOwner() instanceof  LivingEntity owner) entity.hurt(this.damageSources().mobAttack(owner), hurtAmount);
-            entity.setSecondsOnFire(1);
+            entity.setRemainingFireTicks(20);
         }
         this.level().gameEvent(GameEvent.PROJECTILE_LAND, hitResult.getLocation(), GameEvent.Context.of(this, null));
         this.discard();

@@ -12,8 +12,9 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class BirtFeatureRenderer<T extends Birt, M extends BirtModel<T>> extends
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityTranslucentEmissive(this.texture));
         if (birt.isInvisible() || birt.antennaTicks == 0) return;
         this.updateModelPartVisibility();
-        this.getParentModel().renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(birt, 0.0f), 1.0f, 1.0f, 1.0f, this.animationAngleAdjuster.apply(birt, h, j));
+        this.getParentModel().renderToBuffer(matrixStack, vertexConsumer, i, LivingEntityRenderer.getOverlayCoords(birt, 0.0f), FastColor.ARGB32.colorFromFloat(this.animationAngleAdjuster.apply(birt, h, j), 1.0f, 1.0f, 1.0f));
         this.unhideAllModelParts();
     }
 

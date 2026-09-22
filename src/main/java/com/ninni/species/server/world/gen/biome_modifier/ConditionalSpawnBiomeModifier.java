@@ -1,15 +1,15 @@
 package com.ninni.species.server.world.gen.biome_modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesBiomeModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.MobSpawnSettingsBuilder;
-import net.minecraftforge.common.world.ModifiableBiomeInfo;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.MobSpawnSettingsBuilder;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public record ConditionalSpawnBiomeModifier(HolderSet<Biome> biomes, HolderSet<B
     }
 
     @Override
-    public Codec<? extends BiomeModifier> codec() {
+    public MapCodec<? extends BiomeModifier> codec() {
         return SpeciesBiomeModifiers.ADD_SPAWNS_BIOME_MODIFIER_TYPE.get();
     }
 }

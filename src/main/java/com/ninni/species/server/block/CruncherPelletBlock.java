@@ -1,7 +1,8 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.block.entity.CruncherPelletBlockEntity;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesParticles;
+import com.ninni.species.server.block.entity.CruncherPelletBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -14,6 +15,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class CruncherPelletBlock extends BaseEntityBlock {
+
+    public static final MapCodec<CruncherPelletBlock> CODEC = simpleCodec(CruncherPelletBlock::new);
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
 
     public CruncherPelletBlock(Properties properties) {
         super(properties);
@@ -31,12 +38,13 @@ public class CruncherPelletBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         super.playerWillDestroy(level, blockPos, blockState, player);
         if (!player.getAbilities().instabuild && level.getBlockEntity(blockPos) instanceof CruncherPelletBlockEntity cruncherPelletBlock) {
             cruncherPelletBlock.unpackLootTable(player);
             level.destroyBlock(blockPos, false);
         }
+        return blockState;
     }
 
     @Override

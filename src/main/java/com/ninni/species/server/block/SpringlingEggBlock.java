@@ -1,8 +1,8 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.entity.mob.update_2.Springling;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_2.Springling;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -140,7 +140,7 @@ public class SpringlingEggBlock extends Block {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         if (!level.isClientSide) {
             if (player.isCreative()) {
                 SpringlingEggBlock.preventCreativeDropFromBottomPart(level, blockPos, blockState, player);
@@ -148,7 +148,7 @@ public class SpringlingEggBlock extends Block {
                 SpringlingEggBlock.dropResources(blockState, level, blockPos, null, player, player.getMainHandItem());
             }
         }
-        super.playerWillDestroy(level, blockPos, blockState, player);
+        return super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override

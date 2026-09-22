@@ -1,13 +1,14 @@
 package com.ninni.species.server.item;
 
-import com.ninni.species.server.entity.mob.update_3.WickedSwapperProjectile;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_3.WickedSwapperProjectile;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class WickedSwapperItem extends Item {

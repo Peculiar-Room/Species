@@ -1,19 +1,26 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.block.entity.SpeclightBlockEntity;
 import com.ninni.species.server.block.entity.SpectreLightBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -33,6 +40,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class SpeclightBlock extends FaceAttachedHorizontalDirectionalBaseEntityBlock implements SimpleWaterloggedBlock {
+    public static final MapCodec<SpeclightBlock> CODEC = simpleCodec(SpeclightBlock::new);
+    @Override
+    protected MapCodec<? extends FaceAttachedHorizontalDirectionalBaseEntityBlock> codec() {
+        return CODEC;
+    }
+
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape CEILING_AABB = Block.box(5, 13, 5, 11, 16, 11);
@@ -96,23 +109,23 @@ public class SpeclightBlock extends FaceAttachedHorizontalDirectionalBaseEntityB
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         ItemStack stack = new ItemStack(this);
         if (level.getBlockEntity(pos) instanceof SpectreLightBlockEntity blockEntity) {
-            stack.getOrCreateTagElement("BlockEntityTag").putInt("color", blockEntity.getColor());
+            stack.set(DataComponents.DYED_COLOR, new DyedItemColor(blockEntity.getColor(), false));
         }
         return stack;
     }
 
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult) {
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (player.getItemInHand(hand).isEmpty()) {
             level.setBlock(pos, state.setValue(POWERED, !level.getBlockState(pos).getValue(POWERED)), 3);
             if (!state.getValue(POWERED)) level.playSound(null, pos, SpeciesSoundEvents.SPECLIGHT_ON.get(), SoundSource.BLOCKS);
             else level.playSound(null, pos, SpeciesSoundEvents.SPECLIGHT_OFF.get(), SoundSource.BLOCKS);
             level.gameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
-        return super.use(state, level, pos, player, hand, blockHitResult);
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     public RenderShape getRenderShape(BlockState p_49232_) {

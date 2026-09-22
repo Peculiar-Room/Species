@@ -1,9 +1,9 @@
 package com.ninni.species.mixin;
 
 import com.google.common.collect.Lists;
-import com.ninni.species.server.entity.mob.update_2.Mammutilation;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.server.entity.mob.update_2.Mammutilation;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -14,6 +14,7 @@ import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.server.packet.CruncherPelletSyncPacket;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -22,7 +23,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener {
         DATA.clear();
 
         object.forEach((resourceLocation, jsonElement) -> {
-            CruncherPelletManager.CruncherPelletData data = CruncherPelletManager.CruncherPelletData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result()
+            CruncherPelletData data = CruncherPelletData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result()
                     .orElseGet(() -> {
                         Species.LOGGER.error("Failed to read Cruncher pellet recipe for resource {}", resourceLocation);
                         return null;
@@ -64,12 +65,13 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener {
         }
 
         if (player == null) {
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.ALL.noArg(), new CruncherPelletSyncPacket(registryMap));
+            PacketDistributor.sendToAllPlayers(new CruncherPelletSyncPacket(registryMap));
+            //SpeciesNetwork.INSTANCE.send(PacketDistributor.ALL.noArg(), new CruncherPelletSyncPacket(registryMap));
         } else {
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CruncherPelletSyncPacket(registryMap));
+            PacketDistributor.sendToPlayer(player, new CruncherPelletSyncPacket(registryMap));
+            //SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CruncherPelletSyncPacket(registryMap));
         }
     }
-
 
     public void synchronizeRegistryForClient(Map<ResourceLocation, CruncherPelletData> newData) {
         DATA.clear();
@@ -90,16 +92,16 @@ public class CruncherPelletManager extends SimpleJsonResourceReloadListener {
                 ).apply(instance, CruncherPelletData::new));
 
         public static CruncherPelletData fromNetwork(FriendlyByteBuf buf) {
-            EntityType<?> type = buf.readById(BuiltInRegistries.ENTITY_TYPE);
-            ItemStack item = buf.readItem();
+            EntityType<?> type = buf.readById(BuiltInRegistries.ENTITY_TYPE::byId);
+            ItemStack item = new ItemStack(buf.readById(BuiltInRegistries.ITEM::byId));
             int minTries = buf.readVarInt();
             int maxTries = buf.readVarInt();
             return new CruncherPelletData(type, item, minTries, maxTries);
         }
 
         public void toNetwork(FriendlyByteBuf buf) {
-            buf.writeId(BuiltInRegistries.ENTITY_TYPE, this.entityType);
-            buf.writeItem(this.item);
+            buf.writeById(BuiltInRegistries.ENTITY_TYPE::getId, this.entityType);
+            buf.writeById(BuiltInRegistries.ITEM::getId, this.item.getItem());
             buf.writeVarInt(this.minTries);
             buf.writeVarInt(this.maxTries);
         }

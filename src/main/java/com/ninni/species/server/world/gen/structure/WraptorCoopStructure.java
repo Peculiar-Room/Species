@@ -1,6 +1,7 @@
 package com.ninni.species.server.world.gen.structure;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesStructureTypes;
 import com.ninni.species.server.structure.WraptorCoopGenerator;
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import java.util.Optional;
 
 public class WraptorCoopStructure extends Structure {
-    public static final Codec<WraptorCoopStructure> CODEC = WraptorCoopStructure.simpleCodec(WraptorCoopStructure::new);
+    public static final MapCodec<WraptorCoopStructure> CODEC = WraptorCoopStructure.simpleCodec(WraptorCoopStructure::new);
 
     public WraptorCoopStructure(StructureSettings config) {
         super(config);
@@ -41,7 +42,7 @@ public class WraptorCoopStructure extends Structure {
         return flag;
     }
 
-    public void addPieces(StructurePiecesBuilder collector, Structure.GenerationContext context) {
+    public void addPieces(StructurePiecesBuilder collector, GenerationContext context) {
         ChunkPos chunkPos = context.chunkPos();
         WorldgenRandom random = context.random();
         BlockPos pos = new BlockPos(chunkPos.getMinBlockX(), this.getHeight(random), chunkPos.getMinBlockZ());

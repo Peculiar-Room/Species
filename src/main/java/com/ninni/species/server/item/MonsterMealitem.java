@@ -3,6 +3,7 @@ package com.ninni.species.server.item;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
@@ -23,30 +24,30 @@ import java.util.List;
 public class MonsterMealitem extends Item {
 
     public MonsterMealitem() {
-        super(new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationMod(1.2F).alwaysEat().build()));
+        super(new Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(1.2F).alwaysEdible().build()));
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (level instanceof ServerLevel) {
             int i = level.random.nextInt(4);
-            MobEffect effect;
+            Holder<MobEffect> effect;
             int durationInSeconds;
             switch (i) {
                 default -> {
-                    effect = SpeciesStatusEffects.COMBUSTION.get();
+                    effect = SpeciesStatusEffects.COMBUSTION;
                     durationInSeconds = 180;
                 }
                 case 1 -> {
-                    effect = SpeciesStatusEffects.IRON_WILL.get();
+                    effect = SpeciesStatusEffects.IRON_WILL;
                     durationInSeconds = 30;
                 }
                 case 2 -> {
-                    effect = SpeciesStatusEffects.TANKED.get();
+                    effect = SpeciesStatusEffects.TANKED;
                     durationInSeconds = 20;
                 }
                 case 3 -> {
-                    effect = SpeciesStatusEffects.SNATCHED.get();
+                    effect = SpeciesStatusEffects.SNATCHED;
                     durationInSeconds = 10;
                 }
             }
@@ -58,11 +59,11 @@ public class MonsterMealitem extends Item {
 
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.literal(""));
         list.add(Component.translatable("item.species.whenEaten").withStyle(ChatFormatting.DARK_PURPLE));
         list.add(Component.literal(" ").append(Component.translatable("item.species.monster_meal.desc.effect").withStyle(Style.EMPTY.withColor(0xe72a8b))));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 
     @Override

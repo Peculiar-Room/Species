@@ -1,6 +1,7 @@
 package com.ninni.species.server.world.gen.structure;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesStructureTypes;
 import com.ninni.species.server.structure.LibraGenerator;
 import net.minecraft.core.BlockPos;
@@ -10,10 +11,11 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class LibraStructure extends Structure {
-    public static final Codec<LibraStructure> CODEC = LibraStructure.simpleCodec(LibraStructure::new);
+    public static final MapCodec<LibraStructure> CODEC = LibraStructure.simpleCodec(LibraStructure::new);
 
     public LibraStructure(StructureSettings config) {
         super(config);
@@ -44,7 +46,7 @@ public class LibraStructure extends Structure {
         BlockPos blockPos = new BlockPos(x, height, z);
         WorldgenRandom random = generationContext.random();
 
-        return Optional.of(new Structure.GenerationStub(blockPos, structurePiecesBuilder -> LibraGenerator.addPieces(generationContext.structureTemplateManager(), blockPos, Rotation.getRandom(random), structurePiecesBuilder)));
+        return Optional.of(new GenerationStub(blockPos, structurePiecesBuilder -> LibraGenerator.addPieces(generationContext.structureTemplateManager(), blockPos, Rotation.getRandom(random), structurePiecesBuilder)));
     }
 
     @Override

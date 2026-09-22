@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 public class SpectraliburChamberGenerator {
 
     public static void addPieces(StructureTemplateManager manager, BlockPos pos, StructurePieceAccessor holder) {
-        holder.addPiece(new SpectraliburChamberGenerator.Piece(manager, new ResourceLocation(Species.MOD_ID, "spectralibur_chamber"), pos));
+        holder.addPiece(new Piece(manager, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "spectralibur_chamber"), pos));
     }
 
     public static class Piece extends TemplateStructurePiece {

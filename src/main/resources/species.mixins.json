@@ -11,6 +11,7 @@
     "AgeableMobMixin",
     "BlockEntityTypeMixin",
     "EmeraldsForVillagerTypeItemMixin",
+    "FallingBlockEntityMixin",
     "FlowerPotBlockMixin",
     "ItemMixin",
     "LightningRodMixin",
@@ -21,6 +22,7 @@
     "NoteBlockMixin",
     "PlayerMixin",
     "PoseMixin",
+    "ServerPlayerMixin",
     "WitherSkeletonEntityMixin",
     "WolfMixin"
   ],
@@ -31,8 +33,7 @@
     "client.InventoryScreenMixin",
     "client.ItemInHandRendererMixin",
     "client.PlayerRendererMixin",
-    "client.VillagerProfessionLayerMixin",
-    "client.WolfRendererMixin"
+    "client.VillagerProfessionLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

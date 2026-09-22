@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 public class StackatickDyeLayer extends RenderLayer<Stackatick, StackatickModel<Stackatick>> {
     private final StackatickModel<Stackatick> model;
@@ -27,12 +28,12 @@ public class StackatickDyeLayer extends RenderLayer<Stackatick, StackatickModel<
             this.model.prepareMobModel(stackatick, f, g, h);
             this.model.setupAnim(stackatick, f, g, j, k, l);
             VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityTranslucent(this.getOverlayTextureLocation(stackatick)));
-            this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
+            this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1f, 1f, 1f, 1f));
         }
     }
 
 
     public ResourceLocation getOverlayTextureLocation(Stackatick stackatick) {
-        return new ResourceLocation(Species.MOD_ID, "textures/entity/stackatick/dyed/" + stackatick.getColor().getName() + ".png");
+        return ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "textures/entity/stackatick/dyed/" + stackatick.getColor().getName() + ".png");
     }
 }

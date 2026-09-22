@@ -3,14 +3,14 @@ package com.ninni.species.client.renderer.entity.feature;
 import com.ninni.species.client.model.mob.update_3.SpectreModel;
 import com.ninni.species.client.renderer.entity.SpectreRenderer;
 import com.ninni.species.client.renderer.entity.rendertypes.OffsetRenderLayer;
-import com.ninni.species.server.entity.mob.update_3.Spectre;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
+import com.ninni.species.server.entity.mob.update_3.Spectre;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SpectreWiggleFeatureRenderer<T extends Spectre, M extends SpectreModel<T>> extends OffsetRenderLayer<T, M> {

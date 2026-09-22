@@ -1,14 +1,15 @@
 package com.ninni.species.server.entity.mob.update_1;
 
 import com.google.common.collect.Lists;
-import com.ninni.species.registry.SpeciesBlocks;
-import com.ninni.species.server.block.entity.BirtDwellingBlockEntity;
 import com.ninni.species.registry.SpeciesBlockEntities;
-import com.ninni.species.server.entity.ai.goal.BirtCommunicatingGoal;
-import com.ninni.species.server.entity.ai.goal.SendMessageTicksGoal;
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.server.block.entity.BirtDwellingBlockEntity;
+import com.ninni.species.server.entity.ai.goal.BirtCommunicatingGoal;
+import com.ninni.species.server.entity.ai.goal.SendMessageTicksGoal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -31,11 +32,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -46,6 +43,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -59,12 +57,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,17 +82,17 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
     int ticksLeftToFindDwelling;
     @Nullable
     BlockPos dwellingPos;
-    Birt.MoveToDwellingGoal moveToDwellingGoal;
+    MoveToDwellingGoal moveToDwellingGoal;
     private final VibrationUser vibrationUser;
     private final DynamicGameEventListener<LoudVibrationListener> loudVibrationListener;
-    private VibrationSystem.Data vibrationData;
+    private Data vibrationData;
 
-    public Birt(EntityType<? extends Animal> entityType, Level world) {
+    public Birt(EntityType<? extends Birt> entityType, Level world) {
         super(entityType, world);
         this.moveControl = new FlyingMoveControl(this, 20, false);
         this.vibrationUser = new VibrationUser();
-        this.vibrationData = new VibrationSystem.Data();
-        this.loudVibrationListener = new DynamicGameEventListener<>(new LoudVibrationListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.getNotificationRadius()));
+        this.vibrationData = new Data();
+        this.loudVibrationListener = new DynamicGameEventListener<>(new LoudVibrationListener(this.vibrationUser.getPositionSource(), GameEvent.JUKEBOX_PLAY.value().notificationRadius()));
     }
 
     @Override
@@ -133,10 +126,10 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BIRT_FLAGS, (byte)0);
-        this.entityData.define(ANGER, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BIRT_FLAGS, (byte)0);
+        builder.define(ANGER, 0);
     }
 
     @Override
@@ -169,8 +162,14 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
         this.messageTicks = compoundTag.getInt("canMessage");
         this.cannotEnterDwellingTicks = compoundTag.getInt("CannotEnterDwellingTicks");
         if (compoundTag.contains("DwellingPos")) {
-            this.dwellingPos = NbtUtils.readBlockPos(compoundTag.getCompound("DwellingPos"));
+            this.dwellingPos = NbtUtils.readBlockPos(compoundTag, "DwellingPos").get();
         }
+    }
+
+    // No food?
+    @Override
+    public boolean isFood(ItemStack itemStack) {
+        return false;
     }
 
     @Override
@@ -212,7 +211,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
     public void tick() {
         super.tick();
         if (!this.level().isClientSide) {
-            VibrationSystem.Ticker.tick(this.level(), this.vibrationData, this.vibrationUser);
+            Ticker.tick(this.level(), this.vibrationData, this.vibrationUser);
         }
     }
 
@@ -470,7 +469,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
         return this.vibrationUser;
     }
 
-    public class VibrationUser implements VibrationSystem.User {
+    public class VibrationUser implements User {
         private static final int VIBRATION_EVENT_LISTENER_RANGE = 16;
         private final PositionSource positionSource;
         VibrationUser() {
@@ -485,14 +484,14 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
             return this.positionSource;
         }
         @Override
-        public boolean canReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, GameEvent.Context context) {
+        public boolean canReceiveVibration(ServerLevel var1, BlockPos var2, Holder<GameEvent> var3, GameEvent.Context var4) {
             if (Birt.this.isNoAi()) {
                 return false;
             }
             return Birt.this.getTarget() != null;
         }
         @Override
-        public void onReceiveVibration(ServerLevel serverLevel, BlockPos blockPos, GameEvent gameEvent, @Nullable Entity entity, @Nullable Entity entity2, float f) {
+        public void onReceiveVibration(ServerLevel var1, BlockPos var2, Holder<GameEvent> var3, @javax.annotation.Nullable Entity var4, @javax.annotation.Nullable Entity var5, float var6) {
         }
         @Override
         public TagKey<GameEvent> getListenableEvents() {
@@ -515,9 +514,9 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
             return this.listenerRadius;
         }
         @Override
-        public boolean handleGameEvent(ServerLevel serverLevel, GameEvent gameEvent, GameEvent.Context context, Vec3 vec3) {
+        public boolean handleGameEvent(ServerLevel serverLevel, Holder<GameEvent> holder, GameEvent.Context context, Vec3 vec3) {
             BlockPos blockPos = BlockPos.containing(vec3);
-            if (Birt.isLoudNoise(gameEvent, serverLevel, blockPos)) {
+            if (Birt.isLoudNoise(holder.value(), serverLevel, blockPos)) {
                 Birt.this.setTarget(null);
                 return true;
             }
@@ -525,13 +524,13 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
         }
     }
     public static boolean isLoudNoise(GameEvent gameEvent, ServerLevel serverLevel, BlockPos blockPos) {
-        return gameEvent == GameEvent.EXPLODE || gameEvent == GameEvent.INSTRUMENT_PLAY || gameEvent == GameEvent.JUKEBOX_PLAY || (gameEvent == GameEvent.BLOCK_CHANGE && serverLevel.getBlockState(blockPos).is(Blocks.BELL));
+        return gameEvent == GameEvent.EXPLODE.value() || gameEvent == GameEvent.INSTRUMENT_PLAY.value() || gameEvent == GameEvent.JUKEBOX_PLAY.value() || (gameEvent == GameEvent.BLOCK_CHANGE.value() && serverLevel.getBlockState(blockPos).is(Blocks.BELL));
     }
 
     class BirtWanderAroundGoal extends Goal {
 
         BirtWanderAroundGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
@@ -587,7 +586,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
         }
     }
     
-    class EnterDwellingGoal extends Birt.NotAngryGoal {
+    class EnterDwellingGoal extends NotAngryGoal {
         EnterDwellingGoal() {
             super();
         }
@@ -626,7 +625,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
         }
     }
 
-    private class FindDwellingGoal extends Birt.NotAngryGoal {
+    private class FindDwellingGoal extends NotAngryGoal {
         FindDwellingGoal() {
             super();
         }
@@ -672,7 +671,7 @@ public class Birt extends Animal implements NeutralMob, FlyingAnimal, VibrationS
     }
 
     @VisibleForDebug
-    public class MoveToDwellingGoal extends Birt.NotAngryGoal {
+    public class MoveToDwellingGoal extends NotAngryGoal {
         int ticks;
         final List<BlockPos> possibleDwellings;
         @Nullable

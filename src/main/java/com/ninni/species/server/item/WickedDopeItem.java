@@ -22,7 +22,7 @@ import java.util.List;
 public class WickedDopeItem extends Item {
 
     public WickedDopeItem() {
-        super(new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationMod(2).alwaysEat().build()));
+        super(new Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(2).alwaysEdible().build()));
     }
 
     @Override
@@ -50,11 +50,11 @@ public class WickedDopeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.literal(""));
         list.add(Component.translatable("item.species.whenEaten").withStyle(ChatFormatting.DARK_PURPLE));
         list.add(Component.literal(" ").append(Component.translatable("item.species.wicked_dope.desc.effect").withStyle(Style.EMPTY.withColor(0xe72a8b))));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class Coil extends Entity {
 
             if (this.isWaxed()) {
                 if (itemInHand.getItem() instanceof AxeItem) {
-                    itemInHand.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                    itemInHand.hurtAndBreak(1, player, player.getEquipmentSlotForItem(player.getItemInHand(hand)));
 
                     this.setWaxed(false);
                     level().playSound(player, getBlockPos(), SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -135,14 +135,15 @@ public class Coil extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(END_POINT_UUID, Optional.empty());
-        this.entityData.define(END_POINT_POS, Optional.empty());
-        this.entityData.define(START_POINT, true);
-        this.entityData.define(IS_KNOT, false);
-        this.entityData.define(IS_WAXED, false);
-        this.entityData.define(IS_BEING_PLACED, false);
-        this.entityData.define(LOOSENESS, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        //super.defineSynchedData(builder);
+        builder.define(END_POINT_UUID, Optional.empty());
+        builder.define(END_POINT_POS, Optional.empty());
+        builder.define(START_POINT, true);
+        builder.define(IS_KNOT, false);
+        builder.define(IS_WAXED, false);
+        builder.define(IS_BEING_PLACED, false);
+        builder.define(LOOSENESS, 0);
     }
 
     @Override
@@ -153,7 +154,7 @@ public class Coil extends Entity {
         this.setWaxed(tag.getBoolean("IsWaxed"));
         this.setIsBeingPlaced(tag.getBoolean("IsBeingPlaced"));
         if (tag.hasUUID("EndPointUUID")) this.setEndPointUUID(tag.getUUID("EndPointUUID"));
-        if (tag.contains("EndPointPos")) this.setEndPointPos(NbtUtils.readBlockPos(tag.getCompound("EndPointPos")));
+        if (tag.contains("EndPointPos")) this.setEndPointPos(NbtUtils.readBlockPos(tag, "EndPointPos").get());
     }
 
     @Override

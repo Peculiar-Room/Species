@@ -1,17 +1,20 @@
 package com.ninni.species.server.entity.mob.update_3;
 
+import com.ninni.species.Species;
+import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.server.entity.util.CustomDeathParticles;
 import com.ninni.species.server.entity.util.SpeciesPose;
-import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.registry.SpeciesParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
@@ -76,8 +79,8 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyInstance, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag tag) {
-        if (levelAccessor instanceof ServerLevel) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
+        if (serverLevelAccessor instanceof ServerLevel) {
             if (this.getVariant() == Type.HULKING_SPECTRE) {
                 this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(50);
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10);
@@ -89,7 +92,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
             }
             this.setHealth((float) this.getAttribute(Attributes.MAX_HEALTH).getValue());
         }
-        return super.finalizeSpawn(levelAccessor, difficultyInstance, spawnType, spawnGroupData, tag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -107,10 +110,10 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         this.goalSelector.addGoal(6, new SpectreWanderAroundGoal());
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
-    }
+    //@Override
+    //public MobType getMobType() {
+    //    return MobType.UNDEAD;
+    //}
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
@@ -147,17 +150,17 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         }
     }
 
-    public static void spawnSpectre(ServerLevel serverLevel, @Nullable Player player, BlockPos pos, Spectre.Type type, boolean fromSword) {
+    public static void spawnSpectre(ServerLevel serverLevel, @Nullable Player player, BlockPos pos, Type type, boolean fromSword) {
         Spectre spectre = new Spectre(SpeciesEntities.SPECTRE.get(), serverLevel);
 
         spectre.setPos(pos.getX() + 0.5 + (spectre.random.nextGaussian() * 0.5F), pos.getY(), pos.getZ() + 0.5 + (spectre.random.nextGaussian() * 0.5F));
         if (player != null) {
             if (fromSword) {
-                spectre.getAttribute(Attributes.FLYING_SPEED).addPermanentModifier(new AttributeModifier("From sword speed bonus", 0.1, AttributeModifier.Operation.ADDITION));
+                spectre.getAttribute(Attributes.FLYING_SPEED).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "sword_speed_bonus"), 0.1, AttributeModifier.Operation.ADD_VALUE));
                 spectre.setFromSword(true);
                 spectre.setOwnerUUID(player.getUUID());
                 spectre.timeLeftToLive = 20 * 45;
-                if (player.getMainHandItem().hasCustomHoverName())
+                if (player.getMainHandItem().has(DataComponents.CUSTOM_NAME))
                     spectre.setCustomName(Component.translatable("item.species.spectralibur.summon", player.getMainHandItem().getHoverName().getString()).withStyle(Style.EMPTY.withColor(0x44B4D1)));
                 if (player.getLastHurtMob() != null && player.getLastHurtMob().isAlive())
                     spectre.setTarget(player.getLastHurtMob());
@@ -169,7 +172,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
             }
         }
         spectre.setVariant(type);
-        spectre.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null, null);
+        spectre.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), MobSpawnType.MOB_SUMMONED, null);
         spectre.setPose(SpeciesPose.SPAWNING.get());
         serverLevel.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SpeciesSoundEvents.SPECTRE_SPAWN.get(), spectre.getSoundSource(), 1.0F, 1);
         serverLevel.addFreshEntity(spectre);
@@ -188,7 +191,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         ++this.deathTime;
         if (this.deathTime >= 40 && !this.level().isClientSide() && !this.isRemoved()) {
             this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
+            this.remove(RemovalReason.KILLED);
         }
         if (this.deathTime == 1) {
             this.playSound(SpeciesSoundEvents.SPECTRE_DEATH.get(),1,1);
@@ -340,11 +343,11 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FROM_SWORD, false);
-        this.entityData.define(OWNERUUID_ID, Optional.empty());
-        this.entityData.define(DATA_TYPE_ID, "spectre");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(FROM_SWORD, false);
+        builder.define(OWNERUUID_ID, Optional.empty());
+        builder.define(DATA_TYPE_ID, "spectre");
     }
 
     @Override
@@ -366,17 +369,17 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         else OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), compoundTag.getString("Owner"));
 
         this.timeLeftToLive = compoundTag.getInt("TimeLeftToLive");
-        this.setVariant(Spectre.Type.byName(compoundTag.getString("Type")));
+        this.setVariant(Type.byName(compoundTag.getString("Type")));
         this.setFromSword(compoundTag.getBoolean("FromSword"));
     }
 
     @Override
-    public Spectre.Type getVariant() {
-        return Spectre.Type.byName(this.entityData.get(DATA_TYPE_ID));
+    public Type getVariant() {
+        return Type.byName(this.entityData.get(DATA_TYPE_ID));
     }
 
     @Override
-    public void setVariant(Spectre.Type type) {
+    public void setVariant(Type type) {
         this.entityData.set(DATA_TYPE_ID, type.getSerializedName());
     }
 
@@ -437,7 +440,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
     class SpectreWanderAroundGoal extends Goal {
 
         SpectreWanderAroundGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
@@ -515,7 +518,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
 
             if (mob.getTarget() != null) {
                 if (timer > 20) this.mob.addDeltaMovement(new Vec3(0,0.01F,0));
-                double d0 = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(mob.getTarget());
+                double d0 = this.mob.distanceToSqr(mob.getTarget());
                 checkAndPerformAttack(mob.getTarget(), d0);
                 this.mob.getLookControl().setLookAt(mob.getTarget(), mob.getMaxHeadYRot(), mob.getMaxHeadXRot());
                 this.mob.setYBodyRot(this.mob.getYHeadRot());
@@ -577,7 +580,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
             this.navigation = spectre.getNavigation();
             this.startDistance = startDistance;
             this.stopDistance = stopDistance;
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
         public boolean canUse() {
@@ -633,7 +636,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         public OwnerHurtTargetGoal() {
             super(Spectre.this, false);
             this.spectre = Spectre.this;
-            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+            this.setFlags(EnumSet.of(Flag.TARGET));
         }
 
         public boolean canUse() {
@@ -667,7 +670,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         public OwnerHurtByTargetGoal() {
             super(Spectre.this, false);
             this.spectre = Spectre.this;
-            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+            this.setFlags(EnumSet.of(Flag.TARGET));
         }
 
         public boolean canUse() {
@@ -701,7 +704,7 @@ public class Spectre extends Monster implements OwnableEntity, CustomDeathPartic
         JOUSTING_SPECTRE("jousting_spectre"),
         HULKING_SPECTRE("hulking_spectre");
 
-        public static final StringRepresentable.EnumCodec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
+        public static final EnumCodec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
         private final String name;
 
         Type(String name) {

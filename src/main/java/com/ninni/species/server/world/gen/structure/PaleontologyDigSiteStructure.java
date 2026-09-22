@@ -1,6 +1,7 @@
 package com.ninni.species.server.world.gen.structure;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesStructureTypes;
 import com.ninni.species.server.structure.PaleontologyDigSiteGenerator;
 import net.minecraft.core.BlockPos;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import java.util.Optional;
 
 public class PaleontologyDigSiteStructure extends Structure {
-    public static final Codec<PaleontologyDigSiteStructure> CODEC = PaleontologyDigSiteStructure.simpleCodec(PaleontologyDigSiteStructure::new);
+    public static final MapCodec<PaleontologyDigSiteStructure> CODEC = PaleontologyDigSiteStructure.simpleCodec(PaleontologyDigSiteStructure::new);
 
     public PaleontologyDigSiteStructure(StructureSettings structureSettings) {
         super(structureSettings);
@@ -42,7 +43,7 @@ public class PaleontologyDigSiteStructure extends Structure {
 
         BlockPos blockPos = new BlockPos(x, height, z);
 
-        return Optional.of(new Structure.GenerationStub(blockPos, structurePiecesBuilder -> PaleontologyDigSiteGenerator.addPieces(generationContext.structureTemplateManager(), blockPos, structurePiecesBuilder, worldgenRandom)));
+        return Optional.of(new GenerationStub(blockPos, structurePiecesBuilder -> PaleontologyDigSiteGenerator.addPieces(generationContext.structureTemplateManager(), blockPos, structurePiecesBuilder, worldgenRandom)));
     }
 
     @Override

@@ -1,14 +1,28 @@
 package com.ninni.species.server.packet;
 
+import com.ninni.species.Species;
 import com.ninni.species.server.entity.mob.update_3.Harpoon;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class HarpoonInputPacket {
+public class HarpoonInputPacket implements CustomPacketPayload {
+
+    public static final CustomPacketPayload.Type<HarpoonInputPacket> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "harpoon_input"));
+    public static final StreamCodec<FriendlyByteBuf, HarpoonInputPacket> STREAM_CODEC = StreamCodec.of(HarpoonInputPacket::write, HarpoonInputPacket::read);
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     private final int harpoonId;
     private final float xInput, yInput, zInput;
 
@@ -19,7 +33,7 @@ public class HarpoonInputPacket {
         this.zInput = zInput;
     }
 
-    public static void write(HarpoonInputPacket msg, FriendlyByteBuf buf) {
+    public static void write(FriendlyByteBuf buf, HarpoonInputPacket msg) {
         buf.writeInt(msg.harpoonId);
         buf.writeFloat(msg.xInput);
         buf.writeFloat(msg.yInput);
@@ -30,9 +44,9 @@ public class HarpoonInputPacket {
         return new HarpoonInputPacket(buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
-    public static void handle(HarpoonInputPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            Player player = ctx.get().getSender();
+    public static void handle(HarpoonInputPacket msg, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            Player player = ctx.player();
             if (player == null) return;
             Entity harpoonEntity = player.level().getEntity(msg.harpoonId);
 
@@ -40,6 +54,6 @@ public class HarpoonInputPacket {
                 harpoon.setSwingInput(msg.xInput, msg.yInput, msg.zInput);
             }
         });
-        ctx.get().setPacketHandled(true);
+        //ctx.get().setPacketHandled(true);
     }
 }

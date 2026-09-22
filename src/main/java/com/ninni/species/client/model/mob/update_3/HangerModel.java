@@ -1,6 +1,5 @@
 package com.ninni.species.client.model.mob.update_3;
 
-import com.ninni.species.client.animation.DeflectorDummyAnimations;
 import com.ninni.species.client.animation.HangerAnimations;
 import com.ninni.species.server.entity.mob.update_3.Hanger;
 import net.minecraft.client.model.HierarchicalModel;

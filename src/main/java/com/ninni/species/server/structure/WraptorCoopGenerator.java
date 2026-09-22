@@ -31,14 +31,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class WraptorCoopGenerator {
     public static final int COOP_STRUCTURES = 7;
-    private static final Function<Integer, ResourceLocation> TEMPLATES = Util.memoize(i -> new ResourceLocation(Species.MOD_ID, "wraptor_coop/coop" + i));
+    private static final Function<Integer, ResourceLocation> TEMPLATES = Util.memoize(i -> ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "wraptor_coop/coop" + i));
 
     public static void addPieces(StructureTemplateManager manager, BlockPos pos, int height, Rotation rotation, StructurePieceAccessor holder, RandomSource random) {
-        holder.addPiece(new WraptorCoopGenerator.Piece(manager, TEMPLATES.apply(Mth.randomBetweenInclusive(random, 1, COOP_STRUCTURES)), pos, rotation));
+        holder.addPiece(new Piece(manager, TEMPLATES.apply(Mth.randomBetweenInclusive(random, 1, COOP_STRUCTURES)), pos, rotation));
     }
 
     public static class Piece extends TemplateStructurePiece {
@@ -83,15 +84,19 @@ public class WraptorCoopGenerator {
                         }
                 )));
             } else {
-                ArrayList<Mob> entities = new ArrayList<>();
+                List<Mob> entities = new ArrayList<>();
 
-                if ("Wraptor".equals(metadata)) entities.add(SpeciesEntities.WRAPTOR.get().create(world.getLevel()));
+                if ("Wraptor".equals(metadata)) {
+                    entities.add(SpeciesEntities.WRAPTOR.get().create(world.getLevel()));
+                }
 
                 for (Mob entity : entities) {
-                    entity.setPersistenceRequired();
-                    entity.moveTo(pos, 0.0f, 0.0f);
-                    entity.finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, null, null);
-                    world.addFreshEntityWithPassengers(entity);
+                    if (entity != null) {
+                        entity.setPersistenceRequired();
+                        entity.moveTo(pos, 0.0f, 0.0f);
+                        entity.finalizeSpawn(world, world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, null);
+                        world.addFreshEntityWithPassengers(entity);
+                    }
                 }
             }
         }

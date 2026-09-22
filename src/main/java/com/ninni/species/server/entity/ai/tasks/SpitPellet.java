@@ -1,11 +1,11 @@
 package com.ninni.species.server.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import com.ninni.species.server.entity.mob.update_2.Cruncher;
-import com.ninni.species.server.entity.mob.update_2.CruncherPellet;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesMemoryModuleTypes;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_2.Cruncher;
+import com.ninni.species.server.entity.mob.update_2.CruncherPellet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;

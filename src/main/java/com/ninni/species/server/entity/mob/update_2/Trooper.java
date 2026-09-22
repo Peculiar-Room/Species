@@ -1,9 +1,9 @@
 package com.ninni.species.server.entity.mob.update_2;
 
 import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import com.ninni.species.server.entity.ai.goal.TrooperSwellGoal;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.registry.SpeciesCriterion;
+import com.ninni.species.server.entity.ai.goal.TrooperSwellGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,25 +22,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -83,7 +68,7 @@ public class Trooper extends TamableAnimal {
         this.goalSelector.addGoal(1, new TrooperSwellGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.BONE_MEAL), false));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.2, 6.0f, 2.0f, false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.2, 6.0f, 2.0f));
         this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Ocelot.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Cat.class, 6.0f, 1.0, 1.2));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -113,7 +98,7 @@ public class Trooper extends TamableAnimal {
                 if (!itemStack.isDamageableItem()) {
                     itemStack.shrink(1);
                 } else {
-                    itemStack.hurtAndBreak(1, player, player2 -> player2.broadcastBreakEvent(hand));
+                    itemStack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(player.getItemInHand(hand)));
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -127,7 +112,7 @@ public class Trooper extends TamableAnimal {
                 this.playSound(SoundEvents.BONE_MEAL_USE);
             }
             this.tame(player);
-            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TAME_TROOPER.trigger(serverPlayer);
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.TAME_TROOPER.get().trigger(serverPlayer);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else if (this.isTame() && this.getOwner() == player) {
             if (this.getTarget() != null) this.setTarget(null);
@@ -147,10 +132,10 @@ public class Trooper extends TamableAnimal {
 
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SWELL_DIR, -1);
-        this.entityData.define(DATA_IS_IGNITED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SWELL_DIR, -1);
+        builder.define(DATA_IS_IGNITED, false);
     }
 
     @Override
@@ -173,6 +158,11 @@ public class Trooper extends TamableAnimal {
         if (compoundTag.getBoolean("ignited")) {
             this.ignite();
         }
+    }
+
+    @Override
+    public boolean isFood(ItemStack itemStack) {
+        return false;
     }
 
     @Override

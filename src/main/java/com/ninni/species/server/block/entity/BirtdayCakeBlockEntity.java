@@ -2,6 +2,7 @@ package com.ninni.species.server.block.entity;
 
 import com.ninni.species.registry.SpeciesBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -37,31 +38,31 @@ public class BirtdayCakeBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
         if (tag.contains("PlayerName")) this.playerName = tag.getString("PlayerName");
         if (tag.contains("Age")) this.age = tag.getInt("Age");
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         if (!playerName.equals("")) tag.putString("PlayerName", playerName);
         if (age != 0) tag.putInt("Age", age);
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        CompoundTag tag = super.getUpdateTag(provider);
         if (!playerName.equals("")) tag.putString("PlayerName", playerName);
         if (age != 0) tag.putInt("Age", age);
         return tag;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
-        this.load(tag);
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider) {
+        super.handleUpdateTag(tag, provider);
+        this.loadAdditional(tag, provider);
     }
 
     @Nullable
@@ -71,7 +72,7 @@ public class BirtdayCakeBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        handleUpdateTag(pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
+        handleUpdateTag(pkt.getTag(), provider);
     }
 }

@@ -6,6 +6,8 @@ import com.ninni.species.registry.SpeciesItems;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -17,9 +19,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -34,8 +37,9 @@ public class RicoshieldItem extends ShieldItem {
 
     @Override
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-        if (stack.getTag().contains("StoredDamage") && stack.getTag().getFloat("StoredDamage") > 0) {
-            this.damageTargets(stack, entity.level(), stack.getTag().getFloat("StoredDamage"), entity);
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (tag.contains("StoredDamage") && tag.getFloat("StoredDamage") > 0) {
+            this.damageTargets(stack, entity.level(), tag.getFloat("StoredDamage"), entity);
         }
         super.onStopUsing(stack, entity, count);
     }
@@ -78,8 +82,12 @@ public class RicoshieldItem extends ShieldItem {
                 player.doHurtTarget(target);
             }
         }
-        if (player instanceof Player player1) player1.getCooldowns().addCooldown(this, (int) (stack.getOrCreateTag().getFloat("StoredDamage") / 4) * 20);
-        stack.getOrCreateTag().putFloat("StoredDamage", 0);
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (player instanceof Player player1) {
+            player1.getCooldowns().addCooldown(this, (int) (tag.getFloat("StoredDamage") / 4) * 20);
+        }
+        tag.putFloat("StoredDamage", 0);
+        CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
     }
 
     public DamageSource kinetic(LivingEntity livingEntity, LivingEntity livingEntity2) {
@@ -91,12 +99,12 @@ public class RicoshieldItem extends ShieldItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.literal(""));
         list.add(Component.translatable("item.species.ricoshield.desc.blocking").withStyle(ChatFormatting.GRAY));
         list.add(Component.literal(" ").append(Component.translatable("item.species.ricoshield.desc.damage").withStyle(style -> style.withColor(0xE21447))));
 
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 
     @Override

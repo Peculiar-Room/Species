@@ -1,10 +1,10 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.block.property.SpeciesProperties;
-import com.ninni.species.server.entity.mob.update_2.Goober;
 import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.registry.SpeciesSoundEvents;
 import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.server.block.property.SpeciesProperties;
+import com.ninni.species.server.entity.mob.update_2.Goober;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -110,7 +110,7 @@ public class PetrifiedEggBlock extends Block {
     }
 
     @Override
-    public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
+    public boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 

@@ -2,11 +2,11 @@ package com.ninni.species.server.entity.mob.update_2;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.server.entity.util.SpeciesPose;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesItems;
+import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,23 +25,13 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
@@ -102,9 +92,36 @@ public class Mammutilation extends PathfinderMob {
         return false;
     }
 
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            if (flag) {
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+                if (!itemstack.isEmpty()) {
+                    if (itemstack.isDamageableItem()) {
+                        Item item = itemstack.getItem();
+                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                            this.onEquippedItemBroken(item, EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                        }
+                    }
+
+                    flag = false;
+                }
+
+                if (flag) {
+                    this.igniteForSeconds(8.0F);
+                }
+            }
+        }
+
         if (!this.level().isClientSide) {
             if (this.hatchCooldown > 0) {
                 this.hatchCooldown--;
@@ -175,11 +192,11 @@ public class Mammutilation extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(COUGH_COOLDOWN, 30 * 20 + random.nextInt(60 * 2 * 20));
-        this.entityData.define(ICHOR_COUNT, 5);
-        this.entityData.define(ICHOR_COOLDOWN, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(COUGH_COOLDOWN, 30 * 20 + random.nextInt(60 * 2 * 20));
+        builder.define(ICHOR_COUNT, 5);
+        builder.define(ICHOR_COOLDOWN, 0);
     }
 
     @Override
@@ -307,15 +324,15 @@ public class Mammutilation extends PathfinderMob {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.hatchCooldown = UniformInt.of(6000, 12000).sample(this.getRandom());
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
-    }
+    //@Override
+    //public MobType getMobType() {
+    //    return MobType.UNDEAD;
+    //}
 
     @Nullable
     @Override

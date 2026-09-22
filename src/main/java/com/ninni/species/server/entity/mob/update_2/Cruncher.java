@@ -3,20 +3,19 @@ package com.ninni.species.server.entity.mob.update_2;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import com.ninni.species.client.inventory.CruncherInventoryMenu;
-import com.ninni.species.registry.SpeciesParticles;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.mixin_util.ServerPlayerAccess;
+import com.ninni.species.registry.*;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.data.CruncherPelletManager;
 import com.ninni.species.server.entity.ai.CruncherAi;
 import com.ninni.species.server.packet.OpenCruncherScreenPacket;
-import com.ninni.species.registry.SpeciesDamageTypes;
-import com.ninni.species.registry.SpeciesEntityDataSerializers;
-import com.ninni.species.registry.SpeciesNetwork;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,26 +24,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.BossEvent;
-import net.minecraft.world.Container;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HasCustomInventoryScreen;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -54,6 +40,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -61,16 +48,17 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.IntFunction;
 
 public class Cruncher extends Animal implements InventoryCarrier, HasCustomInventoryScreen {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -119,7 +107,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         super.aiStep();
         if (this.isAlive()) {
             if (this.getHunger() > 0) {
-                if (this.getPathfindingMalus(BlockPathTypes.LEAVES) != 0) this.setPathfindingMalus(BlockPathTypes.LEAVES, 0.0F);
+                if (this.getPathfindingMalus(PathType.LEAVES) != 0) this.setPathfindingMalus(PathType.LEAVES, 0.0F);
                 if (this.bossEvent.getColor() != this.getBarColor()) this.bossEvent.setColor(this.getBarColor());
                 if (this.horizontalCollision && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                     boolean bl = false;
@@ -147,7 +135,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
                     }
                 }
             } else {
-                if (this.getPathfindingMalus(BlockPathTypes.LEAVES) == 0) this.setPathfindingMalus(BlockPathTypes.LEAVES, -1.0f);
+                if (this.getPathfindingMalus(PathType.LEAVES) == 0) this.setPathfindingMalus(PathType.LEAVES, -1.0f);
             }
 
         }
@@ -177,10 +165,10 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CRUNCHER_STATE, CruncherState.IDLE);
-        this.entityData.define(STUNNED_TICKS, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CRUNCHER_STATE, CruncherState.IDLE);
+        builder.define(STUNNED_TICKS, 0);
     }
 
     @Override
@@ -200,13 +188,19 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         }
 
         if (compoundTag.contains("PelletFuel", 10)) {
-            this.inventory.setItem(0, ItemStack.of(compoundTag.getCompound("PelletFuel")));
+            this.inventory.setItem(0, ItemStack.parseOptional(registryAccess(), compoundTag.getCompound("PelletFuel")));
         }
 
         this.setHunger(compoundTag.getInt("Hunger"));
         this.setSpits(compoundTag.getInt("Spit"));
         this.setStunnedTicks(compoundTag.getInt("StunnedTicks"));
         this.setDay(compoundTag.getLong("Day"));
+    }
+
+    //No food?
+    @Override
+    public boolean isFood(ItemStack itemStack) {
+        return false;
     }
 
     @Override
@@ -224,7 +218,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         }
 
         if (!this.inventory.getItem(0).isEmpty()) {
-            compoundTag.put("PelletFuel", this.inventory.getItem(0).save(new CompoundTag()));
+            compoundTag.put("PelletFuel", this.inventory.getItem(0).save(registryAccess()));
         }
 
         compoundTag.putInt("Hunger", this.getHunger());
@@ -289,7 +283,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
 
             itemStack.shrink(1);
 
-            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.FEED_CRUNCHER.trigger(serverPlayer);
+            if (player instanceof ServerPlayer serverPlayer) SpeciesCriterion.FEED_CRUNCHER.get().trigger(serverPlayer);
             this.setHunger(this.getHunger() - 1);
             this.bossEvent.setColor(this.getBarColor());
 
@@ -316,7 +310,7 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         super.dropEquipment();
         this.inventory.removeAllItems().forEach(this::spawnAtLocation);
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
+        if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
             this.spawnAtLocation(itemStack);
             this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         }
@@ -333,13 +327,17 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
         if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
             if (serverPlayer.containerMenu != serverPlayer.inventoryMenu) serverPlayer.closeContainer();
 
-            serverPlayer.nextContainerCounter();
+            if (serverPlayer instanceof ServerPlayerAccess serverPlayerAccess) {
+                serverPlayerAccess.getNextContainerCounter();
 
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new OpenCruncherScreenPacket(this.getId(), this.inventory.getContainerSize(), serverPlayer.containerCounter));
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenCruncherScreenPacket(this.getId(), this.inventory.getContainerSize(), serverPlayerAccess.getContainerCounter()));
+                //SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new OpenCruncherScreenPacket(this.getId(), this.inventory.getContainerSize(), serverPlayer.containerCounter));
 
-            serverPlayer.containerMenu = new CruncherInventoryMenu(serverPlayer.containerCounter, serverPlayer.getInventory(), this.inventory, this);
-            serverPlayer.initMenu(serverPlayer.containerMenu);
-            MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(serverPlayer, serverPlayer.containerMenu));
+                serverPlayer.containerMenu = new CruncherInventoryMenu(serverPlayerAccess.getContainerCounter(), serverPlayer.getInventory(), this.inventory, this);
+                serverPlayerAccess.doInitMenu(serverPlayer.containerMenu);
+            }
+            //serverPlayer.initMenu(serverPlayer.containerMenu);
+            NeoForge.EVENT_BUS.post(new PlayerContainerEvent.Open(serverPlayer, serverPlayer.containerMenu));
         }
     }
 
@@ -556,25 +554,34 @@ public class Cruncher extends Animal implements InventoryCarrier, HasCustomInven
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.setHunger(3);
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     public enum CruncherState implements StringRepresentable {
-        IDLE("idle", SoundEvents.EMPTY, 0),
-        ROAR("roar", SoundEvents.EMPTY, 80),
-        STOMP("stomp", SoundEvents.EMPTY, 20),
-        STUNNED("stunned", SoundEvents.EMPTY, 0);
+        IDLE("idle", SoundEvents.EMPTY, 0, 0),
+        ROAR("roar", SoundEvents.EMPTY, 80, 1),
+        STOMP("stomp", SoundEvents.EMPTY, 20, 2),
+        STUNNED("stunned", SoundEvents.EMPTY, 0, 3);
+
+        private static final IntFunction<Cruncher.CruncherState> BY_ID = ByIdMap.continuous(Cruncher.CruncherState::id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+        public static final StreamCodec<ByteBuf, Cruncher.CruncherState> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Cruncher.CruncherState::id);
 
         private final String name;
         private final SoundEvent soundEvent;
         private final int duration;
+        private final int id;
 
-        CruncherState(String name, SoundEvent soundEvents, int duration) {
+        CruncherState(String name, SoundEvent soundEvents, int duration, int id) {
             this.name = name;
             this.soundEvent = soundEvents;
             this.duration = duration;
+            this.id = id;
+        }
+
+        private int id() {
+            return this.id;
         }
 
         @Override

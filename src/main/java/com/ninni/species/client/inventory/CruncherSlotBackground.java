@@ -36,7 +36,7 @@ public class CruncherSlotBackground {
     public void render(AbstractContainerMenu menu, GuiGraphics guiGraphics, float v, int i, int i1) {
         Slot slot = menu.getSlot(this.slotIndex);
         if (!this.icons.isEmpty() && !slot.hasItem()) {
-            System.out.println(this.icons.get(this.iconIndex));
+            //System.out.println(this.icons.get(this.iconIndex));
             this.renderIcon(slot, this.icons.get(this.iconIndex), guiGraphics, i, i1);
         }
     }

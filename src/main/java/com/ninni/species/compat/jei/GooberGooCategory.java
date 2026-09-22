@@ -13,13 +13,13 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GooberGooCategory implements IRecipeCategory<GooberGooManager.GooberGooData> {
-    public static final ResourceLocation UID = new ResourceLocation(Species.MOD_ID, "goober_goo");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Species.MOD_ID, "textures/gui/jei/goober_goo.png");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "goober_goo");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "textures/gui/jei/goober_goo.png");
     private final IDrawable background;
     private final IDrawable icon;
     private final IDrawable slotDrawable;

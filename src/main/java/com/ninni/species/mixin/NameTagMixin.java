@@ -4,6 +4,7 @@ import com.ninni.species.registry.SpeciesEntities;
 import com.ninni.species.server.entity.mob.update_3.CliffHanger;
 import com.ninni.species.server.entity.mob.update_3.Hanger;
 import com.ninni.species.server.entity.mob.update_3.LeafHanger;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +25,7 @@ public abstract class NameTagMixin extends Item {
 
     @Inject(method = "interactLivingEntity", at = @At("HEAD"), cancellable = true)
     private void S$interact(ItemStack stack, Player player, LivingEntity livingEntity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (stack.hasCustomHoverName() && livingEntity instanceof Hanger && (stack.getHoverName().getString().equals("Dinnerbone") || stack.getHoverName().getString().equals("Grumm"))) {
+        if (stack.getComponents().has(DataComponents.CUSTOM_NAME) && livingEntity instanceof Hanger && (stack.getHoverName().getString().equals("Dinnerbone") || stack.getHoverName().getString().equals("Grumm"))) {
             if (!player.level().isClientSide && livingEntity.isAlive()) {
                 if (livingEntity instanceof LeafHanger hanger) {
                     hanger.convertTo(SpeciesEntities.CLIFF_HANGER.get(), false);

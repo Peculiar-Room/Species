@@ -1,13 +1,12 @@
 package com.ninni.species.server.item;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.ninni.species.registry.SpeciesParticles;
 import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.mob.update_3.Spectre;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
@@ -15,61 +14,72 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.List;
 
 public class SpectraliburItem extends Item {
-    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public SpectraliburItem(Properties properties) {
-        super(properties);
+        super(properties.component(DataComponents.TOOL, createToolProperties()));
+    }
 
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 8F, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4F, AttributeModifier.Operation.ADDITION));
-        this.defaultModifiers = builder.build();
+    public static ItemAttributeModifiers createAttributes() {
+        return ItemAttributeModifiers.builder()
+            .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 8F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+            .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, -2.4F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+            .build();
+    }
+
+    public static Tool createToolProperties() {
+        return new Tool(List.of(Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F), Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)), 1.0F, 2);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack mainHandItem = player.getMainHandItem();
-        if (mainHandItem.is(this) && mainHandItem.hasTag() && mainHandItem.getTag().contains("Souls") && mainHandItem.getTag().getInt("Souls") > 0) {
+        var tag = mainHandItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (mainHandItem.is(this) && mainHandItem.has(DataComponents.CUSTOM_DATA) && tag.contains("Souls") && tag.getInt("Souls") > 0) {
             player.startUsingItem(hand);
             player.playSound(SpeciesSoundEvents.SPECTRALIBUR_START_CHARGING.get(), 1,1);
             return InteractionResultHolder.consume(mainHandItem);
         }
-        return super.use(level, player, hand);
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
+        //return super.use(level, player, hand);
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int time) {
         super.onUseTick(level, livingEntity, stack, time);
-        if (time < stack.getUseDuration()) {
-            if (time % 10 == 0 && stack.hasTag() && stack.getTag().contains("Souls") && stack.getTag().getInt("Souls") > 0) {
-                stack.getTag().putInt("Souls", Math.max(stack.getTag().getInt("Souls") - 1, 0));
-                stack.getTag().putInt("UsingSouls", stack.getTag().getInt("UsingSouls") + 1);
-                livingEntity.playSound(SpeciesSoundEvents.SPECTRALIBUR_USE_SOUL.get(), 1,0.75F + stack.getTag().getInt("UsingSouls") * 0.1F);
+        if (time < stack.getUseDuration(livingEntity)) {
+            var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+            if (time % 10 == 0 && stack.has(DataComponents.CUSTOM_DATA) && tag.contains("Souls") && tag.getInt("Souls") > 0) {
+                tag.putInt("Souls", Math.max(tag.getInt("Souls") - 1, 0));
+                tag.putInt("UsingSouls", tag.getInt("UsingSouls") + 1);
+                livingEntity.playSound(SpeciesSoundEvents.SPECTRALIBUR_USE_SOUL.get(), 1,0.75F + tag.getInt("UsingSouls") * 0.1F);
+
+                CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
             }
         }
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity livingEntity, int timeUsed) {
-        super.releaseUsing(stack, level, livingEntity, timeUsed);
+        //super.releaseUsing(stack, level, livingEntity, timeUsed);
         spawnSpectres(stack, level, livingEntity);
     }
 
@@ -80,8 +90,9 @@ public class SpectraliburItem extends Item {
     }
 
     public void spawnSpectres(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (stack.hasTag() && stack.getTag().contains("UsingSouls") && stack.getTag().getInt("UsingSouls") > 0) {
-            int usingSouls = stack.getTag().getInt("UsingSouls");
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (stack.has(DataComponents.CUSTOM_DATA) && tag.contains("UsingSouls") && tag.getInt("UsingSouls") > 0) {
+            int usingSouls = tag.getInt("UsingSouls");
             if (level instanceof ServerLevel serverLevel && livingEntity instanceof Player player) {
                 if (usingSouls == 1 || usingSouls == 3) Spectre.spawnSpectre(serverLevel, player, player.getOnPos().above(2), Spectre.Type.SPECTRE, true);
                 if (usingSouls == 2 || usingSouls == 3 || usingSouls == 4) Spectre.spawnSpectre(serverLevel, player, player.getOnPos().above(2), Spectre.Type.JOUSTING_SPECTRE, true);
@@ -90,25 +101,28 @@ public class SpectraliburItem extends Item {
                 Vec3 pos = livingEntity.position();
                 serverLevel.sendParticles(SpeciesParticles.SPECTRALIBUR.get(), pos.x,pos.y + 0.01, pos.z, 1,0, 0, 0, 0);
             }
-            if (livingEntity instanceof ServerPlayer serverPlayer) SpeciesCriterion.SUMMON_SPECTRE.trigger(serverPlayer);
+            if (livingEntity instanceof ServerPlayer serverPlayer) SpeciesCriterion.SUMMON_SPECTRE.get().trigger(serverPlayer);
             livingEntity.playSound(SpeciesSoundEvents.SPECTRALIBUR_RELEASE_SPECTRE.get(), 1,1);
-            if (stack.getTag().getInt("Souls") == 0) stack.removeTagKey("Souls");
-            stack.removeTagKey("UsingSouls");
+            if (tag.getInt("Souls") == 0) {
+                tag.remove("Souls");
+            }
+            tag.remove("UsingSouls");
+
+            CustomData.set(DataComponents.CUSTOM_DATA, stack, tag);
         }
     }
 
-    public int getUseDuration(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains("Souls") && stack.getTag().getInt("Souls") > 0) return (stack.getTag().getInt("Souls") * 10) + 10;
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (stack.has(DataComponents.CUSTOM_DATA) && tag.contains("Souls") && tag.getInt("Souls") > 0) {
+            return (tag.getInt("Souls") * 10) + 10;
+        }
         return 0;
     }
 
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_43274_) {
-        return p_43274_ == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_43274_);
-    }
-
     @Override
-    public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        return ToolActions.DEFAULT_SWORD_ACTIONS.contains(toolAction);
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
     public float getDestroySpeed(ItemStack stack, BlockState state) {
@@ -124,24 +138,21 @@ public class SpectraliburItem extends Item {
         return true;
     }
 
-    public boolean isCorrectToolForDrops(BlockState p_43298_) {
-        return p_43298_.is(Blocks.COBWEB);
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.TOOT_HORN;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack p_41452_) {
-        return UseAnim.BLOCK;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, level, list, tooltipFlag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, list, tooltipFlag);
 
         Style style = Style.EMPTY.withColor(0x44B4D1);
 
-        if (stack.hasTag() && stack.getTag().contains("Souls") && stack.getTag().getInt("Souls") > 0) {
+        var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (stack.has(DataComponents.CUSTOM_DATA) && tag.contains("Souls") && tag.getInt("Souls") > 0) {
             list.add(Component.literal(" "));
-            int souls = stack.getTag().getInt("Souls");
+            int souls = tag.getInt("Souls");
             list.add(Component.translatable("item.species.spectralibur.desc.release").withStyle(ChatFormatting.GRAY));
 
             if (souls > 1) list.add(Component.literal(" ").append(Component.translatable("item.species.spectralibur.desc.spectre.2", souls).withStyle(style)));

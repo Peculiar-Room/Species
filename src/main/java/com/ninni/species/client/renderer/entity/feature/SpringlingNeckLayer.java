@@ -3,25 +3,18 @@ package com.ninni.species.client.renderer.entity.feature;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.species.client.model.mob.update_2.SpringlingModel;
-import com.ninni.species.client.model.mob.update_3.SpectreModel;
-import com.ninni.species.client.renderer.entity.SpectreRenderer;
 import com.ninni.species.client.renderer.entity.SpringlingRenderer;
-import com.ninni.species.client.renderer.entity.rendertypes.OffsetRenderLayer;
-import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.server.entity.mob.update_2.Springling;
-import com.ninni.species.server.entity.mob.update_3.Spectre;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
@@ -72,36 +65,32 @@ public class SpringlingNeckLayer extends RenderLayer<Springling, SpringlingModel
         float uMin = 0.375f;
         float uMax = 0.625f;
 
-        builder.vertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
-                .color(1F, 1F, 1F, (float) 1.0)
-                .uv(uMin, 0F)
-                .overlayCoords(overlay)
-                .uv2(packedLight)
-                .normal(pose.normal(), (float)normalDir.x, (float)normalDir.y, (float)normalDir.z)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
+                .setColor(1F, 1F, 1F, (float) 1.0)
+                .setUv(uMin, 0F)
+                .setOverlay(overlay)
+                .setLight(packedLight)
+                .setNormal(pose, (float)normalDir.x, (float)normalDir.y, (float)normalDir.z);
 
-        builder.vertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
-                .color(1F, 1F, 1F, (float) 1.0)
-                .uv(uMax, 0F)
-                .overlayCoords(overlay)
-                .uv2(packedLight)
-                .normal(pose.normal(), (float)normalDir.x, (float)normalDir.y, (float)normalDir.z)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
+                .setColor(1F, 1F, 1F, (float) 1.0)
+                .setUv(uMax, 0F)
+                .setOverlay(overlay)
+                .setLight(packedLight)
+                .setNormal(pose, (float)normalDir.x, (float)normalDir.y, (float)normalDir.z);
 
-        builder.vertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
-                .color(1F, 1F, 1F, (float) 1.0)
-                .uv(uMax, vMax)
-                .overlayCoords(overlay)
-                .uv2(packedLight)
-                .normal(pose.normal(), (float)normalDir.x, (float)normalDir.y, (float)normalDir.z)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
+                .setColor(1F, 1F, 1F, (float) 1.0)
+                .setUv(uMax, vMax)
+                .setOverlay(overlay)
+                .setLight(packedLight)
+                .setNormal(pose, (float)normalDir.x, (float)normalDir.y, (float)normalDir.z);
 
-        builder.vertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
-                .color(1F, 1F, 1F, (float) 1.0)
-                .uv(uMin, vMax)
-                .overlayCoords(overlay)
-                .uv2(packedLight)
-                .normal(pose.normal(), (float)normalDir.x, (float)normalDir.y, (float)normalDir.z)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
+                .setColor(1F, 1F, 1F, (float) 1.0)
+                .setUv(uMin, vMax)
+                .setOverlay(overlay)
+                .setLight(packedLight)
+                .setNormal(pose, (float)normalDir.x, (float)normalDir.y, (float)normalDir.z);
     }
 }

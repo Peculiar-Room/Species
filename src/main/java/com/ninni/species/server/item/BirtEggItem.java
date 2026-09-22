@@ -1,7 +1,7 @@
 package com.ninni.species.server.item;
 
-import com.ninni.species.server.entity.mob.update_1.BirtEgg;
 import com.ninni.species.registry.SpeciesSoundEvents;
+import com.ninni.species.server.entity.mob.update_1.BirtEgg;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class BirtEggItem extends Item {
 
-    public BirtEggItem(Item.Properties settings) {
+    public BirtEggItem(Properties settings) {
         super(settings);
     }
 
@@ -43,11 +43,11 @@ public class BirtEggItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.translatable("item.species.birt_egg.desc.birtd").withStyle(ChatFormatting.RED));
         list.add(Component.literal(""));
         list.add(Component.translatable("potion.whenDrank").withStyle(ChatFormatting.DARK_PURPLE));
         list.add(Component.translatable("item.species.birt_egg.desc.effect").withStyle(ChatFormatting.RED));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 }

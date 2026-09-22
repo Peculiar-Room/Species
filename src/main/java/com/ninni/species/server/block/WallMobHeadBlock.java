@@ -2,9 +2,10 @@ package com.ninni.species.server.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.ninni.species.server.block.entity.MobHeadBlockEntity;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesBlockEntities;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.server.block.entity.MobHeadBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class WallMobHeadBlock extends BaseEntityBlock implements Equipable {
+
     private final MobHeadBlock.Type type;
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final Map<Direction, VoxelShape> GHOUL_AABBS = Maps.newEnumMap(
@@ -62,6 +64,19 @@ public class WallMobHeadBlock extends BaseEntityBlock implements Equipable {
             Direction.WEST, Block.box(6, 3, 3, 16, 13, 13)
             )
     );
+
+    public static final MapCodec<WallMobHeadBlock> CODEC = simpleCodec(WallMobHeadBlock::new);
+    @Override
+    protected MapCodec<? extends WallMobHeadBlock> codec() {
+        return CODEC;
+    }
+
+    public WallMobHeadBlock(Properties properties) {
+        super(properties);
+        //Set default type to ghoul
+        this.type = MobHeadBlock.Types.GHOUL;
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
 
     public WallMobHeadBlock(MobHeadBlock.Type type, Properties properties) {
         super(properties);

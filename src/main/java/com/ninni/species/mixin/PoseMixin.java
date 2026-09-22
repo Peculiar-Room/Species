@@ -15,27 +15,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Mixin(Pose.class)
+@Mixin({Pose.class})
 public class PoseMixin {
     @Shadow
     @Mutable
     @Final
     private static Pose[] $VALUES;
 
+    public PoseMixin() {
+    }
+
     @Invoker("<init>")
-    public static Pose newPose(String name, int id) {
+    public static Pose newPose(String name, int ordinal, int id) {
         throw new AssertionError();
     }
 
-    @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Pose;$VALUES:[Lnet/minecraft/world/entity/Pose;", shift = At.Shift.AFTER))
+    @Inject(
+            method = {"<clinit>"},
+            at = {@At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/world/entity/Pose;$VALUES:[Lnet/minecraft/world/entity/Pose;",
+                    shift = At.Shift.AFTER,
+                    opcode = 179
+            )}
+    )
     private static void US$addCustomPose(CallbackInfo ci) {
-        List<Pose> poses = new ArrayList<>(Arrays.asList($VALUES));
-        Pose last = poses.get(poses.size() - 1);
+        List<Pose> poses = new ArrayList(Arrays.asList($VALUES));
+        Pose last = poses.getLast();
         int i = 1;
-        for (SpeciesPose pose : SpeciesPose.values()) {
-            poses.add(newPose(pose.name(), last.ordinal() + i));
-            i++;
+
+        for(SpeciesPose pose : SpeciesPose.values()) {
+            int nextOrdinal = last.ordinal() + i;
+            poses.add(newPose(pose.name(), nextOrdinal, last.id() + i));
+            ++i;
         }
+
         $VALUES = poses.toArray(new Pose[0]);
     }
 }

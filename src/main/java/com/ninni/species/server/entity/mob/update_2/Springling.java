@@ -1,11 +1,7 @@
 package com.ninni.species.server.entity.mob.update_2;
 
-import com.ninni.species.server.criterion.SpeciesCriterion;
-import com.ninni.species.registry.SpeciesEntities;
-import com.ninni.species.registry.SpeciesItems;
-import com.ninni.species.registry.SpeciesNetwork;
-import com.ninni.species.registry.SpeciesSoundEvents;
-import com.ninni.species.registry.SpeciesTags;
+import com.ninni.species.registry.*;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.packet.SendSpringlingPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,28 +18,15 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PlayerRideable;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -52,8 +35,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 public class Springling extends TamableAnimal implements PlayerRideable {
@@ -69,12 +52,16 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     public Springling(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
 
-        this.setMaxUpStep(1f);
         this.refreshDimensions();
 
         this.head = new SpringlingHead(this, "head", 1F, 0.1F);
         this.subEntities = new SpringlingHead[]{this.head};
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1);
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1f;
     }
 
     public void setId(int i1) {
@@ -92,7 +79,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1));
         this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
-        this.goalSelector.addGoal(2, new SpringlingFollowOwnerGoal(this, 1.25, 5.0f, 2.0f, true));
+        this.goalSelector.addGoal(2, new SpringlingFollowOwnerGoal(this, 1.25, 5.0f, 2.0f));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.2, Ingredient.of(SpeciesTags.SPRINGLING_BREED_ITEMS), false));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0f));
@@ -100,9 +87,9 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
         this.setMaxExtendedAmount(this.random.nextInt(10000) == 0? 24 : this.random.nextInt(8, 16));
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
     }
 
     @Override
@@ -117,7 +104,7 @@ public class Springling extends TamableAnimal implements PlayerRideable {
         this.head.moveTo(this.getX(), this.getY() + getBbHeight(), this.getZ());
 
         if (this.isVehicle() && this.getControllingPassenger() instanceof  Player player) {
-            if (player instanceof ServerPlayer serverPlayer && this.getExtendedAmount() == this.getMaxExtendedAmount()) SpeciesCriterion.EXTEND_SPRINGLING_FULLY.trigger(serverPlayer);
+            if (player instanceof ServerPlayer serverPlayer && this.getExtendedAmount() == this.getMaxExtendedAmount()) SpeciesCriterion.EXTEND_SPRINGLING_FULLY.get().trigger(serverPlayer);
             this.setSilent(true);
         } else this.setSilent(false);
 
@@ -135,7 +122,8 @@ public class Springling extends TamableAnimal implements PlayerRideable {
         if (messageCooldown > 0 && !this.level().isClientSide) messageCooldown--;
         if (messageCooldown < 10 && messageCooldown > 0 && this.isVehicle()) {
             if (this.getFirstPassenger() instanceof ServerPlayer serverPlayer) {
-                SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new SendSpringlingPacket());
+                PacketDistributor.sendToPlayer(serverPlayer, new SendSpringlingPacket());
+                //SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new SendSpringlingPacket());
             }
         }
 
@@ -240,22 +228,16 @@ public class Springling extends TamableAnimal implements PlayerRideable {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        float extensionScale = this.currentQuantizedStep / 10.0f;
-        return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getScale(), (this.getScale() + extensionScale / 1.5f) - (0.1F * this.getScale()));
-    }
-
-    @Override
-    public float getScale() {
+    public float getAgeScale() {
         return this.isBaby() ? 0.25f : 1.0f;
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MAX_EXTENDED_AMOUNT, 9);
-        this.entityData.define(EXTENDED_AMOUNT, 0f);
-        this.entityData.define(RETRACTING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(MAX_EXTENDED_AMOUNT, 9);
+        builder.define(EXTENDED_AMOUNT, 0f);
+        builder.define(RETRACTING, false);
     }
 
     @Override
@@ -396,14 +378,20 @@ public class Springling extends TamableAnimal implements PlayerRideable {
         return false;
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height - 0.05f;
+    //@Override
+    //protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
+    //    return entityDimensions.height - 0.05f;
+    //}
+
+    protected Vec3 getPassengerAttachmentPoint(Entity entity, EntityDimensions dimensions, float partialTick) {
+        float height = this.getDimensions(Pose.STANDING).height() + 0.1f;
+        return (new Vec3(0.0F, height, 0f));
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return this.getDimensions(Pose.STANDING).height - 0.05f;
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        float extensionScale = this.currentQuantizedStep / 10.0f;
+        return EntityDimensions.scalable(0.99F, 2.2F).scale(this.getAgeScale(), (this.getAgeScale() + extensionScale / 1.5f) - (0.1F * this.getAgeScale()));
     }
 
     @Override
@@ -440,8 +428,8 @@ public class Springling extends TamableAnimal implements PlayerRideable {
 
     public class SpringlingFollowOwnerGoal extends FollowOwnerGoal {
 
-        public SpringlingFollowOwnerGoal(TamableAnimal tamableAnimal, double d, float f, float g, boolean bl) {
-            super(tamableAnimal, d, f, g, bl);
+        public SpringlingFollowOwnerGoal(TamableAnimal tamableAnimal, double d, float f, float g) {
+            super(tamableAnimal, d, f, g);
         }
 
         @Override

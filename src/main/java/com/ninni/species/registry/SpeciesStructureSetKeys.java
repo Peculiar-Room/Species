@@ -10,6 +10,6 @@ public class SpeciesStructureSetKeys {
     public static final ResourceKey<StructureSet> WRAPTOR_COOPS = of("wraptor_coops");
 
     private static ResourceKey<StructureSet> of(String id) {
-        return ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(Species.MOD_ID, id));
+        return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, id));
     }
 }

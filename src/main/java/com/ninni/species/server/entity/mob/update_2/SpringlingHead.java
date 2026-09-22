@@ -3,6 +3,7 @@ package com.ninni.species.server.entity.mob.update_2;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,7 +12,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.entity.PartEntity;
+import net.neoforged.neoforge.entity.PartEntity;
 
 import javax.annotation.Nullable;
 
@@ -57,6 +58,7 @@ public class SpringlingHead extends PartEntity<Springling> {
         return this.parent.getPickResult();
     }
 
+
     public boolean hurt(DamageSource source, float amount) {
         return !this.isInvulnerableTo(source) && this.parent.hurt(source, amount);
     }
@@ -73,7 +75,7 @@ public class SpringlingHead extends PartEntity<Springling> {
         return false;
     }
 
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
     protected void readAdditionalSaveData(CompoundTag compoundTag) {}
     protected void addAdditionalSaveData(CompoundTag compoundTag) {}
 }

@@ -10,15 +10,16 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class QuakeChargingFeatureRenderer<T extends Quake, M extends QuakeModel<T>> extends RenderLayer<T, M> {
-    private static final ResourceLocation CHARGING = new ResourceLocation(MOD_ID, "textures/entity/quake/quake_charging.png");
-    private static final ResourceLocation CHARGED = new ResourceLocation(MOD_ID, "textures/entity/quake/quake_charged.png");
+    private static final ResourceLocation CHARGING = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/quake/quake_charging.png");
+    private static final ResourceLocation CHARGED = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/quake/quake_charged.png");
     private final QuakeModel<T> model;
 
     public QuakeChargingFeatureRenderer(RenderLayerParent<T, M> renderLayerParent, QuakeModel<T> entityModel) {
@@ -38,9 +39,9 @@ public class QuakeChargingFeatureRenderer<T extends Quake, M extends QuakeModel<
         this.model.setupAnim(quake, f, g, j, k, l);
 
         VertexConsumer vertexConsumerCharging = multiBufferSource.getBuffer(RenderType.entityTranslucent(CHARGING));
-        this.model.renderToBuffer(poseStack, vertexConsumerCharging, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, opacityCharging);
+        this.model.renderToBuffer(poseStack, vertexConsumerCharging, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(opacityCharging, 1f, 1f, 1f));
 
         VertexConsumer vertexConsumerCharged = multiBufferSource.getBuffer(RenderType.entityTranslucentEmissive(CHARGED));
-        this.model.renderToBuffer(poseStack, vertexConsumerCharged, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, opacityCharged);
+        this.model.renderToBuffer(poseStack, vertexConsumerCharged, i, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(opacityCharged, 1f, 1f, 1f));
     }
 }

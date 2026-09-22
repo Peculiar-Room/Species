@@ -14,12 +14,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GooberGooRenderer extends EntityRenderer<GooberGoo> {
-    public static final ResourceLocation LOCATION = new ResourceLocation(Species.MOD_ID,"textures/entity/goober/goober_goo.png");
+    public static final ResourceLocation LOCATION = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID,"textures/entity/goober/goober_goo.png");
     private final GooberGooModel model;
 
     public GooberGooRenderer(EntityRendererProvider.Context context) {
@@ -35,7 +35,7 @@ public class GooberGooRenderer extends EntityRenderer<GooberGoo> {
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityTranslucent(LOCATION));
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0f));
-        this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
+        this.model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         poseStack.popPose();
         super.render(goo, f, g, poseStack, multiBufferSource, i);

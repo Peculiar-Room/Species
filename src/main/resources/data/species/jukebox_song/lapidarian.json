@@ -1,0 +1,8 @@
+{
+  "comparator_output": 2,
+  "description": {
+    "translate": "item.species.music_disc_lapidarian.desc"
+  },
+  "length_in_seconds": 200,
+  "sound_event": "species:music.disc.lapidarian"
+}

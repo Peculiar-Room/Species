@@ -1,0 +1,49 @@
+modLoader="javafml"
+loaderVersion="$[1,)"
+license="All Rights Reserved"
+issueTrackerURL="https://github.com/Peculiar-Room/Species/issues"
+[[mods]]
+modId="species"
+version="3.5"
+displayName="Species"
+logoFile="../species.png"
+displayURL=""
+authors="Ninni, Noon, Bornulhu, FloofHips, GLaDOS edition"
+credits=""
+
+description='''
+A mod that adds fictional mobs to the game, with cool and unique functions
+
+Contributors:
+- lunarbunten
+- Orcinus
+
+'''
+
+[[mixins]]
+config="species.mixins.json"
+
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
+[[dependencies.species]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.248,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.species]]
+modId="jei"
+type="optional"
+versionRange="[19.9.1.125,)"
+ordering="AFTER"
+side="CLIENT"
+
+[[dependencies.species]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+

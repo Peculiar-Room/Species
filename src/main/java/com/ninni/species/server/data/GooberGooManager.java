@@ -14,6 +14,7 @@ import com.ninni.species.registry.SpeciesNetwork;
 import com.ninni.species.server.packet.GooberGooSyncPacket;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -21,7 +22,7 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 public class GooberGooManager extends SimpleJsonResourceReloadListener {
     public static final Gson GSON_INSTANCE = (new GsonBuilder()).create();
-    public static final List<GooberGooManager.GooberGooData> DATA = Lists.newArrayList();
+    public static final List<GooberGooData> DATA = Lists.newArrayList();
 
     public GooberGooManager() {
         super(GSON_INSTANCE, "gameplay/goober_goo");
@@ -40,7 +41,7 @@ public class GooberGooManager extends SimpleJsonResourceReloadListener {
         DATA.clear();
 
         object.forEach((resourceLocation, jsonElement) -> {
-            GooberGooManager.GooberGooData data = GooberGooManager.GooberGooData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result()
+            GooberGooData data = GooberGooData.CODEC.parse(JsonOps.INSTANCE, jsonElement).result()
                     .orElseGet(() -> {
                         Species.LOGGER.error("Failed to read Goober goo recipe for resource {}", resourceLocation);
                         return null;
@@ -64,9 +65,11 @@ public class GooberGooManager extends SimpleJsonResourceReloadListener {
         }
 
         if (player == null) {
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.ALL.noArg(), new GooberGooSyncPacket(registryMap));
+            PacketDistributor.sendToAllPlayers(new GooberGooSyncPacket(registryMap));
+            //SpeciesNetwork.INSTANCE.send(PacketDistributor.ALL.noArg(), new GooberGooSyncPacket(registryMap));
         } else {
-            SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new GooberGooSyncPacket(registryMap));
+            PacketDistributor.sendToPlayer(player, new GooberGooSyncPacket(registryMap));
+            //SpeciesNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new GooberGooSyncPacket(registryMap));
         }
     }
 
@@ -77,22 +80,22 @@ public class GooberGooManager extends SimpleJsonResourceReloadListener {
     }
 
     public record GooberGooData(Block input, Block output) {
-        public static final Codec<GooberGooManager.GooberGooData> CODEC = RecordCodecBuilder.create(instance ->
+        public static final Codec<GooberGooData> CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(
-                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("input").forGetter(GooberGooManager.GooberGooData::input),
-                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("output").forGetter(GooberGooManager.GooberGooData::output)
-                ).apply(instance, GooberGooManager.GooberGooData::new));
+                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("input").forGetter(GooberGooData::input),
+                        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("output").forGetter(GooberGooData::output)
+                ).apply(instance, GooberGooData::new));
 
 
         public static GooberGooData fromNetwork(FriendlyByteBuf buf) {
-            Block input = buf.readById(BuiltInRegistries.BLOCK);
-            Block output = buf.readById(BuiltInRegistries.BLOCK);
+            Block input = buf.readById(BuiltInRegistries.BLOCK::byId);
+            Block output = buf.readById(BuiltInRegistries.BLOCK::byId);
             return new GooberGooData(input, output);
         }
 
         public void toNetwork(FriendlyByteBuf buf) {
-            buf.writeId(BuiltInRegistries.BLOCK, this.input);
-            buf.writeId(BuiltInRegistries.BLOCK, this.output);
+            buf.writeById(BuiltInRegistries.BLOCK::getId, this.input);
+            buf.writeById(BuiltInRegistries.BLOCK::getId, this.output);
         }
     }
 

@@ -78,10 +78,10 @@ public class CranktrapBlock extends Block {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if ((entity instanceof Mob || entity instanceof Player) && !state.getValue(OPEN)) {
-            ((LivingEntity)entity).addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK.get(), 2, 0, false, false, false));
-        }
         super.entityInside(state, level, pos, entity);
+        if (entity instanceof LivingEntity && !state.getValue(OPEN)) {
+            ((LivingEntity)entity).addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK, 2, 0, false, false, false));
+        }
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CranktrapBlock extends Block {
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).deflate(0, 0.5, 0));
+        List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).deflate(1, 0.5, 1));
         boolean hasMob = !list.isEmpty();
 
         if (hasMob) {
@@ -111,7 +111,7 @@ public class CranktrapBlock extends Block {
                 open(level, pos, state);
 
                 for (LivingEntity entity : list) {
-                    entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK.get(), 8, 0, false, false, false));
+                    entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK, 8, 0, false, false, false));
                 }
                 level.scheduleTick(pos, this, 4);
                 return;
@@ -130,7 +130,7 @@ public class CranktrapBlock extends Block {
                             1.0D
                     );
                 }
-                entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK.get(), 4, 0, false, false, false));
+                entity.addEffect(new MobEffectInstance(SpeciesStatusEffects.STUCK, 4, 0, false, false, false));
                 entity.hurt(level.damageSources().source(SpeciesDamageTypes.CRANKTRAP, entity), amount);
             }
         } else if (!state.getValue(OPEN)) {
@@ -159,7 +159,7 @@ public class CranktrapBlock extends Block {
     }
 
     @Override
-    public boolean isPathfindable(BlockState p_60475_, BlockGetter p_60476_, BlockPos p_60477_, PathComputationType p_60478_) {
-        return p_60475_.getValue(OPEN);
+    public boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+        return state.getValue(OPEN);
     }
 }

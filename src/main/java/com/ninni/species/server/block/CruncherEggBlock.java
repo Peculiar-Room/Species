@@ -1,7 +1,8 @@
 package com.ninni.species.server.block;
 
-import com.ninni.species.server.block.entity.CruncherEggBlockEntity;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.server.block.entity.CruncherEggBlockEntity;
 import com.ninni.species.server.block.property.SpeciesProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -40,7 +40,13 @@ public class CruncherEggBlock extends BaseEntityBlock {
     private static final VoxelShape UPPER_SHAPE = Block.box(0, 0, 0, 16, 8, 16);
     private static final VoxelShape CRACKED_UPPER_SHAPE = Block.box(0, 0, 0, 16, 1, 16);
 
-    public CruncherEggBlock(BlockBehaviour.Properties properties) {
+    public static final MapCodec<CruncherEggBlock> CODEC = simpleCodec(CruncherEggBlock::new);
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    public CruncherEggBlock(Properties properties) {
         super(properties);
         this.registerDefaultState((this.stateDefinition.any()).setValue(HALF, DoubleBlockHalf.LOWER).setValue(CRACKED, false));
     }
@@ -110,7 +116,7 @@ public class CruncherEggBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         if (!level.isClientSide) {
             if (player.isCreative()) {
                 CruncherEggBlock.preventCreativeDropFromBottomPart(level, blockPos, blockState, player);
@@ -118,7 +124,7 @@ public class CruncherEggBlock extends BaseEntityBlock {
                 CruncherEggBlock.dropResources(blockState, level, blockPos, null, player, player.getMainHandItem());
             }
         }
-        super.playerWillDestroy(level, blockPos, blockState, player);
+        return super.playerWillDestroy(level, blockPos, blockState, player);
     }
 
     @Override

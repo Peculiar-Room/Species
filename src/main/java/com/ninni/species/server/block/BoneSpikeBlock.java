@@ -1,8 +1,8 @@
 package com.ninni.species.server.block;
 
+import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.server.block.property.BoneSpikeThickness;
 import com.ninni.species.server.block.property.SpeciesProperties;
-import com.ninni.species.registry.SpeciesBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -159,7 +159,7 @@ public class BoneSpikeBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
+    public boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 

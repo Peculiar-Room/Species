@@ -21,16 +21,16 @@ public class BirtdayCakeSliceItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (!livingEntity.hasEffect(SpeciesStatusEffects.BIRTD.get())) level.playSound(null, livingEntity.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD.get(), livingEntity.getSoundSource(), 1, 1);
+        if (!livingEntity.hasEffect(SpeciesStatusEffects.BIRTD)) level.playSound(null, livingEntity.blockPosition(), SpeciesSoundEvents.ENTITY_BIRTD.get(), livingEntity.getSoundSource(), 1, 1);
         return super.finishUsingItem(stack, level, livingEntity);
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.translatable("item.species.birtday_cake_slice.desc.birtd").withStyle(ChatFormatting.RED));
         list.add(Component.literal(""));
         list.add(Component.translatable("potion.whenDrank").withStyle(ChatFormatting.DARK_PURPLE));
         list.add(Component.translatable("item.species.birtday_cake_slice.desc.effect").withStyle(ChatFormatting.RED));
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+        super.appendHoverText(itemStack, context, list, tooltipFlag);
     }
 }

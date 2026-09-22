@@ -10,6 +10,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class BirtdayCakeScreen extends AbstractContainerScreen<BirtdayCakeMenu> {
     private final BirtdayCakeMenu menu;
@@ -43,7 +44,7 @@ public class BirtdayCakeScreen extends AbstractContainerScreen<BirtdayCakeMenu> 
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground(guiGraphics);
+        //this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         int centerY = this.height / 2;
 
         guiGraphics.drawCenteredString(this.font, this.title.getString(), this.width / 2, centerY - 50, 0xFFFFFF);
@@ -63,12 +64,13 @@ public class BirtdayCakeScreen extends AbstractContainerScreen<BirtdayCakeMenu> 
             age = Integer.parseInt(ageField.getValue());
         } catch (NumberFormatException ignored) {}
 
-        SpeciesNetwork.INSTANCE.sendToServer(new UpdateBirtdayCakeDataPacket(menu.blockPos, name, age));
+        PacketDistributor.sendToServer(new UpdateBirtdayCakeDataPacket(menu.blockPos, name, age));
+        //SpeciesNetwork.INSTANCE.sendToServer(new UpdateBirtdayCakeDataPacket(menu.blockPos, name, age));
         super.onClose();
     }
 
     @Override
-    protected void renderLabels(GuiGraphics p_281635_, int p_282681_, int p_283686_) {
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     }
 
     @Override

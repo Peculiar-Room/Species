@@ -2,11 +2,12 @@ package com.ninni.species.server.block.entity;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
-import com.ninni.species.server.data.CruncherPelletManager;
 import com.ninni.species.registry.SpeciesBlockEntities;
+import com.ninni.species.server.data.CruncherPelletManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -39,16 +40,16 @@ public class CruncherPelletBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         if (compoundTag.contains("PelletData", 10)) {
             CruncherPelletManager.CruncherPelletData.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compoundTag.getCompound("PelletData"))).resultOrPartial(LOGGER::error).ifPresent(this::setPelletData);
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         if (this.getPelletData() != null) {
             CruncherPelletManager.CruncherPelletData.CODEC.encodeStart(NbtOps.INSTANCE, this.getPelletData()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("PelletData", tag));
         }
@@ -89,8 +90,8 @@ public class CruncherPelletBlockEntity extends BlockEntity {
 
     public ObjectArrayList<ItemStack> getRandomDrops(Player player) {
         CruncherPelletManager.CruncherPelletData data = this.getPelletData();
-        ResourceLocation resourceLocation = data.entityType().getDefaultLootTable();
-        LootTable lootTable = this.level.getServer().getLootData().getLootTable(resourceLocation);
+        var key = data.entityType().getDefaultLootTable();
+        LootTable lootTable = this.level.getServer().reloadableRegistries().getLootTable(key);
         Entity entity = data.entityType().create(this.level);
 
         DamageSource damageSource;
@@ -105,8 +106,8 @@ public class CruncherPelletBlockEntity extends BlockEntity {
                 .withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(LootContextParams.DAMAGE_SOURCE, damageSource)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
-                .withOptionalParameter(LootContextParams.KILLER_ENTITY, player)
-                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player)
+                .withOptionalParameter(LootContextParams.ATTACKING_ENTITY, player)
+                .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, player)
                 .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
                 .withLuck(player.getLuck());
 

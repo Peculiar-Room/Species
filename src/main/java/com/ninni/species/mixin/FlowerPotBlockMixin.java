@@ -1,12 +1,13 @@
 package com.ninni.species.mixin;
 
-import com.ninni.species.server.block.PottedTrooperBlock;
 import com.ninni.species.registry.SpeciesBlocks;
+import com.ninni.species.server.block.PottedTrooperBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,9 +26,8 @@ public abstract class FlowerPotBlockMixin {
     @Shadow
     protected abstract boolean isEmpty();
 
-    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    public void applyWitherResistance(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        ItemStack stack = player.getItemInHand(interactionHand);
+    @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
+    public void applyWitherResistance(ItemStack stack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult blockHitResult, CallbackInfoReturnable<ItemInteractionResult> cir) {
         if (this.isEmpty() && stack.is(SpeciesBlocks.TROOPER.get().asItem())) {
             cir.cancel();
             Direction direction = blockHitResult.getDirection().getAxis() == Direction.Axis.Y ? Direction.NORTH : blockHitResult.getDirection();
@@ -36,7 +36,7 @@ public abstract class FlowerPotBlockMixin {
             player.awardStat(Stats.POT_FLOWER);
             if (!player.getAbilities().instabuild) stack.shrink(1);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
-            cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
+            cir.setReturnValue(ItemInteractionResult.sidedSuccess(level.isClientSide));
         }
     }
 }

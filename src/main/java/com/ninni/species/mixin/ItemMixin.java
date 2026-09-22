@@ -2,6 +2,8 @@ package com.ninni.species.mixin;
 
 import com.ninni.species.registry.SpeciesStatusEffects;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,15 +19,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements FeatureElement, ItemLike, net.minecraftforge.common.extensions.IForgeItem {
+public abstract class ItemMixin implements FeatureElement, ItemLike {
 
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void makePlayersNotEat(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        if (player != null && player.hasEffect(SpeciesStatusEffects.BLOODLUST.get())) {
+        if (player != null && player.hasEffect(SpeciesStatusEffects.BLOODLUST)) {
             cir.cancel();
             ItemStack itemstack = player.getItemInHand(hand);
-            if (itemstack.isEdible()) {
+            if (itemstack.getComponents().has(DataComponents.FOOD)) {
                 player.displayClientMessage(Component.translatable("effect.species.bloodlust.reason").withStyle(ChatFormatting.DARK_RED), true);
                 player.getCooldowns().addCooldown(this.asItem(), 60);
 

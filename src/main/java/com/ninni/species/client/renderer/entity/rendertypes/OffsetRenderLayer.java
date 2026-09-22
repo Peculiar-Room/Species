@@ -10,13 +10,14 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class OffsetRenderLayer<T extends Entity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Species.MOD_ID, "textures/misc/empty.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "textures/misc/empty.png");
     public OffsetRenderLayer(RenderLayerParent<T, M> p_116967_) {
         super(p_116967_);
     }
@@ -29,7 +30,7 @@ public abstract class OffsetRenderLayer<T extends Entity, M extends EntityModel<
             this.getParentModel().copyPropertiesTo(entitymodel);
             VertexConsumer vertexconsumer = p_116971_.getBuffer(SpeciesRenderTypes.ScrollingTex(this.getTextureLocation(p_116973_), this.xOffset(f) % 1.0F, 0));
             entitymodel.setupAnim(p_116973_, p_116974_, p_116975_, p_116977_, p_116978_, p_116979_);
-            entitymodel.renderToBuffer(p_116970_, vertexconsumer, p_116972_, OverlayTexture.RED_OVERLAY_V, 1.0F, 1.0F, 1.0F, 1.0F);
+            entitymodel.renderToBuffer(p_116970_, vertexconsumer, p_116972_, OverlayTexture.RED_OVERLAY_V, FastColor.ARGB32.colorFromFloat(1f, 1f, 1f, 1f));
         }
     }
 

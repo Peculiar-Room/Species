@@ -2,6 +2,7 @@ package com.ninni.species.server.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -10,7 +11,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 import java.util.EnumSet;
@@ -64,15 +65,15 @@ public class StackatickFollowOwnerGoal extends Goal {
     @Override
     public void start() {
         this.timeToRecalcPath = 0;
-        this.oldWaterCost = this.tamable.getPathfindingMalus(BlockPathTypes.WATER);
-        this.tamable.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        this.oldWaterCost = this.tamable.getPathfindingMalus(PathType.WATER);
+        this.tamable.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         this.owner = null;
         this.navigation.stop();
-        this.tamable.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
+        this.tamable.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class StackatickFollowOwnerGoal extends Goal {
     private boolean maybeTeleportTo(int i, int j, int k) {
         if (Math.abs((double)i - this.owner.getX()) < 2.0 && Math.abs((double)k - this.owner.getZ()) < 2.0) {
             return false;
-        } else if (!this.canTeleportTo(new BlockPos(i, j, k))) {
+        } else if (!this.canTeleportTo(this.tamable, new BlockPos(i, j, k))) {
             return false;
         } else {
             this.tamable.moveTo((double)i + 0.5, j, (double)k + 0.5, this.tamable.getYRot(), this.tamable.getXRot());
@@ -118,8 +119,8 @@ public class StackatickFollowOwnerGoal extends Goal {
         }
     }
 
-    private boolean canTeleportTo(BlockPos pos) {
-        BlockPathTypes blockPathTypes = WalkNodeEvaluator.getBlockPathTypeStatic(this.level, pos.mutable());
+    private boolean canTeleportTo(LivingEntity entity, BlockPos pos) {
+        PathType blockPathTypes = WalkNodeEvaluator.getPathTypeStatic((Mob)entity, pos);
 
         BlockPos n = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1);
         BlockPos s = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1);
@@ -130,7 +131,7 @@ public class StackatickFollowOwnerGoal extends Goal {
         BlockPos ne = new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ() + 1);
         BlockPos nw = new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ() + 1);
 
-        if (blockPathTypes != BlockPathTypes.WALKABLE) {
+        if (blockPathTypes != PathType.WALKABLE) {
             return false;
         } else {
             BlockState blockState = this.level.getBlockState(pos.below());

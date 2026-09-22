@@ -13,10 +13,10 @@ public abstract class FloorParticle extends TextureSheetParticle {
     protected FloorParticle(ClientLevel level, double x, double y, double z) {
         super(level, x, y, z);
     }
-    @Override
-    public boolean shouldCull() {
-        return false;
-    }
+    //@Override
+    //public boolean shouldCull() {
+    //    return false;
+    //}
 
     void renderRotatedParticle(VertexConsumer vertexConsumer, Camera camera, float delta, boolean bl, float rotatingAmount) {
         Vec3 vec3 = camera.getPosition();
@@ -46,6 +46,6 @@ public abstract class FloorParticle extends TextureSheetParticle {
     }
 
     void makeCornerVertex(VertexConsumer p_254493_, Vector3f p_253752_, float p_254250_, float p_254047_, int p_253814_) {
-        p_254493_.vertex(p_253752_.x(), p_253752_.y(), p_253752_.z()).uv(p_254250_, p_254047_).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(p_253814_).endVertex();
+        p_254493_.addVertex(p_253752_.x(), p_253752_.y(), p_253752_.z()).setUv(p_254250_, p_254047_).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(p_253814_);
     }
 }

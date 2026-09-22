@@ -1,36 +1,31 @@
 package com.ninni.species.registry;
 
 import com.ninni.species.Species;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-@Mod.EventBusSubscriber(modid = Species.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class SpeciesPotions {
-    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, Species.MOD_ID);
-    private static final Method ADD_MIX = ObfuscationReflectionHelper.findMethod(PotionBrewing.class, "m_43513_", Potion.class, Item.class, Potion.class);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(BuiltInRegistries.POTION, Species.MOD_ID);
 
-    public static final RegistryObject<Potion> BLOODLUST = POTIONS.register("bloodlust", () -> new Potion(new MobEffectInstance(SpeciesStatusEffects.BLOODLUST.get(), 20 * 60 * 60)));
+    public static final DeferredHolder<Potion, Potion> BLOODLUST = POTIONS.register("bloodlust", registryName -> new Potion(registryName.getPath(), new MobEffectInstance(SpeciesStatusEffects.BLOODLUST, 20 * 60 * 60)));
 
-    public static void register() {
-        addMix(Potions.AWKWARD, SpeciesItems.GHOUL_TONGUE.get(), BLOODLUST.get());
-    }
-
-    public static void addMix(Potion input, Item reactant, Potion result) {
-        try {
-            ADD_MIX.invoke(null, input, reactant, result);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Failed to add mix for " + ForgeRegistries.POTIONS.getKey(result) + " from " + ForgeRegistries.ITEMS.getKey(reactant), e);
-        }
-    }
+    //public static void addMix(Potion input, Item reactant, Potion result) {
+    //    try {
+    //        ADD_MIX.invoke(null, input, reactant, result);
+    //    } catch (IllegalAccessException | InvocationTargetException e) {
+    //        throw new IllegalStateException("Failed to add mix for " + BuiltInRegistries.POTION.getKey(result) + " from " + BuiltInRegistries.ITEM.getKey(reactant), e);
+    //    }
+    //}
 }

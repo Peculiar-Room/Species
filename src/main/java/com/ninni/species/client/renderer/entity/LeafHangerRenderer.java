@@ -11,25 +11,23 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 
 import static com.ninni.species.Species.MOD_ID;
 
 @OnlyIn(Dist.CLIENT)
 public class LeafHangerRenderer extends HangerRenderer<LeafHanger, LeafHangerModel<LeafHanger>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/hanger/leaf_hanger.png");
-    public static final ResourceLocation TEXTURE_RARE = new ResourceLocation(MOD_ID, "textures/entity/hanger/fang_hanger.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/leaf_hanger.png");
+    public static final ResourceLocation TEXTURE_RARE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/fang_hanger.png");
 
     public LeafHangerRenderer(EntityRendererProvider.Context context) {
         super(context, new LeafHangerModel<>(context.bakeLayer(SpeciesEntityModelLayers.LEAF_HANGER)), 0.5f);

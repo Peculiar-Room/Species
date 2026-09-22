@@ -1,0 +1,29 @@
+{
+  "parent": "species:species/v2/obtain_cruncher_egg",
+  "display": {
+    "icon": {
+      "id": "minecraft:cake",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.species.feed_cruncher.title"
+    },
+    "description": {
+      "translate": "advancements.species.feed_cruncher.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "feed_cruncher": {
+      "trigger": "species:feed_cruncher"
+    }
+  },
+  "requirements": [
+    [
+      "feed_cruncher"
+    ]
+  ]
+}

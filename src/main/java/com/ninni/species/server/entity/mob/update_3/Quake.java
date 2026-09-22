@@ -3,7 +3,7 @@ package com.ninni.species.server.entity.mob.update_3;
 import com.ninni.species.Species;
 import com.ninni.species.client.screen.ScreenShakeEvent;
 import com.ninni.species.registry.*;
-import com.ninni.species.server.criterion.SpeciesCriterion;
+import com.ninni.species.registry.SpeciesCriterion;
 import com.ninni.species.server.entity.util.SpeciesPose;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -34,7 +34,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static net.minecraft.world.entity.EntitySelector.NO_CREATIVE_OR_SPECTATOR;
@@ -48,8 +51,12 @@ public class Quake extends Monster {
 
     public Quake(EntityType<? extends Monster> p_21368_, Level p_21369_) {
         super(p_21368_, p_21369_);
-        this.setMaxUpStep(1);
         this.xpReward = 15;
+    }
+
+    @Override
+    public float maxUpStep() {
+        return 1.0F;
     }
 
     @Override
@@ -159,14 +166,14 @@ public class Quake extends Monster {
 
         if (!advancementList.isEmpty()) {
             for (ServerPlayer serverPlayer : advancementList) {
-                if (killedMobs.size() >= 10) SpeciesCriterion.KILL_TEN_MOBS_WITH_QUAKE.trigger(serverPlayer);
+                if (killedMobs.size() >= 10) SpeciesCriterion.KILL_TEN_MOBS_WITH_QUAKE.get().trigger(serverPlayer);
 
                 HashSet<EntityType<?>> killedMobTypes = killedMobs.stream().map(Mob::getType).collect(Collectors.toCollection(HashSet::new));
                 Set<EntityType<?>> requiredMobTypes = BuiltInRegistries.ENTITY_TYPE.stream().filter(type -> type.is(SpeciesTags.PREHISTORIC)).collect(Collectors.toSet());
 
                 System.out.println(requiredMobTypes);
 
-                if (killedMobTypes.containsAll(requiredMobTypes)) SpeciesCriterion.KILL_ALL_PREHISTORIC_MOBS_WITH_QUAKE.trigger(serverPlayer);
+                if (killedMobTypes.containsAll(requiredMobTypes)) SpeciesCriterion.KILL_ALL_PREHISTORIC_MOBS_WITH_QUAKE.get().trigger(serverPlayer);
             }
         }
 
@@ -220,12 +227,12 @@ public class Quake extends Monster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(STORED_DAMAGE, 0F);
-        this.entityData.define(ATTACK_COOLDOWN, 0);
-        this.entityData.define(RECHARGE_TIMER, 0);
-        this.entityData.define(ATTACK_TIMER, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(STORED_DAMAGE, 0F);
+        builder.define(ATTACK_COOLDOWN, 0);
+        builder.define(RECHARGE_TIMER, 0);
+        builder.define(ATTACK_TIMER, 0);
     }
 
     @Override
@@ -303,9 +310,9 @@ public class Quake extends Monster {
         this.playSound(SpeciesSoundEvents.QUAKE_STEP.get(), 1F, this.getVoicePitch());
     }
 
-    protected void dropCustomDeathLoot(DamageSource p_34697_, int p_34698_, boolean p_34699_) {
-        super.dropCustomDeathLoot(p_34697_, p_34698_, p_34699_);
-        Entity entity = p_34697_.getEntity();
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
+        Entity entity = damageSource.getEntity();
         if (entity instanceof Creeper creeper) {
             if (creeper.canDropMobsSkull()) {
                 ItemStack itemstack = new ItemStack(SpeciesItems.QUAKE_HEAD.get());

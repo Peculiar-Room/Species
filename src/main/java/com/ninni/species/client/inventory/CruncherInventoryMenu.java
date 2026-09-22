@@ -1,6 +1,5 @@
 package com.ninni.species.client.inventory;
 
-import com.ninni.species.Species;
 import com.ninni.species.server.data.CruncherPelletManager;
 import com.ninni.species.server.entity.mob.update_2.Cruncher;
 import net.minecraft.world.Container;
@@ -39,18 +38,18 @@ public class CruncherInventoryMenu extends AbstractContainerMenu {
                     return;
                 }
 
-                if (cruncher.getPelletData() == null) {
+                for (ItemStack itemStack : CruncherPelletManager.DATA.keySet()) {
 
-                    for (ItemStack itemStack : CruncherPelletManager.DATA.keySet()) {
-
-                        if (ItemStack.isSameItemSameTags(itemStack, this.getItem())) {
-                            dataInput = CruncherPelletManager.DATA.get(itemStack);
-                            break;
-                        }
-
+                    if (ItemStack.isSameItemSameComponents(itemStack, this.getItem())) {
+                        dataInput = CruncherPelletManager.DATA.get(itemStack);
+                        break;
                     }
+                }
 
-                    if (dataInput != null) cruncher.setPelletData(dataInput);
+                if (dataInput != null && (cruncher.getPelletData() == null || dataInput.entityType() != cruncher.getPelletData().entityType())) {
+
+
+                    cruncher.setPelletData(dataInput);
 
                 }
             }

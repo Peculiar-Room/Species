@@ -12,8 +12,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
@@ -45,7 +45,7 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
     @Override
     public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         limbDistance = Mth.clamp(limbDistance, -0.25F, 0.25F);
-        float partialTicks = Minecraft.getInstance().getFrameTime();
+        float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
         float interpolatedStep = Mth.lerp(partialTicks, entity.previousQuantizedStep, entity.currentQuantizedStep) / 10.0f;
 
         this.rightLeg.xRot = Mth.cos(limbAngle * 0.6662f) * 3.4f * limbDistance;
@@ -148,7 +148,7 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, int f) {
         if (this.young) {
             float l;
             poseStack.pushPose();
@@ -156,19 +156,19 @@ public class SpringlingModel<T extends Springling> extends HierarchicalModel<T> 
             poseStack.scale(l, l, l);
 
             poseStack.translate(0.0f, 3.15f, 0f);
-            this.head.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.head.render(poseStack, vertexConsumer, i, j);
             poseStack.popPose();
             poseStack.pushPose();
             l = 1.0f / 4;
             poseStack.scale(l, l, l);
             poseStack.translate(0.0f, 4.5f, 0.0f);
-            this.body.render(poseStack, vertexConsumer, i, j, f, g, h, k);
-            this.neck.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.body.render(poseStack, vertexConsumer, i, j);
+            this.neck.render(poseStack, vertexConsumer, i, j);
             poseStack.popPose();
         } else {
-            this.head.render(poseStack, vertexConsumer, i, j, f, g, h, k);
-            this.body.render(poseStack, vertexConsumer, i, j, f, g, h, k);
-            this.neck.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+            this.head.render(poseStack, vertexConsumer, i, j);
+            this.body.render(poseStack, vertexConsumer, i, j);
+            this.neck.render(poseStack, vertexConsumer, i, j);
         }
     }
 

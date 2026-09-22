@@ -1,0 +1,8 @@
+{
+  "values": [
+    "species:capacity",
+    "species:sparing",
+    "species:quick_crank"
+  ],
+  "replace": false
+}

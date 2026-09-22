@@ -1,17 +1,30 @@
 package com.ninni.species.server.packet;
 
+import com.ninni.species.Species;
 import com.ninni.species.mixin_util.LivingEntityAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TankedPacket {
+public class TankedPacket implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<TankedPacket> TYPE = new CustomPacketPayload.Type<>(
+            ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, "tanked"));
+    public static final StreamCodec<FriendlyByteBuf, TankedPacket> STREAM_CODEC = StreamCodec.of(TankedPacket::write, TankedPacket::read);
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     private final int entityId;
     private final boolean flag;
 
@@ -26,13 +39,13 @@ public class TankedPacket {
         return new TankedPacket(entityId, flag);
     }
 
-    public static void write(TankedPacket packet, FriendlyByteBuf buf) {
+    public static void write(FriendlyByteBuf buf, TankedPacket packet) {
         buf.writeInt(packet.entityId);
         buf.writeBoolean(packet.flag);
     }
 
-    public static void handle(TankedPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
+    public static void handle(TankedPacket packet, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
             Minecraft minecraft = Minecraft.getInstance();
             Optional.ofNullable(minecraft.level).ifPresent(world -> {
                 int id = packet.getEntityId();
@@ -45,7 +58,7 @@ public class TankedPacket {
                         });
             });
         });
-        ctx.get().setPacketHandled(true);
+        //ctx.get().setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)

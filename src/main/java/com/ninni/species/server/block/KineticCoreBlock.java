@@ -1,5 +1,6 @@
 package com.ninni.species.server.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -16,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
 public class KineticCoreBlock extends HorizontalDirectionalBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     private static final VoxelShape SHAPE = Block.box(4.5, 0, 4.5, 11.5, 7, 11.5);
+
+    public static final MapCodec<KineticCoreBlock> CODEC = simpleCodec(KineticCoreBlock::new);
+    @Override
+    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+        return CODEC;
+    }
 
     public KineticCoreBlock(Properties p_54120_) {
         super(p_54120_);

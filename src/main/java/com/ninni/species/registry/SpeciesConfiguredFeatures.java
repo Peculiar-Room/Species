@@ -5,7 +5,7 @@ import com.ninni.species.Species;
 import com.ninni.species.server.world.gen.features.BirtDwellingLogDecorator;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class SpeciesConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MAMMUTILATION_REMNANT = registerConfiguredFeature("mammutilation_remnant");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ALPHACENE_MUSHROOM = registerConfiguredFeature("alphacene_mushroom");
 
-    public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> bootstapContext) {
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> bootstapContext) {
         HolderGetter<PlacedFeature> holderGetter2 = bootstapContext.lookup(Registries.PLACED_FEATURE);
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH, Feature.TREE, birtedBirch().build());
         FeatureUtils.register(bootstapContext, BIRTED_BIRCH_TREE_FILTERED, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED), 0.0F)), holderGetter2.getOrThrow(SpeciesPlacedFeatures.BIRTED_BIRCH_TREE_CHECKED)));
@@ -71,7 +71,7 @@ public class SpeciesConfiguredFeatures {
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerConfiguredFeature(String id) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Species.MOD_ID, id));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(Species.MOD_ID, id));
     }
 
     private static TreeConfiguration.TreeConfigurationBuilder builder(Block log, Block leaves, int baseHeight, int firstRandomHeight, int secondRandomHeight, int radius) {

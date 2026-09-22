@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.ninni.species.client.model.mob.update_3.DeflectorDummyModel;
 import com.ninni.species.client.renderer.entity.feature.DeflectorDummyChargingFeatureRenderer;
-import com.ninni.species.server.entity.mob.update_3.DeflectorDummy;
 import com.ninni.species.registry.SpeciesEntityModelLayers;
+import com.ninni.species.server.entity.mob.update_3.DeflectorDummy;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import static com.ninni.species.Species.MOD_ID;
 
 public class DeflectorDummyRenderer extends LivingEntityRenderer<DeflectorDummy, DeflectorDummyModel<DeflectorDummy>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/quake/deflector_dummy/deflector_dummy.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/quake/deflector_dummy/deflector_dummy.png");
 
     public DeflectorDummyRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new DeflectorDummyModel<>(ctx.bakeLayer(SpeciesEntityModelLayers.DEFLECTOR_DUMMY)), 0F);

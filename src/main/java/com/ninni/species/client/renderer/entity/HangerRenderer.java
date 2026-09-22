@@ -14,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import static com.ninni.species.Species.MOD_ID;
 
 public abstract class HangerRenderer<T extends Hanger, M extends HangerModel<T>> extends MobRenderer<T, M> {
-    public static final ResourceLocation TEXTURE_COIL = new ResourceLocation(MOD_ID, "textures/entity/hanger/coil/coil_tongue.png");
+    public static final ResourceLocation TEXTURE_COIL = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/coil/coil_tongue.png");
 
     public HangerRenderer(EntityRendererProvider.Context context, M model, float v) {
         super(context, model, v);
@@ -23,37 +23,33 @@ public abstract class HangerRenderer<T extends Hanger, M extends HangerModel<T>>
     void drawTongueQuad(PoseStack poseStack, VertexConsumer builder, Vec3 base, Vec3 tip, Vec3 side, float vMax, int packedLight, float baseOpacity, float tipOpacity) {
         PoseStack.Pose pose = poseStack.last();
 
-        builder.vertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
-                .color(1F, 1F, 1F, baseOpacity)
-                .uv(0F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
+                .setColor(1F, 1F, 1F, baseOpacity)
+                .setUv(0F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
-                .color(1F, 1F, 1F, baseOpacity)
-                .uv(1F, 0F)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
+                .setColor(1F, 1F, 1F, baseOpacity)
+                .setUv(1F, 0F)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
-                .color(1F, 1F, 1F, tipOpacity)
-                .uv(1F, vMax)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
+                .setColor(1F, 1F, 1F, tipOpacity)
+                .setUv(1F, vMax)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
-                .color(1F, 1F, 1F, tipOpacity)
-                .uv(0F, vMax)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
+                .setColor(1F, 1F, 1F, tipOpacity)
+                .setUv(0F, vMax)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
     }
 
     @Override

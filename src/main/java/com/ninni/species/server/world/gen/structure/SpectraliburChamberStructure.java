@@ -1,6 +1,7 @@
 package com.ninni.species.server.world.gen.structure;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.ninni.species.registry.SpeciesStructureTypes;
 import com.ninni.species.server.structure.SpectraliburChamberGenerator;
 import net.minecraft.core.BlockPos;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import java.util.Optional;
 
 public class SpectraliburChamberStructure extends Structure {
-    public static final Codec<SpectraliburChamberStructure> CODEC = SpectraliburChamberStructure.simpleCodec(SpectraliburChamberStructure::new);
+    public static final MapCodec<SpectraliburChamberStructure> CODEC = SpectraliburChamberStructure.simpleCodec(SpectraliburChamberStructure::new);
 
     public SpectraliburChamberStructure(StructureSettings config) {
         super(config);
@@ -31,7 +32,9 @@ public class SpectraliburChamberStructure extends Structure {
             if (!noiseColumn.getBlock(y).isAir() && noiseColumn.getBlock(y + 1).isAir()) break;
             height--;
         }
-        if (height <= seaLevel) return Optional.empty();
+        if (height <= seaLevel) {
+            return Optional.empty();
+        }
         BlockPos blockPos = new BlockPos(x, height, z);
 
         return onTopOfChunkCenter(generationContext, Heightmap.Types.WORLD_SURFACE_WG, (piecesBuilder) -> SpectraliburChamberGenerator.addPieces(generationContext.structureTemplateManager(), blockPos, piecesBuilder));

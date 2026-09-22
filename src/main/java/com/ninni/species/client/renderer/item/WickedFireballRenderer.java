@@ -16,15 +16,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class WickedFireballRenderer<T extends Entity> extends EntityRenderer<T> {
     private final ModelPart all;
     private final float scale;
     private final boolean fullBright;
-    public static final ResourceLocation LOCATION = new ResourceLocation(Species.MOD_ID,"textures/entity/wicked/wicked_fireball.png");
+    public static final ResourceLocation LOCATION = ResourceLocation.fromNamespaceAndPath(Species.MOD_ID,"textures/entity/wicked/wicked_fireball.png");
 
     public WickedFireballRenderer(EntityRendererProvider.Context p_174416_, float p_174417_, boolean p_174418_) {
         super(p_174416_);

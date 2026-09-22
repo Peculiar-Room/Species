@@ -2,6 +2,7 @@ package com.ninni.species.server.block.entity;
 
 import com.ninni.species.registry.SpeciesBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -21,16 +22,16 @@ public class MobHeadBlockEntity extends BlockEntity {
         super(SpeciesBlockEntities.MOB_HEAD.get(), p_155731_, p_155732_);
     }
 
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         if (this.noteBlockSound != null) {
             compoundTag.putString("note_block_sound", this.noteBlockSound.toString());
         }
 
     }
 
-    public void load(CompoundTag compoundTag) {
-        super.load(compoundTag);
+    public void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         if (compoundTag.contains("note_block_sound", 8)) {
             this.noteBlockSound = ResourceLocation.tryParse(compoundTag.getString("note_block_sound"));
         }
@@ -60,8 +61,8 @@ public class MobHeadBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
     }
 
 }

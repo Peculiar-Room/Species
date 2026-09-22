@@ -6,7 +6,10 @@ import com.ninni.species.registry.SpeciesEntityModelLayers;
 import com.ninni.species.server.entity.mob.update_3.Coil;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -17,8 +20,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec3;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +32,9 @@ import static com.ninni.species.Species.MOD_ID;
 public class CoilRenderer extends EntityRenderer<Coil> {
     private final ModelPart coilKnot;
     private final ModelPart coil;
-    public static final ResourceLocation TEXTURE_KNOT = new ResourceLocation(MOD_ID, "textures/entity/hanger/coil/coil_knot.png");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/hanger/coil/coil.png");
-    public static final ResourceLocation TEXTURE_ROPE = new ResourceLocation(MOD_ID, "textures/entity/hanger/coil/coil_rope.png");
+    public static final ResourceLocation TEXTURE_KNOT = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/coil/coil_knot.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/coil/coil.png");
+    public static final ResourceLocation TEXTURE_ROPE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/entity/hanger/coil/coil_rope.png");
 
     public CoilRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -64,7 +69,7 @@ public class CoilRenderer extends EntityRenderer<Coil> {
             VertexConsumer knotBuilder = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity)));
             poseStack.scale(1.01F, 1.01F, 1.01F);
             poseStack.translate(0, -1, 0);
-            this.coilKnot.render(poseStack, knotBuilder, startLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, entity.isBeingPlaced() ? 0.5F : 1);
+            this.coilKnot.render(poseStack, knotBuilder, startLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(entity.isBeingPlaced() ? 0.5F : 1, 1, 1, 1));
             poseStack.popPose();
         }
         else {
@@ -73,7 +78,7 @@ public class CoilRenderer extends EntityRenderer<Coil> {
             poseStack.scale(1.01F, 1.01F, 1.01F);
             poseStack.translate(0, -1.375, 0);
 
-            this.coil.render(poseStack, knotBuilder, startLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, entity.isBeingPlaced() ? 0.5F : 1);
+            this.coil.render(poseStack, knotBuilder, startLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(entity.isBeingPlaced() ? 0.5F : 1, 1, 1, 1));
             poseStack.popPose();
         }
 
@@ -156,37 +161,33 @@ public class CoilRenderer extends EntityRenderer<Coil> {
     private void drawCoilQuad(PoseStack poseStack, VertexConsumer builder, Vec3 base, Vec3 tip, Vec3 side, float vStart, float vEnd, int packedLight) {
         PoseStack.Pose pose = poseStack.last();
 
-        builder.vertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
-                .color(1F, 1F, 1F, 1F)
-                .uv(0F, vStart)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x + side.x), (float)(base.y + side.y), (float)(base.z + side.z))
+                .setColor(1F, 1F, 1F, 1F)
+                .setUv(0F, vStart)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
-                .color(1F, 1F, 1F, 1F)
-                .uv(1F, vStart)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(base.x - side.x), (float)(base.y - side.y), (float)(base.z - side.z))
+                .setColor(1F, 1F, 1F, 1F)
+                .setUv(1F, vStart)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
-                .color(1F, 1F, 1F, 1F)
-                .uv(1F, vEnd)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x - side.x), (float)(tip.y - side.y), (float)(tip.z - side.z))
+                .setColor(1F, 1F, 1F, 1F)
+                .setUv(1F, vEnd)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
 
-        builder.vertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
-                .color(1F, 1F, 1F, 1F)
-                .uv(0F, vEnd)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(packedLight)
-                .normal(pose.normal(), 0, 1, 0)
-                .endVertex();
+        builder.addVertex(pose.pose(), (float)(tip.x + side.x), (float)(tip.y + side.y), (float)(tip.z + side.z))
+                .setColor(1F, 1F, 1F, 1F)
+                .setUv(0F, vEnd)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(pose, 0, 1, 0);
     }
 
     @Override

@@ -2,10 +2,11 @@ package com.ninni.species.server.entity.mob.update_2;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
-import com.ninni.species.server.block.entity.CruncherPelletBlockEntity;
-import com.ninni.species.server.data.CruncherPelletManager;
+import com.ninni.species.mixin_util.FallingBlockEntityAccess;
 import com.ninni.species.registry.SpeciesBlocks;
 import com.ninni.species.registry.SpeciesEntities;
+import com.ninni.species.server.block.entity.CruncherPelletBlockEntity;
+import com.ninni.species.server.data.CruncherPelletManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -24,11 +25,7 @@ import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ConcretePowderBlock;
-import net.minecraft.world.level.block.Fallable;
-import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -49,7 +46,9 @@ public class CruncherPellet extends FallingBlockEntity {
 
     public CruncherPellet(Level level, double d, double e, double f, BlockState blockState, CruncherPelletManager.CruncherPelletData data) {
         this(SpeciesEntities.CRUNCHER_PELLET.get(), level);
-        this.blockState = blockState;
+        if (this instanceof FallingBlockEntityAccess access) {
+            access.setBlockState(blockState);
+        }
         this.blocksBuilding = true;
         this.setPos(d, e, f);
         this.setDeltaMovement(Vec3.ZERO);
@@ -112,7 +111,10 @@ public class CruncherPellet extends FallingBlockEntity {
                     boolean bl5 = this.getBlockState().canSurvive(this.level(), blockPos) && !bl4;
                     if (bl3 && bl5) {
                         if (this.getBlockState().hasProperty(BlockStateProperties.WATERLOGGED) && this.level().getFluidState(blockPos).getType() == Fluids.WATER) {
-                            this.blockState = this.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true);
+
+                            if (this instanceof FallingBlockEntityAccess access) {
+                                access.setBlockState(this.getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+                            }
                         }
                         if (this.level().setBlock(blockPos, this.getBlockState(), 3)) {
                             this.playSound(SoundEvents.SCULK_BLOCK_PLACE);
@@ -126,12 +128,12 @@ public class CruncherPellet extends FallingBlockEntity {
                                 fallable.onLand(this.level(), blockPos, this.getBlockState(), blockState, this);
                             }
                             if (this.blockData != null && this.getBlockState().hasBlockEntity() && (blockEntity = this.level().getBlockEntity(blockPos)) != null) {
-                                CompoundTag compoundTag = blockEntity.saveWithoutMetadata();
+                                CompoundTag compoundTag = blockEntity.saveWithoutMetadata(registryAccess());
                                 for (String string : this.blockData.getAllKeys()) {
                                     compoundTag.put(string, this.blockData.get(string).copy());
                                 }
                                 try {
-                                    blockEntity.load(compoundTag);
+                                    blockEntity.loadCustomOnly(compoundTag, registryAccess());
                                 }
                                 catch (Exception exception) {
                                     LOGGER.error("Failed to load block entity from falling block", exception);
