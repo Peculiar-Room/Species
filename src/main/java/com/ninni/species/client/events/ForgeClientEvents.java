@@ -72,7 +72,7 @@ public class ForgeClientEvents {
         ItemStack headItem = entity.getItemBySlot(EquipmentSlot.HEAD);
         LivingEntity disguise = ((LivingEntityAccess) entity).getDisguisedEntity();
 
-        if (headItem.is(SpeciesItems.WICKED_MASK.get()) && headItem.hasTag() && headItem.getTag().contains("id") && disguise != null && !(entity instanceof Player player && player.isSpectator())) {
+        if (event instanceof RenderLivingEvent.Pre && headItem.is(SpeciesItems.WICKED_MASK.get()) && headItem.hasTag() && headItem.getTag().contains("id") && disguise != null && !(entity instanceof Player player && player.isSpectator())) {
             event.setCanceled(true);
             EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<?> baseRenderer = dispatcher.getRenderer(disguise);
